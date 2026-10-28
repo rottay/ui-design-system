@@ -14,7 +14,35 @@ import { downloadBlob, escapeDelimited, serializeDelimited, writeClipboard } fro
 // escapeDelimited
 // ============================================================================
 
+const formulaPrefixes = ['=', '+', '-', '@'];
+const formulaWhitespace = ['', '   ', '\t', '\u00a0', '\n', '\r', '\r\n', ' \t\u00a0'];
+const formulaCells = formulaPrefixes.flatMap((prefix) =>
+  formulaWhitespace.map((space) => ({ value: `${space}${prefix}1` })),
+);
+
 describe('escapeDelimited', () => {
+  it.each(formulaCells)('neutralizes formula-leading text before quoting: $value', ({ value }) => {
+    const hasLineBreak = value.includes('\r') || value.includes('\n');
+    expect(escapeDelimited(value)).toBe(hasLineBreak ? `"'${value}"` : `'${value}`);
+    expect(escapeDelimited(`${value},"x"`)).toBe(`"'${value},""x"""`);
+  });
+
+  it.each(['Ada', 'Ångström — 日本語 🙂', '', '   ', '−12', 'value-12', '1e-3', 'a+b', 'x@y', 'x=1', "'-12", '\u200b=1'])(
+    'does not neutralize ordinary text outside the formula-leading contract: %j',
+    (value) => expect(escapeDelimited(value)).toBe(value),
+  );
+
+  it('treats negative-looking strings as text without changing caller coercion', () => {
+    expect(escapeDelimited('-12')).toBe("'-12");
+    expect(escapeDelimited(' -0.5')).toBe("' -0.5");
+  });
+
+  it('retains delimiter-specific quoting after neutralization', () => {
+    expect(escapeDelimited('=a;b', ';')).toBe('"\'=a;b"');
+    expect(escapeDelimited('=a;b')).toBe("'=a;b");
+    expect(escapeDelimited('\t-1', '\t')).toBe('"\'\t-1"');
+  });
+
   it('leaves a plain value untouched', () => {
     expect(escapeDelimited('Ada Lovelace')).toBe('Ada Lovelace');
   });
@@ -59,6 +87,21 @@ describe('escapeDelimited', () => {
 // ============================================================================
 
 describe('serializeDelimited', () => {
+  it.each(formulaCells)('protects both headers and data with CRLF and BOM: $value', ({ value }) => {
+    const field = `"'${value},""x"""`;
+    expect(serializeDelimited([[`${value},"x"`], [`${value},"x"`]], {
+      rowSeparator: '\r\n', byteOrderMark: true,
+    })).toBe(`\uFEFF${field}\r\n${field}`);
+  });
+
+  it('hands original formula text to a custom escape policy without neutralizing it', () => {
+    const escapeValue = vi.fn((value: string) => value.replace(/\t/g, ' '));
+    expect(serializeDelimited([['\t=1', '@Header'], ['-12', '+2']], {
+      delimiter: '\t', rowSeparator: '\r\n', byteOrderMark: true, escapeValue,
+    })).toBe('\uFEFF =1\t@Header\r\n-12\t+2');
+    expect(escapeValue.mock.calls.map((call) => call.at(0))).toEqual(['\t=1', '@Header', '-12', '+2']);
+  });
+
   const rows = [
     ['Name', 'Note'],
     ['Ada', 'first, and foremost'],

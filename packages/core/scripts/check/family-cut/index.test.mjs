@@ -14,7 +14,8 @@
 import assert from 'node:assert/strict';
 import { cpSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, symlinkSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { dirname, join, sep } from 'node:path';
+import { dirname, join, posix, sep } from 'node:path';
+import { pathToFileURL } from 'node:url';
 import test from 'node:test';
 
 import ts from 'typescript';
@@ -58,6 +59,7 @@ const SANDBOX_SOURCES = [
   'src/foundation/tokens/css/presentation/components/skin/button-group',
   'src/foundation/tokens/css/presentation/components/skin/button-icon',
   'src/infrastructure/runtime/foundation/recipes/contracts/families/button',
+  'src/infrastructure/runtime/foundation/recipes/contracts/families/index.ts',
   'src/components/primitives/feedback/skeleton/runtime/anatomy-renderer',
 ];
 
@@ -4639,3 +4641,1171 @@ test("PLANT (vi): a hand-off credits ONLY the instance that carries it, never a 
   assert.ok(measured.detail.partsConsumedNotStamped.includes('indicator'), JSON.stringify(measured.detail.partsConsumedNotStamped));
   assert.deepEqual(measured.detail.partsComposedFrom, []);
 });
+
+
+test('ACT08 compares selected variant values with the finite stamped domain', async () => {
+  const p = await import('./index.mjs');
+  for (const [operator, value, domain, expected] of Array.from([
+    ['=', 'solid', ['solid', 'ghost'], true], ['=', 'outline', ['solid', 'ghost'], false],
+    ['~=', 'solid', ['solid raised'], true], ['^=', 'solid', ['solid-raised'], true],
+    ['=', 'solid', [], false],
+  ])) assert.equal(p.variantValueMatches({ operator, value }, new Set(domain)), expected);
+  const dir = mkdtempSync(join(tmpdir(), 'act08-variant-'));
+  try {
+    const source = join(dir, 'index.tsx'); const skin = join(dir, 'index.css');
+    writeFileSync(source, 'export const Widget = () => <div className="ds-widget" data-part="root" data-variant="solid" />;');
+    for (const [value, expected] of Array.from([['ghost', false], ['solid', true]])) {
+      writeFileSync(skin, `.ds-widget[data-part='root'][data-variant='${value}'] { opacity: 1; }`);
+      const m = measureFamily({ family: 'widget', root: ROOT, sources: [source], skins: [skin], componentDirs: [dir], a11yProbes: [] }, { producers: new Set(), compiled: new Set(), scopes: new Map() });
+      assert.equal(m.blocking.variantContract, expected);
+      assert.equal(m.detail.variantValueMismatches.length, Number(!expected));
+    }
+  } finally { rmSync(dir, { recursive: true, force: true }); }
+});
+
+
+test('variant domains follow returned values and refuse unknown arms', () => {
+  const dir = mkdtempSync(join(tmpdir(), 'variant-domain-'));
+  const source = join(dir, 'index.tsx'), skin = join(dir, 'index.css');
+  try {
+    for (const [expression, selector, expected] of Array.from([
+      ["props.variant ?? 'solid'", 'solid', false],
+      ["props.variant || 'solid'", 'solid', false],
+      ["props.variant === 'ghost' ? 'solid' : 'outline'", 'ghost', false],
+      ["props.variant === 'ghost' ? 'solid' : 'outline'", 'solid', true],
+      ["props.flag ? 'solid' : props.dynamic", 'solid', false],
+      ["props.flag ? 'solid' : 'outline'", 'outline', true],
+      ["({ hint:'solid', value:props.dynamic }).value", 'solid', false],
+    ])) {
+      writeFileSync(source, `export const Widget=(props)=> <div className="ds-widget" data-part="root" data-variant={${expression}}/>;`);
+      writeFileSync(skin, `.ds-widget[data-part='root'][data-variant='${selector}'] { opacity:1; }`);
+      const m = measureFamily({ family: 'widget', root: ROOT, sources: [source], skins: [skin], componentDirs: [dir], a11yProbes: [] }, { producers: new Set(), compiled: new Set(), scopes: new Map(), callerParts: { measured: 0, byFile: new Map() } });
+      assert.equal(m.blocking.variantContract, expected, expression);
+    }
+    writeFileSync(source, `type Variant='solid'|'outline'; export const Widget=(props:{variant?:Variant})=> <div className="ds-widget" data-part="root" data-variant={props.variant ?? 'solid'}/>;`);
+    writeFileSync(skin, `.ds-widget[data-part='root'][data-variant='outline'] { opacity:1; }`);
+    const m = measureFamily({ family: 'widget', root: ROOT, sources: [source], skins: [skin], componentDirs: [dir], a11yProbes: [] }, { producers: new Set(), compiled: new Set(), scopes: new Map(), callerParts: { measured: 0, byFile: new Map() } });
+    assert.equal(m.blocking.variantContract, true, 'an explicit finite prop domain remains valid');
+  } finally { rmSync(dir, { recursive: true, force: true }); }
+});
+
+test('composed variant evidence uses the backer returned domain and refuses its unknown arms', () => {
+  const root = mkdtempSync(join(tmpdir(), 'composed-finite-domain-'));
+  const child = join(root, 'src/components/primitives/inputs/widget/index.tsx');
+  const source = join(root, 'src/components/patterns/composer/index.tsx');
+  const skin = join(root, 'src/components/patterns/composer/index.css');
+  mkdirSync(dirname(child), { recursive: true }); mkdirSync(dirname(source), { recursive: true });
+  writeFileSync(source, 'export const Composer=()=> <div className="ds-composer" data-part="root"><Widget/></div>;');
+  writeFileSync(skin, ".ds-composer[data-part='root'] .ds-widget[data-variant='solid'] { opacity:1; }");
+  try {
+    for (const [value, expected] of Array.from([["props.flag ? 'solid' : 'outline'", true], ["props.variant ?? 'solid'", false]])) {
+      writeFileSync(child, `export const Widget=(props)=> <div className="ds-widget" data-part="root" data-variant={${value}}/>;`);
+      const m = measureFamily({ family: 'composer', root, sources: [source], skins: [skin], componentDirs: [dirname(source)], a11yProbes: [] }, { producers: new Set(), compiled: new Set(), scopes: new Map(), callerParts: { measured: 0, byFile: new Map() } });
+      assert.equal(m.blocking.variantContract, expected, value);
+    }
+  } finally { rmSync(root, { recursive: true, force: true }); }
+});
+
+function withVariantSource(text, run, modules = new Map()) {
+  const root = mkdtempSync(join(tmpdir(), 'returned-variant-domain-'));
+  const file = join(root, 'src/components/probe/index.tsx');
+  try {
+    mkdirSync(dirname(file), { recursive: true });
+    writeFileSync(file, text);
+    for (const [relative, content] of modules) {
+      const target = join(root, relative);
+      mkdirSync(dirname(target), { recursive: true });
+      writeFileSync(target, content);
+    }
+    run(analyzeSource(file), root, file);
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+}
+
+function assertVariantDomain(analysis, values, resolved = true) {
+  assert.equal(analysis.variantDomainResolved, resolved);
+  if (resolved) assert.deepEqual([...analysis.variants].sort(), [...values].sort());
+}
+
+test('returned-domain: actual Button serializes its canonical guarded recipe values', () => {
+  const file = join(ROOT, MODERN_TSX);
+  const canonical = ts.createSourceFile('recipe.ts', readFileSync(join(ROOT,
+    'src/infrastructure/runtime/foundation/recipes/contracts/families/button/index.ts'), 'utf8'), ts.ScriptTarget.Latest, true);
+  const declaration = canonical.statements.filter(ts.isVariableStatement)
+    .flatMap((statement) => statement.declarationList.declarations)
+    .find((entry) => ts.isIdentifier(entry.name) && entry.name.text === 'BUTTON_VARIANT_VALUES');
+  assert.ok(declaration && ts.isAsExpression(declaration.initializer));
+  const values = declaration.initializer.expression.elements.map((entry) => entry.text);
+  const analysis = analyzeSource(file);
+  assertVariantDomain(analysis, values);
+  assert.equal(analysis.variants.has('error'), false, 'normalization input is not serialized');
+  assert.equal(analysis.variants.has('gradient'), false, 'comparison input is not serialized');
+  assert.equal(analysis.stampsVariantAttribute, true);
+});
+
+test('returned-domain: actual WorkspaceShell uses the defaulted inherited source binding', () => {
+  const row = Reflect.get(readBaseline().families, 'workspace-shell');
+  const resolved = resolveFamily('workspace-shell', ROOT, row);
+  const file = join(ROOT, 'src/components/structures/shell/workspace-shell/index.tsx');
+  assertVariantDomain(analyzeSource(file), ['default', 'ai-field']);
+  const measured = measureFamily(resolved, { producers: PRODUCERS });
+  assert.equal(measured.blocking.variantContract, true);
+  assert.deepEqual(measured.detail.variantValueMismatches, []);
+  assert.deepEqual(measured.detail.variantComposedFrom, []);
+  assert.deepEqual(resolved.pinnedSkins, ['collection-shell']);
+  assert.deepEqual(resolved.skins.map((skin) => skin.split(sep).slice(-2, -1).at(0)), ['collection-shell']);
+  assert.equal(measured.blocking.skinReadsAnatomy, true);
+});
+
+test('returned-domain: actual Button guard and quiet-danger mutations lose output proof', () => {
+  const original = readFileSync(join(ROOT, MODERN_TSX), 'utf8');
+  const mutations = [
+    ['known guard removed', original.replace('isKnownVariant(normalizedVariant)', 'Boolean(normalizedVariant)')],
+    ['quiet guard removed', original.replace('QUIET_TONE_VARIANTS.has(normalizedVariant)', 'Boolean(normalizedVariant)')],
+    ['cast only', original.replace(/const effectiveVariant: ModernButtonVariant = danger[\s\S]*?: 'primary';/u,
+      'const effectiveVariant: ModernButtonVariant = normalizedVariant as ModernButtonVariant;')],
+  ];
+  for (const [label, text] of mutations) {
+    assert.notEqual(text, original, label);
+    withVariantSource(text, (analysis) => assert.equal(analysis.variantDomainResolved, false, label), new Map([
+      ['src/infrastructure/runtime/foundation/recipes/contracts/families/index.ts', readFileSync(join(ROOT,
+        'src/infrastructure/runtime/foundation/recipes/contracts/families/index.ts'), 'utf8')],
+      ['src/infrastructure/runtime/foundation/recipes/contracts/families/button/index.ts', readFileSync(join(ROOT,
+        'src/infrastructure/runtime/foundation/recipes/contracts/families/button/index.ts'), 'utf8')],
+    ]));
+  }
+});
+
+test('returned-domain: imported renamed finite guards follow values, aliases and both return paths', () => {
+  const modules = new Map([
+    ['src/domain/index.ts', "export { VALUES as CHOICES } from './values';"],
+    ['src/domain/values/index.ts', "export const VALUES=['quiet','loud','new-value'] as const;"],
+  ]);
+  const prefix = `import { CHOICES as allowed } from '@/domain';
+    const choices = new Set(allowed);
+    const admits = (candidate: string): candidate is 'cast-decoy' => choices.has(candidate);
+    export function Probe(props: { value: string; danger: boolean }) {
+      const input = props.value;
+      const normalized = input === 'legacy' ? 'quiet' : input;
+      const quietTone = props.danger && choices.has(normalized) ? 'danger' : undefined;
+      const output = props.danger ? quietTone ? normalized : 'loud' : admits(normalized) ? normalized : 'quiet';
+      const attrs = { 'data-variant': output };
+      return <div {...attrs} />;
+    }`;
+  withVariantSource(prefix, (analysis) => assertVariantDomain(analysis, ['quiet', 'loud', 'new-value']), modules);
+  const mutations = [
+    ['missing import', new Map()],
+    ['open member', new Map([...modules, ['src/domain/values/index.ts', "export const VALUES=['quiet', external] as const;"]])],
+  ];
+  for (const [label, changed] of mutations) withVariantSource(prefix,
+    (analysis) => assert.equal(analysis.variantDomainResolved, false, label), changed);
+  withVariantSource(prefix.replace('admits(normalized) ? normalized', 'admits(normalized) ? props.value'),
+    (analysis) => assertVariantDomain(analysis, [], false), modules);
+});
+
+test('returned-domain: defaulted destructuring follows inherited and imported types without inventing open arms', () => {
+  const modules = new Map([
+    ['src/contracts/index.ts', "export type { Presentation as Contract } from './presentation';"],
+    ['src/contracts/presentation/index.ts', "export interface Presentation { variant?: 'quiet' | 'loud' }"],
+  ]);
+  const source = `import type { Contract as Presentation } from '@/contracts';
+    interface Props extends Presentation { children?: unknown }
+    export function Probe({ variant: selected = 'quiet' }: Props) {
+      return <div data-variant={selected} />;
+    }`;
+  withVariantSource(source, (analysis) => assertVariantDomain(analysis, ['quiet', 'loud']), modules);
+  withVariantSource(source.replace("= 'quiet'", "= 'default-only'"),
+    (analysis) => assertVariantDomain(analysis, ['quiet', 'loud', 'default-only']), modules);
+  withVariantSource(source.replace('variant: selected', 'foreign: selected'),
+    (analysis) => assertVariantDomain(analysis, [], false), modules);
+  const open = new Map([...modules, ['src/contracts/presentation/index.ts', 'export interface Presentation { variant?: string }']]);
+  withVariantSource(source, (analysis) => assertVariantDomain(analysis, [], false), open);
+  withVariantSource(source.replace('data-variant={selected}', "data-variant={other ? selected : external as 'quiet'}"),
+    (analysis) => assertVariantDomain(analysis, [], false), modules);
+  withVariantSource(source.replace('return <div data-variant={selected} />;',
+    "const child = (selected: string) => <div data-variant={selected} />; return child('quiet');"),
+    (analysis) => assertVariantDomain(analysis, [], false), modules);
+});
+
+test('returned-domain: unreachable comparisons and casts never substitute for outputs', () => {
+  const cases = [
+    ["const variant = 'quiet'; const output = variant === 'never-emitted' ? 'unreachable' : variant;", ['quiet'], true],
+    ["const input = props.value; const output = input === 'comparison-only' ? 'quiet' : 'loud';", ['quiet', 'loud'], true],
+    ["const input = props.value; const output: 'quiet' = input as 'quiet';", [], false],
+    ["const input = props.value; const output = input === 'quiet' ? input : 'loud';", ['quiet', 'loud'], true],
+    ["const input = props.value; const output = input === 'quiet' ? input : external;", [], false],
+    ["const input = 'quiet'; const admits = (x) => true; const output = admits(input) ? external : input;", [], false],
+    ["const choices = { has: (x) => true }; const input = props.value; const output = choices.has(input) ? input : 'quiet';", [], false],
+    ["const values = ['quiet']; const Set = FakeSet; const choices = new Set(values); const input = props.value; const output = choices.has(input) ? input : 'quiet';", [], false],
+    ["const choices = new Set(['quiet']); const input = props.value; const output = !choices.has(input) ? 'loud' : input;", ['quiet', 'loud'], true],
+    ["const choices = new Set(['quiet']); const input = props.value; const sibling = props.other; const output = choices.has(sibling) ? input : 'loud';", [], false],
+  ];
+  for (const [body, values, resolved] of cases) withVariantSource(
+    `export function Probe(props) { ${body} return <div data-variant={output} />; }`,
+    (analysis) => assertVariantDomain(analysis, values, resolved));
+});
+
+
+test('returned-domain: destructuring defaults consume undefined, while null remains an omitted attribute', () => {
+  const cases = [
+    ["interface Props { variant: null }", []],
+    ["interface Props { variant: undefined }", ['default-only']],
+    ["interface Props { variant?: 'quiet' | null }", ['quiet', 'default-only']],
+  ];
+  for (const [contract, values] of cases) withVariantSource(
+    `${contract} export function Probe({ variant = 'default-only' }: Props) { return <div data-variant={variant} />; }`,
+    (analysis) => assertVariantDomain(analysis, values));
+});
+
+
+test('returned-domain: normalization removes legacy inputs even when a finite guard lists them', () => {
+  const source = `const allowed = new Set(['quiet', 'loud', 'legacy', 'retired']);
+    export function Probe(props) {
+      const requested = props.value;
+      const normalized = requested === 'legacy' ? 'quiet' : requested === 'retired' ? 'loud' : requested;
+      const output = allowed.has(normalized) ? normalized : 'quiet';
+      return <div data-variant={output} />;
+    }`;
+  withVariantSource(source, (analysis) => assertVariantDomain(analysis, ['quiet', 'loud']));
+  withVariantSource(source.replace("requested === 'legacy' ? 'quiet' : requested === 'retired' ? 'loud' : requested", 'requested'),
+    (analysis) => assertVariantDomain(analysis, ['quiet', 'loud', 'legacy', 'retired']));
+});
+
+
+test('returned-domain: actual Button normalizes aliases even if its imported guard admits them', () => {
+  const source = readFileSync(join(ROOT, MODERN_TSX), 'utf8');
+  const modules = new Map([
+    ['src/infrastructure/runtime/foundation/recipes/contracts/families/index.ts', readFileSync(join(ROOT,
+      'src/infrastructure/runtime/foundation/recipes/contracts/families/index.ts'), 'utf8')],
+    ['src/infrastructure/runtime/foundation/recipes/contracts/families/button/index.ts', readFileSync(join(ROOT,
+      'src/infrastructure/runtime/foundation/recipes/contracts/families/button/index.ts'), 'utf8')
+      .replace("  'primary',", "  'error',\n  'gradient',\n  'primary',")],
+  ]);
+  withVariantSource(source, (analysis) => {
+    assert.equal(analysis.variantDomainResolved, true);
+    assert.equal(analysis.variants.has('error'), false);
+    assert.equal(analysis.variants.has('gradient'), false);
+  }, modules);
+  const bypass = source.replace(/const normalizedVariant = requestedVariant === 'error'[\s\S]*?: requestedVariant;/u,
+    'const normalizedVariant = requestedVariant;');
+  assert.notEqual(bypass, source);
+  withVariantSource(bypass, (analysis) => {
+    assert.equal(analysis.variantDomainResolved, true);
+    assert.equal(analysis.variants.has('error'), true);
+    assert.equal(analysis.variants.has('gradient'), true);
+  }, modules);
+});
+
+
+function checkVariantRefusalPair(source, control, props = { value: 'foreign' }) {
+  for (const [text, resolved] of Array.from([[source, false], [control, true]])) {
+    withVariantSource(text, (analysis, root, file) => {
+      assertVariantDomain(analysis, ['quiet'], resolved);
+      const skin = join(root, 'index.css');
+      writeFileSync(skin, ".ds-probe[data-part='root'][data-variant='quiet'] { opacity:1; }");
+      const measured = measureFamily({ family: 'probe', root, sources: [file], skins: [skin],
+        componentDirs: [dirname(file)], a11yProbes: [] }, { producers: new Set(), compiled: new Set(),
+        scopes: new Map(), callerParts: { measured: 0, byFile: new Map() } });
+      assert.equal(measured.blocking.variantContract, resolved);
+      const js = ts.transpileModule(text.replaceAll('export ', ''), {
+        compilerOptions: { jsx: ts.JsxEmit.React, target: ts.ScriptTarget.ES2022 },
+      }).outputText;
+      const React = { createElement: (tag, attrs) => attrs };
+      const attrs = new Function('React', 'props', `${js}\nreturn Probe(props);`)(React, props);
+      assert.equal(Reflect.get(attrs, 'data-variant'), resolved ? 'quiet' : 'foreign');
+    });
+  }
+}
+
+const variantProbe = (body) => `export function Probe(props) { ${body}
+  return <div className="ds-probe" data-part="root" data-variant={output} />; }`;
+const variantGuardTail = "const input=props.value;const output=choices.has(input)?input:'quiet';";
+const variantMutationPairs = [
+  ['mutable-set-add', "const choices=new Set(['quiet']);choices.add(props.value);", "const choices=new Set(['quiet']);"],
+  ['mutable-set-has', "const choices=new Set(['quiet']);choices.has=()=>true;", "const choices=new Set(['quiet']);"],
+  ['mutable-input-array', "const values=['quiet'];values.push(props.value);const choices=new Set(values);",
+    "const values=['quiet'];const choices=new Set(values);"],
+];
+for (const [name, bad, good] of variantMutationPairs) test(`returned-domain-r2: ${name} refuses while its unchanged guard passes`, () => {
+  checkVariantRefusalPair(variantProbe(bad + variantGuardTail), variantProbe(good + variantGuardTail));
+});
+
+test('returned-domain-r2: reassigned-function refuses while the original predicate passes', () => {
+  const original = "const choices=new Set(['quiet']);function admits(input){return choices.has(input)}";
+  const tail = "const input=props.value;const output=admits(input)?input:'quiet';";
+  checkVariantRefusalPair(variantProbe(original + 'admits=()=>true;' + tail), variantProbe(original + tail));
+});
+
+test('returned-domain-r2: foreign-object-spread refuses while a final owned property passes', () => {
+  checkVariantRefusalPair(variantProbe("const record={value:'quiet',...props};const output=record.value;"),
+    variantProbe("const record={...props,value:'quiet'};const output=record.value;"));
+});
+
+test('returned-domain-r2: mutable-object-property refuses while its literal source passes', () => {
+  checkVariantRefusalPair(variantProbe("const record={value:'quiet'};record.value=props.value;const output=record.value;"),
+    variantProbe("const record={value:'quiet'};const output=record.value;"));
+});
+
+test('returned-domain-r2: lexical-type-shadow uses the nested interface and preserves its finite control', () => {
+  const source = "interface Props {variant:'quiet'} export function Probe(props){interface Props {variant:string}" +
+    "const render=({variant}:Props)=><div className='ds-probe' data-part='root' data-variant={variant}/>;return render(props);}";
+  checkVariantRefusalPair(source, source.replace('variant:string', "variant:'quiet'").replace('return render(props)', "return render({variant:'quiet'})"), { variant: 'foreign' });
+});
+
+const variantEscapePairs = [
+  ['set escape', "foreign(choices);"],
+  ['set alias write', "const alias=choices;alias.add(props.value);"],
+  ['set method escape', "const has=choices.has;"],
+  ['set method computed write', "choices['has']=()=>true;"],
+  ['set write in invoked closure', "const change=()=>choices.add(props.value);change();"],
+  ['set write after predicate declaration', "function change(){choices.has=()=>true;}change();"],
+];
+for (const [name, mutation] of variantEscapePairs) test(`returned-domain-r2: ${name} cannot establish membership`, () => {
+  const original = "const choices=new Set(['quiet']);";
+  withVariantSource(variantProbe(original + mutation + variantGuardTail), (analysis) => assertVariantDomain(analysis, [], false));
+  withVariantSource(variantProbe(original + variantGuardTail), (analysis) => assertVariantDomain(analysis, ['quiet']));
+});
+
+const variantBorrowCases = [
+  ['array escape', "const values=['quiet'];foreign(values);const choices=new Set(values);"],
+  ['array alias mutation', "const values=['quiet'];const alias=values;alias.push(props.value);const choices=new Set(values);"],
+  ['array element write', "const values=['quiet'];values[0]=props.value;const choices=new Set(values);"],
+  ['array helper mutation', "const values=['quiet'];const change=(items)=>items.push(props.value);change(values);const choices=new Set(values);"],
+  ['Set constructor shadow', "const Set=props.Set;const choices=new Set(['quiet']);"],
+];
+for (const [name, body] of variantBorrowCases) test(`returned-domain-r2: ${name} refuses and the input copy control passes`, () => {
+  withVariantSource(variantProbe(body + variantGuardTail), (analysis) => assertVariantDomain(analysis, [], false));
+  withVariantSource(variantProbe("const values=['quiet'];const copy=(items)=>[...items];copy(values);const choices=new Set(values);" + variantGuardTail),
+    (analysis) => assertVariantDomain(analysis, ['quiet']));
+});
+
+const variantPredicateMutations = [
+  ['predicate escape', 'foreign(admits);'],
+  ['predicate property mutation', 'admits.call=()=>true;'],
+  ['predicate nested reassign', 'function change(){admits=()=>true;}change();'],
+];
+for (const [name, mutation] of variantPredicateMutations) test(`returned-domain-r2: ${name} refuses and the direct call control passes`, () => {
+  const prefix = "const choices=new Set(['quiet']);function admits(input){return choices.has(input)}";
+  const tail = "const input=props.value;const output=admits(input)?input:'quiet';";
+  withVariantSource(variantProbe(prefix + mutation + tail), (analysis) => assertVariantDomain(analysis, [], false));
+  withVariantSource(variantProbe(prefix + tail), (analysis) => assertVariantDomain(analysis, ['quiet']));
+});
+
+const variantObjectMutations = [
+  ['object escape', 'foreign(record);'],
+  ['object alias write', 'const alias=record;alias.value=props.value;'],
+  ['object computed write', "record['value']=props.value;"],
+  ['object property define', "Object.defineProperty(record,'value',{value:props.value});"],
+  ['object closure write', 'const change=()=>{record.value=props.value};change();'],
+  ['object deletion', 'delete record.value;'],
+  ['object destructured write', '({value:record.value}=props);'],
+];
+for (const [name, mutation] of variantObjectMutations) test(`returned-domain-r2: ${name} refuses and the final property control passes`, () => {
+  withVariantSource(variantProbe("const record={...props,value:'quiet'};" + mutation + 'const output=record.value;'),
+    (analysis) => assertVariantDomain(analysis, [], false));
+  withVariantSource(variantProbe("const record={...props,value:'quiet'};const output=record.value;"),
+    (analysis) => assertVariantDomain(analysis, ['quiet']));
+});
+
+test('returned-domain-r2: ordered spreads and duplicate properties use the effective final value', () => {
+  const cases = [
+    ["{value:'quiet',...props}", [], false],
+    ["{...props,value:'quiet'}", ['quiet'], true],
+    ["{value:'wrong',value:'quiet'}", ['quiet'], true],
+    ["{value:'quiet',value:props.value}", [], false],
+    ["{value:'quiet',...props,value:'loud'}", ['loud'], true],
+    ["{value:'quiet',[props.key]:props.value}", [], false],
+    ["{[props.key]:props.value,value:'quiet'}", ['quiet'], true],
+    ["{value:'quiet',get value(){return props.value}}", [], false],
+  ];
+  for (const [object, values, resolved] of cases) withVariantSource(variantProbe(`const record=${object};const output=record.value;`),
+    (analysis) => assertVariantDomain(analysis, values, resolved));
+});
+
+const variantLocalTypeCases = [
+  ['nested alias', "type Props={variant:string};"],
+  ['nested interface', 'interface Props {variant:string}'],
+  ['function type parameter', ''],
+  ['nested class', 'class Props {variant:string}'],
+];
+for (const [name, local] of variantLocalTypeCases) test(`returned-domain-r2: ${name} hides the outer finite type`, () => {
+  const generic = name === 'function type parameter' ? '<Props>' : '';
+  const source = `interface Props {variant:'quiet'} export function Probe${generic}(props){${local}
+    const render=({variant}:Props)=><div data-variant={variant}/>;return render(props);}`;
+  withVariantSource(source, (analysis) => assertVariantDomain(analysis, [], false));
+  withVariantSource("interface Outer {variant:'loud'} export function Probe(props){type Props={variant?:'quiet'};" +
+    "const render=({variant='quiet'}:Props)=><div data-variant={variant}/>;return render(props);}",
+    (analysis) => assertVariantDomain(analysis, ['quiet']));
+});
+
+test('returned-domain-r2: block scope and inherited aliases resolve nearest bindings', () => {
+  const source = "interface Base {variant:'quiet'} interface Props extends Base{} export function Probe(props){" +
+    "{type Base={variant:string};interface Props extends Base{};const render=(input:Props)=><div data-variant={input.variant}/>;return render(props)}}";
+  withVariantSource(source, (analysis) => assertVariantDomain(analysis, [], false));
+  withVariantSource(source.replace('variant:string', "variant:'loud'"), (analysis) => assertVariantDomain(analysis, ['loud']));
+});
+
+test('returned-domain-r2: local open types and type parameters hide renamed imports', () => {
+  const modules = new Map([['src/contracts/index.ts', "export interface Original {variant:'quiet'}"]]);
+  const prefix = "import type {Original as Props} from '@/contracts';";
+  const sources = [
+    "export function Probe(props){type Props={variant:string};const render=({variant}:Props)=><div data-variant={variant}/>;return render(props)}",
+    "export function Probe<Props>(props){const render=({variant}:Props)=><div data-variant={variant}/>;return render(props)}",
+    "type Contract<Props>={variant:Props};export function Probe({variant}:Contract<string>){return <div data-variant={variant}/>}" ,
+  ];
+  for (const source of sources) withVariantSource(prefix + source, (analysis) => assertVariantDomain(analysis, [], false), modules);
+  withVariantSource(prefix + "export function Probe({variant}:Props){return <div data-variant={variant}/>}",
+    (analysis) => assertVariantDomain(analysis, ['quiet']), modules);
+});
+
+test('returned-domain-r2: imported domains refuse defining-module writes and consumer escapes', () => {
+  const source = "import {VALUES as allowed} from '@/domain';const choices=new Set(allowed);" + variantProbe(variantGuardTail);
+  const mutations = ['VALUES.push(external);', 'foreign(VALUES);', "const alias=VALUES;alias[0]=external;"];
+  for (const mutation of mutations) withVariantSource(source, (analysis) => assertVariantDomain(analysis, [], false),
+    new Map([['src/domain/index.ts', "export const VALUES=['quiet'] as const;" + mutation]]));
+  const modules = new Map([['src/domain/index.ts', "export const VALUES=['quiet'] as const;"]]);
+  withVariantSource(source.replace('const choices=', 'foreign(allowed);const choices='),
+    (analysis) => assertVariantDomain(analysis, [], false), modules);
+  withVariantSource(source, (analysis) => assertVariantDomain(analysis, ['quiet']), modules);
+});
+
+
+test('returned-domain-r2: a modified Set prototype cannot supply a membership proof', () => {
+  const source = "Set.prototype.has=()=>true;const choices=new Set(['quiet']);";
+  withVariantSource(variantProbe(source + variantGuardTail), (analysis) => assertVariantDomain(analysis, [], false));
+  withVariantSource(variantProbe("const choices=new Set(['quiet']);" + variantGuardTail),
+    (analysis) => assertVariantDomain(analysis, ['quiet']));
+});
+
+test('returned-domain-r2: reexporting a domain does not hide a write in that module', () => {
+  const source = "import {CHOICES as allowed} from '@/domain';const choices=new Set(allowed);" + variantProbe(variantGuardTail);
+  const modules = new Map([
+    ['src/domain/values/index.ts', "export const VALUES=['quiet'] as const;"],
+    ['src/domain/index.ts', "import {VALUES as local} from './values';local.push(external);export {VALUES as CHOICES} from './values';"],
+  ]);
+  withVariantSource(source, (analysis) => assertVariantDomain(analysis, [], false), modules);
+  modules.set('src/domain/index.ts', "import {VALUES as local} from './values';const copy=[...local];export {VALUES as CHOICES} from './values';");
+  withVariantSource(source, (analysis) => assertVariantDomain(analysis, ['quiet']), modules);
+});
+
+test('returned-domain-r2: nested assertions and destructuring cannot hide a method write', () => {
+  const mutations = ["((choices as any).has as any)=()=>true;", "({method:choices.has}=props);", "[choices.has]=props.methods;"];
+  for (const mutation of mutations) withVariantSource(variantProbe("const choices=new Set(['quiet']);" + mutation + variantGuardTail),
+    (analysis) => assertVariantDomain(analysis, [], false));
+  withVariantSource(variantProbe("const choices=new Set(['quiet']);" + variantGuardTail),
+    (analysis) => assertVariantDomain(analysis, ['quiet']));
+});
+
+
+test('returned-domain-r2: another property getter cannot silently mutate the owned value', () => {
+  const source = variantProbe("const record={value:'quiet',get change(){this.value=props.value;return 0}};record.change;const output=record.value;");
+  const control = variantProbe("const record={value:'quiet',get change(){this.value=props.value;return 0}};const output=record.value;");
+  checkVariantRefusalPair(source, control);
+});
+
+function checkReturnedVariant(source, modules, expected, props = { value: 'foreign' }) {
+  withVariantSource(source, (analysis, root, file) => {
+    assertVariantDomain(analysis, expected || [], expected !== false);
+    const skin = join(root, 'index.css');
+    writeFileSync(skin, ".ds-probe[data-part='root'][data-variant='quiet'] { opacity:1; }");
+    const measured = measureFamily({ family: 'probe', root, sources: [file], skins: [skin],
+      componentDirs: [dirname(file)], a11yProbes: [] }, { producers: new Set(), compiled: new Set(),
+      scopes: new Map(), callerParts: { measured: 0, byFile: new Map() } });
+    assert.equal(measured.blocking.variantContract, expected !== false);
+    const texts = new Map([...modules].map(([relative, text]) => [join(root, relative), text]));
+    texts.set(file, source);
+    const cache = new Map();
+    const load = (target) => {
+      if (cache.has(target)) return cache.get(target);
+      const exports = {};
+      cache.set(target, exports);
+      const require = (specifier) => {
+        const base = specifier.startsWith('@/') ? join(root, 'src', specifier.slice(2)) : join(dirname(target), specifier);
+        const resolved = [base, `${base}.ts`, join(base, 'index.ts')].find((candidate) => texts.has(candidate));
+        assert.ok(resolved, specifier);
+        return load(resolved);
+      };
+      const js = ts.transpileModule(texts.get(target), { compilerOptions: {
+        jsx: ts.JsxEmit.React, target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.CommonJS,
+      } }).outputText;
+      new Function('exports', 'require', 'React', js)(exports, require, { createElement: (tag, attrs) => attrs });
+      return exports;
+    };
+    const attrs = Reflect.get(load(file), 'Probe')(props);
+    assert.equal(Reflect.get(attrs, 'data-variant'), expected === false ? 'foreign' : 'quiet');
+  }, modules);
+}
+
+const sharedVariantValues = new Map([['src/domain/values/index.ts', "export const VALUES=['quiet'];"]]);
+const importedVariantGuard = variantProbe('const choices=new Set(allowed);' + variantGuardTail);
+const variantAliasCases = [
+  ['duplicate consumer imports', "import {VALUES as allowed,VALUES as mutable} from '@/domain/values';", 'mutable.push(props.value);', new Map()],
+  ['separate consumer imports', "import {VALUES as allowed} from '@/domain/values';import {VALUES as mutable} from '@/domain/values';", 'mutable.push(props.value);', new Map()],
+  ['consumer namespace member', "import {VALUES as allowed} from '@/domain/values';import * as domain from '@/domain/values';", 'domain.VALUES.push(props.value);', new Map()],
+  ['consumer namespace escape', "import {VALUES as allowed} from '@/domain/values';import * as domain from '@/domain/values';", 'const change=ns=>ns.VALUES.push(props.value);change(domain);', new Map()],
+  ['consumer alias escape', "import {VALUES as allowed,VALUES as mutable} from '@/domain/values';", 'const change=items=>items.push(props.value);change(mutable);', new Map()],
+  ['default consumer alias', "import {VALUES as allowed} from '@/domain';import mutable from '@/domain';", 'mutable.push(props.value);', new Map([['src/domain/index.ts', "export {VALUES,VALUES as default} from './values';"]])],
+  ['default reexport alias', "import {CHOICES as allowed} from '@/domain';", '', new Map([['src/domain/index.ts', "import mutable from './values';mutable.push('foreign');export {VALUES as CHOICES} from './values';"], ['src/domain/values/index.ts', "const VALUES=['quiet'];export {VALUES,VALUES as default};"]])],
+  ['distinct export names', "import {VALUES as allowed} from '@/domain/values';import {OTHER as mutable} from '@/domain';", 'mutable.push(props.value);', new Map([['src/domain/index.ts', "export {VALUES as OTHER} from './values';"]])],
+  ['distinct barrel imports', "import {VALUES as allowed} from '@/domain/values';import {OTHER as mutable} from '@/bridge';", 'mutable.push(props.value);', new Map([['src/bridge/index.ts', "export {VALUES as OTHER} from '../domain/values';"]])],
+  ['duplicate reexport imports', "import {CHOICES as allowed} from '@/domain';", '', new Map([['src/domain/index.ts', "import {VALUES as safe,VALUES as mutable} from './values';mutable.push('foreign');export {VALUES as CHOICES} from './values';"]])],
+  ['separate reexport imports', "import {CHOICES as allowed} from '@/domain';", '', new Map([['src/domain/index.ts', "import {VALUES as safe} from './values';import {VALUES as mutable} from './values';mutable.push('foreign');export {VALUES as CHOICES} from './values';"]])],
+  ['namespace reexport member', "import {CHOICES as allowed} from '@/domain';", '', new Map([['src/domain/index.ts', "import * as domain from './values';domain.VALUES.push('foreign');export {VALUES as CHOICES} from './values';"]])],
+  ['namespace reexport escape', "import {CHOICES as allowed} from '@/domain';", '', new Map([['src/domain/index.ts', "import * as domain from './values';const change=ns=>ns.VALUES.push('foreign');change(domain);export {VALUES as CHOICES} from './values';"]])],
+  ['wildcard reexport namespace', "import {VALUES as allowed} from '@/domain';", '', new Map([['src/domain/index.ts', "import * as domain from './values';domain.VALUES.push('foreign');export * from './values';"]])],
+  ['local export alias namespace', "import {CHOICES as allowed} from '@/domain';", '', new Map([['src/domain/index.ts', "import {VALUES as safe} from './values';import * as domain from './values';domain.VALUES.push('foreign');export {safe as CHOICES};"]])],
+];
+for (const [name, imports, mutation, extra] of variantAliasCases) {
+  const modules = new Map([...sharedVariantValues, ...extra]);
+  const source = imports + importedVariantGuard.replace('const choices=', mutation + 'const choices=');
+  test(`returned-domain-safety: ${name} mutation refuses proof`, () => checkReturnedVariant(source, modules, false));
+  const control = source.replace(mutation, '');
+  const controls = new Map([...modules].map(([file, text]) => [file, text
+    .replace("mutable.push('foreign');", '')
+    .replace("domain.VALUES.push('foreign');", '')
+    .replace("const change=ns=>ns.VALUES.push('foreign');change(domain);", '')]));
+  test(`returned-domain-safety: ${name} unchanged aliases retain proof`, () => checkReturnedVariant(control, controls, ['quiet']));
+}
+
+test('returned-domain-safety: borrowed import copies remain finite', () => {
+  const source = "import {VALUES as allowed,VALUES as other} from '@/domain/values';" + variantProbe(
+    'const copy=items=>[...items];copy(other);const choices=new Set(allowed);' + variantGuardTail);
+  checkReturnedVariant(source, sharedVariantValues, ['quiet']);
+});
+
+const variantLexicalCases = [
+  ['named class expression', (type) => `interface Props{variant:'loud'}const Render=class Props{variant:${type};constructor(variant){this.variant=variant}render(){const render=({variant}:Props)=><div className='ds-probe' data-part='root' data-variant={variant}/>;return render(this)}};export function Probe(props){return new Render(props.value).render()}`],
+  ['shared switch case alias', (type) => `interface Props{variant:'loud'}export function Probe(props){switch(props.branch){case 0:type Props={variant:${type}};case 1:const render=({variant}:Props)=><div className='ds-probe' data-part='root' data-variant={variant}/>;return render({variant:props.value})}}`],
+  ['shared switch default alias', (type) => `interface Props{variant:'loud'}export function Probe(props){switch(props.branch){case 0:type Props={variant:${type}};default:const render=({variant}:Props)=><div className='ds-probe' data-part='root' data-variant={variant}/>;return render({variant:props.value})}}`],
+  ['shared switch inherited interface', (type) => `interface Props{variant:'loud'}export function Probe(props){switch(props.branch){case 0:interface Base{variant:${type}}interface Props extends Base{};case 1:const render=({variant}:Props)=><div className='ds-probe' data-part='root' data-variant={variant}/>;return render({variant:props.value})}}`],
+];
+for (const [name, source] of variantLexicalCases) {
+  test(`returned-domain-safety: ${name} open binding hides outer domain`, () => {
+    checkReturnedVariant(source('string'), new Map(), false, { value: 'foreign', branch: 1 });
+  });
+  test(`returned-domain-safety: ${name} finite binding supplies nearest domain`, () => {
+    checkReturnedVariant(source("'quiet'"), new Map(), ['quiet'], { value: 'quiet', branch: 1 });
+  });
+}
+
+test('returned-domain-safety: unsupported named class getter remains unknown', () => {
+  const source = "interface Props{variant:'quiet'}const Render=class Props{get variant(){return 'foreign'}render(){const render=({variant}:Props)=><div className='ds-probe' data-part='root' data-variant={variant}/>;return render(this)}};export function Probe(){return new Render().render()}";
+  checkReturnedVariant(source, new Map(), false);
+});
+
+const narrowedVariantWrites = [
+  ['captured function call', "function change(){input=props.value;return true}", 'change()', 'function change(){return true}'],
+  ['captured arrow call', 'const change=()=>{input=props.value;return true};', 'change()', 'const change=()=>true;'],
+  ['immediate captured call', '', '(()=>{input=props.value;return true})()', ''],
+  ['nested captured call', 'function change(){function write(){input=props.value}write();return true}', 'change()', 'function change(){return true}'],
+  ['destructured captured write', 'function change(){({value:input}=props);return true}', 'change()', 'function change(){return true}'],
+  ['direct assignment after membership', '', "(input=props.value)!==''", ''],
+];
+for (const [name, mutation, call, control] of narrowedVariantWrites) {
+  const setup = "const choices=new Set(['quiet']);let input='quiet';";
+  const tail = `const output=choices.has(input)&&${call}?input:'quiet';`;
+  test(`returned-domain-safety: ${name} cannot retain stale narrowing`, () => {
+    checkReturnedVariant(variantProbe(setup + mutation + tail), new Map(), false);
+  });
+  const readonlyCall = mutation ? call : 'true';
+  test(`returned-domain-safety: ${name} read-only control keeps narrowing`, () => {
+    checkReturnedVariant(variantProbe(setup + control + `const output=choices.has(input)&&${readonlyCall}?input:'quiet';`), new Map(), ['quiet']);
+  });
+}
+
+test('returned-domain-safety: mutation of a shadowed binding preserves outer narrowing', () => {
+  const source = variantProbe("const choices=new Set(['quiet']);let input='quiet';function change(){let input='quiet';input=props.value;return true}const output=choices.has(input)&&change()?input:'quiet';");
+  checkReturnedVariant(source, new Map(), ['quiet']);
+});
+
+for (const mutation of Array.from([true, false])) test(`returned-domain-safety: unrenamed duplicate import ${mutation ? 'mutation refuses' : 'read-only passes'}`, () => {
+  const source = "import {VALUES,VALUES as other} from '@/domain/values';" + variantProbe(
+    (mutation ? 'other.push(props.value);' : '') + 'const choices=new Set(VALUES);' + variantGuardTail);
+  checkReturnedVariant(source, sharedVariantValues, mutation ? false : ['quiet']);
+});
+
+test('returned-domain-safety: unrelated property names preserve source bindings', () => {
+  const source = "import {VALUES as allowed} from '@/domain/values';import * as domain from '@/domain/values';" + variantProbe(
+    "const record={allowed:'foreign',domain:'foreign'};record.allowed;record.domain;const choices=new Set(allowed);" + variantGuardTail);
+  checkReturnedVariant(source, sharedVariantValues, ['quiet']);
+});
+
+for (const finite of Array.from([true, false])) test(`returned-domain-safety: static class field cannot replace ${finite ? 'finite' : 'open'} instance property`, () => {
+  const type = finite ? "'quiet'" : 'string';
+  const source = `interface Props{variant:'loud'}const Render=class Props{static variant:'loud'='loud';variant:${type};constructor(variant){this.variant=variant}render(){const render=({variant}:Props)=><div className='ds-probe' data-part='root' data-variant={variant}/>;return render(this)}};export function Probe(props){return new Render(props.value).render()}`;
+  checkReturnedVariant(source, new Map(), finite ? ['quiet'] : false, { value: finite ? 'quiet' : 'foreign' });
+});
+
+
+const variantDependencyCases = [
+  ['consumer side effect', "import {VALUES as allowed} from '@/domain/values';import '@/change';", '', new Map([
+    ['src/change/index.ts', "import {VALUES as mutable} from '@/domain/values';mutable.push('foreign');"],
+  ])],
+  ['reexport side effect', "import {CHOICES as allowed} from '@/domain';", '', new Map([
+    ['src/domain/index.ts', "import '@/change';export {VALUES as CHOICES} from './values';"],
+    ['src/change/index.ts', "import {VALUES as mutable} from '@/domain/values';mutable.push('foreign');"],
+  ])],
+  ['transitive side effect', "import {VALUES as allowed} from '@/domain/values';import '@/relay';", '', new Map([
+    ['src/relay/index.ts', "import '@/change';"],
+    ['src/change/index.ts', "import {VALUES as mutable} from '@/domain/values';mutable.push('foreign');"],
+  ])],
+  ['consumer named helper', "import {VALUES as allowed} from '@/domain/values';import {change} from '@/change';", 'change(props.value);', new Map([
+    ['src/change/index.ts', "import {VALUES as mutable} from '@/domain/values';export function change(value){mutable.push(value)}"],
+  ])],
+  ['reexport named helper', "import {CHOICES as allowed} from '@/domain';", '', new Map([
+    ['src/domain/index.ts', "import {change} from '@/change';change('foreign');export {VALUES as CHOICES} from './values';"],
+    ['src/change/index.ts', "import {VALUES as mutable} from '@/domain/values';export function change(value){mutable.push(value)}"],
+  ])],
+  ['consumer default helper', "import {VALUES as allowed} from '@/domain/values';import change from '@/change';", 'change(props.value);', new Map([
+    ['src/change/index.ts', "import {VALUES as mutable} from '@/domain/values';export default function change(value){mutable.push(value)}"],
+  ])],
+  ['helper behind wildcard barrel', "import {VALUES as allowed} from '@/domain/values';import {change} from '@/relay';", 'change(props.value);', new Map([
+    ['src/relay/index.ts', "export * from '../change';"],
+    ['src/change/index.ts', "import {VALUES as mutable} from '@/domain/values';export const change=value=>mutable.push(value);"],
+  ])],
+  ['transitive helper calls', "import {VALUES as allowed} from '@/domain/values';import {change} from '@/relay';", 'change(props.value);', new Map([
+    ['src/relay/index.ts', "import {write} from '../change';export const change=value=>write(value);"],
+    ['src/change/index.ts', "import {VALUES as mutable} from '@/domain/values';export const write=value=>mutable.push(value);"],
+  ])],
+  ['namespace helper call', "import {VALUES as allowed} from '@/domain/values';import * as relay from '@/relay';", 'relay.tools.change(props.value);', new Map([
+    ['src/relay/index.ts', "export * as tools from '../change';"],
+    ['src/change/index.ts', "import {VALUES as mutable} from '@/domain/values';export const change=value=>mutable.push(value);"],
+  ])],
+  ['dependency immediate function', "import {VALUES as allowed} from '@/domain/values';import '@/change';", '', new Map([
+    ['src/change/index.ts', "import {VALUES as mutable} from '@/domain/values';(()=>mutable.push('foreign'))();"],
+  ])],
+  ['dependency callback', "import {VALUES as allowed} from '@/domain/values';import '@/change';", '', new Map([
+    ['src/change/index.ts', "import {VALUES as mutable} from '@/domain/values';['foreign'].forEach(value=>mutable.push(value));"],
+  ])],
+  ['dependency mutable helper', "import {VALUES as allowed} from '@/domain/values';import '@/change';", '', new Map([
+    ['src/change/index.ts', "import {VALUES as mutable} from '@/domain/values';let change=()=>mutable.push('foreign');change();"],
+  ])],
+];
+for (const [name, imports, mutation, extra] of variantDependencyCases) {
+  const modules = new Map([...sharedVariantValues, ...extra]);
+  const source = imports + importedVariantGuard.replace('const choices=', mutation + 'const choices=');
+  test(`returned-domain-r4: ${name} refuses source-visible mutation`, () => checkReturnedVariant(source, modules, false));
+  const controls = new Map([...modules].map(([file, text]) => [file, text
+    .replace("mutable.push('foreign')", "[...mutable]")
+    .replace('mutable.push(value)', '[...mutable]')]));
+  test(`returned-domain-r4: ${name} proven copy retains domain`, () => checkReturnedVariant(source, controls, ['quiet']));
+}
+
+for (const helper of Array.from([
+  'export function change(value){mutable.push(value)}',
+  'export const change=value=>mutable.push(value);',
+])) test('returned-domain-r4: uncalled imported helper has no runtime body effect ' + helper, () => {
+  const source = "import {VALUES as allowed} from '@/domain/values';import {change} from '@/change';" + importedVariantGuard;
+  const modules = new Map([...sharedVariantValues, ['src/change/index.ts', "import {VALUES as mutable} from '@/domain/values';" + helper]]);
+  checkReturnedVariant(source, modules, ['quiet']);
+});
+
+test('returned-domain-r4: type-only import does not execute a mutation dependency', () => {
+  const source = "import {VALUES as allowed} from '@/domain/values';import type {change} from '@/change';" + importedVariantGuard;
+  const modules = new Map([...sharedVariantValues, ['src/change/index.ts', "import {VALUES as mutable} from '@/domain/values';mutable.push('foreign');export type change=string;"]]);
+  checkReturnedVariant(source, modules, ['quiet']);
+});
+
+test('returned-domain-r4: cyclic runtime dependencies terminate and retain safe reads', () => {
+  const source = "import {VALUES as allowed} from '@/domain/values';import '@/relay';" + importedVariantGuard;
+  const modules = new Map([...sharedVariantValues,
+    ['src/relay/index.ts', "import '@/change';"],
+    ['src/change/index.ts', "import '@/relay';import {VALUES as mutable} from '@/domain/values';const copy=[...mutable];copy.push('foreign');"],
+  ]);
+  checkReturnedVariant(source, modules, ['quiet']);
+});
+
+const nestedVariantNamespaces = [
+  ['namespace export', "import * as bridge from '@/bridge';", 'bridge.domain.VALUES', new Map([
+    ['src/bridge/index.ts', "export * as domain from '../domain/values';"],
+  ])],
+  ['double namespace export', "import * as bridge from '@/bridge';", 'bridge.inner.domain.VALUES', new Map([
+    ['src/bridge/index.ts', "export * as inner from '../relay';"],
+    ['src/relay/index.ts', "export * as domain from '../domain/values';"],
+  ])],
+  ['named namespace import', "import {domain as bridge} from '@/bridge';", 'bridge.VALUES', new Map([
+    ['src/bridge/index.ts', "export * as domain from '../domain/values';"],
+  ])],
+  ['namespace through named reexport', "import * as bridge from '@/bridge';", 'bridge.renamed.VALUES', new Map([
+    ['src/bridge/index.ts', "export {domain as renamed} from '../relay';"],
+    ['src/relay/index.ts', "export * as domain from '../domain/values';"],
+  ])],
+  ['namespace through wildcard', "import * as bridge from '@/bridge';", 'bridge.domain.VALUES', new Map([
+    ['src/bridge/index.ts', "export * from '../relay';"],
+    ['src/relay/index.ts', "export * as domain from '../domain/values';"],
+  ])],
+  ['local namespace export', "import * as bridge from '@/bridge';", 'bridge.domain.VALUES', new Map([
+    ['src/bridge/index.ts', "import * as domain from '../domain/values';export {domain};"],
+  ])],
+  ['default array reexport', "import * as bridge from '@/bridge';", 'bridge.domain', new Map([
+    ['src/bridge/index.ts', "export {default as domain} from '../domain/values';"],
+    ['src/domain/values/index.ts', "const VALUES=['quiet'];export {VALUES,VALUES as default};"],
+  ])],
+];
+for (const [name, imports, access, extra] of nestedVariantNamespaces) {
+  const modules = new Map([...sharedVariantValues, ...extra]);
+  const prefix = "import {VALUES as allowed} from '@/domain/values';" + imports;
+  test(`returned-domain-r4: ${name} mutation follows origin`, () => {
+    const source = prefix + importedVariantGuard.replace('const choices=', `${access}.push(props.value);const choices=`);
+    checkReturnedVariant(source, modules, false);
+  });
+  test(`returned-domain-r4: ${name} safe namespace read retains domain`, () => {
+    const source = prefix + importedVariantGuard.replace('const choices=', `const copy=[...${access}];copy.push(props.value);const choices=`);
+    checkReturnedVariant(source, modules, ['quiet']);
+  });
+}
+
+test('returned-domain-r4: unsupported namespace escape cannot prove independence', () => {
+  const modules = new Map([...sharedVariantValues, ['src/bridge/index.ts', "export * as domain from '../domain/values';"]]);
+  const source = "import {VALUES as allowed} from '@/domain/values';import * as bridge from '@/bridge';" + importedVariantGuard.replace(
+    'const choices=', 'const write=domain=>domain.VALUES.push(props.value);write(bridge.domain);const choices=');
+  checkReturnedVariant(source, modules, false);
+});
+
+test('returned-domain-r4: unresolved namespace member refuses rather than proving independence', () => {
+  const modules = new Map([...sharedVariantValues, ['src/bridge/index.ts', "export * as domain from '../domain/values';"]]);
+  const source = "import {VALUES as allowed} from '@/domain/values';import * as bridge from '@/bridge';" + importedVariantGuard.replace(
+    'const choices=', 'bridge.domain.missing;const choices=');
+  withVariantSource(source, (analysis) => assertVariantDomain(analysis, [], false), modules);
+});
+
+const sharedSwitchVariants = [
+  ['open value', "const input='quiet';", 'const input=props.value;', 'const output=input;', false],
+  ['finite nearest value', "const input='loud';", "const input='quiet';", 'const output=input;', ['quiet']],
+  ['open membership set', "const choices=new Set(['quiet']);", "const choices=new Set(['quiet',props.value]);", variantGuardTail, false],
+  ['finite nearest membership set', "const choices=new Set(['foreign']);", "const choices=new Set(['quiet']);", variantGuardTail, ['quiet']],
+  ['mutated nearest membership set', "const choices=new Set(['quiet']);", "const choices=new Set(['quiet']);", 'choices.add(props.value);' + variantGuardTail, false],
+  ['written nearest narrowed input', "let input='quiet';const choices=new Set(['quiet']);", "let input='quiet';", "const output=choices.has(input)&&(input=props.value)!==''?input:'quiet';", false],
+  ['open nearest destructuring', "const input='quiet';", 'const {value:input}=props;', 'const output=input;', false],
+  ['finite nearest object', "const record={value:'loud'};", "const record={value:'quiet'};", 'const output=record.value;', ['quiet']],
+];
+for (const [name, outer, inner, tail, expected] of sharedSwitchVariants) {
+  const source = `${outer}export function Probe(props){switch(props.branch){case 0:${inner}case 1:${tail}return <div className='ds-probe' data-part='root' data-variant={output}/>}}`;
+  test(`returned-domain-r4: shared switch ${name}`, () => checkReturnedVariant(source, new Map(), expected, { branch: 0, value: 'foreign' }));
+}
+
+test('returned-domain-r4: a block inside a switch hides the shared value', () => {
+  const source = "const input='loud';export function Probe(props){switch(props.branch){case 0:const input=props.value;case 1:{const input='quiet';const output=input;return <div className='ds-probe' data-part='root' data-variant={output}/>}}}";
+  checkReturnedVariant(source, new Map(), ['quiet'], { branch: 0, value: 'foreign' });
+});
+
+
+for (const edge of Array.from([
+  "import {type change} from '@/change';",
+  "export {type change} from '@/change';",
+])) test('returned-domain-r4: inline type-only edge has no runtime mutation ' + edge, () => {
+  const modules = new Map([...sharedVariantValues, ['src/change/index.ts', "import {VALUES as mutable} from '@/domain/values';mutable.push('foreign');export type change=string;"]]);
+  checkReturnedVariant("import {VALUES as allowed} from '@/domain/values';" + edge + importedVariantGuard, modules, ['quiet']);
+});
+
+test('returned-domain-r4: unused helper dependency still executes top-level effects', () => {
+  const modules = new Map([...sharedVariantValues, ['src/change/index.ts', "import {VALUES as mutable} from '@/domain/values';mutable.push('foreign');export function change(){}"]]);
+  const source = "import {VALUES as allowed} from '@/domain/values';import {change} from '@/change';change;" + importedVariantGuard;
+  checkReturnedVariant(source, modules, false);
+});
+
+async function checkNativeExportVariant(source, modules, expected, context) {
+  withVariantSource(source, (analysis, root, file) => {
+    assertVariantDomain(analysis, expected || [], expected !== false);
+    const skin = join(root, 'index.css');
+    writeFileSync(skin, ".ds-probe[data-part='root'][data-variant='quiet']{opacity:1}");
+    const measured = measureFamily({ family: 'probe', root, sources: [file], skins: [skin],
+      componentDirs: [dirname(file)], a11yProbes: [] }, { producers: new Set(), compiled: new Set(),
+      scopes: new Map(), callerParts: { measured: 0, byFile: new Map() } });
+    assert.equal(measured.blocking.variantContract, expected !== false);
+  }, modules);
+  const root = mkdtempSync(join(tmpdir(), 'native-variant-exports-'));
+  try {
+    const entry = 'src/components/probe/index.tsx';
+    const texts = new Map(modules).set(entry, source);
+    const paths = new Map([...texts.keys()].map((name) => [name, join(root, name.replace(/\.tsx?$/u, '.mjs'))]));
+    for (const [name, text] of texts) {
+      const linked = text.replace(/(['"])(@\/[^'"]+|\.\.?\/[^'"]+)\1/gu, (match, quote, specifier) => {
+        const base = specifier.startsWith('@/') ? 'src/' + specifier.slice(2) : posix.join(posix.dirname(name), specifier);
+        const candidates = [base, base + '.ts', base + '/index.ts'];
+        const target = candidates.find((candidate) => texts.has(candidate));
+        assert.ok(target, specifier);
+        return quote + pathToFileURL(paths.get(target)).href + quote;
+      });
+      const js = ts.transpileModule(linked, { compilerOptions: {
+        jsx: ts.JsxEmit.React, target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.ESNext,
+      } }).outputText;
+      const target = paths.get(name);
+      mkdirSync(dirname(target), { recursive: true });
+      writeFileSync(target, 'const React={createElement:(tag,attrs)=>attrs};\n' + js);
+    }
+    const component = await import(pathToFileURL(paths.get(entry)).href);
+    const inputs = ['foreign', 'quiet', 'other', null, undefined];
+    const actual = inputs.map((value) => Reflect.get(component.Probe({ value }), 'data-variant'));
+    if (expected === false) assert.equal(actual.at(0), 'foreign');
+    else assert.deepEqual([...new Set(actual)].sort(), [...expected].sort());
+    context.diagnostic(JSON.stringify({ nativeEsm: true, returned: actual, finiteDomain: expected }));
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+}
+
+const explicitVariantExports = [
+  ['named array', "export {VALUES} from '../domain/values';", 'bridge.VALUES', "export const VALUES=['quiet'];"],
+  ['local array', "import {VALUES} from '../domain/values';export {VALUES};", 'bridge.VALUES', "export const VALUES=['quiet'];"],
+  ['namespace', "export * as domain from '../domain/values';", 'bridge.domain.VALUES', "export const domain={VALUES:['quiet']};"],
+  ['local namespace', "import * as domain from '../domain/values';export {domain};", 'bridge.domain.VALUES', "export const domain={VALUES:['quiet']};"],
+  ['helper', "export {change} from '../change';", 'bridge.change', 'export function change(value){return value}'],
+];
+for (const [name, explicit, access, decoy] of explicitVariantExports) {
+  const orders = ['before wildcard', 'after wildcard'];
+  for (const order of orders) {
+    const barrel = order === 'before wildcard' ? explicit + "export * from '../decoy';" : "export * from '../decoy';" + explicit;
+    const copies = [false, true];
+    for (const copy of copies) test(`returned-domain-r5: explicit ${name} ${order} ${copy ? 'copy' : 'mutation'} native ESM`, async (context) => {
+      const helper = copy ? 'const copy=[...mutable];copy.push(value);' : 'mutable.push(value);';
+      const modules = new Map([...sharedVariantValues,
+        ['src/one/index.ts', barrel], ['src/decoy/index.ts', decoy],
+        ['src/change/index.ts', "import {VALUES as mutable} from '@/domain/values';export function change(value){" + helper + '}'],
+      ]);
+      const effect = name === 'helper' ? access + '(props.value);'
+        : copy ? `const copy=[...${access}];copy.push(props.value);` : access + '.push(props.value);';
+      const source = "import {VALUES as allowed} from '@/domain/values';import * as bridge from '@/one';"
+        + importedVariantGuard.replace('const choices=', effect + 'const choices=');
+      await checkNativeExportVariant(source, modules, copy ? ['quiet'] : false, context);
+    });
+  }
+}
+
+const finiteExplicitVariantExports = [
+  ['named array', "export {VALUES} from '../domain/values';"],
+  ['local array', "import {VALUES} from '../domain/values';export {VALUES};"],
+  ['array declaration', "export const VALUES=['foreign'];"],
+];
+for (const [name, explicit] of finiteExplicitVariantExports) {
+  const orders = ['before wildcard', 'after wildcard'];
+  for (const order of orders) test(`returned-domain-r5: finite explicit ${name} ${order} native ESM`, async (context) => {
+    const modules = new Map([
+      ['src/domain/values/index.ts', "export const VALUES=['foreign'];"],
+      ['src/decoy/index.ts', "export const VALUES=['quiet'];"],
+      ['src/one/index.ts', order === 'before wildcard' ? explicit + "export * from '../decoy';" : "export * from '../decoy';" + explicit],
+    ]);
+    await checkNativeExportVariant("import {VALUES as allowed} from '@/one';" + importedVariantGuard,
+      modules, ['foreign', 'quiet'], context);
+  });
+}
+
+test('returned-domain-r5: ambiguous wildcard array refuses a finite domain', () => {
+  const modules = new Map([...sharedVariantValues,
+    ['src/one/index.ts', "export * from '../domain/values';export * from '../decoy';"],
+    ['src/decoy/index.ts', "export const VALUES=['foreign'];"],
+  ]);
+  withVariantSource("import {VALUES as allowed} from '@/one';" + importedVariantGuard,
+    (analysis) => assertVariantDomain(analysis, [], false), modules);
+});
+
+test('returned-domain-r5: ambiguous wildcard helper cannot select an unrelated body', () => {
+  const modules = new Map([...sharedVariantValues,
+    ['src/one/index.ts', "export * from '../change';export * from '../decoy';"],
+    ['src/decoy/index.ts', 'export function change(value){return value}'],
+    ['src/change/index.ts', "import {VALUES as mutable} from '@/domain/values';export function change(value){mutable.push(value)}"],
+  ]);
+  const source = "import {VALUES as allowed} from '@/domain/values';import {change} from '@/one';"
+    + importedVariantGuard.replace('const choices=', 'change(props.value);const choices=');
+  withVariantSource(source, (analysis) => assertVariantDomain(analysis, [], false), modules);
+});
+
+test('returned-domain-r5: unresolved explicit reexport cannot fall back to a wildcard', () => {
+  const modules = new Map([
+    ['src/one/index.ts', "export * from '../decoy';export {missing as VALUES} from '../domain/values';"],
+    ['src/domain/values/index.ts', 'export const marker=1;'],
+    ['src/decoy/index.ts', "export const VALUES=['quiet'];"],
+  ]);
+  withVariantSource("import {VALUES as allowed} from '@/one';" + importedVariantGuard,
+    (analysis) => assertVariantDomain(analysis, [], false), modules);
+});
+
+test('returned-domain-r5: wildcard diamond preserves the same binding native ESM', async (context) => {
+  const modules = new Map([...sharedVariantValues,
+    ['src/one/index.ts', "export * from '../two';export * from '../domain/values';"],
+    ['src/two/index.ts', "export {VALUES} from '../domain/values';"],
+  ]);
+  await checkNativeExportVariant("import {VALUES as allowed} from '@/one';" + importedVariantGuard, modules, ['quiet'], context);
+});
+
+const explicitVariantClasses = [
+  ['declaration', 'export class change{constructor(value){mutable.push(value)}}'],
+  ['local export', 'class change{constructor(value){mutable.push(value)}}export {change};'],
+];
+for (const [name, declaration] of explicitVariantClasses) {
+  const orders = ['before wildcard', 'after wildcard'];
+  for (const order of orders) test(`returned-domain-r5: explicit class ${name} ${order} cannot select a wildcard helper native ESM`, async (context) => {
+    const explicit = "import {VALUES as mutable} from '@/domain/values';" + declaration;
+    const modules = new Map([...sharedVariantValues,
+      ['src/one/index.ts', order === 'before wildcard' ? explicit + "export * from '../decoy';" : "export * from '../decoy';" + explicit],
+      ['src/decoy/index.ts', 'export function change(value){return value}'],
+    ]);
+    const source = "import {VALUES as allowed} from '@/domain/values';import * as bridge from '@/one';"
+      + importedVariantGuard.replace('const choices=', 'new bridge.change(props.value);const choices=');
+    await checkNativeExportVariant(source, modules, false, context);
+  });
+}
+
+test('returned-domain-r5: unresolved explicit helper cannot select a wildcard body', () => {
+  const modules = new Map([...sharedVariantValues,
+    ['src/one/index.ts', "export * from '../decoy';export {missing as change} from '../domain/values';"],
+    ['src/decoy/index.ts', 'export function change(value){return value}'],
+  ]);
+  const source = "import {VALUES as allowed} from '@/domain/values';import {change} from '@/one';"
+    + importedVariantGuard.replace('const choices=', 'change(props.value);const choices=');
+  withVariantSource(source, (analysis) => assertVariantDomain(analysis, [], false), modules);
+});
+
+async function withNativeVariantModules(source, modules, run) {
+  const root = mkdtempSync(join(tmpdir(), 'native-variant-identities-'));
+  try {
+    const entry = 'src/components/probe/index.tsx';
+    const texts = new Map(modules).set(entry, source);
+    const paths = new Map([...texts.keys()].map((name) => [name, join(root, 'native', name.replace(/\.tsx?$/u, '.mjs'))]));
+    for (const [name, text] of texts) {
+      const original = join(root, name);
+      mkdirSync(dirname(original), { recursive: true });
+      writeFileSync(original, text);
+      const js = ts.transpileModule(text, { compilerOptions: {
+        jsx: ts.JsxEmit.React, target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.ESNext,
+      } }).outputText;
+      const linked = js.replace(/(['"])(@\/[^'"]+|\.\.?\/[^'"]+)\1/gu, (match, quote, specifier) => {
+        const base = specifier.startsWith('@/') ? 'src/' + specifier.slice(2) : posix.join(posix.dirname(name), specifier);
+        const candidates = [base, base + '.ts', base + '/index.ts'];
+        const target = candidates.find((candidate) => texts.has(candidate));
+        assert.ok(target, specifier);
+        return quote + pathToFileURL(paths.get(target)).href + quote;
+      });
+      const target = paths.get(name);
+      mkdirSync(dirname(target), { recursive: true });
+      writeFileSync(target, 'const React={createElement:(tag,attrs)=>attrs};\n' + linked);
+    }
+    await run(paths, root, join(root, entry));
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+}
+
+function checkVariantIdentity(source, modules, expected) {
+  withVariantSource(source, (analysis, root, file) => {
+    assertVariantDomain(analysis, expected || [], expected !== false);
+    const skin = join(root, 'index.css');
+    writeFileSync(skin, ".ds-probe[data-part='root'][data-variant='quiet']{opacity:1}");
+    const measured = measureFamily({ family: 'probe', root, sources: [file], skins: [skin],
+      componentDirs: [dirname(file)], a11yProbes: [] }, { producers: new Set(), compiled: new Set(),
+      scopes: new Map(), callerParts: { measured: 0, byFile: new Map() } });
+    assert.equal(measured.blocking.variantContract, expected !== false && expected.includes('quiet'));
+    if (expected === false) assert.ok(measured.detail.variantValueMismatches.some((entry) => entry.resolvedDomain === false));
+    else if (!expected.includes('quiet')) assert.ok(measured.detail.variantValueMismatches.some((entry) => entry.value === 'quiet' && entry.resolvedDomain === true));
+  }, modules);
+}
+
+const typedVariantProbe = "import type {Props} from '@/one';export function Probe({variant}:Props){return <div className='ds-probe' data-part='root' data-variant={variant}/>;}";
+
+async function checkNativeTypeVariant(modules, domain, context) {
+  const expected = domain === 'string' ? false : [domain];
+  checkVariantIdentity(typedVariantProbe, modules, expected);
+  await withNativeVariantModules(typedVariantProbe, modules, async (paths, root, file) => {
+    const program = ts.createProgram({ rootNames: [file], options: {
+      noEmit: true, moduleResolution: ts.ModuleResolutionKind.Node10, module: ts.ModuleKind.ESNext,
+      skipLibCheck: true, types: [], target: ts.ScriptTarget.ES2022, jsx: ts.JsxEmit.Preserve,
+      baseUrl: root, paths: { '@/*': ['src/*'] },
+    } });
+    const checker = program.getTypeChecker();
+    let referenceType;
+    const visit = (node) => {
+      if (ts.isBindingElement(node) && ts.isIdentifier(node.name) && node.name.text === 'variant') {
+        referenceType = checker.typeToString(checker.getTypeAtLocation(node.name));
+      }
+      ts.forEachChild(node, visit);
+    };
+    visit(program.getSourceFile(file));
+    assert.equal(referenceType, domain === 'string' ? 'string' : JSON.stringify(domain));
+    const component = await import(pathToFileURL(paths.get('src/components/probe/index.tsx')).href);
+    const inputs = domain === 'string' ? ['foreign', 'quiet', 'other'] : [domain];
+    const actual = inputs.map((variant) => Reflect.get(component.Probe({ variant }), 'data-variant'));
+    assert.deepEqual(actual, inputs);
+    context.diagnostic(JSON.stringify({ nativeEsm: true, referenceType, returned: actual, finiteDomain: expected }));
+  });
+}
+
+const explicitVariantTypes = [
+  ['interface', (type) => `export interface Props{variant:${type}}`],
+  ['alias', (type) => `export type Props={variant:${type}};`],
+  ['local declaration specifier', (type) => `interface Real{variant:${type}}export type {Real as Props};`],
+  ['imported local specifier', () => "import type {Real} from '../types';export type {Real as Props};"],
+  ['inline local type specifier', () => "import {type Real} from '../types';export {type Real as Props};"],
+  ['named type reexport', () => "export type {Real as Props} from '../types';"],
+  ['inline named type reexport', () => "export {type Real as Props} from '../types';"],
+];
+for (const [name, declaration] of explicitVariantTypes) {
+  const orders = ['before', 'after'];
+  const domains = ['foreign', 'string'];
+  for (const order of orders) for (const domain of domains) {
+    test(`returned-domain-r6: ${name} ${order} wildcard ${domain} native ESM`, async (context) => {
+      const type = domain === 'string' ? 'string' : "'foreign'";
+      const explicit = declaration(type);
+      const wildcard = "export * from '../decoy';";
+      const modules = new Map([
+        ['src/one/index.ts', order === 'before' ? explicit + wildcard : wildcard + explicit],
+        ['src/types/index.ts', `export interface Real{variant:${type}}`],
+        ['src/decoy/index.ts', "export interface Props{variant:'quiet'}"],
+      ]);
+      await checkNativeTypeVariant(modules, domain, context);
+    });
+  }
+}
+
+const refusedVariantTypes = [
+  ['ambiguous identical wildcard types', "export * from '../left';export * from '../right';", "export interface Props{variant:'quiet'}", "export interface Props{variant:'quiet'}"],
+  ['ambiguous different wildcard types', "export * from '../left';export * from '../right';", "export interface Props{variant:'quiet'}", "export interface Props{variant:'foreign'}"],
+  ['reversed ambiguous wildcard types', "export * from '../right';export * from '../left';", "export interface Props{variant:'quiet'}", "export interface Props{variant:'foreign'}"],
+  ['missing named type', "export * from '../left';export type {Missing as Props} from '../right';", "export interface Props{variant:'quiet'}", 'export interface Real{}'],
+  ['missing local type', "export * from '../left';export type {Missing as Props};", "export interface Props{variant:'quiet'}", ''],
+  ['missing named module', "export * from '../left';export type {Props} from '../absent';", "export interface Props{variant:'quiet'}", ''],
+  ['missing wildcard module', "export * from '../left';export * from '../absent';", "export interface Props{variant:'quiet'}", ''],
+  ['cyclic explicit type', "export * from '../left';export type {Props} from '../right';", "export interface Props{variant:'quiet'}", "export type {Props} from '../one';"],
+  ['ambiguous explicit types', "export type {Props} from '../left';export type {Props} from '../right';", "export interface Props{variant:'quiet'}", "export interface Props{variant:'foreign'}"],
+];
+for (const [name, barrel, left, right] of refusedVariantTypes) test(`returned-domain-r6: ${name} refuses proof`, () => {
+  checkVariantIdentity(typedVariantProbe, new Map([
+    ['src/one/index.ts', barrel], ['src/left/index.ts', left], ['src/right/index.ts', right],
+  ]), false);
+});
+
+const sharedVariantTypePaths = [
+  ['named type diamond', "export type {Props} from '../shared';", "export type {Props} from '../shared';"],
+  ['local type diamond', "import type {Props} from '../shared';export type {Props};", "export {type Props} from '../shared';"],
+  ['wildcard type diamond', "export * from '../shared';", "export * from '../shared';"],
+  ['cyclic wildcard type diamond', "export * from '../one';export * from '../shared';", "export type {Props} from '../shared';"],
+  ['unexported local type does not hide wildcard', "interface Props{variant:'quiet'}export * from '../shared';", "export type {Props} from '../shared';"],
+];
+for (const [name, left, right] of sharedVariantTypePaths) test(`returned-domain-r6: ${name} native ESM`, async (context) => {
+  await checkNativeTypeVariant(new Map([
+    ['src/one/index.ts', "export * from '../left';export * from '../right';"],
+    ['src/left/index.ts', left], ['src/right/index.ts', right],
+    ['src/shared/index.ts', "export interface Props{variant:'foreign'}"],
+  ]), 'foreign', context);
+});
+
+test('returned-domain-r6: local finite type exported explicitly remains proven native ESM', async (context) => {
+  await checkNativeTypeVariant(new Map([
+    ['src/one/index.ts', "export * from '../decoy';type Real={variant:'quiet'};export type {Real as Props};"],
+    ['src/decoy/index.ts', 'export interface Props{variant:string}'],
+  ]), 'quiet', context);
+});
+
+const namespaceVariantPaths = [
+  ['direct exports', "export * as domain from '../domain/values';", "export * as domain from '../domain/values';"],
+  ['named aliases of distinct namespace exports', "export {domain} from '../first';", "export {domain} from '../second';"],
+];
+for (const [name, left, right] of namespaceVariantPaths) {
+  const orders = ['forward', 'reverse'];
+  for (const order of orders) test(`returned-domain-r6: conflicting namespace ${name} ${order} native ESM and refusal`, async (context) => {
+    const barrel = order === 'forward' ? "export * from '../left';export * from '../right';" : "export * from '../right';export * from '../left';";
+    const modules = new Map([...sharedVariantValues,
+      ['src/one/index.ts', barrel], ['src/left/index.ts', left], ['src/right/index.ts', right],
+      ['src/first/index.ts', "export * as domain from '../domain/values';"],
+      ['src/second/index.ts', "export * as domain from '../domain/values';"],
+    ]);
+    const source = "import {VALUES as allowed} from '@/domain/values';import * as bridge from '@/one';"
+      + importedVariantGuard.replace('const choices=', 'const copy=[...bridge.domain.VALUES];copy.push(props.value);const choices=');
+    checkVariantIdentity(source, modules, false);
+    const consumer = "import {domain} from '@/one';export {domain};";
+    await withNativeVariantModules(consumer, modules, async (paths) => {
+      const namespace = await import(pathToFileURL(paths.get('src/one/index.ts')).href);
+      assert.equal(Object.hasOwn(namespace, 'domain'), false);
+      await assert.rejects(import(pathToFileURL(paths.get('src/components/probe/index.tsx')).href),
+        (error) => error instanceof SyntaxError && error.message.includes('conflicting star exports'));
+      context.diagnostic(JSON.stringify({ nativeEsm: true, namespaceContainsDomain: false, namedImportRejected: true }));
+    });
+  });
+}
+
+const sharedNamespaceVariantPaths = [
+  ['namespace export binding', "export * as domain from '../domain/values';"],
+  ['local namespace import binding', "import * as domain from '../domain/values';export {domain};"],
+];
+for (const [name, shared] of sharedNamespaceVariantPaths) test(`returned-domain-r6: shared ${name} diamond native ESM copy`, async (context) => {
+  const modules = new Map([...sharedVariantValues,
+    ['src/one/index.ts', "export * from '../left';export * from '../right';"],
+    ['src/shared/index.ts', shared],
+    ['src/left/index.ts', "export {domain} from '../shared';"],
+    ['src/right/index.ts', "import {domain} from '../shared';export {domain};"],
+  ]);
+  const source = "import {VALUES as allowed} from '@/domain/values';import * as bridge from '@/one';"
+    + importedVariantGuard.replace('const choices=', 'const copy=[...bridge.domain.VALUES];copy.push(props.value);const choices=');
+  await checkNativeExportVariant(source, modules, ['quiet'], context);
+});
+
+const duplicateVariantTypeSpecifiers = [
+  ['named duplicate specifiers', "export type {Quiet as Props,Foreign as Props} from '../types';"],
+  ['reversed named duplicate specifiers', "export type {Foreign as Props,Quiet as Props} from '../types';"],
+  ['local duplicate specifiers', "import type {Quiet,Foreign} from '../types';export type {Quiet as Props,Foreign as Props};"],
+  ['inline duplicate specifiers', "export {type Quiet as Props,type Foreign as Props} from '../types';"],
+];
+for (const [name, barrel] of duplicateVariantTypeSpecifiers) test(`returned-domain-r7: ${name} refuses proof`, (context) => {
+  const modules = new Map([
+    ['src/one/index.ts', "export * from '../decoy';" + barrel],
+    ['src/decoy/index.ts', "export interface Props{variant:'quiet'}"],
+    ['src/types/index.ts', "export interface Quiet{variant:'quiet'}export interface Foreign{variant:'foreign'}"],
+  ]);
+  withVariantSource(typedVariantProbe, (analysis, root, file) => {
+    const program = ts.createProgram({ rootNames: [file], options: {
+      noEmit: true, moduleResolution: ts.ModuleResolutionKind.Node10, module: ts.ModuleKind.ESNext,
+      skipLibCheck: true, types: [], target: ts.ScriptTarget.ES2022, jsx: ts.JsxEmit.Preserve,
+      baseUrl: root, paths: { '@/*': ['src/*'] },
+    } });
+    const diagnostics = program.getSemanticDiagnostics().filter((entry) => entry.file?.fileName === join(root, 'src/one/index.ts'));
+    const duplicates = diagnostics.filter((entry) => entry.code === 2300);
+    assert.equal(duplicates.length, 2);
+    context.diagnostic(JSON.stringify({ duplicateIdentifierDiagnostics: duplicates.map((entry) => entry.code),
+      resolved: analysis.variantDomainResolved, values: [...analysis.variants].sort(), nativeReturnClaimed: false }));
+    assertVariantDomain(analysis, [], false);
+  }, modules);
+  checkVariantIdentity(typedVariantProbe, modules, false);
+});
+
+const splitVariantTypeSpecifiers = [
+  ['split named export clauses', "export type {Quiet as Props} from '../types';export type {Foreign as Props} from '../types';"],
+  ['split local export clauses', "import type {Quiet,Foreign} from '../types';export type {Quiet as Props};export type {Foreign as Props};"],
+  ['wildcard conflict forward', "export * from '../left';export * from '../right';"],
+  ['wildcard conflict reverse', "export * from '../right';export * from '../left';"],
+];
+for (const [name, barrel] of splitVariantTypeSpecifiers) test(`returned-domain-r7: ${name} refuses proof`, () => {
+  checkVariantIdentity(typedVariantProbe, new Map([
+    ['src/one/index.ts', barrel],
+    ['src/types/index.ts', "export interface Quiet{variant:'quiet'}export interface Foreign{variant:'foreign'}"],
+    ['src/left/index.ts', "export interface Props{variant:'quiet'}"],
+    ['src/right/index.ts', "export interface Props{variant:'foreign'}"],
+  ]), false);
+});
+
+const missingVariantTypeSpecifiers = [
+  ['named missing first', "export type {Missing as Props,Quiet as Props} from '../types';"],
+  ['named missing last', "export type {Quiet as Props,Missing as Props} from '../types';"],
+  ['local missing first', "import type {Quiet} from '../types';export type {Missing as Props,Quiet as Props};"],
+  ['local missing last', "import type {Quiet} from '../types';export type {Quiet as Props,Missing as Props};"],
+];
+for (const [name, barrel] of missingVariantTypeSpecifiers) test(`returned-domain-r7: ${name} blocks wildcard fallback`, () => {
+  checkVariantIdentity(typedVariantProbe, new Map([
+    ['src/one/index.ts', "export * from '../decoy';" + barrel],
+    ['src/decoy/index.ts', "export interface Props{variant:'quiet'}"],
+    ['src/types/index.ts', "export interface Quiet{variant:'quiet'}"],
+  ]), false);
+});
+
+const multiNameVariantTypeOrders = ['before', 'after'];
+const multiNameVariantTypeDomains = ['foreign', 'string'];
+for (const order of multiNameVariantTypeOrders) for (const domain of multiNameVariantTypeDomains) {
+  test(`returned-domain-r7: distinct exported names ${order} wildcard ${domain} native ESM`, async (context) => {
+    const explicit = "export type {Quiet as Other,Foreign as Props} from '../types';";
+    const wildcard = "export * from '../decoy';";
+    await checkNativeTypeVariant(new Map([
+      ['src/one/index.ts', order === 'before' ? explicit + wildcard : wildcard + explicit],
+      ['src/decoy/index.ts', "export interface Props{variant:'quiet'}"],
+      ['src/types/index.ts', `export interface Quiet{variant:'quiet'}export interface Foreign{variant:${domain === 'string' ? 'string' : "'foreign'"}}`],
+    ]), domain, context);
+  });
+}

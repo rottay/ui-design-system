@@ -633,6 +633,585 @@ function attributeLiterals(attribute) {
   return [];
 }
 
+const unknownVariant = () => ({ resolved: false, values: new Set(), nullish: true, excluded: new Set() });
+const finiteVariant = (values, nullish = false, nullable = false) => ({ resolved: true, values: new Set(values),
+  nullish, nullable, defaultable: nullish && !nullable, excluded: new Set() });
+const variantExcludes = (domain, value) => domain.resolved ? !domain.values.has(value) : domain.excluded.has(value);
+const mergeVariant = (a, b) => ({ resolved: a.resolved && b.resolved,
+  values: new Set([...a.values, ...b.values]), nullish: a.nullish || b.nullish,
+  nullable: a.nullable || b.nullable, defaultable: a.defaultable || b.defaultable,
+  excluded: new Set([...a.excluded, ...b.excluded].filter((value) => variantExcludes(a, value) && variantExcludes(b, value))) });
+
+function variantRoot(source) {
+  const marker = `${sep}src${sep}`;
+  const offset = source.fileName.lastIndexOf(marker);
+  return offset < 0 ? dirname(source.fileName) : source.fileName.slice(0, offset);
+}
+
+function variantTypeTarget(name, from, seen = new Set()) {
+  const source = from.getSourceFile();
+  const key = `${source.fileName}\0${from.pos}\0${name}`;
+  if (seen.has(key)) return undefined;
+  const next = new Set(seen).add(key);
+  for (let scope = from; !ts.isSourceFile(from) && scope; scope = scope.parent) {
+    const parameter = scope.typeParameters?.find((entry) => entry.name.text === name)
+      ?? (ts.isMappedTypeNode(scope) && scope.typeParameter.name.text === name ? scope.typeParameter : undefined);
+    if (parameter) return parameter;
+    if (ts.isClassExpression(scope) && scope.name?.text === name) return scope;
+    const statements = ts.isCaseBlock(scope) ? scope.clauses.flatMap((clause) => clause.statements) : scope.statements;
+    if (!statements) continue;
+    const locals = statements.filter((statement) => (ts.isTypeAliasDeclaration(statement)
+      || ts.isInterfaceDeclaration(statement) || ts.isClassDeclaration(statement)
+      || ts.isEnumDeclaration(statement) || ts.isModuleDeclaration(statement)) && statement.name?.text === name);
+    if (locals.length) return locals.length === 1 ? locals.at(0) : null;
+    for (const statement of statements) {
+      if (!ts.isImportDeclaration(statement) || !statement.importClause) continue;
+      const clause = statement.importClause;
+      const bindings = clause.namedBindings;
+      const entry = bindings && ts.isNamedImports(bindings) && bindings.elements.find((item) => item.name.text === name);
+      if (!entry && clause.name?.text !== name && !(bindings && ts.isNamespaceImport(bindings) && bindings.name.text === name)) continue;
+      if (!entry || !ts.isStringLiteral(statement.moduleSpecifier)) return null;
+      const file = resolveModuleSpecifier(statement.moduleSpecifier.text, source.fileName, variantRoot(source));
+      const target = file && moduleSource(file);
+      return target ? variantTypeTarget((entry.propertyName ?? entry.name).text, target, next) ?? null : null;
+    }
+  }
+  if (!ts.isSourceFile(from)) return undefined;
+  const explicit = source.statements.flatMap((statement) => {
+    if ((ts.isTypeAliasDeclaration(statement) || ts.isInterfaceDeclaration(statement)
+      || ts.isClassDeclaration(statement) || ts.isEnumDeclaration(statement) || ts.isModuleDeclaration(statement))
+      && isExportedStatement(statement)) {
+      const matches = name === 'default' ? hasModifier(statement, ts.SyntaxKind.DefaultKeyword)
+        : !hasModifier(statement, ts.SyntaxKind.DefaultKeyword) && statement.name?.text === name;
+      return matches ? [{ statement }] : [];
+    }
+    const clause = ts.isExportDeclaration(statement) && statement.exportClause;
+    if (clause && ts.isNamedExports(clause)) return clause.elements.filter((entry) => entry.name.text === name)
+      .map((entry) => ({ statement, entry }));
+    return clause && ts.isNamespaceExport(clause) && clause.name.text === name ? [{ statement }] : [];
+  });
+  if (explicit.length) {
+    if (explicit.length !== 1) return null;
+    const { statement, entry } = explicit.at(0);
+    if (!ts.isExportDeclaration(statement)) return statement;
+    if (!entry) return null;
+    const imported = (entry.propertyName ?? entry.name).text;
+    if (!statement.moduleSpecifier) return variantTypeTarget(imported, statement, next) ?? null;
+    if (!ts.isStringLiteral(statement.moduleSpecifier)) return null;
+    const file = resolveModuleSpecifier(statement.moduleSpecifier.text, source.fileName, variantRoot(source));
+    const target = file && moduleSource(file);
+    return target ? variantTypeTarget(imported, target, next) ?? null : null;
+  }
+  if (name === 'default') return undefined;
+  let found;
+  for (const statement of source.statements) {
+    if (!ts.isExportDeclaration(statement) || statement.exportClause || !statement.moduleSpecifier) continue;
+    if (!ts.isStringLiteral(statement.moduleSpecifier)) return null;
+    const file = resolveModuleSpecifier(statement.moduleSpecifier.text, source.fileName, variantRoot(source));
+    const target = file && moduleSource(file);
+    const candidate = target ? variantTypeTarget(name, target, next) : null;
+    if (candidate === undefined) continue;
+    if (candidate === null || found && found !== candidate) return null;
+    found = candidate;
+  }
+  return found;
+}
+
+function variantTypeDomain(type, member, seen = new Set()) {
+  if (!type || seen.has(type)) return unknownVariant();
+  const next = new Set(seen).add(type);
+  if (ts.isParenthesizedTypeNode(type) || ts.isTypeAliasDeclaration(type)) return variantTypeDomain(type.type, member, next);
+  if (ts.isTypeReferenceNode(type) || ts.isExpressionWithTypeArguments(type)) {
+    const name = ts.isTypeReferenceNode(type) ? type.typeName : type.expression;
+    const target = ts.isIdentifier(name) && variantTypeTarget(name.text, type);
+    return target ? variantTypeDomain(target, member, next) : unknownVariant();
+  }
+  if (ts.isUnionTypeNode(type)) return type.types.map((part) => variantTypeDomain(part, member, next)).reduce(mergeVariant);
+  if (member !== undefined && (ts.isInterfaceDeclaration(type) || ts.isTypeLiteralNode(type) || ts.isClassExpression(type))) {
+    const own = type.members.find((entry) => entry.name?.getText().replace(/^['"]|['"]$/gu, '') === member
+      && !(ts.isClassExpression(type) && hasModifier(entry, ts.SyntaxKind.StaticKeyword)));
+    if (own) {
+      if (ts.isClassExpression(type) && !ts.isPropertyDeclaration(own)) return unknownVariant();
+      const domain = variantTypeDomain(own.type, undefined, next);
+      return { ...domain, nullish: domain.nullish || Boolean(own.questionToken),
+        defaultable: domain.defaultable || Boolean(own.questionToken) };
+    }
+    const bases = type.heritageClauses?.flatMap((clause) => clause.types) ?? [];
+    const domains = bases.map((base) => variantTypeDomain(base, member, next));
+    const finite = domains.filter((domain) => domain.resolved);
+    return domains.length === 1 && finite.length === 1 ? finite.at(0) : unknownVariant();
+  }
+  if (member !== undefined) return unknownVariant();
+  if (ts.isLiteralTypeNode(type) && ts.isStringLiteral(type.literal)) return finiteVariant([type.literal.text]);
+  if (type.kind === ts.SyntaxKind.UndefinedKeyword) return finiteVariant([], true);
+  if (type.kind === ts.SyntaxKind.NullKeyword || ts.isLiteralTypeNode(type)
+    && type.literal.kind === ts.SyntaxKind.NullKeyword) return finiteVariant([], true, true);
+  return unknownVariant();
+}
+
+function variantDeclaration(node) {
+  return ts.isIdentifier(node) ? declarationOf(node.text, node) : undefined;
+}
+
+function variantInitializer(node) {
+  const identifier = variantDeclaration(node);
+  const declaration = identifier?.parent;
+  return declaration && ts.isVariableDeclaration(declaration) && declaration.name === identifier
+    && declaration.parent.flags & ts.NodeFlags.Const ? declaration.initializer : undefined;
+}
+
+const variantBindingSafetyCache = new WeakMap();
+
+function variantFunction(identifier) {
+  const declaration = identifier?.parent;
+  const initializer = declaration && ts.isVariableDeclaration(declaration) && declaration.initializer
+    && declaration.parent.flags & ts.NodeFlags.Const ? unwrapTransparent(declaration.initializer) : undefined;
+  const fn = declaration && ts.isFunctionDeclaration(declaration) ? declaration : initializer;
+  return fn && (ts.isFunctionDeclaration(fn) || ts.isFunctionExpression(fn) || ts.isArrowFunction(fn)) ? fn : undefined;
+}
+
+function variantTypeUse(node) {
+  for (let parent = node.parent; parent; parent = parent.parent) {
+    if (ts.isTypeNode(parent)) return true;
+    if (ts.isStatement(parent) || ts.isExpression(parent)) return false;
+  }
+  return false;
+}
+
+function variantWritten(node) {
+  let target = node;
+  while (target.parent) {
+    const parent = target.parent;
+    if (parent.expression === target && unwrapTransparent(parent) !== parent
+      || ts.isPropertyAssignment(parent) && parent.initializer === target
+      || ts.isShorthandPropertyAssignment(parent) || ts.isSpreadAssignment(parent) || ts.isSpreadElement(parent)
+      || ts.isObjectLiteralExpression(parent) || ts.isArrayLiteralExpression(parent)) target = parent;
+    else break;
+  }
+  const parent = target.parent;
+  return Boolean(parent) && (ts.isBinaryExpression(parent) && parent.left === target
+    && parent.operatorToken.kind >= ts.SyntaxKind.FirstAssignment && parent.operatorToken.kind <= ts.SyntaxKind.LastAssignment
+    || (ts.isPrefixUnaryExpression(parent) || ts.isPostfixUnaryExpression(parent))
+      && (parent.operator === ts.SyntaxKind.PlusPlusToken || parent.operator === ts.SyntaxKind.MinusMinusToken)
+    || ts.isDeleteExpression(parent) || ts.isForInStatement(parent) && parent.initializer === target
+    || ts.isForOfStatement(parent) && parent.initializer === target);
+}
+
+function variantValueUse(node) {
+  return !variantTypeUse(node) && !ts.isImportSpecifier(node.parent)
+    && !(ts.isPropertyAccessExpression(node.parent) && node.parent.name === node)
+    && !(ts.isPropertyAssignment(node.parent) && node.parent.name === node);
+}
+
+function variantReferenceSafe(node, kind, seen) {
+  let value = node;
+  while (value.parent?.expression === value && unwrapTransparent(value.parent) !== value.parent) value = value.parent;
+  const parent = value.parent;
+  let allowed = false;
+  if (ts.isExportSpecifier(parent)) allowed = true;
+  else if (kind === 'predicate') allowed = ts.isCallExpression(parent) && parent.expression === value;
+  else if (ts.isPropertyAccessExpression(parent) && parent.expression === value && !variantWritten(parent)) {
+    allowed = kind.startsWith('object:')
+      ? parent.name.text === kind.slice('object:'.length) && !(ts.isCallExpression(parent.parent) && parent.parent.expression === parent)
+      : kind === 'set' && parent.name.text === 'has' && ts.isCallExpression(parent.parent)
+        && parent.parent.expression === parent && parent.parent.arguments.length === 1;
+  } else if (kind === 'array') {
+    allowed = ts.isSpreadElement(parent) && ts.isArrayLiteralExpression(parent.parent);
+    if (ts.isNewExpression(parent) && parent.arguments?.length === 1 && parent.arguments.at(0) === value
+      && ts.isIdentifier(parent.expression) && parent.expression.text === 'Set' && !variantDeclaration(parent.expression)) allowed = true;
+    if (ts.isCallExpression(parent) && ts.isIdentifier(parent.expression)) {
+      const binding = variantDeclaration(parent.expression);
+      const fn = variantFunction(binding);
+      const index = parent.arguments.indexOf(value);
+      const parameter = fn?.parameters.at(index);
+      allowed = index >= 0 && Boolean(fn?.body) && parameter && ts.isIdentifier(parameter.name)
+        && !parameter.dotDotDotToken && variantBindingSafe(binding, 'predicate', seen)
+        && variantBindingSafe(parameter.name, 'array', seen);
+    }
+  }
+  return allowed && !variantWritten(value);
+}
+
+// A borrowed reference is safe only when every source use is a proven read or copy.
+function variantBindingSafe(identifier, kind, seen = new Set()) {
+  if (!identifier || seen.has(identifier)) return false;
+  const cached = variantBindingSafetyCache.get(identifier)?.get(kind);
+  if (cached !== undefined) return cached;
+  const next = new Set(seen).add(identifier);
+  let safe = true;
+  const visit = (node) => {
+    if (!safe) return;
+    if (kind === 'set' && ts.isIdentifier(node) && node.text === 'Set' && !variantDeclaration(node)
+      && !variantTypeUse(node) && !(ts.isNewExpression(node.parent) && node.parent.expression === node)) safe = false;
+    if (ts.isIdentifier(node) && node !== identifier && node.text === identifier.text
+      && variantDeclaration(node) === identifier && variantValueUse(node)) {
+      if (!variantReferenceSafe(node, kind, next)) safe = false;
+    }
+    ts.forEachChild(node, visit);
+  };
+  visit(identifier.getSourceFile());
+  if (!variantBindingSafetyCache.has(identifier)) variantBindingSafetyCache.set(identifier, new Map());
+  variantBindingSafetyCache.get(identifier).set(kind, safe);
+  return safe;
+}
+
+function variantRuntimeLocal(file, name, from, root, seen) {
+  const identifier = declarationOf(name, from);
+  const binding = identifier?.parent;
+  if (!binding) return undefined;
+  if (ts.isNamespaceImport(binding) || ts.isImportSpecifier(binding) || ts.isImportClause(binding)) {
+    if (ts.isImportSpecifier(binding) && binding.isTypeOnly) return undefined;
+    const declaration = ts.isNamespaceImport(binding) ? binding.parent.parent
+      : ts.isImportClause(binding) ? binding.parent : binding.parent.parent.parent;
+    const target = resolveModuleSpecifier(declaration.moduleSpecifier.text, file, root);
+    if (!target) return undefined;
+    return ts.isNamespaceImport(binding) ? { namespace: target, namespaceBinding: binding }
+      : variantRuntimeExport(target, ts.isImportClause(binding) ? 'default'
+        : (binding.propertyName ?? binding.name).text, root, seen);
+  }
+  return ts.isFunctionDeclaration(binding) || ts.isVariableDeclaration(binding) && binding.name === identifier
+    ? { file, node: binding } : undefined;
+}
+
+function variantRuntimeExport(file, name, root, seen = new Set()) {
+  const key = `${file}\0${name}`;
+  if (seen.has(key)) return undefined;
+  const next = new Set(seen).add(key);
+  const source = moduleSource(file);
+  if (!source) return { unresolved: true };
+  for (const statement of source.statements) {
+    if (name === 'default' && ts.isExportAssignment(statement) && !statement.isExportEquals) {
+      const expression = unwrapTransparent(statement.expression);
+      return (ts.isIdentifier(expression) ? variantRuntimeLocal(file, expression.text, statement, root, next)
+        : { file, node: expression }) ?? { unresolved: true };
+    }
+    if (isExportedStatement(statement)) {
+      const isDefault = hasModifier(statement, ts.SyntaxKind.DefaultKeyword);
+      if ((ts.isFunctionDeclaration(statement) || ts.isClassDeclaration(statement) || ts.isEnumDeclaration(statement) || ts.isModuleDeclaration(statement))
+        && (name === 'default' ? isDefault : !isDefault && statement.name?.text === name)) {
+        return ts.isFunctionDeclaration(statement) ? { file, node: statement } : { unresolved: true };
+      }
+      if (ts.isVariableStatement(statement) && name !== 'default') {
+        const declaration = statement.declarationList.declarations.find((entry) => bindingNamed(entry.name, name));
+        if (declaration) return { file, node: declaration };
+      }
+    }
+    if (!ts.isExportDeclaration(statement) || statement.isTypeOnly) continue;
+    const clause = statement.exportClause;
+    const namespace = clause && ts.isNamespaceExport(clause) && clause.name.text === name;
+    const entry = clause && ts.isNamedExports(clause)
+      && clause.elements.find((item) => item.name.text === name && !item.isTypeOnly);
+    if (!namespace && !entry) continue;
+    const exported = entry ? (entry.propertyName ?? entry.name).text : name;
+    if (!statement.moduleSpecifier) return variantRuntimeLocal(file, exported, statement, root, next) ?? { unresolved: true };
+    const target = resolveModuleSpecifier(statement.moduleSpecifier.text, file, root);
+    if (!target) return { unresolved: true };
+    return (namespace ? { namespace: target, namespaceBinding: clause }
+      : variantRuntimeExport(target, exported, root, next)) ?? { unresolved: true };
+  }
+  if (name === 'default') return undefined;
+  let found;
+  for (const statement of source.statements) {
+    if (!ts.isExportDeclaration(statement) || statement.isTypeOnly || statement.exportClause || !statement.moduleSpecifier) continue;
+    const target = resolveModuleSpecifier(statement.moduleSpecifier.text, file, root);
+    const candidate = target ? variantRuntimeExport(target, name, root, next) : { unresolved: true };
+    if (!candidate) continue;
+    if (candidate.unresolved || found && (found.node !== candidate.node || found.namespace !== candidate.namespace
+      || found.namespaceBinding !== candidate.namespaceBinding)) return { unresolved: true };
+    found = candidate;
+  }
+  return found;
+}
+
+function variantModuleArraySafe(source, origin) {
+  if (!source || !origin) return false;
+  const root = variantRoot(source);
+  const modules = new Set();
+  const functions = new Set();
+  const pending = [];
+  let safe = true;
+  const addModule = (target) => {
+    if (!target || modules.has(target)) return;
+    modules.add(target);
+    pending.push(target);
+  };
+  const addFunction = (target) => {
+    const fn = target && (ts.isFunctionDeclaration(target) || ts.isFunctionExpression(target) || ts.isArrowFunction(target) ? target
+      : ts.isVariableDeclaration(target) && ts.isIdentifier(target.name) ? variantFunction(target.name) : undefined);
+    if (!fn || functions.has(fn)) return;
+    functions.add(fn);
+    pending.push(fn);
+  };
+  addModule(source);
+  while (pending.length && safe) {
+    const unit = pending.shift();
+    const visit = (node) => {
+      if (!safe) return;
+      if (unit !== source && node !== unit && (ts.isFunctionDeclaration(node)
+        || ts.isFunctionExpression(node) || ts.isArrowFunction(node))) {
+        const holder = node.parent;
+        if (!ts.isFunctionDeclaration(node) && !(ts.isVariableDeclaration(holder)
+          && ts.isIdentifier(holder.name) && variantFunction(holder.name) === node)) addFunction(node);
+        return;
+      }
+      if ((ts.isImportDeclaration(node) || ts.isExportDeclaration(node)) && !node.isTypeOnly
+        && !(ts.isImportDeclaration(node) && node.importClause?.isTypeOnly)
+        && node.moduleSpecifier && ts.isStringLiteral(node.moduleSpecifier)) {
+        const bindings = ts.isImportDeclaration(node) ? node.importClause?.namedBindings : node.exportClause;
+        const typeOnly = bindings && (ts.isNamedImports(bindings) || ts.isNamedExports(bindings))
+          && bindings.elements.length > 0 && bindings.elements.every((entry) => entry.isTypeOnly)
+          && !(ts.isImportDeclaration(node) && node.importClause?.name);
+        const file = !typeOnly && resolveModuleSpecifier(node.moduleSpecifier.text, node.getSourceFile().fileName, root);
+        if (file) addModule(moduleSource(file));
+      }
+      if (ts.isIdentifier(node) && variantValueUse(node) && !ts.isExportSpecifier(node.parent)) {
+        const identifier = variantDeclaration(node);
+        if (identifier && node !== identifier) {
+          const binding = identifier.parent;
+          let target;
+          let value = node;
+          if (ts.isNamespaceImport(binding) || ts.isImportSpecifier(binding) || ts.isImportClause(binding)) {
+            const declaration = ts.isNamespaceImport(binding) ? binding.parent.parent
+              : ts.isImportClause(binding) ? binding.parent : binding.parent.parent.parent;
+            const file = resolveModuleSpecifier(declaration.moduleSpecifier.text, node.getSourceFile().fileName, root);
+            target = file && (ts.isNamespaceImport(binding) ? { namespace: file }
+              : variantRuntimeExport(file, ts.isImportClause(binding) ? 'default'
+                : (binding.propertyName ?? binding.name).text, root));
+            if (file && (!target || target.unresolved)) safe = false;
+            while (target?.namespace) {
+              while (value.parent?.expression === value && unwrapTransparent(value.parent) !== value.parent) value = value.parent;
+              const member = value.parent;
+              if (!ts.isPropertyAccessExpression(member) || member.expression !== value) { safe = false; break; }
+              target = variantRuntimeExport(target.namespace, member.name.text, root);
+              if (!target || target.unresolved) { safe = false; break; }
+              value = member;
+            }
+          } else target = { node: binding };
+          if (target?.node === origin && !variantReferenceSafe(value, 'array', new Set())) safe = false;
+          if (target?.node) addFunction(target.node);
+        }
+      }
+      ts.forEachChild(node, visit);
+    };
+    visit(unit);
+  }
+  return safe;
+}
+
+function variantExportArray(file, name, seen) {
+  const source = moduleSource(file);
+  if (!source || seen.has(source)) return undefined;
+  const target = variantRuntimeExport(file, name, variantRoot(source));
+  const declaration = target?.node;
+  return declaration && ts.isVariableDeclaration(declaration) && ts.isIdentifier(declaration.name)
+    && declaration.parent.flags & ts.NodeFlags.Const && variantBindingSafe(declaration.name, 'array')
+    ? variantArray(declaration.initializer, new Set(seen).add(source)) : undefined;
+}
+
+function variantArray(node, seen = new Set()) {
+  const value = node && unwrapTransparent(node);
+  if (!value || seen.has(value)) return undefined;
+  const next = new Set(seen).add(value);
+  if (ts.isArrayLiteralExpression(value)) {
+    const domains = value.elements.map((entry) => ts.isStringLiteral(entry) ? entry.text : undefined);
+    return domains.every((entry) => entry !== undefined) ? new Set(domains) : undefined;
+  }
+  if (!ts.isIdentifier(value) || !variantBindingSafe(variantDeclaration(value), 'array')) return undefined;
+  const local = variantInitializer(value);
+  if (local) return variantArray(local, next);
+  const declared = variantDeclaration(value);
+  const holder = declared?.parent;
+  const imported = holder && ts.isImportSpecifier(holder) ? holder.parent.parent.parent : undefined;
+  if (!imported || !ts.isStringLiteral(imported.moduleSpecifier)) return undefined;
+  const file = resolveModuleSpecifier(imported.moduleSpecifier.text, value.getSourceFile().fileName, variantRoot(value.getSourceFile()));
+  const name = (holder.propertyName ?? holder.name).text;
+  const origin = file && variantRuntimeExport(file, name, variantRoot(value.getSourceFile()))?.node;
+  return origin && variantModuleArraySafe(value.getSourceFile(), origin) ? variantExportArray(file, name, next) : undefined;
+}
+
+function variantMembership(node) {
+  if (!ts.isCallExpression(node) || node.arguments.length !== 1 || !ts.isPropertyAccessExpression(node.expression)
+    || node.expression.name.text !== 'has') return undefined;
+  const receiver = node.expression.expression;
+  if (!variantBindingSafe(variantDeclaration(receiver), 'set')) return undefined;
+  const initializer = variantInitializer(receiver);
+  const set = initializer && unwrapTransparent(initializer);
+  if (!set || !ts.isNewExpression(set) || !ts.isIdentifier(set.expression) || set.expression.text !== 'Set'
+    || variantDeclaration(set.expression) || set.arguments?.length !== 1) return undefined;
+  const values = variantArray(set.arguments.at(0));
+  return values ? { values, value: node.arguments.at(0) } : undefined;
+}
+
+function variantPredicate(node) {
+  if (!ts.isCallExpression(node) || !ts.isIdentifier(node.expression)) return undefined;
+  const identifier = variantDeclaration(node.expression);
+  if (!variantBindingSafe(identifier, 'predicate')) return undefined;
+  const fn = variantFunction(identifier);
+  if (!fn || !fn.body || !(ts.isArrowFunction(fn) || ts.isFunctionExpression(fn) || ts.isFunctionDeclaration(fn))
+    || fn.parameters.length !== 1 || node.arguments.length !== 1) return undefined;
+  const parameter = fn.parameters.at(0);
+  if (!ts.isIdentifier(parameter.name)) return undefined;
+  const body = ts.isBlock(fn.body)
+    ? fn.body.statements.length === 1 && ts.isReturnStatement(fn.body.statements.at(0)) && fn.body.statements.at(0).expression
+    : fn.body;
+  const membership = body && variantMembership(unwrapTransparent(body));
+  return membership && variantDeclaration(membership.value) === parameter.name
+    ? { values: membership.values, value: node.arguments.at(0) } : undefined;
+}
+
+const variantUnwrittenCache = new WeakMap();
+
+function variantUnwritten(identifier) {
+  if (variantUnwrittenCache.has(identifier)) return variantUnwrittenCache.get(identifier);
+  let safe = true;
+  const visit = (node) => {
+    if (!safe) return;
+    if (ts.isIdentifier(node) && node !== identifier && node.text === identifier.text
+      && variantDeclaration(node) === identifier && variantValueUse(node) && variantWritten(node)) safe = false;
+    ts.forEachChild(node, visit);
+  };
+  visit(identifier.getSourceFile());
+  variantUnwrittenCache.set(identifier, safe);
+  return safe;
+}
+
+function variantNarrow(value, domain, env, seen) {
+  const declaration = variantDeclaration(unwrapTransparent(value));
+  if (!declaration || !variantUnwritten(declaration)) return undefined;
+  const previous = variantDomain(value, value.getSourceFile(), seen, env);
+  const narrowed = domain.resolved
+    ? { ...domain, values: new Set([...domain.values].filter((entry) => !variantExcludes(previous, entry))),
+      nullish: domain.nullish && previous.nullish }
+    : previous.resolved
+      ? { ...previous, values: new Set([...previous.values].filter((entry) => !domain.excluded.has(entry))) }
+      : { ...previous, excluded: new Set([...previous.excluded, ...domain.excluded]) };
+  if (narrowed.resolved && narrowed.values.size === 0 && !narrowed.nullish) return null;
+  return new Map(env).set(declaration, narrowed);
+}
+
+function variantCondition(expression, truth, env, seen = new Set()) {
+  const node = expression && unwrapTransparent(expression);
+  if (!node || seen.has(node)) return [env];
+  const next = new Set(seen).add(node);
+  if (node.kind === ts.SyntaxKind.TrueKeyword || node.kind === ts.SyntaxKind.FalseKeyword) {
+    return (node.kind === ts.SyntaxKind.TrueKeyword) === truth ? [env] : [];
+  }
+  if (ts.isPrefixUnaryExpression(node) && node.operator === ts.SyntaxKind.ExclamationToken) {
+    return variantCondition(node.operand, !truth, env, next);
+  }
+  if (ts.isBinaryExpression(node) && (node.operatorToken.kind === ts.SyntaxKind.AmpersandAmpersandToken
+    || node.operatorToken.kind === ts.SyntaxKind.BarBarToken)) {
+    const and = node.operatorToken.kind === ts.SyntaxKind.AmpersandAmpersandToken;
+    const continuing = variantCondition(node.left, and, env, next)
+      .flatMap((branch) => variantCondition(node.right, truth, branch, next));
+    return truth === and ? continuing : [...variantCondition(node.left, !and, env, next), ...continuing];
+  }
+  if (ts.isConditionalExpression(node)) {
+    return [...variantCondition(node.condition, true, env, next).flatMap((branch) => variantCondition(node.whenTrue, truth, branch, next)),
+      ...variantCondition(node.condition, false, env, next).flatMap((branch) => variantCondition(node.whenFalse, truth, branch, next))];
+  }
+  const membership = variantMembership(node) ?? variantPredicate(node);
+  if (membership) {
+    const current = variantDomain(membership.value, membership.value.getSourceFile(), next, env);
+    const domain = truth ? finiteVariant(membership.values) : current.resolved
+      ? { ...current, values: new Set([...current.values].filter((value) => !membership.values.has(value))) }
+      : { ...unknownVariant(), excluded: new Set(membership.values) };
+    const narrowed = variantNarrow(membership.value, domain, env, next);
+    return narrowed === null ? [] : [narrowed ?? env];
+  }
+  if (ts.isBinaryExpression(node) && (node.operatorToken.kind === ts.SyntaxKind.EqualsEqualsEqualsToken
+    || node.operatorToken.kind === ts.SyntaxKind.ExclamationEqualsEqualsToken)) {
+    const literal = ts.isStringLiteral(node.right) ? node.right : ts.isStringLiteral(node.left) ? node.left : undefined;
+    const value = literal === node.right ? node.left : node.right;
+    if (literal) {
+      const current = variantDomain(value, value.getSourceFile(), seen, env);
+      const equal = truth === (node.operatorToken.kind === ts.SyntaxKind.EqualsEqualsEqualsToken);
+      const domain = equal ? finiteVariant([literal.text]) : current.resolved
+        ? { ...current, values: new Set([...current.values].filter((entry) => entry !== literal.text)) }
+        : { ...unknownVariant(), excluded: new Set([literal.text]) };
+      if (domain) {
+        if (current.resolved && (equal ? !current.values.has(literal.text) : current.values.size === 1 && current.values.has(literal.text) && !current.nullish)) return [];
+        const narrowed = variantNarrow(value, domain, env, next);
+        return narrowed === null ? [] : [narrowed ?? env];
+      }
+    }
+    return [env];
+  }
+  const initializer = variantInitializer(node);
+  if (initializer && !env.has(variantDeclaration(node))) return variantCondition(initializer, truth, env, next);
+  const current = variantDomain(node, node.getSourceFile(), seen, env);
+  if (!current.resolved) return [env];
+  const domain = { ...current, values: new Set([...current.values].filter((value) => Boolean(value) === truth)),
+    nullish: !truth && current.nullish, nullable: !truth && current.nullable, defaultable: !truth && current.defaultable };
+  if (domain.values.size === 0 && !domain.nullish) return [];
+  const narrowed = variantNarrow(node, domain, env, next);
+  return narrowed === null ? [] : [narrowed ?? env];
+}
+
+/** Only returned values count; guards narrow their source binding, never a cast. */
+function variantDomain(expression, source, seen = new Set(), env = new Map()) {
+  const node = expression && unwrapTransparent(ts.isJsxExpression(expression) ? expression.expression : expression);
+  if (!node || seen.has(node)) return unknownVariant();
+  const next = new Set(seen).add(node);
+  if (ts.isStringLiteral(node) || ts.isNoSubstitutionTemplateLiteral(node)) return finiteVariant([node.text]);
+  if (node.kind === ts.SyntaxKind.NullKeyword) return finiteVariant([], true, true);
+  if (ts.isIdentifier(node) && node.text === 'undefined' && !variantDeclaration(node)) return finiteVariant([], true);
+  if (ts.isConditionalExpression(node)) {
+    const branches = [true, false].flatMap((truth) => variantCondition(node.condition, truth, env, next)
+      .map((branch) => variantDomain(truth ? node.whenTrue : node.whenFalse, source, next, branch)));
+    return branches.length ? branches.reduce(mergeVariant) : finiteVariant([]);
+  }
+  if (ts.isBinaryExpression(node) && (node.operatorToken.kind === ts.SyntaxKind.QuestionQuestionToken
+    || node.operatorToken.kind === ts.SyntaxKind.BarBarToken)) {
+    const left = variantDomain(node.left, source, next, env);
+    if (!left.resolved) return unknownVariant();
+    const fallback = left.nullish || node.operatorToken.kind === ts.SyntaxKind.BarBarToken && left.values.has('');
+    if (!fallback) return left;
+    const right = variantDomain(node.right, source, next, env);
+    return { ...mergeVariant(finiteVariant([...left.values].filter((value) => node.operatorToken.kind !== ts.SyntaxKind.BarBarToken || value !== '')), right), nullish: right.nullish };
+  }
+  if (ts.isIdentifier(node)) {
+    const identifier = variantDeclaration(node);
+    if (!identifier || !variantUnwritten(identifier)) return unknownVariant();
+    if (env.has(identifier)) return env.get(identifier);
+    const declaration = identifier.parent;
+    const initializer = variantInitializer(node);
+    if (initializer) return variantDomain(initializer, source, next, env);
+    if (ts.isBindingElement(declaration) && ts.isObjectBindingPattern(declaration.parent)
+      && ts.isParameter(declaration.parent.parent) && !declaration.dotDotDotToken) {
+      const parameter = declaration.parent.parent;
+      const member = (declaration.propertyName ?? declaration.name).getText().replace(/^['"]|['"]$/gu, '');
+      const domain = variantTypeDomain(parameter.type, member);
+      if (!domain.resolved || !domain.defaultable || !declaration.initializer) return domain;
+      return mergeVariant({ ...domain, nullish: domain.nullable, defaultable: false },
+        variantDomain(declaration.initializer, source, next, env));
+    }
+    if (ts.isParameter(declaration)) return variantTypeDomain(declaration.type);
+    const resolved = resolveDeclared(source.fileName, identifier, variantRoot(source));
+    return resolved && ts.isVariableDeclaration(resolved.node) && resolved.node.parent.flags & ts.NodeFlags.Const
+      ? variantDomain(resolved.node.initializer, resolved.node.getSourceFile(), next, env) : unknownVariant();
+  }
+  if (ts.isPropertyAccessExpression(node)) {
+    const declaration = variantDeclaration(node.expression)?.parent;
+    if (declaration && ts.isParameter(declaration)) return variantTypeDomain(declaration.type, node.name.text);
+    const object = variantInitializer(node.expression);
+    const literal = object && unwrapTransparent(object);
+    if (literal && ts.isObjectLiteralExpression(literal)
+      && variantBindingSafe(variantDeclaration(node.expression), `object:${node.name.text}`)) {
+      let domain = unknownVariant();
+      for (const member of literal.properties) {
+        if (ts.isSpreadAssignment(member) || member.name && ts.isComputedPropertyName(member.name)) domain = unknownVariant();
+        else if (member.name?.getText().replace(/^['"]|['"]$/gu, '') === node.name.text) {
+          domain = ts.isPropertyAssignment(member) ? variantDomain(member.initializer, source, next, env)
+            : ts.isShorthandPropertyAssignment(member) ? variantDomain(member.name, source, next, env) : unknownVariant();
+        }
+      }
+      return domain;
+    }
+  }
+  return unknownVariant();
+}
+
 /**
  * Strips the wrappers that change a type and never a value. `x as CSSProperties`,
  * `(x)`, `x satisfies CSSProperties`, `<CSSProperties>x` and `x!` all paint
@@ -732,6 +1311,7 @@ export function analyzeSource(file, source = ts.createSourceFile(
   const parts = new Set();
   const states = new Set();
   const variants = new Set();
+  let variantDomainResolved = true;
   const classTokens = new Set();
   const componentAnchors = [];
   const inlineStyleViolations = [];
@@ -891,7 +1471,9 @@ export function analyzeSource(file, source = ts.createSourceFile(
         }
       } else if (key === 'data-variant') {
         stampsVariantAttribute = true;
-        for (const value of literalsIn(node.initializer)) variants.add(value);
+        const domain = variantDomain(node.initializer, source);
+        variantDomainResolved &&= domain.resolved;
+        for (const value of domain.values) variants.add(value);
       }
     }
     if (ts.isJsxAttribute(node)) {
@@ -915,7 +1497,9 @@ export function analyzeSource(file, source = ts.createSourceFile(
         }
       } else if (name === 'data-variant') {
         stampsVariantAttribute = true;
-        for (const value of attributeLiterals(node)) variants.add(value);
+        const domain = node.initializer ? variantDomain(node.initializer, source) : { resolved: false, values: [] };
+        variantDomainResolved &&= domain.resolved;
+        for (const value of domain.values) variants.add(value);
       } else if (name === 'style' && node.initializer && ts.isJsxExpression(node.initializer)) {
         const expression = node.initializer.expression;
         if (expression) {
@@ -958,6 +1542,7 @@ export function analyzeSource(file, source = ts.createSourceFile(
     nonElementParts,
     states,
     variants,
+    variantDomainResolved,
     classTokens,
     componentAnchors,
     inlineStyleViolations,
@@ -1012,6 +1597,10 @@ export function analyzeSkin(file) {
   if (/\[data-variant/u.test(text)) selectsVariant = true;
   const variantCompounds = [...text.matchAll(/\[data-variant/gu)]
     .map((match) => compoundClassTokensBefore(text, match.index));
+  const variantReads = [...text.matchAll(/\[data-variant(?:\s*([~^*$|]?=)\s*(?:'([^']*)'|"([^"]*)"|([^\]\s]+)))?\s*\]/gu)]
+    .map((match) => ({ operator: match.at(1) ?? null, value: match.at(2) ?? match.at(3) ?? match.at(4) ?? null,
+      tokens: compoundClassTokensBefore(text, match.index), file,
+      line: text.slice(0, match.index).split('\n').length }));
   for (const prefix of CLASS_PREFIXES) {
     for (const match of text.matchAll(
       new RegExp(`\\.(${prefix}-[a-zA-Z0-9]+(?:-{1,2}[a-zA-Z0-9]+)*)`, 'gu'),
@@ -1076,7 +1665,7 @@ export function analyzeSkin(file) {
     skeletonSigns.push({ what: `selector \`${match[0]}\``, line: lineAt(match.index), file });
   }
 
-  return { file, parts, partReads, states, stateCompounds, classTokens, components, selectsVariant, variantCompounds, colorLiterals, maskAlphaStops, unpairedPseudo, antReads, skeletonSigns };
+  return { file, parts, partReads, states, stateCompounds, classTokens, components, selectsVariant, variantCompounds, variantReads, colorLiterals, maskAlphaStops, unpairedPseudo, antReads, skeletonSigns };
 }
 
 /**
@@ -1487,8 +2076,8 @@ function declarationOf(name, from) {
         if (found) return found;
       }
     }
-    const statements = ts.isSourceFile(node) || ts.isBlock(node) || ts.isModuleBlock(node)
-      || ts.isCaseClause(node) || ts.isDefaultClause(node) ? node.statements : undefined;
+    const statements = ts.isCaseBlock(node) ? node.clauses.flatMap((clause) => clause.statements)
+      : ts.isSourceFile(node) || ts.isBlock(node) || ts.isModuleBlock(node) ? node.statements : undefined;
     if (!statements) continue;
     for (const statement of statements) {
       if (ts.isVariableStatement(statement)) {
@@ -1501,6 +2090,7 @@ function declarationOf(name, from) {
       } else if (ts.isImportDeclaration(statement) && statement.importClause && !statement.importClause.isTypeOnly) {
         const clause = statement.importClause;
         if (clause.name?.text === name) return clause.name;
+        if (clause.namedBindings && ts.isNamespaceImport(clause.namedBindings) && clause.namedBindings.name.text === name) return clause.namedBindings.name;
         if (clause.namedBindings && ts.isNamedImports(clause.namedBindings)) {
           const element = clause.namedBindings.elements.find((entry) => entry.name.text === name);
           if (element) return element.name;
@@ -3098,6 +3688,19 @@ export function measureDragAndDropArm(resolved, parsed) {
   };
 }
 
+/** A selected variant value must be in the finite stamped domain; an unknown domain earns no value credit. */
+export function variantValueMatches(read, values) {
+  if (read.operator === null) return values.size > 0;
+  return [...values].some((value) => {
+    if (read.operator === '=') return value === read.value;
+    if (read.operator === '~=') return value.split(/\s+/u).includes(read.value);
+    if (read.operator === '^=') return value.startsWith(read.value);
+    if (read.operator === '$=') return value.endsWith(read.value);
+    if (read.operator === '*=') return value.includes(read.value);
+    return value === read.value || value.startsWith(`${read.value}-`);
+  });
+}
+
 export function measureFamily(resolved, { producers, compiled, scopes, callerParts } = {}) {
   const { family, root } = resolved;
   const measured = producers && compiled ? null : sharedChannelProducers();
@@ -3208,6 +3811,19 @@ export function measureFamily(resolved, { producers, compiled, scopes, callerPar
       .find(Boolean);
     if (backer) variantComposedFrom.add(backer);
     else familyVariantSelections += 1;
+  }
+  const variantValueMismatches = [];
+  for (const read of skins.flatMap((skin) => skin.variantReads)) {
+    const backer = read.tokens.filter((token) => !ownsClass(token))
+      .map((token) => composedPrimitiveStampsVariant(token, root)).find(Boolean);
+    let values = stampedVariants;
+    let resolvedDomain = sources.every((entry) => entry.variantDomainResolved);
+    if (backer) {
+      const owners = findComponentDirs(root, backer).flatMap((dir) => walkFiles(dir, isFamilySource)).map((file) => analyzeSource(file));
+      values = new Set(owners.flatMap((entry) => [...entry.variants]));
+      resolvedDomain = owners.length > 0 && owners.every((entry) => entry.variantDomainResolved);
+    }
+    if (!resolvedDomain || !variantValueMatches(read, values)) variantValueMismatches.push({ ...read, stamped: [...values].sort(), backer, resolvedDomain });
   }
   /* A state painted on a compound that carries a composed primitive's class is
    * stamped by that primitive, not by this family: the class and the state land
@@ -3375,7 +3991,8 @@ export function measureFamily(resolved, { producers, compiled, scopes, callerPar
       owners: resolved.componentDirs.length,
       stampsAnatomy: stampsPartAttribute,
       skinReadsAnatomy: consumedParts.size > 0,
-      variantContract: stampsVariantAttribute ? skinSelectsVariant : familyVariantSelections === 0,
+      variantContract: (stampsVariantAttribute ? skinSelectsVariant : familyVariantSelections === 0)
+        && variantValueMismatches.length === 0,
       stateContract: stampsStateAttribute === skinUsesStateAttribute,
       stateGoverned: skinUsesStateAttribute ? usesPartAttributes : true,
       a11yProbes: resolved.a11yProbes.length,
@@ -3412,6 +4029,7 @@ export function measureFamily(resolved, { producers, compiled, scopes, callerPar
       colorLiteralsInSkin,
       maskAlphaStops,
       variantComposedFrom: [...variantComposedFrom].sort(),
+      variantValueMismatches,
       stateComposedFrom: [...stateComposedFrom].sort(),
       partsComposedFrom,
       statesNotComposed,
@@ -3670,7 +4288,7 @@ export function judgeFamily(measured, pinned) {
     : [`${family}: BLOCKING the family skin selects no \`[data-part]\`; it paints something this contract cannot see`]));
   waivable('variantContract', () => (blocking.variantContract
     ? []
-    : [`${family}: BLOCKING \`data-variant\` is on exactly one side of the contract -- stamped without a rule, or painted without a stamp`]));
+    : [`${family}: BLOCKING \`data-variant\` is on exactly one side of the contract -- stamped without a rule, painted without a stamp, or variant values do not match: ${JSON.stringify(detail.variantValueMismatches ?? [])}`]));
   waivable('stateContract', () => (blocking.stateContract || credit.covers
     ? []
     : [`${family}: BLOCKING \`data-state\` is on exactly one side of the contract -- stamped with no rule, or painted with no stamp`]));

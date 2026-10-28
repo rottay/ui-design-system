@@ -5,10 +5,11 @@
  * as a download, and writing text to the system clipboard.
  *
  * @remarks
- * The kernel owns document SHAPE and platform plumbing only. Cell policy stays
- * with the caller: which columns are exported, how a raw value becomes a
- * string, and whether a refused clipboard write is reported to the user are
- * decisions the calling surface makes, not this module.
+ * The kernel owns document shape, default spreadsheet-formula safety and
+ * platform plumbing. Cell policy stays with the caller: which columns are
+ * exported, how a raw value becomes a string, and whether a refused clipboard
+ * write is reported to the user are decisions the calling surface makes, not
+ * this module.
  *
  * @module System/Data/ExportKernel
  * @category System
@@ -20,25 +21,30 @@
 // ============================================================================
 
 /**
- * Escape one cell for a delimited document, per RFC 4180.
+ * Escape one string cell for a spreadsheet-safe delimited document.
  *
- * A value containing the delimiter, a double quote, or a line break is wrapped
- * in double quotes and its own quotes are doubled.
+ * Prefix an apostrophe when the first non-whitespace character is `=`, `+`,
+ * `-` or `@`, including numeric-looking strings. Callers have already coerced
+ * raw values to text. Then apply RFC 4180 quoting: a value containing the
+ * delimiter, a double quote, or a line break is wrapped in double quotes and
+ * its own quotes are doubled.
  *
  * @param value     - Cell text. Callers coerce their raw value first.
  * @param delimiter - Cell separator the document uses. Defaults to a comma.
- * @returns The cell, quoted only when quoting is required.
+ * @returns Formula-neutralized cell text, quoted only when required.
  */
 export function escapeDelimited(value: string, delimiter: string = ','): string {
+  const safe = /^\s*[=+\-@]/u.test(value) ? `'${value}` : value;
+
   if (
-    value.includes(delimiter) ||
-    value.includes('"') ||
-    value.includes('\n') ||
-    value.includes('\r')
+    safe.includes(delimiter) ||
+    safe.includes('"') ||
+    safe.includes('\n') ||
+    safe.includes('\r')
   ) {
-    return `"${value.replace(/"/g, '""')}"`;
+    return `"${safe.replace(/"/g, '""')}"`;
   }
-  return value;
+  return safe;
 }
 
 /**
@@ -59,9 +65,11 @@ export interface SerializeDelimitedOptions {
   byteOrderMark?: boolean;
 
   /**
-   * Per-cell escape. Defaults to `escapeDelimited` bound to `delimiter`.
-   * Surfaces whose format sanitizes rather than quotes (tab-separated
-   * clipboard payloads) pass their own policy here.
+   * Per-cell escape. Defaults to `escapeDelimited` bound to `delimiter`,
+   * including formula neutralization. An override receives the original text
+   * and fully replaces that safety and quoting policy. Surfaces whose format
+   * sanitizes rather than quotes (tab-separated clipboard payloads) pass their
+   * own policy here.
    */
   escapeValue?: (value: string) => string;
 }
@@ -70,7 +78,7 @@ export interface SerializeDelimitedOptions {
  * Join a grid of already-stringified cells into one delimited document.
  *
  * The header row, when there is one, is simply the first row: the kernel
- * applies the same escape to every row.
+ * applies the same escape, including default formula safety, to every row.
  *
  * @param rows    - Rows of cells, header row included.
  * @param options - Delimiter, row separator, BOM and escape policy.
