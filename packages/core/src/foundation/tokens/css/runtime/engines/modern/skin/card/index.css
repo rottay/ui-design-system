@@ -20,6 +20,12 @@
 .ds-card.ds-card--modern[data-part='root'] {
   position: relative;
   container: ds-card / inline-size;
+  --_ds-card-intrinsic-scale: var(--ds-card-scale-md, 1);
+  /* Size containment needs a family footprint when the parent shrink-wraps. */
+  contain-intrinsic-inline-size: calc(
+    var(--ds-card-min-inline-size, calc(16rem * var(--ds-density-effective-scale, 1) * var(--ds-type-scale, 1)))
+    * var(--ds-card-scale, var(--_ds-card-intrinsic-scale, var(--ds-card-scale-md, 1)))
+  );
   min-inline-size: 0;
   min-block-size: var(--ds-premium-card-min-height);
   overflow: hidden;
@@ -312,6 +318,19 @@
 }
 .ds-card.ds-card--modern[data-part='root'][data-padding='xl'] {
   --ds-card-instance-padding: calc(var(--ds-card-padding-xl, var(--ds-card-xl-padding)) * var(--ds-rhythm-effective-scale, 1));
+}
+
+.ds-card.ds-card--modern[data-part='root'][data-size='xs'],
+.ds-card.ds-card--modern[data-part='root'][data-size='sm'] {
+  --_ds-card-intrinsic-scale: var(--ds-card-scale-sm, calc(var(--ds-card-scale-md, 1) * 0.875));
+}
+.ds-card.ds-card--modern[data-part='root'][data-size='lg'] {
+  --_ds-card-intrinsic-scale: var(--ds-card-scale-lg, calc(var(--ds-card-scale-md, 1) * 1.25));
+}
+.ds-card.ds-card--modern[data-part='root'][data-size='xl'],
+.ds-card.ds-card--modern[data-part='root'][data-size='2xl'],
+.ds-card.ds-card--modern[data-part='root'][data-size='3xl'] {
+  --_ds-card-intrinsic-scale: var(--ds-card-scale-xl, calc(var(--ds-card-scale-md, 1) * 1.5));
 }
 
 /* size axis: compact sizes de-escalate the copy, amplified sizes scale it up;

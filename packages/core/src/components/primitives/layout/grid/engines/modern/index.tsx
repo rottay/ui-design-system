@@ -297,12 +297,109 @@ const buildGridStyles = (props: GridProps): CSSProperties => {
   return computedStyle;
 };
 
+/** Available explicit tracks for automatic column spans; explicit grids stay unbounded. */
+const GridTrackLimit = React.createContext<number | undefined>(undefined);
+
+/** Count resolved tracks, including collapsed auto-fit tracks, ignoring line names. */
+const countGridTracks = (template: string): number => {
+  const tracks = template.replace(/\[[^\]]*\]/g, " ").trim().split(/\s+/);
+  return tracks.length > 0 && tracks.every((track) => /^\d+(?:\.\d+)?px$/.test(track))
+    ? tracks.length
+    : 1;
+};
+
+/** Measure the same track recipe without item placement creating implicit columns. */
+const measureGridTracks = (node: HTMLElement, contentInlineSize?: number): number => {
+  const view = node.ownerDocument.defaultView;
+  if (!view) return 1;
+  const style = view.getComputedStyle(node);
+  const vertical = /^(vertical|sideways)/.test(style.writingMode);
+  const size = parseFloat(vertical ? style.height : style.width);
+  const padding = vertical
+    ? parseFloat(style.paddingTop || "0") + parseFloat(style.paddingBottom || "0")
+    : parseFloat(style.paddingLeft || "0") + parseFloat(style.paddingRight || "0");
+  const border = vertical
+    ? parseFloat(style.borderTopWidth || "0") + parseFloat(style.borderBottomWidth || "0")
+    : parseFloat(style.borderLeftWidth || "0") + parseFloat(style.borderRightWidth || "0");
+  const overflow = vertical ? style.overflowX : style.overflowY;
+  const reservesGutter = /^(auto|scroll)$/.test(overflow) || /stable/.test(style.scrollbarGutter);
+  // CSS width includes reserved gutters; only the observed content box is exact there.
+  if (contentInlineSize === undefined && reservesGutter) return 1;
+  const width = contentInlineSize ?? size - (style.boxSizing === "border-box" ? padding + border : 0);
+  if (!Number.isFinite(width) || width <= 0) return 1;
+  const probe = node.cloneNode(false) as HTMLElement;
+  probe.removeAttribute("id");
+  probe.setAttribute("aria-hidden", "true");
+  probe.setAttribute("data-grid-track-probe", "");
+  probe.setAttribute("inert", "");
+  probe.style.cssText += ";position:fixed!important;visibility:hidden!important;pointer-events:none!important;box-sizing:content-box!important;min-width:0!important;max-width:none!important;height:0!important;min-height:0!important;overflow:hidden!important;scrollbar-gutter:auto!important;";
+  probe.style.setProperty("inline-size", `${width}px`, "important");
+  // Inherit the actual recipe; copying CSSOM's resolved tracks would copy implicit tracks too.
+  node.appendChild(probe);
+  probe.style.setProperty("grid-template-columns", "inherit", "important");
+  probe.style.setProperty("column-gap", "inherit", "important");
+  try {
+    return countGridTracks(view.getComputedStyle(probe).gridTemplateColumns);
+  } finally {
+    probe.remove();
+  }
+};
+
+/** Keep automatic spans inside the explicit grid as its container or recipe changes. */
+const useGridTrackLimit = (node: HTMLElement | null, enabled: boolean): number | undefined => {
+  const [tracks, setTracks] = React.useState(1);
+  React.useLayoutEffect(() => {
+    if (!enabled || !node) return;
+    let contentInlineSize: number | undefined;
+    const update = () => setTracks(measureGridTracks(node, contentInlineSize));
+    const resize = typeof ResizeObserver === "undefined" ? undefined : new ResizeObserver((entries) => {
+      const entry = entries?.find((value) => value.target === node);
+      if (entry) {
+        const [contentBox] = entry.contentBoxSize ?? [];
+        if (contentBox) contentInlineSize = contentBox.inlineSize;
+        else {
+          const vertical = /^(vertical|sideways)/.test(node.ownerDocument.defaultView?.getComputedStyle(node).writingMode ?? "");
+          contentInlineSize = vertical ? entry.contentRect.height : entry.contentRect.width;
+        }
+      }
+      update();
+    });
+    const observe = () => {
+      resize?.disconnect();
+      resize?.observe(node);
+      Array.from(node.children).filter((child) => !child.hasAttribute("data-grid-track-probe")).forEach((child) => resize?.observe(child));
+    };
+    const mutation = new MutationObserver((records) => {
+      const childrenChanged = records.some((record) => record.type === "childList" &&
+        Array.from(record.addedNodes).concat(Array.from(record.removedNodes)).some((child) =>
+          child.nodeType !== 1 || !(child as Element).hasAttribute("data-grid-track-probe")));
+      if (childrenChanged) observe();
+      if (childrenChanged || records.some((record) => record.type === "attributes")) update();
+    });
+    mutation.observe(node, { attributes: true, childList: true });
+    let ancestor = node.parentElement;
+    while (ancestor) {
+      mutation.observe(ancestor, { attributes: true });
+      ancestor = ancestor.parentElement;
+    }
+    observe();
+    update();
+    node.ownerDocument.defaultView?.addEventListener("resize", update);
+    return () => {
+      resize?.disconnect();
+      mutation.disconnect();
+      node.ownerDocument.defaultView?.removeEventListener("resize", update);
+    };
+  }, [node, enabled]);
+  return enabled ? tracks : undefined;
+};
+
 /**
  * Assembles inline CSSProperties for a grid item.
  *
  * Handles common spans and advanced placement in one structural style contract.
  */
-const buildGridItemStyles = (props: GridItemProps): CSSProperties => {
+const buildGridItemStyles = (props: GridItemProps, trackLimit?: number): CSSProperties => {
   const {
     span,
     colSpan,
@@ -323,10 +420,15 @@ const buildGridItemStyles = (props: GridItemProps): CSSProperties => {
   // Named area takes full precedence over col/row placement
   if (area) computedStyle.gridArea = area;
   else {
-    const effectiveColSpan = resolveSpan(colSpan ?? span);
-    const effectiveRowSpan = resolveSpan(rowSpan);
+    const requestedColSpan = resolveSpan(colSpan ?? span);
     const effectiveColStart = resolveLine(colStart);
     const effectiveColEnd = resolveLine(colEnd);
+    const automaticColumn = (effectiveColStart === undefined || effectiveColStart === "auto") &&
+      (effectiveColEnd === undefined || effectiveColEnd === "auto");
+    const effectiveColSpan = requestedColSpan !== undefined && trackLimit !== undefined && automaticColumn
+      ? Math.min(requestedColSpan, trackLimit)
+      : requestedColSpan;
+    const effectiveRowSpan = resolveSpan(rowSpan);
     const effectiveRowStart = resolveLine(rowStart);
     const effectiveRowEnd = resolveLine(rowEnd);
     // Build gridColumn: "start / span N" or "start / end" or "span N"
@@ -428,6 +530,10 @@ const ModernGrid = forwardRef<HTMLElement, GridProps>((props, ref) => {
   // The posture the grid is actually in, resolved through the shared runtime.
   // The app declares deltas only; the thresholds are the platform's.
   const containerRef = React.useRef<HTMLElement | null>(null);
+  const [gridElement, setGridElement] = React.useState<HTMLElement | null>(null);
+  const trackLimit = useGridTrackLimit(gridElement,
+    Boolean((autoFit || minColumnWidth !== undefined) && !props.templateColumns &&
+      !props.style?.gridTemplateColumns && !props.style?.gridTemplate && !props.style?.grid));
   const adaptationBase: GridAdaptation = React.useMemo(
     () => ({ columns: props.columns, gap: props.gap ?? props.spacing }),
     [props.columns, props.gap, props.spacing]
@@ -490,16 +596,18 @@ const ModernGrid = forwardRef<HTMLElement, GridProps>((props, ref) => {
   };
 
   const ElementType = Component as ElementType;
+  const setGridRef = React.useCallback((node: HTMLElement | null) => {
+    containerRef.current = node;
+    setGridElement(node);
+    if (typeof ref === "function") ref(node);
+    else if (ref) (ref as React.MutableRefObject<HTMLElement | null>).current = node;
+  }, [ref]);
 
   return React.createElement(
     ElementType,
     {
       ...htmlAttributes,
-      ref: (node: HTMLElement | null) => {
-        containerRef.current = node;
-        if (typeof ref === "function") ref(node);
-        else if (ref) (ref as React.MutableRefObject<HTMLElement | null>).current = node;
-      },
+      ref: setGridRef,
       className: `rottay-grid rottay-grid--modern ${className}`.trim(),
       style: computedStyle,
       id,
@@ -524,7 +632,7 @@ const ModernGrid = forwardRef<HTMLElement, GridProps>((props, ref) => {
       "data-layout-motion":
         props.motion === "rearrange" ? "rearrange" : undefined,
     },
-    children
+    React.createElement(GridTrackLimit.Provider, { value: trackLimit }, children)
   );
 });
 
@@ -562,7 +670,8 @@ const ModernGridItem = forwardRef<HTMLElement, GridItemProps>((props, ref) => {
     ...htmlAttributes
   } = props;
 
-  const computedStyle = buildGridItemStyles(props);
+  const trackLimit = React.useContext(GridTrackLimit);
+  const computedStyle = buildGridItemStyles(props, trackLimit);
 
   const ElementType = Component as ElementType;
 

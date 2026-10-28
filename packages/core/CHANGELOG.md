@@ -4,6 +4,10 @@
 
 ### Patch Changes
 
+- Keep Modern Card content visible in shrink-to-fit, Flex and intrinsic
+  compositions without imposing full width on every Card root.
+- Correct Modern Grid auto-fit measurement, inherited recipe invalidation and
+  span clamping while preserving automatic endpoints and explicit placement.
 - Make Modern FilterPanel select options neutral by default. Remove label/value
   inference of business tone and icons while preserving explicit consumer
   metadata.
