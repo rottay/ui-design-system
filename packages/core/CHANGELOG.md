@@ -1,5 +1,13 @@
 # @rottay/design-system
 
+## [Unreleased]
+
+### Patch Changes
+
+- Make Modern FilterPanel select options neutral by default. Remove label/value
+  inference of business tone and icons while preserving explicit consumer
+  metadata.
+
 ## 2.19.34
 
 ### Patch Changes

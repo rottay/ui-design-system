@@ -40,23 +40,7 @@
 import React, { useId, useState } from 'react';
 import type { FilterPanelProps } from '../../contracts';
 import type { FilterDef } from '../../../../../../foundation/contracts/runtime/components/patterns/core';
-/* Option-icon heuristics route through the governed semantic-icon facade
-   (generated roles) — never raw glyph imports or local SVG. */
-import { ComplianceReviewIcon } from '@/graphics/icons/semantic/generated/roles/compliance-review';
-import { EntityGroupIcon } from '@/graphics/icons/semantic/generated/roles/entity-group';
-import { EntityOrganizationIcon } from '@/graphics/icons/semantic/generated/roles/entity-organization';
-import { EntityPersonIcon } from '@/graphics/icons/semantic/generated/roles/entity-person';
-import { LayoutHierarchyIcon } from '@/graphics/icons/semantic/generated/roles/layout-hierarchy';
-import { LocationPlaceIcon } from '@/graphics/icons/semantic/generated/roles/location-place';
-import { NavigationRouteIcon } from '@/graphics/icons/semantic/generated/roles/navigation-route';
-import { OperationsTargetIcon } from '@/graphics/icons/semantic/generated/roles/operations-target';
-import { SecurityProtectionIcon } from '@/graphics/icons/semantic/generated/roles/security-protection';
-import { StatusErrorIcon } from '@/graphics/icons/semantic/generated/roles/status-error';
 import { StatusNeutralIcon } from '@/graphics/icons/semantic/generated/roles/status-neutral';
-import { StatusPendingIcon } from '@/graphics/icons/semantic/generated/roles/status-pending';
-import { StatusSuccessIcon } from '@/graphics/icons/semantic/generated/roles/status-success';
-import { StatusWarningIcon } from '@/graphics/icons/semantic/generated/roles/status-warning';
-import { TimeScheduleIcon } from '@/graphics/icons/semantic/generated/roles/time-schedule';
 import { ActionCloseIcon } from '@/graphics/icons/semantic/generated/roles/action-close';
 import { NavigationDownIcon } from '@/graphics/icons/semantic/generated/roles/navigation-down';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
@@ -90,8 +74,6 @@ interface FilterPanelCopy {
 }
 
 type FilterOption = NonNullable<FilterDef['options']>[number];
-type FilterOptionTone = NonNullable<FilterOption['tone']>;
-type FilterIconComponent = typeof StatusNeutralIcon;
 
 /** Maps the pattern's number-or-empty range vocabulary onto the composed
  *  InputNumber's `number | null` contract ('' and undefined both mean empty). */
@@ -101,73 +83,27 @@ function toNumberInputValue(value: unknown): number | null {
   return Number.isNaN(parsed) ? null : parsed;
 }
 
-function normalizeFilterToken(value: unknown): string {
-  return String(value ?? '')
-    .replace(/[_-]+/g, ' ')
-    .replace(/\s+/g, ' ')
-    .trim()
-    .toLowerCase();
-}
-
-function inferOptionTone(filter: FilterDef, option: FilterOption): FilterOptionTone {
-  if (option.tone) return option.tone;
-
-  const token = `${normalizeFilterToken(filter.key)} ${normalizeFilterToken(filter.label)} ${normalizeFilterToken(option.value)} ${normalizeFilterToken(option.label)}`;
-
-  if (/(cancel|cancelled|canceled|reject|rejected|failed|no hire|no show|blocked|closed)/.test(token)) return 'danger';
-  if (/(needs|missing|gap|risk|urgent|overdue|pending|draft|unassigned|unscored|attention|paused)/.test(token)) return 'warning';
-  if (/(ready|scored|completed|complete|active|accepted|approved|hired|published|attached|assigned|healthy|clear)/.test(token)) return 'success';
-  if (/(scheduled|open|live|available|route|system design|technical|screen)/.test(token)) return 'primary';
-  if (/(remote|hybrid|onsite|on site|market|location|source|channel)/.test(token)) return 'info';
-
-  return 'neutral';
-}
-
-function inferOptionIcon(filter: FilterDef, option: FilterOption): FilterIconComponent {
-  const token = `${normalizeFilterToken(filter.key)} ${normalizeFilterToken(filter.label)} ${normalizeFilterToken(option.value)} ${normalizeFilterToken(option.label)}`;
-
-  if (/(cancel|reject|failed|blocked|closed|no hire|no show)/.test(token)) return StatusErrorIcon;
-  if (/(needs|missing|gap|risk|urgent|overdue|unassigned|unscored|attention)/.test(token)) return StatusWarningIcon;
-  if (/(ready|scored|completed|active|accepted|approved|hired|published|attached|assigned|clear)/.test(token)) return StatusSuccessIcon;
-  if (/(score|evidence|debrief|readiness|review|decision)/.test(token)) return ComplianceReviewIcon;
-  if (/(date|time|deadline|schedule|scheduled|clock|cadence|recent)/.test(token)) return TimeScheduleIcon;
-  if (/(owner|interviewer|recruiter|team|squad|panel|candidate)/.test(token)) return EntityGroupIcon;
-  if (/(person|user|requester|referrer|employee)/.test(token)) return EntityPersonIcon;
-  if (/(job|role|position|department|business unit|client|company)/.test(token)) return EntityOrganizationIcon;
-  if (/(location|market|remote|hybrid|onsite|on site)/.test(token)) return LocationPlaceIcon;
-  if (/(route|meeting|link)/.test(token)) return NavigationRouteIcon;
-  if (/(priority|target|fit|match|confidence)/.test(token)) return OperationsTargetIcon;
-  if (/(status|stage|type|workflow|category)/.test(token)) return LayoutHierarchyIcon;
-  if (/(sla|security|approval|compliance|guard)/.test(token)) return SecurityProtectionIcon;
-  if (/(pending|draft|open|paused)/.test(token)) return StatusPendingIcon;
-
-  return StatusNeutralIcon;
-}
-
-function renderOptionIcon(filter: FilterDef, option: FilterOption) {
+function renderOptionIcon(option: FilterOption) {
   if (option.icon) return option.icon;
-
-  const tone = inferOptionTone(filter, option);
-  const Icon = inferOptionIcon(filter, option);
 
   return (
     <span
       aria-hidden
       className="ds-pattern-filter-panel__option-icon"
       data-part="option-icon-badge"
-      data-tone={tone}
+      data-tone={option.tone ?? 'neutral'}
     >
-      <Icon decorative size={13} />
+      <StatusNeutralIcon decorative size={13} />
     </span>
   );
 }
 
-function enrichFilterOption(filter: FilterDef, option: FilterOption) {
+function enrichFilterOption(option: FilterOption) {
   return {
     value: option.value,
     label: option.label,
     disabled: option.disabled,
-    icon: renderOptionIcon(filter, option),
+    icon: renderOptionIcon(option),
     // The pattern ships zero business copy: option descriptions render only
     // when the consumer supplies them.
     description: option.description,
@@ -211,7 +147,7 @@ function renderFilterControl(
             placeholder={filter.placeholder ?? copy.selectPlaceholder}
             value={(value as string) ?? undefined}
             onChange={(val) => onChange(filter.key, val || undefined)}
-            options={filter.options?.map((option) => enrichFilterOption(filter, option)) ?? []}
+            options={filter.options?.map((option) => enrichFilterOption(option)) ?? []}
             allowClear
             aria-label={filter.label}
           />

@@ -34,14 +34,14 @@ const FILTERS: FilterDef[] = [
     label: 'Status',
     type: 'select',
     placeholder: 'All statuses',
-    // One option per inferOptionTone branch (modern-only option-icon-badge coverage).
+    // Explicit option tones exercise every supported badge tone.
     options: [
-      { value: 'rejected', label: 'Rejected candidate' }, // danger
-      { value: 'needs-review', label: 'Needs review' }, // warning
-      { value: 'completed', label: 'Completed' }, // success
-      { value: 'scheduled', label: 'Scheduled' }, // primary
-      { value: 'remote', label: 'Remote' }, // info
-      { value: 'other', label: 'Other' }, // neutral
+      { value: 'rejected', label: 'Rejected candidate', tone: 'danger' },
+      { value: 'needs-review', label: 'Needs review', tone: 'warning' },
+      { value: 'completed', label: 'Completed', tone: 'success' },
+      { value: 'scheduled', label: 'Scheduled', tone: 'primary' },
+      { value: 'remote', label: 'Remote', tone: 'info' },
+      { value: 'other', label: 'Other', tone: 'neutral' },
     ],
   },
   {
@@ -137,7 +137,7 @@ describe('FilterPanel data-part contract', () => {
     }
   });
 
-  it('reaches option-icon-badge parts inside the modern select dropdown, one per inferred tone', async () => {
+  it('reaches option-icon-badge parts inside the modern select dropdown, one per explicit tone', async () => {
     renderWithEngine(
       <PatternFilterPanel engine="modern" filters={FILTERS} values={VALUES} onChange={vi.fn()} />,
       'modern',
