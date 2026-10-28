@@ -3,7 +3,7 @@
  "updated": "2026-10-27",
  "rules": {
   "done_requires": "status in-progress + all dependsOn done + non-empty --evidence + mustLandWith partner in-progress/done; support milestones never complete source IDs",
-  "claim_requires": "all dependsOn done + DS-improvements phase claimState open",
+  "claim_requires": "all dependsOn done, except the validated CON-08 DS-step1 claimDependsOn subset; DS-improvements phase claimState open with ownerGo; consumer steps blocked by ARC-21; full done unchanged",
   "edit_via": "scripts/maintain/roadmap/status/index.mjs only (claim/done/reopen); never hand-edit statuses",
   "new_work": "new WO in its lane markdown + registry entry, verified by roadmap/status/index.mjs check; NO new plan documents anywhere",
   "wave_gate": "future phases remain locked until prior checkpoint evidence and explicit owner GO"
@@ -2446,7 +2446,7 @@
     "scope": "Remove live high-intensity ParticleField exposure from the five Platform ai-field routes and prove the static fallback/chunk boundary.",
     "completionEffect": "none",
     "finalAuthority": "WO-CRA-15",
-    "finalPhase": "2C"
+    "finalPhase": "6"
    },
    "phase": "0",
    "notes": "Stage-A support milestone only. Completion quarantines active routes but cannot complete DS-IMP-106; full lifecycle/resource hardening remains WO-CRA-15 in Phase 2C.",
@@ -2513,7 +2513,7 @@
     "DS-IMP-107",
     "DS-IMP-108"
    ],
-   "phase": "2C",
+   "phase": "6",
    "notes": "PAUSED until WO-RET-01 (D-19): ParticleField/Canvas have no productive consumer (audit F-42/F-94); adopt-or-retire is decided in the retirement census before any hardening effort is spent. Original spec: Final authority for DS-IMP-106. WO-CRA-14 is only the Phase-0 quarantine milestone; this hardening WO remains phase-locked until the owner approves Phase 2C.",
    "progressLog": [],
    "claimedBy": null,
@@ -3464,7 +3464,7 @@
    "sourceIds": [
     "DS-IMP-048"
    ],
-   "phase": "2A",
+   "phase": "6",
    "notes": "ABSORBED by WO-DER-03 + WO-EVI-02: text contrast is derived from contrast-posture rather than patched per token, and the empty APCA baseline becomes a gate instead of a task. Original spec: W4-C1 APCA autocorrect closes the 6 failed and 5 skipped pairs.",
    "progressLog": [],
    "claimedBy": null,
@@ -3559,7 +3559,7 @@
     "DS-IMP-088",
     "DS-IMP-089"
    ],
-   "phase": "2B",
+   "phase": "6",
    "notes": "REFORMULATED by WO-DER-04 + WO-INV-05: semantic motion becomes the motion.character decision and the single motion vocabulary (audit F-31 records two competing vocabularies today). The AI state-motion kit is paused: no productive consumer (D-19). Original spec: W3 motion adoption wave wires recipes, presence/continuity, the governor extension and the AI kit.",
    "progressLog": [],
    "claimedBy": null,
@@ -4143,7 +4143,7 @@
     "DS-IMP-028",
     "DS-IMP-029"
    ],
-   "phase": "3",
+   "phase": "6",
    "notes": "REFORMULATED by WO-EVI-02: the two-tenant divergence proof becomes the by-axis difference probe excluding colour, with its negative test, over Modern x bithire only (owner scope D-31). Original spec: W4 bithire divergence demo plus W7 evnto/platform proofs through the showroom vertical pages.",
    "progressLog": [],
    "claimedBy": null,
@@ -9489,7 +9489,14 @@
    "programs": [
     "audit-2026-09-05"
    ],
-   "notes": "owner-approved 2026-09-20 (proposals.md style/history queue; Fable review ACCEPT: evidence/style-history-roadmap-review/index.md); registered 2026-09-20 by the sole DT per the queue instructions — no new source IDs, phase or DS-improvements authority; wave 4; touchedRepos: [ui-design-system, app-bithire] (explicit cross-repo exception under D-31; other apps receive the protocol/recipe only); extends the consumer contract through the CON-05 versioned change protocol; WO-ARC-21 keeps its original acceptance/authority"
+   "notes": "owner-approved 2026-09-20 (proposals.md style/history queue; Fable review ACCEPT: evidence/style-history-roadmap-review/index.md); registered 2026-09-20 by the sole DT per the queue instructions — no new source IDs, phase or DS-improvements authority; wave 4; touchedRepos: [ui-design-system, app-bithire] (explicit cross-repo exception under D-31; other apps receive the protocol/recipe only); extends the consumer contract through the CON-05 versioned change protocol; WO-ARC-21 keeps its original acceptance/authority",
+   "claimDependsOn": [
+    "WO-CAT-04",
+    "WO-EMI-02",
+    "WO-CON-06"
+   ],
+   "claimDecisionRef": "roadmap/README.md#owner-approved-v1-scope-and-parallel-delivery--2026-10-27",
+   "claimScope": "ds-step1"
   },
   {
    "id": "WO-CON-09",
@@ -11130,13 +11137,13 @@
      "id": "DS-IMP-028",
      "disposition": "execute",
      "authority": "WO-ARC-19",
-     "phase": "3"
+     "phase": "6"
     },
     {
      "id": "DS-IMP-029",
      "disposition": "execute",
      "authority": "WO-ARC-19",
-     "phase": "3"
+     "phase": "6"
     },
     {
      "id": "DS-IMP-030",
@@ -11250,7 +11257,7 @@
      "id": "DS-IMP-048",
      "disposition": "execute",
      "authority": "WO-TOK-11",
-     "phase": "2A"
+     "phase": "6"
     },
     {
      "id": "DS-IMP-049",
@@ -11481,25 +11488,25 @@
      "id": "DS-IMP-086",
      "disposition": "execute",
      "authority": "WO-ENG-25",
-     "phase": "2B"
+     "phase": "6"
     },
     {
      "id": "DS-IMP-087",
      "disposition": "execute",
      "authority": "WO-ENG-25",
-     "phase": "2B"
+     "phase": "6"
     },
     {
      "id": "DS-IMP-088",
      "disposition": "execute",
      "authority": "WO-ENG-25",
-     "phase": "2B"
+     "phase": "6"
     },
     {
      "id": "DS-IMP-089",
      "disposition": "execute",
      "authority": "WO-ENG-25",
-     "phase": "2B"
+     "phase": "6"
     },
     {
      "id": "DS-IMP-090",
@@ -11601,19 +11608,19 @@
      "id": "DS-IMP-106",
      "disposition": "execute",
      "authority": "WO-CRA-15",
-     "phase": "2C"
+     "phase": "6"
     },
     {
      "id": "DS-IMP-107",
      "disposition": "execute",
      "authority": "WO-CRA-15",
-     "phase": "2C"
+     "phase": "6"
     },
     {
      "id": "DS-IMP-108",
      "disposition": "execute",
      "authority": "WO-CRA-15",
-     "phase": "2C"
+     "phase": "6"
     },
     {
      "id": "DS-IMP-109",

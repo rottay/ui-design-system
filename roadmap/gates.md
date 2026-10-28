@@ -226,6 +226,41 @@ These work orders execute the requirements pinned at `docs-engineering@969205380
 - **Execution control** — Certification changes no runtime default. Withdraw unsupported claims, block publish/repin/system certification, and retain the prior certified release. Telemetry covers claim cardinality, inventory freshness, provenance, stale assertions, clean-run agreement and open/expired authorities.
 - **Do NOT** — Do not count WO-GAT-07's Phase-0 milestone as DS-IMP-060 completion, approve prose-only evidence, or claim the desired system while any authority remains open.
 
+- **V1 scoped certifier implementation candidate (owner decision 2026-10-27; independent review pending)** — The existing certifier implements `--v1 --scope-input=<relative-file> --reviewed-input-sha256=<sha256>`. Its read-only scoped report runs the bound clause harness and live inherited/public assertions twice, compares complete evidence, reports all full-programme blockers, and always returns `completionEligible=false`, `workOrdersClosed=0`. `--write` and `--check-artifact` refuse scoped mode; only the unchanged final path owns final-certification artifacts. The full 170-WO lane population, exact retained clause hashes and closed named exceptions are bound to candidate/input/artifact/harness/population manifests. Every retained clause, including previously DONE authorities, requires executed evidence. APCA, fleet/control floors, stored-row safety and static spatial fallback remain blocking. The four named dependency-status holds are available only after all substantive proof passes. This candidate creates no V1 verdict, phase GO or WO credit.
+
+**V1 scoped execution-identity amendment (2026-10-27, private correction candidate).**
+Scoped proof executes the declared certifier, status and helper bytes in a fresh
+Node process. Its resolved module graph, package-resolution data, ordinary file
+reads, explicit missing-file dependencies and directory populations are checked
+against the reviewed binding closure before use and after execution. Every
+clause, inherited and public runner, including admitted Node descendants, uses
+the same guard; unbound imports/data, source substitution, writes and unsupported
+untracked capabilities refuse. A status module may retain its declared authority
+resolution context only while its executed implementation bytes come from the
+candidate and the context files and command outputs remain pinned. That context
+is explicit evidence, not an alternate validator. The final dependency receipt
+rechecks the entire declared file closure, including transitive helpers and data.
+Every command-data executable must resolve to a reviewed native byte pin before
+launch and match again after execution and in the full postcheck, including its
+canonical target. Admission requires the certifier-owned Git 2.52.0 arm64
+implementation identity (3,603,952 bytes; SHA-256
+`344a7297ad66085daaf5faafcba9da1f12f5baa0e97f8d379fee884cf9d65a66`).
+Context pins, executable names and native signatures cannot approve a different
+implementation. A different Git build requires a separately reviewed identity
+update; byte-identical copies and canonical symlinks retain their target checks.
+The actual native launch sets `argv[0]` to `git`, so a copy or target named
+`git-<builtin>` cannot select another builtin. Caller-supplied `argv0` remains
+refused; command-output pins must match the admitted query after normalization.
+Only the existing read-only Git revision/root/archive queries are admitted as
+command-data providers. Script providers, shell/interpreter or
+loader invocations and shell redirection refuse; their executable/data dependency
+closure is unavailable in this protocol. Command-output pins and the fixed
+execution environment remain required.
+These checks establish execution identity; independent review must still assess
+assertion meaning and real product coverage. All 170 identities, closed scoped
+exclusions and full done/final barriers remain binding. Scoped reports always
+retain `completionEligible=false` and cannot emit a final-certification artifact.
+
 ### WO-GAT-10 Effect license and provenance gate generalization
 - **Source IDs / phase** — DS-IMP-110; Phase 2C.
 - **Depends on** — WO-GAT-05, WO-GAT-06.

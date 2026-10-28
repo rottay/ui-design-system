@@ -73,6 +73,35 @@ const ROOT = findRepoRoot(path.dirname(fileURLToPath(import.meta.url)));
 const ROADMAP = path.join(ROOT, "roadmap");
 const REGISTRY_PATH = path.join(ROADMAP, "registry.json");
 const STATUS_PATH = path.join(ROADMAP, "STATUS.md");
+const DOCUMENTATION_ROOT = path.resolve(ROOT, "../docs-engineering");
+let documentationRelocations;
+
+// Resolve physical relocation only; sealed registry identities and Git paths stay pinned.
+function resolveDocumentationPath(referencePath) {
+  const absolutePath = path.resolve(ROOT, referencePath);
+  const relativePath = path.relative(DOCUMENTATION_ROOT, absolutePath).split(path.sep).join("/");
+  if (relativePath === ".." || relativePath.startsWith("../") || path.isAbsolute(relativePath)) return absolutePath;
+  const relocationFile = path.join(DOCUMENTATION_ROOT, "development/documentation/path-map/path-map.json");
+  if (!fs.existsSync(relocationFile)) return absolutePath;
+  documentationRelocations ??= JSON.parse(fs.readFileSync(relocationFile, "utf8")).entries;
+  const exact = documentationRelocations.find((entry) => entry.source === relativePath);
+  let destination = exact?.destination;
+  if (!destination) {
+    const children = documentationRelocations.filter((entry) => entry.source.startsWith(`${relativePath}/`));
+    const destinations = new Set(children.map((entry) => {
+      const suffix = entry.source.slice(relativePath.length);
+      return entry.destination.endsWith(suffix) ? entry.destination.slice(0, -suffix.length) : null;
+    }));
+    if (destinations.size === 1 && !destinations.has(null)) [destination] = destinations;
+  }
+  if (!destination) return absolutePath;
+  const relocated = path.resolve(DOCUMENTATION_ROOT, destination);
+  const withinDocs = path.relative(DOCUMENTATION_ROOT, relocated);
+  if (withinDocs === ".." || withinDocs.startsWith(`..${path.sep}`) || path.isAbsolute(withinDocs)) {
+    throw new Error(`Documentation relocation escapes its repository: ${referencePath}`);
+  }
+  return relocated;
+}
 export function executionPolicyText(readme) {
   const start = "<!-- execution-policy:start -->";
   const end = "<!-- execution-policy:end -->";
@@ -91,6 +120,98 @@ const LANES = [
   "emission-mount", "platform-invariants", "retire", "evidence-graph",
 ];
 const STATUSES = ["todo", "in-progress", "done"];
+export const V1_OWNER_DECISION = "roadmap/README.md#owner-approved-v1-scope-and-parallel-delivery--2026-10-27";
+export const V1_PHASE_MOVES = Object.freeze([
+  { id: "WO-TOK-11", from: "2A", items: ["DS-IMP-048"] },
+  { id: "WO-ARC-19", from: "3", items: ["DS-IMP-028", "DS-IMP-029"] },
+  { id: "WO-ENG-25", from: "2B", items: ["DS-IMP-086", "DS-IMP-087", "DS-IMP-088", "DS-IMP-089"] },
+  { id: "WO-CRA-15", from: "2C", items: ["DS-IMP-106", "DS-IMP-107", "DS-IMP-108"] },
+]);
+const CON08_CLAIM_DEPS = ["WO-CAT-04", "WO-EMI-02", "WO-CON-06"];
+const STAGED_CLAIM_KEYS = ["claimDependsOn", "claimDecisionRef", "claimScope"];
+export function stagedClaimRestriction(workOrder) {
+  return workOrder?.id === "WO-CON-08" && workOrder.claimDependsOn
+    ? "DS step 1 only; independent CON-05/shared-contract review required before descriptor source work; consumer steps 2–4 blocked by WO-ARC-21; full done uses all dependsOn."
+    : "";
+}
+
+export function validateStagedClaims(reg) {
+  const errors = [];
+  const orders = Array.isArray(reg?.workOrders) ? reg.workOrders : [];
+  const map = new Map(orders.map((w) => [w.id, w]));
+  for (const w of orders) {
+    if (!STAGED_CLAIM_KEYS.some((key) => Object.hasOwn(w, key))) continue;
+    if (w.id !== "WO-CON-08") errors.push(`${w.id}: staged claim is not allow-listed`);
+    if (JSON.stringify(w.claimDependsOn) !== JSON.stringify(CON08_CLAIM_DEPS)) {
+      errors.push(`${w.id}: claimDependsOn must be exactly CAT-04, EMI-02, CON-06 in that order`);
+    }
+    if (w.claimDecisionRef !== V1_OWNER_DECISION) errors.push(`${w.id}: staged claim decision reference is invalid`);
+    if (w.claimScope !== "ds-step1") errors.push(`${w.id}: staged claim requires explicit DS-step1 restriction`);
+    if (!Array.isArray(w.claimDependsOn) || !Array.isArray(w.dependsOn)
+      || w.claimDependsOn.length >= w.dependsOn.length
+      || w.claimDependsOn.some((id) => !w.dependsOn.includes(id) || !map.has(id))) {
+      errors.push(`${w.id}: claimDependsOn must be a strict known subset of dependsOn`);
+    }
+    if (w.id === "WO-CON-08" && JSON.stringify(w.dependsOn) !== JSON.stringify([...CON08_CLAIM_DEPS, "WO-ARC-21"])) {
+      errors.push(`${w.id}: full dependencies including WO-ARC-21 must remain unchanged`);
+    }
+  }
+  const visiting = new Set();
+  const visited = new Set();
+  function visit(id) {
+    if (visiting.has(id)) { errors.push(`staged dependency cycle at ${id}`); return; }
+    if (visited.has(id)) return;
+    visiting.add(id);
+    const w = map.get(id);
+    for (const dependency of w?.claimDependsOn ?? w?.dependsOn ?? []) visit(dependency);
+    visiting.delete(id);
+    visited.add(id);
+  }
+  for (const w of orders) visit(w.id);
+  return errors;
+}
+
+export function validateV1PhaseMapping(reg) {
+  const errors = [];
+  const orders = new Map((reg.workOrders ?? []).map((w) => [w.id, w]));
+  const items = reg.traceability?.["ds-improvements"]?.items ?? [];
+  for (const move of V1_PHASE_MOVES) {
+    const w = orders.get(move.id);
+    if (w?.phase !== "6") errors.push(`${move.id}: V1 full-completion mapping must be phase 6`);
+    const mapped = items.filter((item) => item.disposition === "execute" && item.authority === move.id);
+    if (JSON.stringify(mapped.map((item) => item.id).sort()) !== JSON.stringify([...move.items].sort())
+      || mapped.some((item) => item.phase !== "6")) {
+      errors.push(`${move.id}: V1 exact mapped items/phase must be preserved`);
+    }
+  }
+  return errors;
+}
+
+/** Pure reviewed mapping derivation; never writes or opens a phase. */
+export function deriveApprovedV1Mapping(reg) {
+  const candidate = structuredClone(reg);
+  const items = candidate.traceability["ds-improvements"].items;
+  for (const move of V1_PHASE_MOVES) {
+    const w = candidate.workOrders.find((order) => order.id === move.id);
+    const mapped = items.filter((item) => item.disposition === "execute" && item.authority === move.id);
+    if (w?.phase !== move.from
+      || JSON.stringify(mapped.map((item) => item.id).sort()) !== JSON.stringify([...move.items].sort())
+      || mapped.some((item) => item.phase !== move.from)) throw new Error(`${move.id}: exact approved mapping pre-state required`);
+    w.phase = "6";
+    for (const item of mapped) item.phase = "6";
+  }
+  const cra14 = candidate.workOrders.find((w) => w.id === "WO-CRA-14");
+  if (cra14?.milestone?.finalAuthority !== "WO-CRA-15" || cra14.milestone.finalPhase !== "2C") throw new Error("CRA-14 support pointer pre-state differs");
+  cra14.milestone.finalPhase = "6";
+  const con08 = candidate.workOrders.find((w) => w.id === "WO-CON-08");
+  if (!con08 || STAGED_CLAIM_KEYS.some((key) => Object.hasOwn(con08, key))) throw new Error("CON-08 staged pre-state differs");
+  con08.claimDependsOn = [...CON08_CLAIM_DEPS];
+  con08.claimDecisionRef = V1_OWNER_DECISION;
+  con08.claimScope = "ds-step1";
+  candidate.rules.claim_requires = "all dependsOn done, except the validated CON-08 DS-step1 claimDependsOn subset; DS-improvements phase claimState open with ownerGo; consumer steps blocked by ARC-21; full done unchanged";
+  return candidate;
+}
+
 const DS_IMPROVEMENTS_KEY = "ds-improvements";
 const DS_IMPROVEMENTS_PREFIX = "DS-IMP";
 const DS_IMPROVEMENTS_FIRST = 1;
@@ -129,11 +250,12 @@ const DS_IMPROVEMENTS_PHASE_INDEX = new Map(
 // authorities, sourceIds and WO topology are unchanged.
 // Owner-approved wave mapping update 2026-10-20 (G-1 route 1, roadmap/proposals.md): DS-IMP-061 and
 // its authority WO-ARC-21 move from phase 1 to phase 6; nothing else in the plan changes and no phase opens.
-const DS_IMPROVEMENTS_PLAN_SHA256 = "debdf5e355172160ff7d5a0a83d3f7cc1a9d7cba4f3f070df6adb82cfab31cdb";
+// Owner-approved wave mapping update 2026-10-27: exact four-WO V1 moves and CON-08 DS-step1 claim; phases and full dependencies unchanged.
+const DS_IMPROVEMENTS_PLAN_SHA256 = "a8f2e3f537c99cf3872c1b13863bb78d786de049e1c59562a033e603286c10cd";
 const DS_IMPROVEMENTS_SOURCE_REVISION = "8b618ab000b784fc7fa05bca96a1dcc9de80b3b9";
 const DS_IMPROVEMENTS_DOC_ROOT = path.resolve(
   ROOT,
-  "../docs-engineering/engineering/audits/ds-improvements",
+  "../docs-engineering/archive/audits/undated/ecosystem/ds-improvements",
 );
 const DS_IMPROVEMENTS_SOURCE_PATH = path.join(
   DS_IMPROVEMENTS_DOC_ROOT,
@@ -719,7 +841,7 @@ function pinnedPathContent(filePath, revision) {
 
     const rootResult = spawnSync(
       "git",
-      ["-C", path.dirname(absolutePath), "rev-parse", "--show-toplevel"],
+      ["-C", path.dirname(resolveDocumentationPath(absolutePath)), "rev-parse", "--show-toplevel"],
       { encoding: "utf8" },
     );
     if (rootResult.status !== 0) {
@@ -759,7 +881,7 @@ function markdownReferenceError(reference, { basePath, revision, label }) {
   const [referencePath, anchor] = reference.split("#", 2);
   if (!referencePath) return `${label} must include a Markdown path`;
   const absolutePath = path.resolve(path.dirname(path.resolve(ROOT, basePath)), referencePath);
-  if (!fs.existsSync(absolutePath)) return `${label} path does not exist: ${referencePath}`;
+  if (!fs.existsSync(resolveDocumentationPath(absolutePath))) return `${label} path does not exist: ${referencePath}`;
   const content = pinnedPathContent(absolutePath, revision);
   if (content == null) return `${label} path is absent at pinned revision ${revision}: ${referencePath}`;
   if (anchor) {
@@ -997,6 +1119,9 @@ const REGISTRY_WORK_ORDER_KEYS = new Set([
   "size",
   "status",
   "dependsOn",
+  "claimDependsOn",
+  "claimDecisionRef",
+  "claimScope",
   "mustLandWith",
   "coordinatesWith",
   "programs",
@@ -1249,7 +1374,7 @@ function pinnedEntityReferenceErrors(reference, label, revision, { tableRow = fa
   }
   let absolutePath;
   try {
-    absolutePath = path.resolve(ROOT, referencePath);
+    absolutePath = resolveDocumentationPath(referencePath);
   } catch {
     errors.push(`${label}.path cannot be resolved safely`);
     return errors;
@@ -1782,6 +1907,10 @@ function dsImprovementsPlanFingerprintUnsafe(reg) {
       workOrders: normalizedWorkOrders,
       phaseControls: normalizedPhaseControls,
       convergenceLedger: normalizedConvergenceLedger,
+      ...(reg.workOrders.some((w) => STAGED_CLAIM_KEYS.some((key) => Object.hasOwn(w, key))) ? {
+        stagedClaims: reg.workOrders.filter((w) => STAGED_CLAIM_KEYS.some((key) => Object.hasOwn(w, key)))
+          .map((w) => ({ id: w.id, claimDependsOn: w.claimDependsOn, claimDecisionRef: w.claimDecisionRef, claimScope: w.claimScope })),
+      } : {}),
     }))
     .digest("hex");
 }
@@ -1904,9 +2033,9 @@ export function validateDsImprovementsTraceability(
   const source = sourceReference(program);
   if (!isNonEmptyString(source.path)) {
     errors.push(`traceability.${DS_IMPROVEMENTS_KEY}.source must be a non-empty path or { path, revision } object`);
-  } else if (!fs.existsSync(path.resolve(ROOT, source.path))) {
+  } else if (!fs.existsSync(resolveDocumentationPath(source.path))) {
     errors.push(`traceability.${DS_IMPROVEMENTS_KEY}.source does not exist from the repository root: ${source.path}`);
-  } else if (path.resolve(ROOT, source.path) !== DS_IMPROVEMENTS_SOURCE_PATH) {
+  } else if (resolveDocumentationPath(source.path) !== DS_IMPROVEMENTS_SOURCE_PATH) {
     errors.push(`traceability.${DS_IMPROVEMENTS_KEY}.source must resolve to ${DS_IMPROVEMENTS_SOURCE_PATH}`);
   }
   if (!isFullGitSha(source.revision)) {
@@ -1918,18 +2047,18 @@ export function validateDsImprovementsTraceability(
   }
   if (!isNonEmptyString(program.roadmap)) {
     errors.push(`traceability.${DS_IMPROVEMENTS_KEY}.roadmap must be a non-empty path`);
-  } else if (!fs.existsSync(path.resolve(ROOT, program.roadmap))) {
+  } else if (!fs.existsSync(resolveDocumentationPath(program.roadmap))) {
     errors.push(`traceability.${DS_IMPROVEMENTS_KEY}.roadmap does not exist from the repository root: ${program.roadmap}`);
-  } else if (path.resolve(ROOT, program.roadmap) !== DS_IMPROVEMENTS_ROADMAP_PATH) {
+  } else if (resolveDocumentationPath(program.roadmap) !== DS_IMPROVEMENTS_ROADMAP_PATH) {
     errors.push(`traceability.${DS_IMPROVEMENTS_KEY}.roadmap must resolve to ${DS_IMPROVEMENTS_ROADMAP_PATH}`);
   } else if (isFullGitSha(source.revision) && pinnedPathContent(program.roadmap, source.revision) == null) {
     errors.push(`traceability.${DS_IMPROVEMENTS_KEY}.roadmap is absent at pinned revision ${source.revision}`);
   }
   if (!isNonEmptyString(program.adjudication)) {
     errors.push(`traceability.${DS_IMPROVEMENTS_KEY}.adjudication must be a non-empty string`);
-  } else if (!fs.existsSync(path.resolve(ROOT, program.adjudication))) {
+  } else if (!fs.existsSync(resolveDocumentationPath(program.adjudication))) {
     errors.push(`traceability.${DS_IMPROVEMENTS_KEY}.adjudication does not exist from the repository root: ${program.adjudication}`);
-  } else if (path.resolve(ROOT, program.adjudication) !== DS_IMPROVEMENTS_ADJUDICATION_PATH) {
+  } else if (resolveDocumentationPath(program.adjudication) !== DS_IMPROVEMENTS_ADJUDICATION_PATH) {
     errors.push(`traceability.${DS_IMPROVEMENTS_KEY}.adjudication must resolve to ${DS_IMPROVEMENTS_ADJUDICATION_PATH}`);
   } else if (isFullGitSha(source.revision) && pinnedPathContent(program.adjudication, source.revision) == null) {
     errors.push(`traceability.${DS_IMPROVEMENTS_KEY}.adjudication is absent at pinned revision ${source.revision}`);
@@ -2245,7 +2374,7 @@ export function validateDsImprovementsTraceability(
       }
       if (!isNonEmptyString(item.external?.owner) || !isNonEmptyString(item.external?.path)) {
         errors.push(`${id}: routed requires external.owner and external.path`);
-      } else if (!fs.existsSync(path.resolve(ROOT, item.external.path))) {
+      } else if (!fs.existsSync(resolveDocumentationPath(item.external.path))) {
         errors.push(`${id}: routed external.path does not exist from the repository root: ${item.external.path}`);
       }
       errors.push(...unknownObjectKeyErrors(
@@ -2830,9 +2959,24 @@ function depSatisfied(w, depId, map) {
   return (w.mustLandWith || []).includes(depId) && dep.status === "in-progress";
 }
 const openDeps = (w, map) => (w.dependsOn || []).filter((d) => !depSatisfied(w, d, map));
+const openClaimDeps = (w, map) => (w.claimDependsOn ?? w.dependsOn ?? []).filter((d) => !depSatisfied(w, d, map));
+export function validateClaimTransition(reg, w, { scope, ...options } = {}) {
+  const shapeErrors = strictJsonDataShapeErrors(reg);
+  if (shapeErrors.length) return shapeErrors;
+  const errors = validateStagedClaims(reg);
+  if (!w || w.status !== "todo") errors.push("claim requires a todo work order");
+  if (!w) return errors;
+  const open = openClaimDeps(w, byId(reg));
+  if (open.length) errors.push(`${w.id}: open claim dependencies: ${open.join(", ")}`);
+  if (w.claimDependsOn && scope !== "ds-step1") errors.push(`${w.id}: explicit --scope ds-step1 required; ${stagedClaimRestriction(w)}`);
+  const blocker = phaseClaimBlocker(reg, w, options);
+  if (blocker) errors.push(`${w.id}: ${blocker}`);
+  return errors;
+}
 const actionable = (reg, map) => reg.workOrders.filter((w) =>
   w.status === "todo"
-  && openDeps(w, map).length === 0
+  && validateStagedClaims(reg).length === 0
+  && openClaimDeps(w, map).length === 0
   && !phaseClaimBlocker(reg, w)
 );
 
@@ -2939,6 +3083,7 @@ function validateRegistryMutationIntegrityUnsafe(
   }
   errors.push(...validateRegistryTemporalIntegrity(reg, { today }));
   errors.push(...validateDsImprovementsTraceability(reg, { today, enforcePinnedPlan: true }));
+  errors.push(...validateStagedClaims(reg));
   errors.push(...detectCycles(reg).map((cycle) => `dependency cycle: ${cycle}`));
   return errors;
 }
@@ -3646,7 +3791,7 @@ function generateStatus() {
   lines.push("");
   lines.push("| WO | Title | Size | Lane | Programs |");
   lines.push("| --- | --- | --- | --- | --- |");
-  for (const w of nextUp) lines.push(`| ${w.id} | ${w.title} | ${w.size} | ${w.lane} | ${(w.programs || []).join(", ")} |`);
+  for (const w of nextUp) lines.push(`| ${w.id} | ${w.title}${stagedClaimRestriction(w) ? ` — ${stagedClaimRestriction(w)}` : ""} | ${w.size} | ${w.lane} | ${(w.programs || []).join(", ")} |`);
   lines.push("");
   const blocked = reg.workOrders.filter((w) =>
     w.status === "todo" && (openDeps(w, map).length > 0 || phaseClaimBlocker(reg, w))
@@ -3767,7 +3912,7 @@ switch (cmd) {
       console.error(`REFUSED: registry is invalid (${errors.length}); run pnpm roadmap:check.`);
       process.exit(1);
     }
-    for (const w of actionable(reg, byId(reg))) console.log(`${w.id} [${w.size}] (${w.lane}) ${w.title}`);
+    for (const w of actionable(reg, byId(reg))) console.log(`${w.id} [${w.size}] (${w.lane}) ${w.title}${stagedClaimRestriction(w) ? ` — ${stagedClaimRestriction(w)}` : ""}`);
     break;
   }
   case "show": case "delegate": {
@@ -3784,6 +3929,7 @@ switch (cmd) {
       console.log("\n---\n" + executionPolicyText(fs.readFileSync(path.join(ROADMAP, "README.md"), "utf8")));
     }
     console.log(`\n[state] status=${w.status}${w.claimedBy ? ` claimedBy=${w.claimedBy}` : ""}${open.length ? ` OPEN-DEPS=${open.join(",")}` : " deps-satisfied"}${(w.mustLandWith || []).length ? ` mustLandWith=${w.mustLandWith.join(",")}` : ""}`);
+    if (stagedClaimRestriction(w)) console.log(`[dispatch restriction] ${stagedClaimRestriction(w)}`);
     for (const p of w.progressLog || []) console.log(`[progress] ${p.at} ${p.by}: ${p.note}`);
     if (w.status === "in-progress" && (w.progressLog || []).length) console.log("[handoff] resume from the last progress entry — do not redo completed steps");
     if (open.length) console.log(`[warn] not actionable yet — complete ${open.join(", ")} first`);
@@ -3840,11 +3986,8 @@ switch (cmd) {
       process.exit(1);
     }
     const w = requireWo(reg, arg);
-    const open = openDeps(w, byId(reg));
-    if (w.status !== "todo") { console.error(`REFUSED: ${w.id} is ${w.status}; claim requires todo`); process.exit(1); }
-    if (open.length) { console.error(`REFUSED: ${w.id} has open dependencies: ${open.join(", ")}`); process.exit(1); }
-    const phaseBlocker = phaseClaimBlocker(reg, w);
-    if (phaseBlocker) { console.error(`REFUSED: ${w.id} ${phaseBlocker}`); process.exit(1); }
+    const claimErrors = validateClaimTransition(reg, w, { scope: flag(args, "--scope") });
+    if (claimErrors.length) { console.error(`REFUSED: ${claimErrors.join("; ")}`); process.exit(1); }
     w.status = "in-progress";
     w.claimedBy = flag(args, "--by") || process.env.USER || "agent";
     w.claimedAt = localDate();
