@@ -8,6 +8,7 @@
  * receipt provenance.
  */
 
+import { resolveThemeStyle } from "@/contracts/theme/runtime/styles/presentation/reference";
 import type { TenantConfig } from "@/foundation/contracts/composition/tenants";
 import type { TenantAppearance } from "@/foundation/contracts/composition/tenants/themes";
 import type {
@@ -1037,6 +1038,26 @@ function isAdmittedArtifactRuntime(value: unknown): boolean {
   return true;
 }
 
+function isAdmittedStyleReference(ref: Record<string, unknown>): boolean {
+  if (
+    Object.keys(ref).length !== 3 ||
+    !Object.prototype.hasOwnProperty.call(ref, "kind") ||
+    !Object.prototype.hasOwnProperty.call(ref, "id") ||
+    !Object.prototype.hasOwnProperty.call(ref, "version") ||
+    ref.kind !== "style-reference" ||
+    typeof ref.id !== "string" ||
+    typeof ref.version !== "number"
+  ) {
+    return false;
+  }
+  try {
+    resolveThemeStyle({ id: ref.id, version: ref.version });
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 function isAdmittedProvenance(value: unknown): boolean {
   if (!isRecord(value) || !Array.isArray(value.entries)) return false;
   return value.entries.every((entry) => {
@@ -1047,7 +1068,11 @@ function isAdmittedProvenance(value: unknown): boolean {
       ((ref.kind === "decision" && typeof ref.id === "string" && ref.id.length > 0) ||
         (ref.kind === "sanctioned-override" &&
           typeof ref.path === "string" &&
-          ref.path.length > 0));
+          ref.path.length > 0) ||
+        (ref.kind === "style-reference" &&
+          entry.provenance === "preset-inherited" &&
+          entry.tier === null &&
+          isAdmittedStyleReference(ref)));
     return (
       refOk &&
       typeof entry.provenance === "string" &&
