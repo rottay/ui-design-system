@@ -5134,6 +5134,52 @@ describe('axis-difference — a real-render mount is the engine\'s markup, never
     }
   });
 
+  it('filter-panel: option metadata defaults to neutral, all four source bindings hold and both gates name numeric lines', () => {
+    const { 'filter-panel': entry } = REAL_RENDER_MOUNTS;
+    const source = readFileSync(join(ROOT, entry.state.source), 'utf8');
+    const tone = entry.stamps.find((row) => row.token === 'attr:data-tone=neutral');
+    assert.deepEqual(entry.axes, ['depth']);
+    assert.deepEqual(entry.state.anchors, [
+      'options={filter.options?.map((option) => enrichFilterOption(option)) ?? []}',
+      'icon: renderOptionIcon(option),',
+    ]);
+    assert.equal(tone.stamp, "data-tone={option.tone ?? 'neutral'}");
+    assert.deepEqual(tone.resolves, [{ source: entry.state.source, text: "data-tone={option.tone ?? 'neutral'}" }]);
+    assert.ok(source.includes('if (option.icon) return option.icon;'));
+    assert.ok(source.includes('description: option.description,'));
+    assert.ok(source.includes('disabled: option.disabled,'));
+    const contract = readFileSync(join(ROOT, 'src/foundation/contracts/runtime/components/patterns/core/index.ts'), 'utf8');
+    assert.ok(contract.includes("tone?: 'neutral' | 'primary' | 'success' | 'warning' | 'danger' | 'info';"));
+    assert.deepEqual(realRenderRosterFailures(ROOT, { 'filter-panel': entry }), []);
+    const report = realRenderReport(realRenderMountList(familyElements(ROOT, ['filter-panel'])));
+    const { 'filter-panel': filtered } = report.map;
+    const gates = filtered.gates;
+    assert.equal(gates.length, 2);
+    for (const [anchor, gate] of entry.state.anchors.map((anchor, index) => [anchor, gates.at(index)])) {
+      const line = source.slice(0, source.indexOf(anchor)).split('\n').length;
+      assert.match(gate, /^src\/components\/.+\/index\.tsx:\d+$/u);
+      assert.equal(gate, `${entry.state.source}:${line}`);
+    }
+  });
+
+  it('NEGATIVE: each FilterPanel option binding refuses source drift instead of inventing a default', () => {
+    const { 'filter-panel': entry } = REAL_RENDER_MOUNTS;
+    const cases = [
+      ['options={filter.options?.map((option) => enrichFilterOption(option)) ?? []}', 'options={filter.options ?? []}', 'gate'],
+      ['icon: renderOptionIcon(option),', 'icon: option.icon,', 'gate'],
+      ["data-tone={option.tone ?? 'neutral'}", "data-color={option.tone ?? 'neutral'}", 'stamp'],
+      ["data-tone={option.tone ?? 'neutral'}", "data-tone={option.tone ?? 'primary'}", 'resolves'],
+    ];
+    for (const [from, to, binding] of cases) {
+      const source = readFileSync(join(ROOT, entry.state.source), 'utf8');
+      assert.equal(source.split(from).length - 1, 1, `the mutant must change exactly one binding: ${from}`);
+      const failures = realRenderRosterFailures(ROOT, { 'filter-panel': entry }, {
+        readSource: (file) => file === join(ROOT, entry.state.source) ? source.replace(from, to) : readFileSync(file, 'utf8'),
+      });
+      assert.ok(failures.some((line) => line.startsWith('filter-panel') && line.includes(`no longer carries the ${binding}`)), failures.join(' | '));
+    }
+  });
+
   it('MUTANT: a fabricated token -- a part, a class or a value the engine never writes -- fails its pin', () => {
     for (const markup of [
       SKELETON.markup.replace('data-part="title"', 'data-part="headline"'),
@@ -7640,13 +7686,49 @@ describe('axis-difference — the composed reach rows: the node a pattern paints
     }
   });
 
-  it('compare: the as-rendered row restores the part the engine stamps beside the two classes -- and only that', () => {
+  it('NEGATIVE: the Compare witness requires its three classes and root part on the same opening tag', () => {
+    const [row] = AS_RENDERED_ROOT_STAMPS.compare;
+    const source = readFileSync(join(ROOT, COMPARE_ENGINE), 'utf8');
+    const classes = 'className="ds-surface ds-compare ds-compare__root"';
+    const opening = '<Stack\n          ';
+    const stamp = `${opening}${classes}\n          data-part="root"`;
+    assert.equal(row.stamp, stamp);
+    assert.equal(row.resolves, classes);
+    assert.equal(source.split(stamp).length - 1, 1);
+    const root = mkdtempSync(join(tmpdir(), 'axis-compare-source-'));
+    const engineFile = join(root, COMPARE_ENGINE);
+    const skinFile = join(root, 'src/foundation/tokens/css/presentation/components/skin/compare/index.css');
+    try {
+      mkdirSync(dirname(engineFile), { recursive: true });
+      mkdirSync(dirname(skinFile), { recursive: true });
+      writeFileSync(skinFile, skin('compare'));
+      writeFileSync(engineFile, source);
+      assert.deepEqual(asRenderedRosterFailures(root, { compare: [row] }), []);
+      const mutants = [
+        'className="ds-surface ds-compare"\n          data-part="root"',
+        'className="ds-surface ds-compare ds-compare__other"\n          data-part="root"',
+        `${classes}\n          data-part="surface"`,
+        `${classes}><Box data-part="root"`,
+        `${classes}\n          data-part={rootPart}`,
+        `data-className="ds-surface ds-compare ds-compare__root"\n          data-part="root"`,
+      ];
+      for (const mutant of mutants) {
+        writeFileSync(engineFile, source.replace(stamp, `${opening}${mutant}`));
+        const failures = asRenderedRosterFailures(root, { compare: [row] });
+        assert.ok(failures.some((line) => line.startsWith('compare/data-part:') && line.includes('no longer carries the stamp')), `${mutant}: ${failures.join(' | ')}`);
+      }
+    } finally {
+      rmSync(root, { recursive: true, force: true });
+    }
+  });
+
+  it('compare: the as-rendered row restores the part the engine stamps beside the three classes -- and only that', () => {
     assert.deepEqual(AS_RENDERED_ROOT_STAMPS.compare.map((row) => [row.attribute, row.value, row.source]), [['data-part', 'root', COMPARE_ENGINE]]);
     assert.deepEqual(asRenderedRosterFailures(ROOT, { compare: AS_RENDERED_ROOT_STAMPS.compare }), []);
-    // One element writes all three, and the surface writes those two classes nowhere else.
+    // One element writes the part and all three classes.
     const engine = readFileSync(join(ROOT, COMPARE_ENGINE), 'utf8');
-    assert.equal(engine.split('className="ds-surface ds-compare"').length - 1, 1);
-    assert.ok(engine.includes('className="ds-surface ds-compare"\n          data-part="root"'));
+    assert.equal(engine.split('className="ds-surface ds-compare ds-compare__root"').length - 1, 1);
+    assert.ok(engine.includes('className="ds-surface ds-compare ds-compare__root"\n          data-part="root"'));
     // THE OLD MOUNT: the class-door re-key left no root candidate naming the part, so the bare root is mounted and
     // every `[data-part="root"]`-headed rule is refused at the head.
     const before = familyElements(ROOT, ['compare'], { asRendered: false }).get('compare');
@@ -7657,16 +7739,43 @@ describe('axis-difference — the composed reach rows: the node a pattern paints
       .filter((rule) => rule.declarations.some((declaration) => /^padding/u.test(declaration.property)))
       .map((rule) => rule.selector.replace(/\s+/gu, ' '));
     assert.deepEqual(rhythm, [
-      '.ds-surface.ds-compare[data-part="root"] .ds-compare__section-heading',
-      '.ds-surface.ds-compare[data-part="root"] .ds-compare__divider[data-part="divider"]',
+      [
+        '.ds-surface.ds-compare[data-part="root"] .ds-compare__section-heading',
+        '.ds-surface.ds-compare.ds-compare__root .ds-compare__section-heading',
+      ].join(', '),
+      [
+        '.ds-surface.ds-compare[data-part="root"] .ds-compare__divider[data-part="divider"]',
+        '.ds-surface.ds-compare[data-part="root"] .ds-compare__divider.ds-compare__divider',
+        '.ds-surface.ds-compare.ds-compare__root .ds-compare__divider[data-part="divider"]',
+        '.ds-surface.ds-compare.ds-compare__root .ds-compare__divider.ds-compare__divider',
+      ].join(', '),
     ]);
-    for (const selector of rhythm) {
+    const selectors = rhythm.flatMap(selectorList);
+    const partRootSelectors = selectors.filter((selector) => selector.startsWith('.ds-surface.ds-compare[data-part="root"]'));
+    const classRootAliases = selectors.filter((selector) => selector.startsWith('.ds-surface.ds-compare.ds-compare__root'));
+    assert.equal(selectors.length, 6);
+    assert.equal(partRootSelectors.length, 3);
+    assert.equal(classRootAliases.length, 3);
+    for (const selector of partRootSelectors) {
       assert.equal(projectPartChain(selector, before).rejected, 'head-variant-gated', selector);
       assert.equal(projectPartChain(selector, after).rejected, undefined, selector);
     }
+    for (const selector of classRootAliases) {
+      assert.equal(projectPartChain(selector, before).rejected, 'head-not-the-family-root', selector);
+      assert.equal(projectPartChain(selector, after).rejected, 'head-not-the-family-root', selector);
+    }
     const partsOn = (elements) => familyAxisParts(ROOT, ['compare'], new Map([['compare', elements]]), { partReach: true })
-      .get('compare').parts.filter((part) => part.axes.includes('rhythm')).length;
-    assert.deepEqual([partsOn(before), partsOn(after)], [0, 2]);
+      .get('compare').parts.filter((part) => part.axes.includes('rhythm'));
+    const beforeParts = partsOn(before);
+    const afterParts = partsOn(after);
+    assert.deepEqual(beforeParts, []);
+    assert.deepEqual(afterParts.map((part) => part.id), [
+      'div|ds-compare__section-heading|',
+      'div|ds-compare__divider|data-part=divider',
+      'div|ds-compare__divider.ds-compare__divider|',
+    ]);
+    assert.deepEqual(afterParts.map((part) => part.selector), partRootSelectors);
+    assert.deepEqual([beforeParts.length, afterParts.length], [0, 3]);
   });
 
   it('MUTANT: a compare row for a part the engine does not stamp there, or one the skin does not gate on, fails the door', () => {
@@ -8668,15 +8777,21 @@ describe('axis-difference --verify-indicator — the reading-only mode reads a f
 
   it('the Chromium is the one the LOCKED Playwright pins: read from browsers.json, refused when the install is not the lock\'s', async () => {
     const { lockedChromiumVersion } = await import('../index.mjs');
-    const workspace = mkdtempSync(join(tmpdir(), 'axis-locked-chromium-'));
+    const fixtureParent = mkdtempSync(join(tmpdir(), 'axis-locked-chromium-'));
+    const workspace = join(fixtureParent, 'workspace');
     const root = join(workspace, 'packages/core');
+    const fixtureChromium = () => lockedChromiumVersion({
+      root,
+      lockfileExists: (file) => dirname(file) === workspace && existsSync(file),
+    });
     const write = (path, text) => {
       mkdirSync(dirname(join(workspace, path)), { recursive: true });
       writeFileSync(join(workspace, path), text);
     };
     try {
+      writeFileSync(join(fixtureParent, 'pnpm-lock.yaml'), "packages:\n\n  playwright-core@9.9.8:\n    resolution: {}\n");
       write('packages/core/package.json', '{"name":"fixture"}');
-      assert.match(lockedChromiumVersion({ root }).reason, /no Playwright install is reachable/u);
+      assert.match(fixtureChromium().reason, /no Playwright install is reachable/u);
       write('node_modules/playwright/package.json', '{"name":"playwright","version":"9.9.9","main":"index.js"}');
       write('node_modules/playwright/index.js', 'throw new Error("the reading-only mode loaded Playwright");\n');
       write('node_modules/playwright-core/package.json', '{"name":"playwright-core","version":"9.9.9"}');
@@ -8684,16 +8799,18 @@ describe('axis-difference --verify-indicator — the reading-only mode reads a f
         { name: 'chromium-headless-shell', browserVersion: '1.0.0.0' },
         { name: 'chromium', browserVersion: '200.0.1.2' },
       ] }));
-      assert.match(lockedChromiumVersion({ root }).reason, /no pnpm-lock\.yaml was found above the package/u);
-      write('pnpm-lock.yaml', "packages:\n\n  playwright-core@9.9.8:\n    resolution: {}\n");
+      assert.match(fixtureChromium().reason, /no pnpm-lock\.yaml was found above the package/u);
       assert.deepEqual(lockedChromiumVersion({ root }),
         { version: null, reason: 'the installed playwright-core 9.9.9 is not the one pnpm-lock.yaml carries; run pnpm install' });
+      write('pnpm-lock.yaml', "packages:\n\n  playwright-core@9.9.8:\n    resolution: {}\n");
+      assert.deepEqual(fixtureChromium(),
+        { version: null, reason: 'the installed playwright-core 9.9.9 is not the one pnpm-lock.yaml carries; run pnpm install' });
       write('pnpm-lock.yaml', "packages:\n\n  playwright-core@9.9.9:\n    resolution: {}\n");
-      assert.deepEqual(lockedChromiumVersion({ root }), { version: '200.0.1.2', reason: null });
+      assert.deepEqual(fixtureChromium(), { version: '200.0.1.2', reason: null });
       write('node_modules/playwright-core/browsers.json', JSON.stringify({ browsers: [{ name: 'firefox', browserVersion: '1' }] }));
-      assert.match(lockedChromiumVersion({ root }).reason, /names no chromium browserVersion/u);
+      assert.match(fixtureChromium().reason, /names no chromium browserVersion/u);
     } finally {
-      rmSync(workspace, { recursive: true, force: true });
+      rmSync(fixtureParent, { recursive: true, force: true });
     }
     // This checkout: the pin is the version the committed indicator was read in, or the indicator is stale.
     const here = lockedChromiumVersion();

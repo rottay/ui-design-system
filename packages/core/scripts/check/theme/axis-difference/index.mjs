@@ -961,14 +961,14 @@ export const AS_RENDERED_ROOT_STAMPS = Object.freeze({
   // chain to class doors, so no root candidate names the part any more and the
   // mount law reads `.ds-surface.ds-compare` bare -- while every section rule
   // is still headed `[data-part="root"]`. The engine writes the part on the
-  // same element as the two classes, in the one branch that renders them.
+  // same element as the three classes, in the one branch that renders them.
   compare: Object.freeze([
     Object.freeze({
       attribute: 'data-part',
       value: 'root',
       source: 'src/components/surfaces/presentation/pages/data/compare/index.tsx',
-      stamp: 'className="ds-surface ds-compare"\n          data-part="root"',
-      resolves: 'className="ds-surface ds-compare"',
+      stamp: '<Stack\n          className="ds-surface ds-compare ds-compare__root"\n          data-part="root"',
+      resolves: 'className="ds-surface ds-compare ds-compare__root"',
     }),
   ]),
 });
@@ -2956,9 +2956,9 @@ export const REAL_RENDER_MOUNTS = Object.freeze({
   }),
   'filter-panel': Object.freeze({
     state: Object.freeze({
-      name: 'the option badge a select filter hands each option it enriches (no caller icon, no caller tone, wording matching no inference arm -> neutral) -- the node carrying the badge keyline',
+      name: 'the option badge a select filter hands each option it enriches (no caller icon or tone -> neutral) -- the node carrying the badge keyline',
       source: 'src/components/patterns/forms/filter-panel/engines/modern/index.tsx',
-      anchors: Object.freeze(['options={filter.options?.map((option) => enrichFilterOption(filter, option)) ?? []}', 'icon: renderOptionIcon(filter, option),']),
+      anchors: Object.freeze(['options={filter.options?.map((option) => enrichFilterOption(option)) ?? []}', 'icon: renderOptionIcon(option),']),
       resolves: Object.freeze([]),
     }),
     axes: Object.freeze(['depth']),
@@ -2971,11 +2971,11 @@ export const REAL_RENDER_MOUNTS = Object.freeze({
       }),
       Object.freeze({
         token: 'attr:data-tone=neutral',
-        stamp: 'data-tone={tone}',
+        stamp: "data-tone={option.tone ?? 'neutral'}",
         resolves: Object.freeze([
           Object.freeze({
             source: 'src/components/patterns/forms/filter-panel/engines/modern/index.tsx',
-            text: '  return \'neutral\';\n}',
+            text: "data-tone={option.tone ?? 'neutral'}",
           }),
         ]),
       }),
@@ -12433,7 +12433,7 @@ export function readInputDigest({ root = CORE_ROOT, entry = fileURLToPath(import
  *
  * @returns {{ version: string | null, reason: string | null }}
  */
-export function lockedChromiumVersion({ root = CORE_ROOT } = {}) {
+export function lockedChromiumVersion({ root = CORE_ROOT, lockfileExists = existsSync } = {}) {
   const roots = [resolve(root, 'package.json'), resolve(root, '../../package.json'), resolve(root, '../showroom/package.json')];
   let core = null;
   for (const from of roots) {
@@ -12464,7 +12464,7 @@ export function lockedChromiumVersion({ root = CORE_ROOT } = {}) {
   let lock = null;
   for (let cursor = resolve(root); ; cursor = dirname(cursor)) {
     const candidate = resolve(cursor, 'pnpm-lock.yaml');
-    if (existsSync(candidate)) {
+    if (lockfileExists(candidate)) {
       lock = readFileSync(candidate, 'utf8');
       break;
     }
