@@ -139,3 +139,44 @@ describe('OTPInput modern advanced coverage', () => {
     expect(codeOnScreen(4)).toBe('129');
   });
 });
+
+
+describe('OTPInput modern public binding props', () => {
+  it('names the first slot from caller references and retains every prefix and later positional name', () => {
+    render(
+      <>
+        <span id="code-label">Security code</span><span id="code-help">From your device.</span>
+        <ModernOTPInput length={2} id="security" name="secret" aria-label="Caller code"
+          aria-labelledby="code-label" aria-describedby="code-help" aria-invalid="grammar" />
+      </>
+    );
+    const first = screen.getByRole('textbox', { name: 'Security code' });
+    const second = screen.getByRole('textbox', { name: 'Digit 2 of 2' });
+    expect(first).toHaveAttribute('id', 'security-0');
+    expect(first).toHaveAttribute('name', 'secret-0');
+    expect(first).toHaveAttribute('aria-label', 'Caller code');
+    expect(second).toHaveAttribute('id', 'security-1');
+    expect(second).toHaveAttribute('name', 'secret-1');
+    const slots = [first, second];
+    for (const slot of slots) {
+      expect(slot).toHaveAccessibleDescription('From your device.');
+      expect(slot).toHaveAttribute('aria-invalid', 'grammar');
+    }
+  });
+
+  it('keeps own error semantics when external validation clears and removes only the own message on recovery', () => {
+    const field = (error: boolean) => (
+      <><span id="otp-context">Caller context.</span>
+        <ModernOTPInput length={2} id="recover" error={error} errorMessage="Code error."
+          aria-describedby="otp-context" aria-invalid={false} /></>
+    );
+    const { rerender } = render(field(true));
+    const first = screen.getByLabelText('Digit 1 of 2');
+    expect(first).toHaveAttribute('aria-invalid', 'true');
+    expect(first).toHaveAccessibleDescription('Code error. Caller context.');
+    rerender(field(false));
+    expect(first).toHaveAttribute('aria-invalid', 'false');
+    expect(first).toHaveAccessibleDescription('Caller context.');
+    expect(document.getElementById('recover-error')).toBeNull();
+  });
+});

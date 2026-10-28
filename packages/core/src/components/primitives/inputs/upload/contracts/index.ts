@@ -32,7 +32,7 @@
  * @category Inputs
  * @package @rottay/design-system
  */
-import type { ReactNode, CSSProperties } from 'react';
+import type { ReactNode, CSSProperties, AriaAttributes } from 'react';
 import type { EngineAwareProps } from '@/foundation/contracts/runtime/engine';
 
 /**
@@ -164,6 +164,16 @@ export interface UploadRequestOption<T = unknown> {
  * ```
  */
 export interface UploadProps<T = unknown> extends EngineAwareProps {
+  /** Modern: native file input ID, independent of the outer div ref. */
+  id?: string;
+  /** Modern: accessible name for the native file input; trigger action names are retained. */
+  'aria-label'?: string;
+  /** Modern: native file input label references, taking precedence over aria-label. */
+  'aria-labelledby'?: string;
+  /** Modern: description references for the native file input and upload trigger. */
+  'aria-describedby'?: string;
+  /** Modern: invalid state for the native file input and upload trigger. */
+  'aria-invalid'?: AriaAttributes['aria-invalid'];
   /** Upload API endpoint (string or function returning URL) */
   action?: string | ((file: File) => string | Promise<string>);
   /** Accepted file types (e.g., 'image/*', '.pdf,.doc') */

@@ -4,6 +4,11 @@
 
 ### Patch Changes
 
+- Bind Modern FormField labels and validation messages to Slider, OTPInput,
+  Rate and Upload controls. Preserve caller naming, range thumb names and OTP
+  ID prefixes; give generated field IDs instance scope and keep Upload trigger
+  descriptions without nesting custom buttons inside interactive picture triggers.
+  Preserve named keyboard triggers for decorative Upload content.
 - Follow the label role weight for Notifier titles and the section-title role
   weight for Toolbar titles, preserving urgent notification weights, title
   metrics and local density behavior.

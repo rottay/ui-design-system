@@ -36,7 +36,7 @@
  * @package @rottay/design-system
  */
 
-import type { CSSProperties } from 'react';
+import type { CSSProperties, AriaAttributes } from 'react';
 import type { EngineAwareProps } from '../../../../../foundation/contracts';
 
 /**
@@ -83,6 +83,14 @@ export type OTPInputSize = 'sm' | 'md' | 'lg';
  * ```
  */
 export interface OTPInputProps extends EngineAwareProps {
+  /** Modern: optional first-slot name; other slots keep localized positional names. */
+  'aria-label'?: string;
+  /** Modern: first-slot label references, taking precedence over its aria-label. */
+  'aria-labelledby'?: string;
+  /** Modern: references merged after the component error description on every slot. */
+  'aria-describedby'?: string;
+  /** Modern: every slot's invalid state; the component error state takes precedence. */
+  'aria-invalid'?: AriaAttributes['aria-invalid'];
   /** Number of OTP input fields to render (default: 6) */
   length?: number;
   /** Current value as a concatenated string of all digits/characters (controlled) */

@@ -8,7 +8,8 @@
  * @remarks
  * FormField simplifies form layouts by encapsulating the common pattern of
  * label, input, error message, and help text into a single component.
- * It works across all three engines (Classic, Modern, Rustic).
+ * Modern binds direct controls to instance-specific IDs, the visible label and
+ * the active error/help message. These binding guarantees apply to Modern only.
  *
  * @module FormField/Types
  * @category Inputs
@@ -50,11 +51,16 @@ export type FormFieldSize = 'sm' | 'md' | 'lg';
 export interface FormFieldProps extends EngineAwareProps {
   /**
    * Label text displayed above (vertical) or beside (horizontal) the input.
+   * Modern labels the first direct control unless it supplies aria-labelledby
+   * or a nonempty aria-label; an empty label preserves standalone naming.
    */
   label: string;
 
   /**
-   * Name attribute, used as `htmlFor` on the label and `id` on the wrapper.
+   * Modern generated-ID prefix: `formfield-${name}-${React.useId()}`.
+   * Caller control IDs are preserved; id-less controls use the instance ID,
+   * then `-2`, `-3`, etc. Caller IDs do not advance that sequence. The label
+   * targets the first direct control's ID. No name or ID is set on the wrapper.
    */
   name: string;
 
@@ -67,11 +73,15 @@ export interface FormFieldProps extends EngineAwareProps {
   /**
    * Error message to display below the input.
    * When provided, the field enters an error visual state.
+   * Modern appends its description reference after each control's own context
+   * and sets aria-invalid=true; otherwise the control's invalid state survives.
    */
   error?: string;
 
   /**
    * Help text displayed below the input (hidden when error is shown).
+   * Modern appends its description reference after each control's own context
+   * when no error is active; message IDs are instance-specific.
    */
   help?: string;
 
@@ -92,6 +102,10 @@ export interface FormFieldProps extends EngineAwareProps {
 
   /**
    * The input element(s) to render inside the field.
+   * Modern binds direct input/textarea/select elements and component children;
+   * it does not descend into fragments or host wrappers. Components must forward
+   * id and aria-* to their control; composite ID prefixes/groups keep their own
+   * targeting semantics (OTPInput slots, Slider range group, Upload file input).
    */
   children: ReactNode;
 

@@ -90,11 +90,17 @@ export default function ModernOTPInput(props: OTPInputProps): React.ReactElement
     className,
     style,
     id: providedId,
+    'aria-label': ariaLabel,
+    'aria-labelledby': ariaLabelledBy,
+    'aria-describedby': ariaDescribedBy,
+    'aria-invalid': ariaInvalid,
   } = props;
 
   const generatedId = useId();
   const idPrefix = providedId || `otp-modern-${generatedId}`;
   const errorMessageId = `${idPrefix}-error`;
+  const describedBy = [error && errorMessage ? errorMessageId : undefined, ariaDescribedBy]
+    .filter(Boolean).join(' ') || undefined;
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
   const composingRef = useRef(false);
   const composedDraftRef = useRef('');
@@ -259,9 +265,10 @@ export default function ModernOTPInput(props: OTPInputProps): React.ReactElement
             onKeyDown={(e) => handleKeyDown(index, e)}
             onPaste={handlePaste}
             autoComplete={index === 0 ? 'one-time-code' : 'off'}
-            aria-label={digitLabel(index, length)}
-            aria-invalid={error || undefined}
-            aria-describedby={error && errorMessage ? errorMessageId : undefined}
+            aria-label={index === 0 ? ariaLabel ?? digitLabel(index, length) : digitLabel(index, length)}
+            aria-labelledby={index === 0 ? ariaLabelledBy : undefined}
+            aria-invalid={error ? true : ariaInvalid}
+            aria-describedby={describedBy}
           />
         ))}
       </div>

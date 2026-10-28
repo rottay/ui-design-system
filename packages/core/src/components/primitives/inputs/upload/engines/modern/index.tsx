@@ -42,7 +42,7 @@
  * @category Inputs
  * @package @rottay/design-system
  */
-import React, { useState, useRef, useCallback, useEffect, useId } from 'react';
+import React, { useState, useRef, useCallback, useEffect, useLayoutEffect, useId } from 'react';
 import type { UploadProps, DraggerProps, UploadFile, UploadChangeInfo, UploadListType } from '../../contracts';
 import { useFieldOverlay } from '../../../../runtime/overlay/field';
 import { useFileDropZone } from '../../../../runtime/collection/sortable';
@@ -62,6 +62,99 @@ import { StatusErrorIcon } from '@/graphics/icons/semantic/generated/roles/statu
 // ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
+
+function bindUploadTrigger(
+  content: React.ReactNode,
+  describedBy: string | undefined,
+  invalid: React.AriaAttributes['aria-invalid'],
+): { content: React.ReactNode; interactive: boolean; opaque: boolean } {
+  let interactive = false;
+  let opaque = false;
+  const boundContent = React.Children.map(content, (child) => {
+    if (!React.isValidElement<React.HTMLAttributes<HTMLElement>>(child)) return child;
+    const isOpaque = child.type !== React.Fragment && typeof child.type !== 'string';
+    const ownsInteraction = child.type !== React.Fragment && (
+      (typeof child.type === 'string' && ['button', 'a', 'input', 'select', 'textarea', 'summary'].includes(child.type))
+      || child.props.role === 'button' || child.props.tabIndex !== undefined
+    );
+    opaque ||= isOpaque;
+    if (!ownsInteraction && !isOpaque) {
+      const nested = bindUploadTrigger(child.props.children, describedBy, invalid);
+      interactive ||= nested.interactive;
+      opaque ||= nested.opaque;
+      return nested.interactive || nested.opaque ? React.cloneElement(child, { children: nested.content }) : child;
+    }
+    interactive ||= ownsInteraction;
+    const { 'aria-describedby': childDescription, 'aria-invalid': childInvalid } = child.props;
+    const description = [...new Set([childDescription, describedBy]
+      .filter(Boolean).join(' ').split(/\s+/).filter(Boolean))].join(' ') || undefined;
+    return React.cloneElement(child, {
+      'aria-describedby': description,
+      'aria-invalid': invalid && invalid !== 'false' ? invalid : childInvalid ?? invalid,
+    });
+  });
+  return { content: content ? boundContent : content, interactive, opaque };
+}
+
+
+function RenderedUploadTrigger({
+  children, disabled, label, describedBy, invalid, onActivate,
+}: {
+  children: React.ReactNode;
+  disabled: boolean;
+  label: string;
+  describedBy?: string;
+  invalid: React.AriaAttributes['aria-invalid'];
+  onActivate: () => void;
+}) {
+  const ref = useRef<HTMLSpanElement>(null);
+  const [resolved, setResolved] = useState<{ content: React.ReactNode; interactive: boolean }>();
+  useLayoutEffect(() => {
+    const element = ref.current;
+    if (!element) return;
+    const update = () => {
+      const interactive = Boolean(element.querySelector(
+        'button, a[href], input, select, textarea, summary, [role="button"], [role="link"], [tabindex], [contenteditable="true"]',
+      ));
+      setResolved((previous) => previous && previous.content === children && previous.interactive === interactive
+        ? previous : { content: children, interactive });
+    };
+    update();
+    const observer = new MutationObserver(update);
+    observer.observe(element, {
+      childList: true, subtree: true, attributes: true,
+      attributeFilter: ['role', 'tabindex', 'href', 'contenteditable'],
+    });
+    return () => observer.disconnect();
+  }, [children]);
+  const isTrigger = resolved !== undefined && resolved.content === children && !resolved.interactive;
+  return (
+    <span
+      ref={ref}
+      data-part="add-button"
+      data-disabled={disabled || undefined}
+      className="ds-upload__add-button"
+      role={isTrigger ? 'button' : undefined}
+      tabIndex={isTrigger ? (disabled ? -1 : 0) : undefined}
+      aria-label={isTrigger ? label : undefined}
+      aria-describedby={isTrigger ? describedBy : undefined}
+      aria-invalid={isTrigger ? invalid : undefined}
+      onClick={(event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        if (!disabled) onActivate();
+      }}
+      onKeyDown={(event) => {
+        if (isTrigger && !disabled && event.target === event.currentTarget && (event.key === 'Enter' || event.key === ' ')) {
+          event.preventDefault();
+          onActivate();
+        }
+      }}
+    >
+      {children}
+    </span>
+  );
+}
 
 /**
  * Generates a data URL thumbnail for image files using FileReader.
@@ -601,6 +694,11 @@ export const Upload = React.forwardRef<HTMLDivElement, UploadProps>(
     const { t } = useTranslation('components');
 
     const {
+      id,
+      'aria-label': ariaLabel,
+      'aria-labelledby': ariaLabelledBy,
+      'aria-describedby': ariaDescribedBy,
+      'aria-invalid': ariaInvalid,
       accept,
       multiple = UPLOAD_DEFAULTS.multiple,
       fileList: controlledFileList,
@@ -633,7 +731,8 @@ export const Upload = React.forwardRef<HTMLDivElement, UploadProps>(
     const [previewImage, setPreviewImage] = useState<{ src: string; alt: string } | null>(null);
     const inputRef = useRef<HTMLInputElement>(null);
     const actualFileList = controlledFileList ?? fileList;
-    const inputId = `upload-input-${useId()}`;
+    const generatedId = useId();
+    const inputId = id ?? `upload-input-${generatedId}`;
 
     // showUploadList's object form gates which per-item actions render
     // (download stays contract debt -- see the family report).
@@ -728,6 +827,7 @@ export const Upload = React.forwardRef<HTMLDivElement, UploadProps>(
     ].filter(Boolean).join(' ');
 
     const fileListLabel = translateOr(t, 'upload.file_list', 'Uploaded files');
+    const triggerContent = bindUploadTrigger(children, ariaDescribedBy, ariaInvalid);
 
     const uploadTrigger = (
       <>
@@ -740,11 +840,33 @@ export const Upload = React.forwardRef<HTMLDivElement, UploadProps>(
           onChange={handleFileChange}
           data-part="file-input"
           id={inputId}
-          aria-label={t('upload.upload_file')}
+          aria-label={ariaLabel ?? t('upload.upload_file')}
+          aria-labelledby={ariaLabelledBy}
+          aria-describedby={ariaDescribedBy}
+          aria-invalid={ariaInvalid}
           {...directoryAttrs}
         />
         {isPictureCardOrCircle ? (
-          canAdd && (
+          canAdd && (triggerContent.interactive ? (
+            <span
+              data-part="add-button"
+              data-disabled={disabled || undefined}
+              className="ds-upload__add-button"
+              onClick={(e) => { e.preventDefault(); e.stopPropagation(); if (!disabled) inputRef.current?.click(); }}
+            >
+              {triggerContent.content}
+            </span>
+          ) : triggerContent.opaque ? (
+            <RenderedUploadTrigger
+              disabled={disabled}
+              label={t('upload.add_file')}
+              describedBy={ariaDescribedBy}
+              invalid={ariaInvalid}
+              onActivate={() => inputRef.current?.click()}
+            >
+              {triggerContent.content}
+            </RenderedUploadTrigger>
+          ) : (
             <label
               htmlFor={inputId}
               data-part="add-button"
@@ -753,15 +875,16 @@ export const Upload = React.forwardRef<HTMLDivElement, UploadProps>(
               role="button"
               tabIndex={disabled ? -1 : 0}
               aria-label={t('upload.add_file')}
+              aria-describedby={ariaDescribedBy}
+              aria-invalid={ariaInvalid}
+              onClick={(e) => { if (disabled) e.preventDefault(); }}
               onKeyDown={(e) => {
                 if (!disabled && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); inputRef.current?.click(); }
               }}
             >
-              {children || (
-                <ActionAddIcon decorative size={32} />
-              )}
+              {children || <ActionAddIcon decorative size={32} />}
             </label>
-          )
+          ))
         ) : (
           <span
             data-part="trigger"
@@ -769,8 +892,10 @@ export const Upload = React.forwardRef<HTMLDivElement, UploadProps>(
             data-disabled={disabled ? 'true' : undefined}
             onClick={(e) => { e.preventDefault(); e.stopPropagation(); if (!disabled) inputRef.current?.click(); }}
           >
-            {children || (
-              <button type="button" disabled={disabled}>{t('upload.button')}</button>
+            {triggerContent.content || (
+              <button type="button" disabled={disabled} aria-describedby={ariaDescribedBy} aria-invalid={ariaInvalid}>
+                {t('upload.button')}
+              </button>
             )}
           </span>
         )}
@@ -841,6 +966,11 @@ export const Dragger = React.forwardRef<HTMLDivElement, DraggerProps>(
     const { t } = useTranslation('components');
 
     const {
+      id,
+      'aria-label': ariaLabel,
+      'aria-labelledby': ariaLabelledBy,
+      'aria-describedby': ariaDescribedBy,
+      'aria-invalid': ariaInvalid,
       accept,
       multiple = UPLOAD_DEFAULTS.multiple,
       fileList: controlledFileList,
@@ -963,6 +1093,8 @@ export const Dragger = React.forwardRef<HTMLDivElement, DraggerProps>(
           tabIndex={disabled ? -1 : 0}
           aria-label={t('upload.drop_hint')}
           aria-disabled={disabled || undefined}
+          aria-describedby={ariaDescribedBy}
+          aria-invalid={ariaInvalid}
           onKeyDown={(e) => {
             if (!disabled && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); inputRef.current?.click(); }
           }}
@@ -986,7 +1118,11 @@ export const Dragger = React.forwardRef<HTMLDivElement, DraggerProps>(
             disabled={disabled}
             onChange={(e) => processFiles(Array.from(e.target.files || []))}
             data-part="file-input"
-            aria-label={t('upload.upload_file')}
+            id={id}
+            aria-label={ariaLabel ?? t('upload.upload_file')}
+            aria-labelledby={ariaLabelledBy}
+            aria-describedby={ariaDescribedBy}
+            aria-invalid={ariaInvalid}
             {...directoryAttrs}
           />
           {children || (

@@ -76,6 +76,36 @@ Public types are exported from the root and the focused capability entries.
 The former `./contracts/*` doors were retired with the 3.0 API cleanup;
 consumer code must not import private source paths.
 
+### Modern form control binding
+
+`FormField` binds its visible label to the first direct control child and merges
+its active error/help message after the child's `aria-describedby`. A field error
+sets `aria-invalid=true`; otherwise caller validation state survives. Explicit
+child `aria-labelledby` wins, then child `aria-label`, then the visible field
+label. An empty/absent field label leaves standalone component names intact.
+Caller IDs are preserved. Generated control, label and message IDs are opaque,
+instance-specific and stable across rerenders; do not derive DOM references from
+`name` or depend on their spelling. Give caller IDs document-wide uniqueness.
+
+The following public props are forwarded by the Modern engines. Classic and
+Rustic remain frozen; this does not extend their behavior guarantees.
+
+| Component | Binding target and public props |
+|---|---|
+| `Slider` | `id`, `aria-label`, `aria-labelledby`, `aria-describedby`, `aria-invalid`. Single mode targets the native range input. Range mode puts the ID/name on the group, derives thumb IDs as `{id}-start`/`{id}-end`, and forwards description/invalid state to both native inputs. Thumb names remain the localized minimum/maximum names. |
+| `OTPInput` | Existing `id` remains a prefix for `{id}-0`, `{id}-1`, etc. `aria-label`/`aria-labelledby` name the first slot; later slots keep positional names. The first slot retains its default positional `aria-label` unless explicitly overridden, with `aria-labelledby` taking accessible-name precedence. `aria-describedby` is merged after the component's own error reference on every slot. `aria-invalid` reaches every slot; the component's own `error` state takes precedence. |
+| `Rate` | Existing `id` and ARIA props reach the radiogroup. FormField supplies `aria-labelledby` referencing the visible label because a radiogroup div cannot receive a native label association. Radio names and interaction are retained. |
+| `Upload` / `Upload.Dragger` | `id`, `aria-label`, `aria-labelledby` name the real native file input; the forwarded ref still targets the outer div. `aria-describedby`/`aria-invalid` reach the input and existing trigger/dropzone. Trigger action names are retained. A custom button's own description is merged before field context; its name and handlers survive. Text, picture, picture-card and picture-circle modes retain their selection behavior. Interactive picture-trigger children use a passive container to avoid nested controls. |
+
+```tsx
+<FormField label="Budget" name="budget" error="Choose a valid interval.">
+  <Slider range defaultValue={[20, 80]} />
+</FormField>
+<FormField label="Verification code" name="verification" help="Check your device.">
+  <OTPInput id="verification-code" length={6} />
+</FormField>
+```
+
 ## 6. Icons and marks
 
 `./icons` is the governed, supplier-independent `Icon` facade with the

@@ -91,3 +91,46 @@ describe('Slider modern value semantics', () => {
     expect(screen.queryByRole('group')).toBeNull();
   });
 });
+
+
+describe('Slider modern public binding props', () => {
+  it('forwards the single input id and caller ARIA without changing its value', () => {
+    render(
+      <>
+        <span id="volume-label">Volume</span><span id="volume-help">Choose a level.</span>
+        <ModernSlider id="volume" aria-label="Fallback" aria-labelledby="volume-label"
+          aria-describedby="volume-help" aria-invalid="spelling" defaultValue={40} />
+      </>
+    );
+    const input = screen.getByRole('slider', { name: 'Volume' });
+    expect(input).toHaveAttribute('id', 'volume');
+    expect(input).toHaveAttribute('aria-label', 'Fallback');
+    expect(input).toHaveAccessibleDescription('Choose a level.');
+    expect(input).toHaveAttribute('aria-invalid', 'spelling');
+    expect(input).toHaveValue('40');
+  });
+
+  it('forwards range descriptions and invalid state while keeping thumb names and formatter values', () => {
+    render(
+      <>
+        <span id="weight-label">Weight</span><span id="weight-help">Allowed interval.</span>
+        <ModernSlider range id="weight" aria-labelledby="weight-label" aria-describedby="weight-help"
+          aria-invalid defaultValue={[20, 80]} tooltip={{ formatter: (value) => `${value} kg` }} />
+      </>
+    );
+    const group = screen.getByRole('group', { name: 'Weight' });
+    expect(group).toHaveAttribute('id', 'weight');
+    expect(group).toHaveAccessibleDescription('Allowed interval.');
+    const minimum = screen.getByRole('slider', { name: 'Minimum value' });
+    const maximum = screen.getByRole('slider', { name: 'Maximum value' });
+    expect(minimum).toHaveAttribute('id', 'weight-start');
+    expect(maximum).toHaveAttribute('id', 'weight-end');
+    expect(minimum).toHaveAttribute('aria-valuetext', '20 kg');
+    expect(maximum).toHaveAttribute('aria-valuetext', '80 kg');
+    const thumbs = [minimum, maximum];
+    for (const thumb of thumbs) {
+      expect(thumb).toHaveAccessibleDescription('Allowed interval.');
+      expect(thumb).toHaveAttribute('aria-invalid', 'true');
+    }
+  });
+});

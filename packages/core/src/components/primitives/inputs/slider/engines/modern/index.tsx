@@ -113,7 +113,11 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
       handleStyle,
       className,
       style,
+      id,
       'aria-label': ariaLabel,
+      'aria-labelledby': ariaLabelledBy,
+      'aria-describedby': ariaDescribedBy,
+      'aria-invalid': ariaInvalid,
     } = props;
 
     const i18n = useOptionalTranslation('components');
@@ -502,8 +506,12 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
              either thumb. Without it a "Price" range announced only
              "Minimum value"/"Maximum value" and lost every trace of what was
              being ranged. */
-          role={ariaLabel ? 'group' : undefined}
+          role={ariaLabel || ariaLabelledBy ? 'group' : undefined}
+          id={id}
           aria-label={ariaLabel}
+          aria-labelledby={ariaLabelledBy}
+          aria-describedby={ariaDescribedBy}
+          aria-invalid={ariaInvalid}
         >
           {/* Track */}
           <div data-part="rail" style={railStyle} />
@@ -558,6 +566,9 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
             disabled={disabled}
             data-part="native-input"
             data-variant="overlay"
+            id={id ? `${id}-start` : undefined}
+            aria-describedby={ariaDescribedBy}
+            aria-invalid={ariaInvalid}
             aria-label={tOr('slider.start_value', 'Minimum value')}
             aria-valuetext={valueTextFor(start)}
             aria-orientation={vertical ? 'vertical' : 'horizontal'}
@@ -586,6 +597,9 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
             disabled={disabled}
             data-part="native-input"
             data-variant="overlay"
+            id={id ? `${id}-end` : undefined}
+            aria-describedby={ariaDescribedBy}
+            aria-invalid={ariaInvalid}
             aria-label={tOr('slider.end_value', 'Maximum value')}
             aria-valuetext={valueTextFor(end)}
             aria-orientation={vertical ? 'vertical' : 'horizontal'}
@@ -635,6 +649,10 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
           onKeyUp={handleKeyUp}
           disabled={disabled}
           data-part="native-input"
+          id={id}
+          aria-labelledby={ariaLabelledBy}
+          aria-describedby={ariaDescribedBy}
+          aria-invalid={ariaInvalid}
           aria-label={ariaLabel ?? tOr('slider.label', 'Slider')}
           aria-valuetext={valueTextFor(singleValue)}
           aria-orientation={vertical ? 'vertical' : 'horizontal'}

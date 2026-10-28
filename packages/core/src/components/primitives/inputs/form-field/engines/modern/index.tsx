@@ -9,6 +9,8 @@ type BoundControlProps = {
   id?: string;
   disabled?: boolean;
   required?: boolean;
+  'aria-label'?: string;
+  'aria-labelledby'?: string;
   'aria-describedby'?: string;
   'aria-invalid'?: boolean | string;
   'aria-required'?: boolean | 'false' | 'true';
@@ -45,7 +47,10 @@ export default function ModernFormField(props: FormFieldProps): React.ReactEleme
     'data-testid': testId,
   } = props;
 
-  const fieldId = `formfield-${name}`;
+  const instanceId = React.useId();
+  const fieldId = `formfield-${name}-${instanceId}`;
+  const labelId = `${fieldId}-label`;
+  const hasLabel = Boolean(label);
   const errorId = `${fieldId}-error`;
   const helpId = `${fieldId}-help`;
   const describedBy = error ? errorId : help ? helpId : undefined;
@@ -59,6 +64,7 @@ export default function ModernFormField(props: FormFieldProps): React.ReactEleme
   // controls (a range pair, a split code entry) needs a suffix after the first;
   // the counter advances in the same document order the map below walks.
   let boundIndex = 0;
+  let labelBound = false;
   const nextFallbackId = (): string => {
     boundIndex += 1;
     return boundIndex === 1 ? fieldId : `${fieldId}-${boundIndex}`;
@@ -116,7 +122,7 @@ export default function ModernFormField(props: FormFieldProps): React.ReactEleme
     >
       <div data-part="layout">
         <label htmlFor={controlId} data-part="label-wrap">
-          <span data-part="label">
+          <span id={hasLabel ? labelId : undefined} data-part="label">
             {label}
             {required && <span data-part="required-mark" aria-hidden="true">*</span>}
           </span>
@@ -127,16 +133,25 @@ export default function ModernFormField(props: FormFieldProps): React.ReactEleme
             {React.Children.map(children, (child) => {
               if (!receivesFieldBinding(child)) return child;
 
-              const childDescription = child.props['aria-describedby'];
+              const receivesLabel = !labelBound;
+              labelBound = true;
+              const {
+                'aria-label': childLabel,
+                'aria-labelledby': childLabelledBy,
+                'aria-describedby': childDescription,
+                'aria-invalid': childInvalid,
+                'aria-required': childRequired,
+              } = child.props;
               const mergedDescription = [childDescription, describedBy].filter(Boolean).join(' ') || undefined;
 
               return React.cloneElement(child, {
                 id: child.props.id ?? nextFallbackId(),
                 disabled: disabled || child.props.disabled,
                 required: required || child.props.required,
+                'aria-labelledby': childLabelledBy ?? (receivesLabel && hasLabel && !childLabel ? labelId : undefined),
                 'aria-describedby': mergedDescription,
-                'aria-invalid': error ? true : child.props['aria-invalid'] ?? false,
-                'aria-required': required ? true : child.props['aria-required'],
+                'aria-invalid': error ? true : childInvalid ?? false,
+                'aria-required': required ? true : childRequired,
               });
             })}
           </div>

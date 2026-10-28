@@ -43,13 +43,21 @@
  * @package @rottay/design-system
  */
 
-import type { ReactNode, CSSProperties } from 'react';
+import type { ReactNode, CSSProperties, AriaAttributes } from 'react';
 
 export interface SliderMarks {
   [key: number]: ReactNode | { style?: CSSProperties; label: ReactNode };
 }
 
 export interface SliderProps {
+  /** Modern: native input ID in single mode; range group ID in range mode. */
+  id?: string;
+  /** Modern: labels the single input or range group; thumb names remain positional. */
+  'aria-labelledby'?: string;
+  /** Modern: description references forwarded to every native range input and the range group. */
+  'aria-describedby'?: string;
+  /** Modern: validation state forwarded to every native range input and the range group. */
+  'aria-invalid'?: AriaAttributes['aria-invalid'];
   /** Current value (single or range) */
   value?: number | [number, number];
   /** Default value */
@@ -113,8 +121,8 @@ export interface SliderProps {
   /**
    * Accessible name for the single-mode native input when no surrounding
    * label provides one (without a name, a standalone slider fails the axe
-   * `label` rule, critical). Range mode ignores this prop and uses the
-   * localized per-handle defaults instead.
+   * `label` rule, critical). In range mode this names the group; thumbs keep
+   * their localized per-handle names. `aria-labelledby` takes precedence.
    */
   'aria-label'?: string;
 }

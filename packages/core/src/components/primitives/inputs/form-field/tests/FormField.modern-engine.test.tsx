@@ -49,7 +49,8 @@ describe('Modern FormField public anatomy', () => {
     expect(control).toHaveAttribute('aria-invalid', 'true');
     expect(inputShell).toHaveAttribute('data-invalid', 'true');
     expect(inputShell).toHaveAttribute('data-disabled', 'true');
-    expect(screen.getByRole('alert')).toHaveAttribute('id', 'formfield-work-email-error');
+    expect(screen.getByRole('alert').id).toMatch(/^formfield-work-email-.+-error$/);
+    expect(control).toHaveAttribute('aria-describedby', screen.getByRole('alert').id);
   });
 
   it('keeps the same anatomy in an Arabic RTL context', () => {
@@ -95,7 +96,8 @@ describe('Modern FormField public anatomy', () => {
       </ModernFormField>
     );
 
-    for (const testId of ['non-control', 'fragment-content']) {
+    const testIds = ['non-control', 'fragment-content'];
+    for (const testId of testIds) {
       const node = screen.getByTestId(testId);
       expect(node).not.toHaveAttribute('disabled');
       expect(node).not.toHaveAttribute('required');
