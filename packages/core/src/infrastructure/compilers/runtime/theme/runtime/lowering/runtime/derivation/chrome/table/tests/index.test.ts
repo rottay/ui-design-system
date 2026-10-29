@@ -142,13 +142,16 @@ describe("chrome/table", () => {
 });
 
 const TITLE_WEIGHT = "--ds-table-title-font-weight";
+const CURRENT_WEIGHT = "--ds-table-pagination-current-font-weight";
+const TITLE_CHAIN = "var(--ds-type-section-title-font-weight, var(--ds-font-weight-semibold))";
+const CURRENT_CHAIN = "var(--ds-type-label-font-weight, var(--ds-font-weight-semibold))";
+const ROLE_WEIGHT_CHANNELS = new Set([TITLE_WEIGHT, CURRENT_WEIGHT]);
 const OTHER_CHANNELS: Record<string, string> = {
   "--ds-table-title-margin-block-end": "var(--ds-spacing-2)",
   "--ds-table-footer-margin-block-start": "var(--ds-spacing-2)",
   "--ds-table-cell-numeric": "tabular-nums",
   "--ds-table-pagination-numeric": "tabular-nums",
   "--ds-table-pagination-font-size": "var(--ds-type-supporting-font-size)",
-  "--ds-table-pagination-current-font-weight": "var(--ds-font-weight-semibold)",
   "--ds-table-pagination-margin-block-start": "var(--ds-spacing-4)",
   "--ds-table-selection-control-coarse-size": "calc(var(--ds-spacing-5) * var(--ds-control-height-scale, 1))",
   "--ds-table-touch-target-min": "var(--ds-touch-target-min)",
@@ -158,11 +161,23 @@ const OTHER_CHANNELS: Record<string, string> = {
   "--ds-table-cell-ellipsis-max-width": "var(--ds-spacing-80, 320px)",
 };
 
+const read = (channels: Record<string, string>, channel: string): string | undefined =>
+  new Map(Object.entries(channels)).get(channel);
+
+const otherChannels = (channels: Record<string, string>): Record<string, string> =>
+  Object.fromEntries(Object.entries(channels).filter(([channel]) => !ROLE_WEIGHT_CHANNELS.has(channel)));
+
 function resolveWeight(value: string | undefined, channels: Record<string, string>): string {
   if (value === undefined) throw new Error("Missing weight channel");
   const reference = /^var\((--ds-[a-z0-9-]+)(?:,\s*(.*))?\)$/.exec(value);
   if (reference === null) return value;
-  return resolveWeight(channels[reference[1]!] ?? reference[2], channels);
+  const [, channel = "", fallback] = reference;
+  return resolveWeight(read(channels, channel) ?? fallback, channels);
+}
+
+function lower(typography: NonNullable<FlatTheme["typography"]>) {
+  const ctx = buildLoweringContext({ theme: { ...MINIMAL_THEME, typography } });
+  return { ctx, channels: runDerivation(ctx, [typographyDeriver, tableChromeDeriver]).channels };
 }
 
 const WEIGHT_POSTURES = [
@@ -170,46 +185,35 @@ const WEIGHT_POSTURES = [
   { roleWeights: "regular", expected: "600" },
   { roleWeights: "strong", expected: "700" },
 ] as const;
+const FONT_SIZES = ["1rem", "2rem"] as const;
+const SECTION_TITLE_WEIGHTS = [300, 700] as const;
+const LABEL_WEIGHTS = [300, 800] as const;
 
 describe("chrome/table title role weight", () => {
   it.each(WEIGHT_POSTURES)("follows $roleWeights independently of section-title font-size", ({ roleWeights, expected }) => {
-    for (const fontSize of ["1rem", "2rem"]) {
-      const ctx = buildLoweringContext({
-        theme: {
-          ...MINIMAL_THEME,
-          typography: { roleWeights, roles: { sectionTitle: { fontSize } } },
-        },
-      });
-      const { channels } = runDerivation(ctx, [typographyDeriver, tableChromeDeriver]);
-      expect(channels["--ds-type-section-title-font-size"]).toBe(fontSize);
-      expect(resolveWeight(channels[TITLE_WEIGHT], channels)).toBe(expected);
-      expect(resolveWeight(channels["--ds-table-pagination-current-font-weight"], channels)).toBe("600");
-      const { [TITLE_WEIGHT]: titleWeight, ...otherChannels } = tableChromeDeriver.derive(ctx, {});
-      expect(titleWeight).toBe("var(--ds-type-section-title-font-weight, var(--ds-font-weight-semibold))");
-      expect(otherChannels).toEqual(OTHER_CHANNELS);
+    for (const fontSize of FONT_SIZES) {
+      const { ctx, channels } = lower({ roleWeights, roles: { sectionTitle: { fontSize } } });
+      expect(read(channels, "--ds-type-section-title-font-size")).toBe(fontSize);
+      expect(resolveWeight(read(channels, TITLE_WEIGHT), channels)).toBe(expected);
+      const derived = tableChromeDeriver.derive(ctx, {});
+      expect(read(derived, TITLE_WEIGHT)).toBe(TITLE_CHAIN);
+      expect(otherChannels(derived)).toEqual(OTHER_CHANNELS);
     }
   });
 
   it("follows the authored section-title weight above the posture and label weight", () => {
-    for (const fontWeight of [300, 700]) {
-      const ctx = buildLoweringContext({
-        theme: {
-          ...MINIMAL_THEME,
-          typography: {
-            roleWeights: "strong",
-            roles: { sectionTitle: { fontWeight }, label: { fontWeight: 800 } },
-          },
-        },
+    for (const fontWeight of SECTION_TITLE_WEIGHTS) {
+      const { channels } = lower({
+        roleWeights: "strong",
+        roles: { sectionTitle: { fontWeight }, label: { fontWeight: 800 } },
       });
-      const { channels } = runDerivation(ctx, [typographyDeriver, tableChromeDeriver]);
-      expect(channels["--ds-type-label-font-weight"]).toBe("800");
-      expect(resolveWeight(channels[TITLE_WEIGHT], channels)).toBe(String(fontWeight));
-      expect(resolveWeight(channels["--ds-table-pagination-current-font-weight"], channels)).toBe("600");
+      expect(read(channels, "--ds-type-label-font-weight")).toBe("800");
+      expect(resolveWeight(read(channels, TITLE_WEIGHT), channels)).toBe(String(fontWeight));
     }
   });
 
   it("falls back to semibold only when the section-title role channel is absent", () => {
-    const titleWeight = tableChromeDeriver.derive(context(), {})[TITLE_WEIGHT];
+    const titleWeight = read(tableChromeDeriver.derive(context(), {}), TITLE_WEIGHT);
     expect(resolveWeight(titleWeight, { "--ds-font-weight-semibold": "600" })).toBe("600");
     expect(resolveWeight(titleWeight, {
       "--ds-type-section-title-font-weight": "300",
@@ -220,9 +224,55 @@ describe("chrome/table title role weight", () => {
   it("preserves every other declared channel exactly", () => {
     for (const fixture of FIXTURES) {
       const ctx = buildLoweringContext({ theme: fixture.theme, tenant: fixture.tenant });
-      const { [TITLE_WEIGHT]: titleWeight, ...otherChannels } = tableChromeDeriver.derive(ctx, {});
-      expect(titleWeight).toBe("var(--ds-type-section-title-font-weight, var(--ds-font-weight-semibold))");
-      expect(otherChannels).toEqual(OTHER_CHANNELS);
+      const derived = tableChromeDeriver.derive(ctx, {});
+      expect(read(derived, TITLE_WEIGHT)).toBe(TITLE_CHAIN);
+      expect(read(derived, CURRENT_WEIGHT)).toBe(CURRENT_CHAIN);
+      expect(otherChannels(derived)).toEqual(OTHER_CHANNELS);
     }
+  });
+});
+
+describe("chrome/table pagination current role weight", () => {
+  it.each(WEIGHT_POSTURES)("follows $roleWeights independently of label font-size", ({ roleWeights, expected }) => {
+    for (const fontSize of FONT_SIZES) {
+      const { ctx, channels } = lower({ roleWeights, roles: { label: { fontSize } } });
+      expect(read(channels, "--ds-type-label-font-size")).toBe(fontSize);
+      expect(read(channels, "--ds-type-label-font-weight")).toBe(expected);
+      expect(resolveWeight(read(channels, CURRENT_WEIGHT), channels)).toBe(expected);
+      const derived = tableChromeDeriver.derive(ctx, {});
+      expect(read(derived, CURRENT_WEIGHT)).toBe(CURRENT_CHAIN);
+      expect(otherChannels(derived)).toEqual(OTHER_CHANNELS);
+    }
+  });
+
+  it("follows the authored label weight above the posture and section-title weight", () => {
+    for (const fontWeight of LABEL_WEIGHTS) {
+      const { channels } = lower({
+        roleWeights: "strong",
+        roles: { label: { fontWeight }, sectionTitle: { fontWeight: 500 } },
+      });
+      expect(read(channels, "--ds-type-label-font-weight")).toBe(String(fontWeight));
+      expect(resolveWeight(read(channels, CURRENT_WEIGHT), channels)).toBe(String(fontWeight));
+      expect(resolveWeight(read(channels, TITLE_WEIGHT), channels)).toBe("500");
+    }
+  });
+
+  it("stays on the label posture when only the section title is authored", () => {
+    const { channels } = lower({ roleWeights: "light", roles: { sectionTitle: { fontWeight: 800 } } });
+    expect(resolveWeight(read(channels, TITLE_WEIGHT), channels)).toBe("800");
+    expect(resolveWeight(read(channels, CURRENT_WEIGHT), channels)).toBe("500");
+  });
+
+  it("falls back to semibold only when the label role channel is absent", () => {
+    const currentWeight = read(tableChromeDeriver.derive(context(), {}), CURRENT_WEIGHT);
+    expect(resolveWeight(currentWeight, { "--ds-font-weight-semibold": "600" })).toBe("600");
+    expect(resolveWeight(currentWeight, {
+      "--ds-type-section-title-font-weight": "300",
+      "--ds-font-weight-semibold": "900",
+    })).toBe("900");
+    expect(resolveWeight(currentWeight, {
+      "--ds-type-label-font-weight": "300",
+      "--ds-font-weight-semibold": "900",
+    })).toBe("300");
   });
 });

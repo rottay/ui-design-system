@@ -137,7 +137,8 @@ function authoredDials(
 }
 
 /**
- * Publish a v2 document.
+ * Publish a v2 or v3 decision document with a slug accepted by the v1 schema
+ * and artifact verifier.
  *
  * Refusals keep their owners. A domain, tier or cap rejection is the DOOR's and
  * propagates by its own name and issue path, because a route that catches
@@ -189,6 +190,12 @@ export function compileTenantThemeDocumentV2(
     slug: input.slug,
     verticalKey: input.verticalKey,
   });
+  if (
+    typeof input.slug !== "string" ||
+    !/^[a-z0-9](?:[a-z0-9-]{0,62}[a-z0-9])?$/.test(input.slug)
+  ) {
+    refuse("invalid_value", "$.slug", "Expected a lowercase slug of 1 to 64 characters with alphanumeric endpoints");
+  }
 
   const identity: TenantThemeConfigIdentity = {
     tenantId: input.tenantId,

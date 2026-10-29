@@ -4,6 +4,20 @@
 
 ### Patch Changes
 
+- Follow the section-title role weight for Modern ShortcutsOverlay titles and
+  the label role weight for the Table pagination current page, each keeping its
+  semibold fallback; ShortcutsOverlay category weight, its Modal chamber and the
+  other channels of both families are unchanged. This supersedes the earlier
+  note that Table pagination weight was preserved; at the deriver level the
+  BitHire current page now resolves to 700. Refuse style decision names the
+  style partition does not own, such as inherited `constructor`, `toString` or
+  `__proto__`, with the existing unclassified-row error while all 29 rows keep
+  their classification. Refuse a malformed or non-string v2/v3 tenant document
+  slug at `$.slug` with `invalid_value` before admission under the unchanged
+  v1/mount slug grammar; `tenant--one` stays valid and reserved identities keep
+  their own refusal. No public API or dependency change. Source and focal checks
+  cover these corrections; generated artifacts, integration, browser/computed-
+  style and public-package acceptance remain pending.
 - Follow semantic role weights for Modern Result titles and PageShell eyebrow/
   terminal-crumb labels, preserving Result's bold HTTP codes, ordinary crumb
   weights and existing semibold fallbacks. Let GuidedDraftForm inherit the

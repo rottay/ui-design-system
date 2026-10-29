@@ -8,7 +8,7 @@
  * the envelopes it must fit inside.
  *
  * The two tables this owner declares beside the catalog (the class column and
- * the non-emitting row) are re-derived from the catalog HERE, in both
+ * the non-emitting rows) are re-derived from the catalog HERE, in both
  * directions, because the contract may not import its unranked peer in
  * production and a column nobody re-measures is a column that rots.
  */
@@ -191,6 +191,50 @@ describe("I10 registration refuses a row a style may not author", () => {
       /"palette\.invented", which the style partition does not classify/u
     );
   });
+
+  it.each(["constructor", "toString", "__proto__"])(
+    "refuses inherited property %s as an unclassified row",
+    (id) => {
+      expect(() => assertStyleAuthorable("ghost", id)).toThrowError(
+        new ThemeStyleReferenceError(
+          `style "ghost" authors ${JSON.stringify(id)}, which the style partition does not classify; every one of the 29 rows is classified and there is no default`
+        )
+      );
+    }
+  );
+
+  it.each(["typography.invented", "constructor.value", "__proto__.value"])(
+    "keeps the unclassified-row refusal for unknown dotted key %s",
+    (id) => {
+      expect(() => assertStyleAuthorable("ghost", id)).toThrowError(
+        new ThemeStyleReferenceError(
+          `style "ghost" authors ${JSON.stringify(id)}, which the style partition does not classify; every one of the 29 rows is classified and there is no default`
+        )
+      );
+    }
+  );
+
+  it.each(Object.entries(THEME_STYLE_CLASS_BY_DECISION))(
+    "preserves authorability of %s (%s)",
+    (id, classification) => {
+      const author = () => assertStyleAuthorable("fixture", id);
+      if (classification === "style") {
+        expect(author).not.toThrow();
+      } else if (classification === "brand") {
+        expect(author).toThrowError(
+          new ThemeStyleReferenceError(
+            `style "fixture" authors ${JSON.stringify(id)}, which is brand-class; a style owns form, the tenant owns brand`
+          )
+        );
+      } else {
+        expect(author).toThrowError(
+          new ThemeStyleReferenceError(
+            `style "fixture" authors ${JSON.stringify(id)}, whose expansion produces "profile-derived"; a style may not author a row that outranks itself`
+          )
+        );
+      }
+    }
+  );
 
   it("refuses a manifest digest that disagrees with the document", () => {
     expect(() =>

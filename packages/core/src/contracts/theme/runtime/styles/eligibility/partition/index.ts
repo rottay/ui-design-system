@@ -3,9 +3,9 @@
  * tenant's alone. A new column BESIDE the catalog, never inside it: the catalog
  * is AST-parsed by the gate reader, so a new field per row moves the reader too.
  *
- * Every row is classified and there is no default. A row missing from the table
- * is refused by name rather than admitted, so the partition can never acquire
- * one silently.
+ * Every row is classified and there is no default. A row the table does not own
+ * is refused by name rather than admitted, so inherited properties cannot
+ * supply a classification.
  *
  * @module Contracts/Theme/Styles/Partition
  * @category Types
@@ -113,12 +113,12 @@ export const THEME_STYLE_NON_EMITTING_DECISIONS: readonly ThemeDecisionId[] =
  */
 export function assertStyleAuthorable(styleId: string, id: string): void {
   const name = JSON.stringify(styleId);
-  const row = THEME_STYLE_CLASS_BY_DECISION[id as ThemeDecisionId];
-  if (row === undefined) {
+  if (!Object.prototype.hasOwnProperty.call(THEME_STYLE_CLASS_BY_DECISION, id)) {
     throw new ThemeStyleReferenceError(
       `style ${name} authors ${JSON.stringify(id)}, which the style partition does not classify; every one of the ${THEME_DECISION_IDS.length} rows is classified and there is no default`
     );
   }
+  const row = THEME_STYLE_CLASS_BY_DECISION[id as ThemeDecisionId];
   if (row === "brand") {
     throw new ThemeStyleReferenceError(
       `style ${name} authors ${JSON.stringify(id)}, which is brand-class; a style owns form, the tenant owns brand`

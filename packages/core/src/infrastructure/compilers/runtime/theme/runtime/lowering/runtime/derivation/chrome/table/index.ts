@@ -1,6 +1,7 @@
 /**
- * @fileoverview The table family: its title and pagination steps on the type
- * roles and weights, its footer, title and pagination gaps on the spacing ramp,
+ * @fileoverview The table family: its title weight on the section-title role,
+ * its current page weight on the label role and its pagination size on the
+ * supporting role, its footer, title and pagination gaps on the spacing ramp,
  * the numeric postures its figures align on, and the coarse-pointer sizes its
  * selection control and hit areas take from the touch-target foundation.
  *
@@ -59,7 +60,7 @@ export function deriveTableChannels(): Record<string, string> {
   vars["--ds-table-pagination-numeric"] = "tabular-nums";
 
   vars["--ds-table-pagination-font-size"] = "var(--ds-type-supporting-font-size)";
-  vars["--ds-table-pagination-current-font-weight"] = "var(--ds-font-weight-semibold)";
+  vars["--ds-table-pagination-current-font-weight"] = "var(--ds-type-label-font-weight, var(--ds-font-weight-semibold))";
   vars["--ds-table-pagination-margin-block-start"] = "var(--ds-spacing-4)";
 
   vars["--ds-table-selection-control-coarse-size"] =

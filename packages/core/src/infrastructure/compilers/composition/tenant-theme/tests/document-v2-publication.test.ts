@@ -1,12 +1,6 @@
 /**
- * WO-CON-06 — the v2 publication seam, through the published package boundary.
- *
- * A v2 row could not be published at all: `hydrateTenantThemeConfig` refused it
- * by schema version, and the only other route flattened it to v1, which drops
- * the `plan` the tier station judges. Both halves are asserted here through
- * `@rottay/design-system/server`, not through an internal path -- exporting
- * from a module is not exposing an API, and the consumer contract is the thing
- * under test.
+ * The decision-document publication seam through the public server entrypoint,
+ * including artifact verification, identity admission and named refusals.
  */
 import { describe, expect, it } from "vitest";
 
@@ -259,6 +253,70 @@ describe("compileTenantThemeDocumentV2 · the real published path", () => {
       ).toEqual({ ok: true, artifact });
     }
   });
+});
+
+describe.each([2, 3] as const)("compileTenantThemeDocumentV2 · version %i slug admission", (version) => {
+  const document = { ...DOCUMENT, version };
+
+  it.each([
+    ["empty", ""],
+    ["uppercase", "Northwind"],
+    ["underscore", "north_wind"],
+    ["leading hyphen", "-northwind"],
+    ["trailing hyphen", "northwind-"],
+    ["double hyphen only", "--"],
+    ["non-ASCII", "nórthwind"],
+    ["65 characters", "a".repeat(65)],
+    ["longer than 65 characters", "a".repeat(128)],
+    ["whitespace", "north wind"],
+    ["selector punctuation", 'northwind"]'],
+  ])("refuses %s with a named slug issue", (_label, slug) => {
+    expect(
+      issuesOf(() => compileTenantThemeDocumentV2({ ...IDENTITY, slug, document }))
+    ).toEqual([
+      {
+        code: "invalid_value",
+        path: "$.slug",
+        message: "Expected a lowercase slug of 1 to 64 characters with alphanumeric endpoints",
+      },
+    ]);
+  });
+
+  it.each([undefined, null, 7, { toString: () => "northwind" }])(
+    "refuses a non-string slug %j without coercion",
+    (slug) => {
+      expect(
+        issuesOf(() => compileTenantThemeDocumentV2({ ...IDENTITY, slug: slug as never, document }))
+      ).toEqual([expect.objectContaining({ code: "invalid_value", path: "$.slug" })]);
+    }
+  );
+
+  it.each(["a", "0", "a0", "northwind", "north-wind-7", "a".repeat(64), "0" + "-".repeat(62) + "9", "tenant--one"])(
+    "preserves and verifies the valid slug %j",
+    (slug) => {
+      const { artifact } = compileTenantThemeDocumentV2({ ...IDENTITY, slug, document });
+      expect(artifact).toMatchObject({ ...IDENTITY, slug });
+      const reloaded = JSON.parse(JSON.stringify(artifact)) as TenantThemeArtifact;
+      expect(
+        verifyTenantThemeArtifactV1(reloaded, { slug, verticalKey: IDENTITY.verticalKey })
+      ).toEqual({ ok: true, artifact: reloaded });
+      expect(
+        compileTenantThemeConfig(
+          { schemaVersion: 1, mode: "simple", appearance: {}, ...IDENTITY, slug },
+          { verticalEnvelope: getTenantThemeVerticalEnvelope(IDENTITY.verticalKey) }
+        ).slug
+      ).toBe(slug);
+    }
+  );
+
+  it.each(["rottay", "bithire", "evnto", "Bit-Hire", "ＢｉｔＨｉｒｅ"])(
+    "preserves the reserved-identity refusal for %j",
+    (slug) => {
+      expect(() => compileTenantThemeDocumentV2({ ...IDENTITY, slug, document })).toThrow(
+        expect.objectContaining({ name: "ReservedTenantIdentityError" })
+      );
+    }
+  );
 });
 
 describe("compileTenantThemeDocumentV2 · refusals, by name", () => {

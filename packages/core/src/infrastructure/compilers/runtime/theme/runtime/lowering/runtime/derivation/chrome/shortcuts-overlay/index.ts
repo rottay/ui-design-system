@@ -6,9 +6,8 @@
  * root and its entrance on the motion dial.
  *
  * @remarks
- * Each produced value is the single chained fallback its Modern skin reads it
- * with, so producing the name cannot move a pixel -- it changes WHO can reach
- * the value, not what it rests at.
+ * The title weight follows the section-title role with the skin's semibold
+ * fallback. Other channels retain their existing resting values.
  *
  * The chamber is the Modal primitive's: its layer, top offset, scrim, radius
  * rung, phone posture and keyframes are Modal's own channels and are not
@@ -29,7 +28,7 @@ export const shortcutsOverlayChromeDeriver: FamilyDeriver = {
   family: "shortcuts-overlay",
   rank: "derived",
   scopes: ["density"],
-  consumes: ["surfaces.*", "palette.*", "shape.*", "density", "motion"],
+  consumes: ["surfaces.*", "palette.*", "shape.*", "density", "motion", "typography.roleWeights"],
   produces: [
     // The chamber, delivered through Modal's channels
     "--ds-shortcuts-overlay-padding-inline",
@@ -97,7 +96,8 @@ export function deriveShortcutsOverlayChannels(): Record<string, string> {
   vars["--ds-shortcuts-overlay-header-padding-inline"] = "var(--ds-spacing-5, 20px)";
   vars["--ds-shortcuts-overlay-title-color"] = "var(--ds-color-text-primary)";
   vars["--ds-shortcuts-overlay-title-font-size"] = "var(--ds-font-size-base, 16px)";
-  vars["--ds-shortcuts-overlay-title-font-weight"] = "var(--ds-font-weight-semibold, 600)";
+  vars["--ds-shortcuts-overlay-title-font-weight"] =
+    "var(--ds-type-section-title-font-weight, var(--ds-font-weight-semibold, 600))";
   vars["--ds-shortcuts-overlay-search-padding-block"] = "var(--ds-spacing-2, 8px)";
   vars["--ds-shortcuts-overlay-search-padding-inline"] = "var(--ds-spacing-5, 20px)";
   vars["--ds-shortcuts-overlay-close-touch-target"] = "var(--ds-touch-target-min, 44px)";
