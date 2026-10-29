@@ -4,6 +4,23 @@
 
 ### Patch Changes
 
+- Refuse a v2/v3 tenant document over the v1 schema's payload ceilings (depth
+  10, 512 fields, 65,536 canonical bytes) with `invalid_value` at `$.document`
+  and the v1 messages, after the identity stations and before admission walks
+  it. The v1 door's measurement and limits are shared, not copied or changed.
+  The byte ceiling applies to JSON documents only: an in-memory document with
+  an `undefined` optional member keeps its previous outcome with depth and
+  fields still measured, and a cyclic in-memory document now receives the typed
+  lowering refusal at `$.document`. No public API or dependency change. Source
+  and focal checks cover the correction; browser and public-package acceptance
+  remain pending.
+- Keep DataTable mobile cards inert when no `onRowClick` is supplied: no button
+  role, tab stop, clickable state or consumed Enter/Space. With `onRowClick`,
+  click, Enter and Space still open the right row, and selection and row
+  actions do not open it. Rustic Card keyboard bubbling from nested controls
+  is not changed by this correction. No public API or dependency change. Source
+  and focal checks cover the correction; browser/assistive-technology and
+  public-package acceptance remain pending.
 - Follow the section-title role weight for the List header, keeping its
   semibold fallback, in the authored List tokens, the root-alias table and the
   Rottay, BitHire and Evnto served artifacts. List meta stays on the medium

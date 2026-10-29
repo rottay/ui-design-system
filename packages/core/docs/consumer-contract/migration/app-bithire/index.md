@@ -216,6 +216,30 @@ migrated. Both facts are executable in
 document through the real path, keeping one row" and "keeps the v1 door refusing
 a v2 document by name").
 
+`compileTenantThemeDocumentV2` refuses two inputs before its admission runs,
+after the reserved first-party identity check (which keeps
+`ReservedTenantIdentityError`):
+
+- `slug` must match the publication grammar shared by the v1 schema, the mount
+  and the artifact verifier: 1 to 64 lowercase ASCII letters, digits or
+  hyphens with alphanumeric endpoints
+  (`/^[a-z0-9](?:[a-z0-9-]{0,62}[a-z0-9])?$/`). A malformed or non-string slug
+  throws `TenantThemeValidationError` with one `invalid_value` issue at
+  `$.slug` ("Expected a lowercase slug of 1 to 64 characters with alphanumeric
+  endpoints"). `tenant--one` is valid, `--` is not, and a valid slug is never
+  normalized. The runtime tenant loader's own guard,
+  `assertLowerKebabTenantSlug`, is a separate check that this door does not
+  change: it refuses repeated hyphens and has no length cap, so a publishable
+  slug is not thereby a loader-accepted slug.
+- The document must fit the v1 schema's payload ceilings: depth 10, 512 fields
+  and 65,536 canonical bytes. A breach throws `TenantThemeValidationError` with
+  `invalid_value` issues at `$.document` carrying the v1 messages in the v1
+  order (`Maximum object depth is 10`, `Maximum field count is 512`,
+  `Maximum canonical payload is 65536 bytes`). The byte ceiling measures JSON
+  documents only; an in-memory document with an `undefined` optional member
+  keeps its previous outcome, with only depth and fields measured. A row read
+  from the database is JSON and is measured on all three.
+
 That gap is closed too (WO-CON-06 step 2): `migrateDocumentV1ToV2` now carries
 `general.states.emphasis` / `general.states.focusStyle` into the
 `states.emphasis` / `states.focus-style` decisions, and refuses a value outside

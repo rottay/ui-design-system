@@ -186,6 +186,56 @@ function countValueShape(
   );
 }
 
+/**
+ * The schema's depth, field and canonical-byte ceilings over one payload, with
+ * every issue reported at `path`. Both publish doors measure through this.
+ */
+function payloadCeilingIssues(
+  input: unknown,
+  path: string
+): TenantThemeValidationIssue[] {
+  const limits = TENANT_THEME_CONFIG_SCHEMA.limits;
+  const shape = countValueShape(input);
+  const issues: TenantThemeValidationIssue[] = [];
+  if (shape.maxDepth > limits.maxDepth) {
+    issues.push({
+      code: "invalid_value",
+      path,
+      message: `Maximum object depth is ${limits.maxDepth}`,
+    });
+  }
+  if (shape.fields > limits.maxObjectFields) {
+    issues.push({
+      code: "invalid_value",
+      path,
+      message: `Maximum field count is ${limits.maxObjectFields}`,
+    });
+  }
+  try {
+    const bytes = new TextEncoder().encode(
+      canonicalizeTenantThemeValue(input)
+    ).byteLength;
+    if (bytes > limits.maxDocumentBytes) {
+      issues.push({
+        code: "invalid_value",
+        path,
+        message: `Maximum canonical payload is ${limits.maxDocumentBytes} bytes`,
+      });
+    }
+  } catch {
+    issues.push({
+      code: "invalid_type",
+      path,
+      message: "Payload must be JSON-serializable",
+    });
+  }
+  return issues;
+}
+
+// The default export is the decision-document door's reach into this owner:
+// `export *` never carries it, so the package surface does not grow.
+export default payloadCeilingIssues;
+
 function validateEnvelopeShape(
   input: unknown,
   schemas:
@@ -220,40 +270,7 @@ function validateEnvelopeShape(
   }
 
   const limits = TENANT_THEME_CONFIG_SCHEMA.limits;
-  const shape = countValueShape(input);
-  const issues: TenantThemeValidationIssue[] = [];
-  if (shape.maxDepth > limits.maxDepth) {
-    issues.push({
-      code: "invalid_value",
-      path: "$",
-      message: `Maximum object depth is ${limits.maxDepth}`,
-    });
-  }
-  if (shape.fields > limits.maxObjectFields) {
-    issues.push({
-      code: "invalid_value",
-      path: "$",
-      message: `Maximum field count is ${limits.maxObjectFields}`,
-    });
-  }
-  try {
-    const bytes = new TextEncoder().encode(
-      canonicalizeTenantThemeValue(input)
-    ).byteLength;
-    if (bytes > limits.maxDocumentBytes) {
-      issues.push({
-        code: "invalid_value",
-        path: "$",
-        message: `Maximum canonical payload is ${limits.maxDocumentBytes} bytes`,
-      });
-    }
-  } catch {
-    issues.push({
-      code: "invalid_type",
-      path: "$",
-      message: "Payload must be JSON-serializable",
-    });
-  }
+  const issues = payloadCeilingIssues(input, "$");
   // The override-key vocabulary is wider than the per-document budget, so the
   // closed tokenOverrides key schema cannot enforce the entry count by itself.
   const visualFoundation = input.visualFoundation;

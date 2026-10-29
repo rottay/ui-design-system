@@ -326,7 +326,7 @@ export function DataTableMobileCards<T extends object>({
             variant="outlined"
             hoverable={!!onRowClick}
             clickable={!!onRowClick}
-            onClick={() => onRowClick?.(row, index)}
+            onClick={onRowClick ? () => onRowClick(row, index) : undefined}
             className={`ds-data-table__mobile-card${
               isSelected ? " ds-data-table__mobile-card--selected" : ""
             }`}

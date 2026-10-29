@@ -5,16 +5,22 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  TENANT_THEME_CONFIG_SCHEMA,
   TenantThemeValidationError,
+  canonicalizeTenantThemeValue,
   compileTenantThemeConfig,
   compileTenantThemeDocumentV2,
   getTenantThemeVerticalEnvelope,
+  validateTenantThemeConfig,
 } from "@rottay/design-system/server";
 import type {
   TenantThemeArtifact,
   TenantThemeDocumentV2,
 } from "@rottay/design-system/server";
-import { TenantThemeDocumentV2Error } from "@/contracts/theme/presentation/document";
+import {
+  TenantThemeDocumentError,
+  TenantThemeDocumentV2Error,
+} from "@/contracts/theme/presentation/document";
 // The verifier is deliberately NOT public: a consumer proves a mount through
 // `resolveVisualAuthority`. This suite asserts the producer/verifier pair, so
 // it reads the verifier where it lives.
@@ -317,6 +323,97 @@ describe.each([2, 3] as const)("compileTenantThemeDocumentV2 · version %i slug 
       );
     }
   );
+});
+
+describe.each([2, 3] as const)("compileTenantThemeDocumentV2 · version %i payload ceilings", (version) => {
+  const { maxDepth, maxObjectFields, maxDocumentBytes } = TENANT_THEME_CONFIG_SCHEMA.limits;
+  // A raw channel is refused by the admission's recursive walk only once the
+  // walk reaches it, so its refusal proves the walk ran over the whole payload.
+  const RAW = { "--ds-card-bg": "red" };
+  const RAW_WALK = expect.objectContaining({ message: expect.stringContaining('raw channel "--ds-card-bg"') });
+  const withChrome = (chrome: Record<string, unknown>) =>
+    ({ version, plan: "pro", decisions: {}, overrides: { chrome } }) as unknown as TenantThemeDocumentV2;
+  const compile = (document: TenantThemeDocumentV2) => () =>
+    compileTenantThemeDocumentV2({ ...IDENTITY, document });
+  const ceiling = (message: string) => [{ code: "invalid_value", path: "$.document", message }];
+
+  // document 0 -> overrides 1 -> chrome 2 -> cardComponent 3; the raw leaf sits one below the last wrapper.
+  const atDepth = (depth: number) => {
+    let node: Record<string, unknown> = RAW;
+    for (let level = 4; level < depth; level += 1) node = { k: node };
+    return withChrome({ cardComponent: node });
+  };
+  // version, plan, decisions, overrides, chrome and cardComponent hold six fields; the raw key is the last.
+  const withFields = (fields: number) =>
+    withChrome({
+      cardComponent: Object.fromEntries([
+        ...Array.from({ length: fields - 7 }, (_, index) => [`f${index}`, "x"]),
+        ["--ds-card-bg", "red"],
+      ]),
+    });
+  const withBytes = (bytes: number) => {
+    const bare = new TextEncoder().encode(
+      canonicalizeTenantThemeValue(withChrome({ modal: { overlayBg: "" }, cardComponent: RAW }))
+    ).byteLength;
+    return withChrome({ modal: { overlayBg: "x".repeat(bytes - bare) }, cardComponent: RAW });
+  };
+
+  it.each([
+    ["depth", () => atDepth(maxDepth)],
+    ["field count", () => withFields(maxObjectFields)],
+    ["canonical bytes", () => withBytes(maxDocumentBytes)],
+  ])("lets a payload exactly at the %s ceiling reach the admission walk", (_label, build) => {
+    const document = build();
+    expect(compile(document)).toThrow(RAW_WALK);
+    expect(compile(document)).toThrow(TenantThemeDocumentError);
+  });
+
+  it.each([
+    ["depth", () => atDepth(maxDepth + 1), `Maximum object depth is ${maxDepth}`],
+    ["field count", () => withFields(maxObjectFields + 1), `Maximum field count is ${maxObjectFields}`],
+    ["canonical bytes", () => withBytes(maxDocumentBytes + 1), `Maximum canonical payload is ${maxDocumentBytes} bytes`],
+  ])("refuses one %s over the ceiling before the admission walks it", (_label, build, message) => {
+    expect(issuesOf(compile(build()))).toEqual(ceiling(message));
+  });
+
+  it("answers with the v1 terminal's measurement and messages", () => {
+    const payload = {
+      deep: atDepth(maxDepth + 4),
+      wide: withFields(maxObjectFields + 1),
+      long: "x".repeat(maxDocumentBytes),
+    };
+    const v1 = validateTenantThemeConfig({ schemaVersion: 1, mode: "simple", appearance: payload });
+    const onV1 = v1.success ? [] : v1.issues.filter((issue) => issue.path === "$");
+    const onV2 = issuesOf(compile(withChrome({ cardComponent: payload })));
+    expect(onV1).toHaveLength(3);
+    expect(onV2).toEqual(onV1.map(({ code, message }) => ({ code, path: "$.document", message })));
+  });
+
+  it("keeps compiling a document whose optional members are left undefined", () => {
+    const document = {
+      ...DOCUMENT,
+      version,
+      overrides: undefined,
+      decisions: { ...DOCUMENT.decisions, "palette.seeds": { primary: "#2f6bff", secondary: undefined } },
+    } as unknown as TenantThemeDocumentV2;
+    const { artifact } = compileTenantThemeDocumentV2({ ...IDENTITY, document });
+    const reloaded = JSON.parse(JSON.stringify(artifact)) as TenantThemeArtifact;
+    expect(
+      verifyTenantThemeArtifactV1(reloaded, { slug: IDENTITY.slug, verticalKey: IDENTITY.verticalKey })
+    ).toEqual({ ok: true, artifact: reloaded });
+  });
+
+  it("keeps the lowering's typed refusal for a cyclic document", () => {
+    const cycle: Record<string, unknown> = {};
+    Object.assign(cycle, { k: cycle });
+    expect(issuesOf(compile(withChrome({ cardComponent: cycle })))).toEqual([
+      expect.objectContaining({
+        code: "invalid_value",
+        path: "$.document",
+        message: expect.stringContaining("Rejected by the ISO Theme lowering"),
+      }),
+    ]);
+  });
 });
 
 describe("compileTenantThemeDocumentV2 · refusals, by name", () => {

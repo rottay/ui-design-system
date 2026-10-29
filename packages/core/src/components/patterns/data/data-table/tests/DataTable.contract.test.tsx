@@ -1,6 +1,6 @@
 import React from "react";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { cleanup, fireEvent, waitFor } from "@testing-library/react";
+import { cleanup, fireEvent, waitFor, within } from "@testing-library/react";
 
 import { PatternDataTable } from "..";
 import type { ColumnDef } from "../../../../../foundation/contracts/runtime/components/patterns/core";
@@ -459,4 +459,148 @@ describe("DataTable data-part contract (mobile branch)", () => {
       ).toHaveLength(6);
     });
   });
+});
+
+describe("DataTable mobile card activation", () => {
+  afterEach(() => {
+    cleanup();
+  });
+
+  async function waitForCards(container: HTMLElement): Promise<HTMLElement> {
+    await waitFor(() => {
+      expect(
+        container.querySelectorAll(".ds-data-table__mobile-card")
+      ).toHaveLength(3);
+    });
+    return container.querySelector(
+      ".ds-data-table__record-cards"
+    ) as HTMLElement;
+  }
+
+  function cardOf(container: HTMLElement, name: string): HTMLElement {
+    const card = within(container)
+      .getByText(name)
+      .closest(".ds-data-table__mobile-card");
+    expect(card).not.toBeNull();
+    return card as HTMLElement;
+  }
+
+  it.each(["modern", "rustic"] as const)(
+    "renders a %s card without onRowClick as static content, not a button",
+    async (engine) => {
+      mockMatchMedia(390);
+
+      const { container } = renderWithEngine(
+        <PatternDataTable<Row>
+          engine={engine}
+          data={ROWS}
+          rowKey="id"
+          columns={COLUMNS}
+        />,
+        engine
+      );
+
+      const list = await waitForCards(container);
+      expect(within(list).queryAllByRole("button")).toHaveLength(0);
+      container
+        .querySelectorAll<HTMLElement>(".ds-data-table__mobile-card")
+        .forEach((card) => {
+          expect(card).not.toHaveAttribute("role");
+          expect(card).not.toHaveAttribute("tabindex");
+          expect(card).not.toHaveAttribute("data-clickable");
+          expect(fireEvent.keyDown(card, { key: "Enter" })).toBe(true);
+          expect(fireEvent.keyDown(card, { key: " " })).toBe(true);
+        });
+    }
+  );
+
+  it.each(["modern", "rustic"] as const)(
+    "keeps a %s card with onRowClick a button that opens its own row",
+    async (engine) => {
+      mockMatchMedia(390);
+      const onRowClick = vi.fn();
+
+      const { container } = renderWithEngine(
+        <PatternDataTable<Row>
+          engine={engine}
+          data={ROWS}
+          rowKey="id"
+          columns={COLUMNS}
+          onRowClick={onRowClick}
+        />,
+        engine
+      );
+
+      await waitForCards(container);
+      const bravo = cardOf(container, "Bravo");
+      expect(bravo).toHaveAttribute("role", "button");
+      expect(bravo).toHaveAttribute("tabindex", "0");
+      expect(bravo).toHaveAttribute("data-clickable", "true");
+
+      fireEvent.click(bravo);
+      expect(onRowClick).toHaveBeenCalledTimes(1);
+      expect(onRowClick).toHaveBeenLastCalledWith(
+        expect.objectContaining({ id: "r2" }),
+        1
+      );
+
+      const charlie = cardOf(container, "Charlie");
+      expect(fireEvent.keyDown(charlie, { key: "Enter" })).toBe(false);
+      expect(onRowClick).toHaveBeenCalledTimes(2);
+      expect(onRowClick).toHaveBeenLastCalledWith(
+        expect.objectContaining({ id: "r3" }),
+        2
+      );
+      expect(fireEvent.keyDown(charlie, { key: " " })).toBe(false);
+      expect(onRowClick).toHaveBeenCalledTimes(3);
+    }
+  );
+
+  it.each(["modern", "rustic"] as const)(
+    "keeps selection and row actions on a %s card from opening the row",
+    async (engine) => {
+      mockMatchMedia(390);
+      const onRowClick = vi.fn();
+      const onSelectionChange = vi.fn();
+      const onArchive = vi.fn();
+
+      const { container } = renderWithEngine(
+        <PatternDataTable<Row>
+          engine={engine}
+          data={ROWS}
+          rowKey="id"
+          columns={COLUMNS}
+          selectable
+          onSelectionChange={onSelectionChange}
+          onRowClick={onRowClick}
+          actions={(row) => (
+            <button type="button" onClick={() => onArchive(row.id)}>
+              {`Archive ${row.name}`}
+            </button>
+          )}
+        />,
+        engine
+      );
+
+      await waitForCards(container);
+      const alpha = cardOf(container, "Alpha");
+
+      fireEvent.click(await within(alpha).findByRole("checkbox"));
+      expect(onSelectionChange).toHaveBeenCalledTimes(1);
+      expect(onRowClick).not.toHaveBeenCalled();
+
+      fireEvent.click(
+        within(alpha).getByRole("button", { name: "Archive Alpha" })
+      );
+      expect(onArchive).toHaveBeenCalledWith("r1");
+      expect(onRowClick).not.toHaveBeenCalled();
+
+      fireEvent.click(alpha);
+      expect(onRowClick).toHaveBeenCalledTimes(1);
+      expect(onRowClick).toHaveBeenLastCalledWith(
+        expect.objectContaining({ id: "r1" }),
+        0
+      );
+    }
+  );
 });

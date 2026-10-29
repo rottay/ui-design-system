@@ -44,7 +44,7 @@ import {
   documentThemeAdmission,
   type DocumentAdmission,
 } from "@/infrastructure/compilers/runtime/theme";
-import {
+import payloadCeilingIssues, {
   TenantThemeValidationError,
   assembleTenantThemeArtifact,
 } from "..";
@@ -138,7 +138,7 @@ function authoredDials(
 
 /**
  * Publish a v2 or v3 decision document with a slug accepted by the v1 schema
- * and artifact verifier.
+ * and artifact verifier, inside the v1 schema's depth, field and byte ceilings.
  *
  * Refusals keep their owners. A domain, tier or cap rejection is the DOOR's and
  * propagates by its own name and issue path, because a route that catches
@@ -227,6 +227,14 @@ export function compileTenantThemeDocumentV2(
   }
 
   try {
+    // The v1 schema's payload ceilings bound the document before the admission
+    // walks it. A payload outside the JSON model keeps the admission's answer.
+    const ceilingIssues = payloadCeilingIssues(input.document, "$.document").filter(
+      (issue) => issue.code === "invalid_value"
+    );
+    if (ceilingIssues.length > 0) {
+      throw new TenantThemeValidationError(ceilingIssues);
+    }
     // ONE admission, and ONE expansion inside it. The intent it returns carries
     // the document's plan, so the tier station judges the publish exactly as it
     // judges the preview; the report it returns is the same one the editor was
