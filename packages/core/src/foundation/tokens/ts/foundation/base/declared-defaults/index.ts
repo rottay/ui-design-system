@@ -236,7 +236,7 @@ export const FOUNDATION_COLOR_DEFAULTS_DARK_DELTA: Readonly<
   "--ds-color-neutral-800": "#e2e8f0",
   "--ds-color-neutral-900": "#f8fafc",
   "--ds-color-on-error": "#171717",
-  "--ds-color-primary": "#e5e5e5",
+  "--ds-color-primary": "var(--ds-color-primary-500)",
   "--ds-color-primary-100": "#262626",
   "--ds-color-primary-200": "#404040",
   "--ds-color-primary-300": "#525252",
@@ -248,6 +248,7 @@ export const FOUNDATION_COLOR_DEFAULTS_DARK_DELTA: Readonly<
   "--ds-color-primary-900": "#ffffff",
   "--ds-color-primary-foreground": "#171717",
   "--ds-color-primary-rgb": "229, 229, 229",
+  "--ds-color-success": "var(--ds-color-success-500)",
   "--ds-color-success-bg": "#052e16",
   "--ds-color-surface": "#101826",
   "--ds-color-surface-muted": "#152033",
@@ -257,6 +258,7 @@ export const FOUNDATION_COLOR_DEFAULTS_DARK_DELTA: Readonly<
   "--ds-color-text-primary": "#f3f4f6",
   "--ds-color-text-secondary": "var(--ds-color-neutral-700)",
   "--ds-color-text-tertiary": "var(--ds-color-neutral-600)",
+  "--ds-color-warning": "var(--ds-color-warning-500)",
   "--ds-color-warning-bg": "#451a03",
   });
 

@@ -5,7 +5,7 @@
   "vertical": "bithire",
   "mode": "dark",
   "channelCount": 4271,
-  "digest": "ac24d7c05fcb4c6c6d45656dc1e2a7fec565782a9c68fb34d99dead292b398a3",
+  "digest": "82b8544c0baa24886af8f46039c30b2537c850b5a26cc58fd486904f9ee76e8c",
   "channels": {
     "--_ds-button-selected-bg": "color-mix(\n    in oklch,\n    var(--ds-color-primary) 8%,\n    var(--ds-color-bg-primary)\n  )",
     "--default-font-family": "var(--font-sans)",
@@ -1250,7 +1250,7 @@
     "--ds-color-picker-touch-target-min": "var(--ds-touch-target-min)",
     "--ds-color-picker-transition-duration": "var(--ds-input-transition-duration)",
     "--ds-color-picker-transition-timing": "var(--ds-input-transition-timing)",
-    "--ds-color-primary": "#e5e5e5",
+    "--ds-color-primary": "var(--ds-color-primary-500)",
     "--ds-color-primary-100": "#262626",
     "--ds-color-primary-200": "#404040",
     "--ds-color-primary-300": "#525252",

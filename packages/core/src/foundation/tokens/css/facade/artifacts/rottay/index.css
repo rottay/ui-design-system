@@ -1737,6 +1737,7 @@
   --ds-overlay-light: color-mix(in srgb, var(--ds-color-bg-primary) 52%, transparent);
   --ds-overlay-medium: color-mix(in srgb, var(--ds-color-bg-primary) 78%, transparent);
   --ds-page-shell-actions-backdrop: none;
+  --ds-page-shell-eyebrow-size: var(--ds-type-label-font-size);
   --ds-page-shell-header-icon-radius: var(--ds-radius-lg);
   --ds-page-shell-header-radius: var(--ds-radius-xl);
   --ds-page-shell-header-shadow: var(--ds-toolbar-shadow, var(--ds-elevation-1));

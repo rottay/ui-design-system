@@ -5,7 +5,7 @@
   "vertical": "rottay",
   "mode": "dark",
   "channelCount": 4270,
-  "digest": "a21903f1a64c459580f8edb47951671e9c95fe97da2a13833d484a947365fadc",
+  "digest": "9d802518a76536c620a18108194a7cd727d20ac42cfa88be40ec13cf2badd5d5",
   "channels": {
     "--_ds-button-selected-bg": "color-mix(\n    in oklch,\n    var(--ds-color-primary) 8%,\n    var(--ds-color-bg-primary)\n  )",
     "--default-font-family": "var(--font-sans)",
@@ -1250,7 +1250,7 @@
     "--ds-color-picker-touch-target-min": "var(--ds-touch-target-min)",
     "--ds-color-picker-transition-duration": "var(--ds-input-transition-duration)",
     "--ds-color-picker-transition-timing": "var(--ds-input-transition-timing)",
-    "--ds-color-primary": "#e5e5e5",
+    "--ds-color-primary": "var(--ds-color-primary-500)",
     "--ds-color-primary-100": "#262626",
     "--ds-color-primary-200": "#404040",
     "--ds-color-primary-300": "#525252",

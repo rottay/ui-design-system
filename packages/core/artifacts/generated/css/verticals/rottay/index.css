@@ -3375,7 +3375,7 @@ html.dark {
   --ds-color-primary-700: #fafafa;
   --ds-color-primary-800: #ffffff;
   --ds-color-primary-900: #ffffff;
-  --ds-color-primary: #e5e5e5;
+  --ds-color-primary: var(--ds-color-primary-500);
   --ds-color-primary-rgb: 229, 229, 229;
   --ds-color-primary-foreground: #171717;
 
@@ -64316,7 +64316,8 @@ html[data-ds-motion='reduced']
  *
  * Typography lives in the skin; the engine emits structure and state.
  * Eyebrow and terminal crumb weights follow the label role with a semibold
- * fallback; ordinary crumbs retain their medium reading weight.
+ * fallback; ordinary crumbs retain their medium reading weight. The eyebrow
+ * size reads the family's own channel, at rest the label role size.
  *
  * WAVE p612b: crumb links gain the governed `:focus-visible` ring; crumbs,
  * tabs and the back button gain the coarse-pointer 44px floor (the crumb is
@@ -64563,9 +64564,9 @@ html[data-ds-motion='reduced']
   margin-bottom: 4px;
   color: var(--ds-color-text-muted);
   /* The shared overline family channel preserves mono as its fallback;
-     weight independently follows the semantic label role. */
+     size and weight independently follow the semantic label role. */
   font-family: var(--_ds-page-hierarchy-eyebrow-family, var(--ds-font-family-mono, ui-monospace, monospace));
-  font-size: var(--ds-page-header-eyebrow-size, 10px);
+  font-size: var(--ds-page-shell-eyebrow-size, var(--ds-type-label-font-size));
   font-weight: var(--ds-type-label-font-weight, var(--ds-font-weight-semibold, 600));
   letter-spacing: var(--ds-page-header-eyebrow-tracking, 0.11em);
   line-height: 1.25;
@@ -110823,6 +110824,7 @@ html[lang]:lang(ar) {
   --ds-overlay-light: color-mix(in srgb, var(--ds-color-bg-primary) 52%, transparent);
   --ds-overlay-medium: color-mix(in srgb, var(--ds-color-bg-primary) 78%, transparent);
   --ds-page-shell-actions-backdrop: none;
+  --ds-page-shell-eyebrow-size: var(--ds-type-label-font-size);
   --ds-page-shell-header-icon-radius: var(--ds-radius-lg);
   --ds-page-shell-header-radius: var(--ds-radius-xl);
   --ds-page-shell-header-shadow: var(--ds-toolbar-shadow, var(--ds-elevation-1));

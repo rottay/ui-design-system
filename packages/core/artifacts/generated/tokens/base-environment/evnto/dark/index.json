@@ -5,7 +5,7 @@
   "vertical": "evnto",
   "mode": "dark",
   "channelCount": 4271,
-  "digest": "a74cf37db78d331d89bbf9eee9a5a82a92a4e632159770d8bd88e535f18a1486",
+  "digest": "5f3e025bb5cea78c6d0a783e3883cf50889b92f054f351391c5178f385612c4a",
   "channels": {
     "--_ds-button-selected-bg": "color-mix(\n    in oklch,\n    var(--ds-color-primary) 8%,\n    var(--ds-color-bg-primary)\n  )",
     "--default-font-family": "var(--font-sans)",
@@ -1250,7 +1250,7 @@
     "--ds-color-picker-touch-target-min": "var(--ds-touch-target-min)",
     "--ds-color-picker-transition-duration": "var(--ds-input-transition-duration)",
     "--ds-color-picker-transition-timing": "var(--ds-input-transition-timing)",
-    "--ds-color-primary": "#e5e5e5",
+    "--ds-color-primary": "var(--ds-color-primary-500)",
     "--ds-color-primary-100": "#262626",
     "--ds-color-primary-200": "#404040",
     "--ds-color-primary-300": "#525252",
