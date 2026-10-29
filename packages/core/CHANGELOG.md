@@ -4,6 +4,17 @@
 
 ### Patch Changes
 
+- Route Modern Tabs line hover/active and Breadcrumb hover/current backgrounds
+  through their existing material state channels and tenant emphasis, retaining
+  authored family overrides and the original absent-material fallbacks.
+- Keep Modern Avatar secondary, success, warning and error solid fills dark
+  against white initials in dark mode, preserving tenant seeds, caller overrides
+  and light-mode recipes. The existing light-secondary contrast residual
+  (about 3.195:1 for Rottay/Evnto) remains open for a separate correction.
+- Make TagInput sm/md/lg heights follow the existing Input ramp, preserving
+  authored TagInput precedence and applying density/control-height once.
+  Source and focal regression evidence supports these three corrections;
+  integrated browser/computed-style and public-package proof remain pending.
 - Follow the section-title role weight for Modern Stepper items and current-process
   titles while preserving semibold fallbacks and ordinary medium labels.
 - Follow the section-title role weight for Modern Descriptions titles while

@@ -1,6 +1,6 @@
 /**
  * @fileoverview The avatar family: its tone fills on the palette's own seeds
- * mixed toward the deep neutral, its inks on the inverse text role, the
+ * mixed toward a mode-safe dark anchor, its inks on the inverse text role, the
  * surplus corner on the full radius, the focus ring on the foundation ring,
  * the hover and press transforms on the family's scale dials, and the initials
  * tracking on the letter-spacing step.
@@ -10,7 +10,7 @@
  * @package @rottay/design-system
  */
 
-import type { FamilyDeriver } from "../../../../foundation/contract";
+import type { FamilyDeriver, LoweringContext } from "../../../../foundation/contract";
 
 /** A vertical's own avatar chrome outranks every relation stated here. */
 export const avatarChromeDeriver: FamilyDeriver = {
@@ -34,23 +34,32 @@ export const avatarChromeDeriver: FamilyDeriver = {
     "--ds-avatar-press-transform",
     "--ds-avatar-initials-tracking",
   ],
-  derive: () => deriveAvatarChannels(),
+  derive: (context) => deriveAvatarChannels(context.mode),
 };
 
-export function deriveAvatarChannels(): Record<string, string> {
+/** Derive the block's solid fills without changing light-mode chrome. */
+export function deriveAvatarChannels(mode: LoweringContext["mode"] = "light"): Record<string, string> {
   const vars: Record<string, string> = {};
 
-  // A tone tile carries its seed mixed toward the deep neutral, so the ink on
-  // top clears the contrast floor at every seed a tenant can author.
+  // The dark ramp reverses; its ink anchor stays dark. At 45% seed even white
+  // clears AA under white initials with the governed neutral temperatures.
   vars["--ds-avatar-primary-solid-bg"] = "var(--ds-color-primary)";
   vars["--ds-avatar-secondary-solid-bg"] =
-    "color-mix(in srgb, var(--ds-color-secondary) 82%, var(--ds-color-neutral-900) 18%)";
+    mode === "dark"
+      ? "color-mix(in srgb, var(--ds-color-secondary) 45%, var(--ds-color-neutral-ink, var(--ds-color-black)) 55%)"
+      : "color-mix(in srgb, var(--ds-color-secondary) 82%, var(--ds-color-neutral-900) 18%)";
   vars["--ds-avatar-success-solid-bg"] =
-    "color-mix(in srgb, var(--ds-color-success) 62%, var(--ds-color-neutral-900) 38%)";
+    mode === "dark"
+      ? "color-mix(in srgb, var(--ds-color-success) 45%, var(--ds-color-neutral-ink, var(--ds-color-black)) 55%)"
+      : "color-mix(in srgb, var(--ds-color-success) 62%, var(--ds-color-neutral-900) 38%)";
   vars["--ds-avatar-warning-solid-bg"] =
-    "color-mix(in srgb, var(--ds-color-warning) 55%, var(--ds-color-neutral-900) 45%)";
+    mode === "dark"
+      ? "color-mix(in srgb, var(--ds-color-warning) 45%, var(--ds-color-neutral-ink, var(--ds-color-black)) 55%)"
+      : "color-mix(in srgb, var(--ds-color-warning) 55%, var(--ds-color-neutral-900) 45%)";
   vars["--ds-avatar-error-solid-bg"] =
-    "color-mix(in srgb, var(--ds-color-error) 78%, var(--ds-color-neutral-900) 22%)";
+    mode === "dark"
+      ? "color-mix(in srgb, var(--ds-color-error) 45%, var(--ds-color-neutral-ink, var(--ds-color-black)) 55%)"
+      : "color-mix(in srgb, var(--ds-color-error) 78%, var(--ds-color-neutral-900) 22%)";
 
   vars["--ds-avatar-primary-ink"] = "var(--ds-color-primary-foreground, var(--ds-color-text-inverse))";
   vars["--ds-avatar-secondary-ink"] = "var(--ds-color-white)";

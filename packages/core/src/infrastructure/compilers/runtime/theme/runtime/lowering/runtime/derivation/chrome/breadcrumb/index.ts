@@ -16,7 +16,7 @@ export const breadcrumbChromeDeriver: FamilyDeriver = {
   family: "breadcrumb",
   rank: "derived",
   scopes: ["density"],
-  consumes: ["palette.*", "surfaces.materials", "surfaces.elevation", "surfaces.effects", "surfaces.radiusScale", "typography.roles", "states.focus", "states.press", "density", "motion"],
+  consumes: ["palette.*", "surfaces.materials", "surfaces.elevation", "surfaces.effects", "surfaces.radiusScale", "typography.roles", "states.emphasis", "states.focus", "states.press", "density", "motion"],
   produces: [
     "--ds-breadcrumb-bg",
     "--ds-breadcrumb-border",
@@ -95,14 +95,14 @@ export function deriveBreadcrumbChannels(): Record<string, string> {
 
   // Hover and press share one tint; the press drops the lift.
   vars["--ds-breadcrumb-color-hover"] = "var(--ds-color-text-primary)";
-  vars["--ds-breadcrumb-hover-bg"] = "color-mix(in srgb, var(--ds-color-primary) 6%, var(--ds-card-bg, var(--ds-surface-card)))";
+  vars["--ds-breadcrumb-hover-bg"] = "var(--ds-material-card-background-hover, color-mix(in srgb, var(--ds-color-primary) 6%, var(--ds-card-bg, var(--ds-surface-card))))";
   vars["--ds-breadcrumb-hover-border"] = "color-mix(in srgb, var(--ds-color-primary) 18%, var(--ds-color-border-subtle))";
   vars["--ds-breadcrumb-hover-shadow"] = "var(--ds-elevation-1)";
   vars["--ds-breadcrumb-hover-lift"] = "calc(-1px * var(--ds-motion-intensity))";
 
   // The current location: primary tint, framed, with an intensity-scaled keyline.
   vars["--ds-breadcrumb-active-color"] = "var(--ds-color-text-primary)";
-  vars["--ds-breadcrumb-current-bg"] = "color-mix(in srgb, var(--ds-color-primary) 8%, var(--ds-card-bg, var(--ds-surface-card)))";
+  vars["--ds-breadcrumb-current-bg"] = "var(--ds-material-card-background-selected, color-mix(in srgb, var(--ds-color-primary) 8%, var(--ds-card-bg, var(--ds-surface-card))))";
   vars["--ds-breadcrumb-current-border"] = "color-mix(in srgb, var(--ds-color-primary) 22%, var(--ds-color-border-subtle))";
   vars["--ds-breadcrumb-current-keyline"] = "inset 0 1px 0 color-mix(in srgb, var(--ds-color-white) calc(58% * var(--ds-effect-intensity)), transparent)";
   vars["--ds-breadcrumb-focus-ring"] = "var(--ds-focus-ring)";

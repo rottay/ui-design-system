@@ -150,20 +150,9 @@
    ink (the canonical `--ds-avatar-default-*` pair), never a dark ink token on
    a light surface token.
 
-   CONTRAST LAW (R0/Axe): chromatic solid fills deepen toward the tenant-safe
-   dark neutral ramp (`--ds-color-neutral-900`, the theme's strongest neutral
-   ink) until white initials clear WCAG AA on EVERY governed source -- the
-   raw 500-level hues fail (white on rottay #22C55E = 2.28, on bithire
-   #D6A04E = 2.33) and no static ink survives both light (rottay) and dark
-   (TMM #8A6B00) semantic hues. The mix derives from the tenant's own
-   resolved hue, so the ramp stays hue-faithful with no ramp lookup. Measured
-   white-ink ratios (worst source): success 62% >= 5.41, warning 55% >= 6.20,
-   error 78% >= 5.74, secondary 82% >= 6.51, primary unmixed >= 5.15 (the
-   ramp swap from flat black to neutral-900 shifts the fill luminance by
-   ~0.004 at most -- ratios hold within ~2%).
-   The darkened variants' ink fallback is a guaranteed light ink: fills are
-   darkened specifically to host white initials, and a text-on-primary token
-   may itself resolve dark on sources with a light primary (TMM). */
+   Light solid fills keep their existing mixes. Dark solids use the stable
+   neutral ink anchor instead of the inverted neutral-900 ramp; their seed
+   weight is bounded so white initials remain legible even on a white seed. */
 .rottay-avatar.rottay-avatar--modern > [data-part='mask'] > [data-part='fallback'] {
   background: var(--ds-avatar-custom-bg, var(--ds-avatar-default-bg, var(--ds-color-neutral-100)));
   color: var(--ds-avatar-default-color, var(--ds-color-neutral-600));
@@ -190,6 +179,21 @@
 .rottay-avatar.rottay-avatar--modern[data-variant='error'] > [data-part='mask'] > [data-part='fallback'] {
   background: var(--ds-avatar-custom-bg, var(--ds-avatar-error-solid-bg, color-mix(in srgb, var(--ds-color-error) 78%, var(--ds-color-neutral-900) 22%)));
   --ds-avatar-ink-resting: var(--ds-avatar-error-ink, var(--ds-color-white));
+}
+
+/* Uncompiled fallbacks follow the foundation's document dark selectors.
+   Compiled mode blocks and authored family/caller channels still win. */
+:where(:root[data-theme='dark'], html.dark) .rottay-avatar.rottay-avatar--modern[data-variant='secondary'] > [data-part='mask'] > [data-part='fallback'] {
+  background: var(--ds-avatar-custom-bg, var(--ds-avatar-secondary-solid-bg, color-mix(in srgb, var(--ds-color-secondary) 45%, var(--ds-color-neutral-ink, var(--ds-color-black)) 55%)));
+}
+:where(:root[data-theme='dark'], html.dark) .rottay-avatar.rottay-avatar--modern[data-variant='success'] > [data-part='mask'] > [data-part='fallback'] {
+  background: var(--ds-avatar-custom-bg, var(--ds-avatar-success-solid-bg, color-mix(in srgb, var(--ds-color-success) 45%, var(--ds-color-neutral-ink, var(--ds-color-black)) 55%)));
+}
+:where(:root[data-theme='dark'], html.dark) .rottay-avatar.rottay-avatar--modern[data-variant='warning'] > [data-part='mask'] > [data-part='fallback'] {
+  background: var(--ds-avatar-custom-bg, var(--ds-avatar-warning-solid-bg, color-mix(in srgb, var(--ds-color-warning) 45%, var(--ds-color-neutral-ink, var(--ds-color-black)) 55%)));
+}
+:where(:root[data-theme='dark'], html.dark) .rottay-avatar.rottay-avatar--modern[data-variant='error'] > [data-part='mask'] > [data-part='fallback'] {
+  background: var(--ds-avatar-custom-bg, var(--ds-avatar-error-solid-bg, color-mix(in srgb, var(--ds-color-error) 45%, var(--ds-color-neutral-ink, var(--ds-color-black)) 55%)));
 }
 
 /* ---- gradient is the only variant that diverges on ink, and the only one that

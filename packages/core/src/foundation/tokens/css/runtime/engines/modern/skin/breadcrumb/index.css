@@ -104,7 +104,7 @@
   .ds-breadcrumb--modern[data-part='root'] [data-part='crumb'][data-clickable='true']:is([data-state~='hovered'], :hover),
   .ds-breadcrumb--modern[data-part='root'] [data-part='overflow-trigger']:is([data-state~='hovered'], :hover) {
     border-color: var(--ds-breadcrumb-hover-border, color-mix(in srgb, var(--ds-color-primary) 18%, var(--ds-color-border-subtle)));
-    background: var(--ds-breadcrumb-hover-bg, color-mix(in srgb, var(--ds-color-primary) 6%, var(--ds-card-bg, var(--ds-surface-card))));
+    background: var(--ds-breadcrumb-hover-bg, var(--ds-material-card-background-hover, color-mix(in srgb, var(--ds-color-primary) 6%, var(--ds-card-bg, var(--ds-surface-card)))));
     color: var(--ds-breadcrumb-color-hover, var(--ds-color-text-primary));
     box-shadow: var(--ds-breadcrumb-hover-shadow, var(--ds-elevation-1));
     transform: translateY(var(--ds-breadcrumb-hover-lift, calc(-1px * var(--ds-motion-intensity))));
@@ -123,7 +123,7 @@
 .ds-breadcrumb--modern[data-part='root'] [data-part='crumb'][data-clickable='true']:is([data-state~='pressed'], :active),
 .ds-breadcrumb--modern[data-part='root'] [data-part='overflow-trigger']:is([data-state~='pressed'], :active) {
   border-color: var(--ds-breadcrumb-hover-border, color-mix(in srgb, var(--ds-color-primary) 18%, var(--ds-color-border-subtle)));
-  background: var(--ds-breadcrumb-hover-bg, color-mix(in srgb, var(--ds-color-primary) 6%, var(--ds-card-bg, var(--ds-surface-card))));
+  background: var(--ds-breadcrumb-hover-bg, var(--ds-material-card-background-hover, color-mix(in srgb, var(--ds-color-primary) 6%, var(--ds-card-bg, var(--ds-surface-card)))));
   color: var(--ds-breadcrumb-color-hover, var(--ds-color-text-primary));
   box-shadow: none;
   transform: translateY(0);
@@ -138,7 +138,7 @@
 
 .ds-breadcrumb--modern[data-part='root'] [data-part='crumb'][data-current='true'] {
   border-color: var(--ds-breadcrumb-current-border, color-mix(in srgb, var(--ds-color-primary) 22%, var(--ds-color-border-subtle)));
-  background: var(--ds-breadcrumb-current-bg, color-mix(in srgb, var(--ds-color-primary) 8%, var(--ds-card-bg, var(--ds-surface-card))));
+  background: var(--ds-breadcrumb-current-bg, var(--ds-material-card-background-selected, color-mix(in srgb, var(--ds-color-primary) 8%, var(--ds-card-bg, var(--ds-surface-card)))));
   color: var(--ds-breadcrumb-active-color, var(--ds-color-text-primary));
   font-weight: var(--ds-breadcrumb-current-font-weight, var(--ds-font-weight-semibold));
   box-shadow: var(--ds-breadcrumb-current-keyline, inset 0 1px 0 color-mix(in srgb, var(--ds-color-white) calc(58% * var(--ds-effect-intensity)), transparent));

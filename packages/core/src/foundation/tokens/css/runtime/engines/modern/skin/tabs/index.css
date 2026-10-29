@@ -288,7 +288,7 @@
   }
 
   .ds-tabs--modern[data-part='root']:is([data-variant='underline'], [data-variant='line']) [data-part='tab-button'][data-selected='false']:not([data-state~='disabled']):not([data-loading]):is([data-state~='hovered'], :hover) {
-    background: var(--ds-tabs-line-hover-bg, color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent));
+    background: var(--ds-tabs-line-hover-bg, var(--ds-material-control-background-hover, color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent)));
   }
 
   .ds-tabs--modern[data-part='root']:is([data-variant='contained'], [data-variant='card'], [data-variant='segmented']) [data-part='tab-button'][data-selected='false']:not([data-state~='disabled']):not([data-loading]):is([data-state~='hovered'], :hover) {
@@ -361,7 +361,7 @@
 }
 
 .ds-tabs--modern[data-part='root']:is([data-variant='underline'], [data-variant='line']) [data-part='tab-button'][data-selected='true']:not([data-state~='disabled']) {
-  background: var(--ds-tabs-line-active-bg, linear-gradient(180deg, color-mix(in srgb, var(--ds-color-primary) 8%, transparent), color-mix(in srgb, var(--ds-color-primary) 3%, transparent)));
+  background: var(--ds-tabs-line-active-bg, var(--ds-material-control-background-active, linear-gradient(180deg, color-mix(in srgb, var(--ds-color-primary) 8%, transparent), color-mix(in srgb, var(--ds-color-primary) 3%, transparent))));
 }
 
 .ds-tabs--modern[data-part='root']:is([data-variant='contained'], [data-variant='card'], [data-variant='segmented']) [data-part='tab-button'][data-selected='true']:not([data-state~='disabled']) {

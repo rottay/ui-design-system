@@ -1,7 +1,6 @@
 /**
- * The `avatar` vocabulary at rest: every produced channel equals the one
- * fallback its Modern skin reads it with, so producing the name cannot move a
- * pixel, and any higher-ranked statement still wins.
+ * The `avatar` vocabulary at rest: produced channels equal the Modern skin
+ * fallbacks in their mode, and higher-ranked statements still win.
  *
  * The four geometry channels `--ds-avatar-{xs,sm,lg,xl}-size` are deliberately
  * NOT produced here: the engine-agnostic presentation base already declares
@@ -17,14 +16,18 @@ import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 
 import { describe, expect, it } from "vitest";
+import postcss from "postcss";
 
-import type { FlatTheme } from "@/foundation/contracts/composition/tenants/themes";
+import { parseHex, relativeLuminanceOf, ratioFromLuminance, type Rgb255 } from "@/foundation/kernel/color/contrast";
+import { resolveChannel, type Bundle } from "@checks/tokens/cascade/preservation";
+
+import type { FlatTheme, FlatThemeMode } from "@/foundation/contracts/composition/tenants/themes";
 import {
   describeFamilyContract,
   FIXTURE_TENANT_FACTS,
   type FamilyFixture,
 } from "@tests/support/family-contract";
-import { firstPartyFixture } from "@tests/support/theme-lowering";
+import { firstPartyFixture, lowerFlatThemeFixture } from "@tests/support/theme-lowering";
 import type { FamilyDeriver } from "../../../../../foundation/contract";
 import { buildLoweringContext, runDerivation } from "../../../../pipeline";
 import { avatarChromeDeriver } from "..";
@@ -81,15 +84,19 @@ const SIZE_CHAINS: Record<string, string> = {
   "--ds-avatar-xl-size": "var(--ds-spacing-14, 3.5rem)",
 };
 
-const context = () => buildLoweringContext({ theme: firstPartyFixture("bithire") });
+const MODES = ["light", "dark"] as const;
+const OVERRIDE_RANKS = ["verticalOverride", "tenant"] as const;
+const SOLID_TONES = ["secondary", "success", "warning", "error"] as const;
+const context = (mode: FlatThemeMode = "light") => buildLoweringContext({ theme: firstPartyFixture("bithire"), mode });
 
 describe("chrome/avatar", () => {
-  it("states every declared channel at the single resting value the skin reads it with", () => {
+  it("states every declared channel at the resting values the skin reads in light and dark", () => {
     const derived = avatarChromeDeriver.derive(context(), {});
+    const dark = new Map(Object.entries(avatarChromeDeriver.derive(context("dark"), {})));
     expect(Object.keys(derived).sort()).toEqual([...avatarChromeDeriver.produces].sort());
     for (const [channel, value] of Object.entries(derived)) {
       if (channel === "--ds-avatar-initials-tracking") continue;
-      expect({ channel, fallbacks: skinFallbacks(channel) }).toEqual({ channel, fallbacks: [value] });
+      expect({ channel, fallbacks: skinFallbacks(channel) }).toEqual({ channel, fallbacks: [...new Set([value, dark.get(channel)])] });
     }
   });
 
@@ -131,7 +138,7 @@ describe("chrome/avatar", () => {
 
   it("yields every channel to a vertical or tenant statement of it", () => {
     const channels = Object.keys(avatarChromeDeriver.derive(context(), {}));
-    for (const rank of ["verticalOverride", "tenant"] as const) {
+    for (const rank of OVERRIDE_RANKS) {
       const stated: FamilyDeriver = {
         family: `stated-${rank}`,
         rank,
@@ -145,5 +152,161 @@ describe("chrome/avatar", () => {
         expect(result.provenance.get(channel)?.rank).toBe(rank);
       }
     }
+  });
+});
+
+const LIGHT_FILLS = new Map([
+  ["--ds-avatar-secondary-solid-bg", "color-mix(in srgb, var(--ds-color-secondary) 82%, var(--ds-color-neutral-900) 18%)"],
+  ["--ds-avatar-success-solid-bg", "color-mix(in srgb, var(--ds-color-success) 62%, var(--ds-color-neutral-900) 38%)"],
+  ["--ds-avatar-warning-solid-bg", "color-mix(in srgb, var(--ds-color-warning) 55%, var(--ds-color-neutral-900) 45%)"],
+  ["--ds-avatar-error-solid-bg", "color-mix(in srgb, var(--ds-color-error) 78%, var(--ds-color-neutral-900) 22%)"],
+]);
+const FOUNDATION = postcss.parse(readFileSync(
+  resolve(process.cwd(), "src/foundation/tokens/css/foundation/themes/default/index.css"), "utf8"
+));
+const VERTICALS = ["rottay", "bithire", "evnto"] as const;
+const COMPILED = VERTICALS.map((vertical) => ({
+  vertical,
+  compilation: lowerFlatThemeFixture({ flatTheme: firstPartyFixture(vertical) }),
+}));
+
+/** Compose current foundation declarations with the compiler's real per-mode deltas. */
+function resolvedScope(compilation: typeof COMPILED[number]["compilation"], mode: FlatThemeMode): Map<string, string> {
+  const scope = new Map<string, string>();
+  FOUNDATION.walkRules((rule) => {
+    if (rule.selector === ":root" || (mode === "dark" && rule.selector.includes(":root[data-theme='dark']"))) {
+      rule.walkDecls((declaration) => { scope.set(declaration.prop, declaration.value); });
+    }
+  });
+  for (const entry of Object.entries(compilation.cssVariables)) scope.set(...entry);
+  for (const block of compilation.modeBlocks ?? []) {
+    if (block.mode === mode) {
+      for (const entry of Object.entries(block.cssVariables)) scope.set(...entry);
+    }
+  }
+  return scope;
+}
+
+/** Resolve the emitted var graph, then evaluate its opaque sRGB mix without rounding. */
+function resolvedColor(scope: Map<string, string>, channel: string): Rgb255 {
+  const bundle: Bundle = { path: "avatar source scope", declarations: scope, sites: new Map() };
+  const value = resolveChannel(bundle, channel);
+  if (!value) throw new Error(`Unresolved ${channel}`);
+  const plain = parseHex(value);
+  if (plain) return plain;
+  const mix = value.match(/^color-mix\(in srgb,\s*(?<first>#[\da-f]+)\s+(?<weight>[\d.]+)%,\s*(?<second>#[\da-f]+)\s+(?<rest>[\d.]+)%\)$/i)?.groups;
+  if (!mix) throw new Error(`Unmeasured ${channel}: ${value}`);
+  const first = parseHex(mix.first);
+  const second = parseHex(mix.second);
+  if (!first || !second || Number(mix.weight) + Number(mix.rest) !== 100) throw new Error(value);
+  const weight = Number(mix.weight) / 100;
+  const rest = Number(mix.rest) / 100;
+  return { r: first.r * weight + second.r * rest, g: first.g * weight + second.g * rest, b: first.b * weight + second.b * rest };
+}
+
+/** Measure the actual solid fill against the initials ink through the shared WCAG owner. */
+function solidRatio(scope: Map<string, string>, tone: string): number {
+  return ratioFromLuminance(
+    relativeLuminanceOf(resolvedColor(scope, `--ds-avatar-${tone}-solid-bg`)),
+    relativeLuminanceOf(resolvedColor(scope, `--ds-avatar-${tone}-ink`))
+  );
+}
+
+describe("chrome/avatar mode contrast", () => {
+  it("reproduces the prior dark failures and retains bithire secondary's negative result", () => {
+    for (const { vertical, compilation } of COMPILED) {
+      const scope = resolvedScope(compilation, "dark");
+      for (const entry of LIGHT_FILLS) scope.set(...entry);
+      for (const tone of SOLID_TONES) {
+        const ratio = solidRatio(scope, tone);
+        if (vertical === "bithire" && tone === "secondary") expect(ratio).toBeGreaterThan(10);
+        else expect(ratio, `${vertical}/${tone} inherited failure`).toBeLessThan(4.5);
+      }
+    }
+  });
+
+  it("keeps every light-mode derived channel and resolved ratio at its existing value", () => {
+    const light = new Map(Object.entries(avatarChromeDeriver.derive(context("light"), {})));
+    for (const [channel, value] of LIGHT_FILLS) expect(light.get(channel)).toBe(value);
+    for (const { compilation } of COMPILED) {
+      const before = resolvedScope(compilation, "light");
+      for (const entry of LIGHT_FILLS) before.set(...entry);
+      const after = resolvedScope(compilation, "light");
+      for (const tone of SOLID_TONES) expect(solidRatio(after, tone)).toBe(solidRatio(before, tone));
+    }
+  });
+
+  it("clears 4.5:1 on all dark solid tones with actual resolved source palettes", () => {
+    for (const { vertical, compilation } of COMPILED) {
+      const scope = resolvedScope(compilation, "dark");
+      for (const tone of SOLID_TONES) {
+        expect(solidRatio(scope, tone), `${vertical}/${tone}`).toBeGreaterThanOrEqual(4.5);
+      }
+    }
+  });
+
+  it("retains distinct tenant palette fills instead of replacing them with a shared neutral", () => {
+    const rottay = resolvedScope(COMPILED.find((row) => row.vertical === "rottay")!.compilation, "dark");
+    const bithire = resolvedScope(COMPILED.find((row) => row.vertical === "bithire")!.compilation, "dark");
+    for (const tone of SOLID_TONES) {
+      const channel = `--ds-avatar-${tone}-solid-bg`;
+      expect(resolvedColor(rottay, channel)).not.toEqual(resolvedColor(bithire, channel));
+      const changed = new Map(bithire);
+      changed.set(`--ds-color-${tone}`, "#abcdef");
+      expect(resolvedColor(changed, channel)).not.toEqual(resolvedColor(bithire, channel));
+    }
+  });
+
+  it("bounds dark fills even at white and black seeds with each governed neutral temperature", () => {
+    const temperatures = ["neutral", "warm", "cool"] as const;
+    const extremes = ["#ffffff", "#000000"] as const;
+    for (const neutralTemperature of temperatures) {
+      const theme: FlatTheme = { ...firstPartyFixture("bithire"), palette: { neutralTemperature } };
+      const compilation = lowerFlatThemeFixture({ flatTheme: theme });
+      for (const tone of SOLID_TONES) {
+        for (const seed of extremes) {
+          const scope = resolvedScope(compilation, "dark");
+          scope.set(`--ds-color-${tone}`, seed);
+          expect(solidRatio(scope, tone), `${neutralTemperature}/${tone}/${seed}`).toBeGreaterThanOrEqual(4.5);
+        }
+      }
+    }
+  });
+
+  it("moves only the four non-primary fills between modes", () => {
+    const light = new Map(Object.entries(avatarChromeDeriver.derive(context("light"), {})));
+    const dark = new Map(Object.entries(avatarChromeDeriver.derive(context("dark"), {})));
+    const changed = [...light].filter(([name, value]) => dark.get(name) !== value).map(([name]) => name).sort();
+    expect(changed).toEqual([...LIGHT_FILLS.keys()].sort());
+    expect(light.get("--ds-avatar-primary-solid-bg")).toBe("var(--ds-color-primary)");
+    expect(light.get("--ds-avatar-primary-ink")).toBe("var(--ds-color-primary-foreground, var(--ds-color-text-inverse))");
+  });
+
+  it("yields dark fills and inks to both vertical and tenant authored channels", () => {
+    for (const mode of MODES) {
+      for (const rank of OVERRIDE_RANKS) {
+        const authored: FamilyDeriver = {
+          family: `authored-avatar-${rank}`, rank, consumes: ["chrome.*"], produces: avatarChromeDeriver.produces,
+          derive: () => Object.fromEntries(avatarChromeDeriver.produces.map((channel) => [channel, "#123456"])),
+        };
+        const result = new Map(Object.entries(runDerivation(context(mode), [avatarChromeDeriver, authored]).channels));
+        for (const channel of avatarChromeDeriver.produces) expect(result.get(channel)).toBe("#123456");
+      }
+    }
+  });
+
+  it("matches each uncompiled dark fallback and preserves caller-first paint", () => {
+    const skin = postcss.parse(SKIN);
+    const dark = new Map(Object.entries(avatarChromeDeriver.derive(context("dark"), {})));
+    for (const tone of SOLID_TONES) {
+      const matching: string[] = [];
+      skin.walkRules((rule) => {
+        if (rule.selector.startsWith(":where(:root[data-theme='dark'], html.dark)") && rule.selector.includes(`[data-variant='${tone}']`)) {
+          rule.walkDecls("background", (declaration) => { matching.push(declaration.value); });
+        }
+      });
+      expect(matching).toEqual([`var(--ds-avatar-custom-bg, var(--ds-avatar-${tone}-solid-bg, ${dark.get(`--ds-avatar-${tone}-solid-bg`)}))`]);
+    }
+    expect(SKIN).toContain("color: var(--ds-avatar-ink, var(--ds-avatar-ink-resting, inherit));");
   });
 });

@@ -17,7 +17,7 @@ export const tabsChromeDeriver: FamilyDeriver = {
   family: "tabs",
   rank: "derived",
   scopes: ["density"],
-  consumes: ["palette.*", "surfaces.materials", "surfaces.elevation", "surfaces.effects", "surfaces.radiusScale", "typography.roles", "states.focus", "states.press", "density", "motion"],
+  consumes: ["palette.*", "surfaces.materials", "surfaces.elevation", "surfaces.effects", "surfaces.radiusScale", "typography.roles", "states.emphasis", "states.focus", "states.press", "density", "motion"],
   produces: [
     "--ds-tabs-gap",
     "--ds-tabs-motion-duration",
@@ -226,8 +226,8 @@ export function deriveTabsChannels(): Record<string, string> {
   vars["--ds-tabs-active-shadow"] = "var(--ds-elevation-1)";
   vars["--ds-tabs-active-transform"] = "translateY(var(--ds-tabs-item-lift))";
   vars["--ds-tabs-pressed-transform"] = "translateY(0) scale(0.985)";
-  vars["--ds-tabs-line-hover-bg"] = "color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent)";
-  vars["--ds-tabs-line-active-bg"] = "linear-gradient(180deg, color-mix(in srgb, var(--ds-color-primary) 8%, transparent), color-mix(in srgb, var(--ds-color-primary) 3%, transparent))";
+  vars["--ds-tabs-line-hover-bg"] = "var(--ds-material-control-background-hover, color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent))";
+  vars["--ds-tabs-line-active-bg"] = "var(--ds-material-control-background-active, linear-gradient(180deg, color-mix(in srgb, var(--ds-color-primary) 8%, transparent), color-mix(in srgb, var(--ds-color-primary) 3%, transparent)))";
   vars["--ds-tabs-contained-active-bg"] = "var(--ds-tabs-active-bg)";
   vars["--ds-tabs-contained-active-shadow"] = "var(--ds-tabs-active-shadow)";
   vars["--ds-tabs-segmented-active-bg"] = "var(--ds-surface-card)";

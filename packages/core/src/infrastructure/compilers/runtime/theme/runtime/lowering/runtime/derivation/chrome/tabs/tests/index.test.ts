@@ -26,6 +26,9 @@ import type { FamilyDeriver } from "../../../../../foundation/contract";
 import { buildLoweringContext, runDerivation } from "../../../../pipeline";
 import { tabsChromeDeriver } from "..";
 
+import { deriveMaterialChannels } from "../../../materials";
+import { deriveStateChannels } from "../../../states";
+
 const MINIMAL_THEME: FlatTheme = { id: "minimal", name: "Minimal" };
 
 const FIXTURES: readonly FamilyFixture[] = [
@@ -108,9 +111,9 @@ const WIRED: Record<string, string> = {
   "--ds-tabs-icon-shadow-active":
     "inset 0 0 0 1px color-mix(in srgb, var(--ds-color-primary) 14%, transparent), 0 3px 8px color-mix(in srgb, var(--ds-color-primary) 8%, transparent)",
   "--ds-tabs-item-lift": "calc(-1px * var(--ds-motion-intensity))",
-  "--ds-tabs-line-hover-bg": "color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent)",
+  "--ds-tabs-line-hover-bg": "var(--ds-material-control-background-hover, color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent))",
   "--ds-tabs-line-active-bg":
-    "linear-gradient(180deg, color-mix(in srgb, var(--ds-color-primary) 8%, transparent), color-mix(in srgb, var(--ds-color-primary) 3%, transparent))",
+    "var(--ds-material-control-background-active, linear-gradient(180deg, color-mix(in srgb, var(--ds-color-primary) 8%, transparent), color-mix(in srgb, var(--ds-color-primary) 3%, transparent)))",
   "--ds-tabs-badge-bg": "color-mix(in srgb, var(--ds-color-text-primary) 7%, transparent)",
   "--ds-tabs-badge-keyline":
     "inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 72%, transparent)",
@@ -173,6 +176,144 @@ describe("chrome/tabs", () => {
       const result = runDerivation(context(), [tabsChromeDeriver, stated]);
       for (const channel of channels) {
         expect(result.channels[channel]).toBe(rank);
+        expect(result.provenance.get(channel)?.rank).toBe(rank);
+      }
+    }
+  });
+});
+
+/** Substitute test channel values only; this is not a CSS engine or a paint measurement. */
+function substituteChannels(value: string, channels: ReadonlyMap<string, string>, depth = 0): string {
+  if (depth > 32) throw new Error("Channel substitution did not settle");
+  let result = "";
+  let cursor = 0;
+  for (let start = value.indexOf("var("); start !== -1; start = value.indexOf("var(", cursor)) {
+    result += value.slice(cursor, start);
+    let end = start + 4;
+    let balance = 1;
+    for (; balance > 0 && end < value.length; end += 1) {
+      if (value.charAt(end) === "(") balance += 1;
+      else if (value.charAt(end) === ")") balance -= 1;
+    }
+    if (balance !== 0) throw new Error("Unbalanced channel reference");
+    const body = value.slice(start + 4, end - 1);
+    const comma = body.indexOf(",");
+    const name = (comma === -1 ? body : body.slice(0, comma)).trim();
+    const chosen = channels.get(name) ?? (comma === -1 ? undefined : body.slice(comma + 1).trim());
+    result += chosen === undefined ? value.slice(start, end) : substituteChannels(chosen, channels, depth + 1);
+    cursor = end;
+  }
+  return result + value.slice(cursor);
+}
+
+const EMPHASIS_POSTURES = ["subtle", "medium", "strong"] as const;
+const EMPHASIS_PALETTE: ReadonlyArray<readonly [string, string]> = [
+  ["--ds-color-primary", "#2457a7"],
+  ["--ds-color-text-primary", "#17202a"],
+  ["--ds-surface-control", "#f0f2f4"],
+  ["--ds-surface-card", "#ffffff"],
+  ["--ds-type-body-font-size", "16px"],
+  ["--ds-type-supporting-font-size", "14px"],
+];
+
+const EMPHASIS_TARGETS = [
+  {
+    "channel": "--ds-tabs-line-hover-bg",
+    "material": "--ds-material-control-background-hover",
+    "shift": "--ds-state-hover-shift",
+    "rest": "color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent)"
+  },
+  {
+    "channel": "--ds-tabs-line-active-bg",
+    "material": "--ds-material-control-background-active",
+    "shift": "--ds-state-active-shift",
+    "rest": "linear-gradient(180deg, color-mix(in srgb, var(--ds-color-primary) 8%, transparent), color-mix(in srgb, var(--ds-color-primary) 3%, transparent))"
+  }
+];
+
+function emphasisChannels(posture: typeof EMPHASIS_POSTURES[number], theme: FlatTheme = MINIMAL_THEME): Map<string, string> {
+  const themed: FlatTheme = { ...theme, surfaces: { ...theme.surfaces, stateEmphasis: posture } };
+  return new Map([
+    ...EMPHASIS_PALETTE,
+    ...Object.entries(deriveStateChannels(themed)),
+    ...Object.entries(deriveMaterialChannels(themed)),
+    ...Object.entries(tabsChromeDeriver.derive(buildLoweringContext({ theme: themed }), {})),
+  ]);
+}
+
+describe("tabs emphasis grounds", () => {
+  it.each(EMPHASIS_TARGETS)("$channel follows its material state with palette and font size held fixed", ({ channel, material, shift }) => {
+    const resolved = EMPHASIS_POSTURES.map((posture) => {
+      const channels = emphasisChannels(posture);
+      const ground = substituteChannels(`var(${channel})`, channels);
+      expect(ground).toBe(substituteChannels(`var(${material})`, channels));
+      expect(ground).toContain(channels.get(shift));
+      expect(substituteChannels("var(--ds-tabs-line-item-radius)", channels)).toBe("var(--ds-radius-md)");
+      return ground;
+    });
+    expect(new Set(resolved).size).toBe(3);
+  });
+
+  it.each(EMPHASIS_TARGETS)("$channel responds to its own shift only", ({ channel, shift }) => {
+    const channels = emphasisChannels("medium");
+    const baseline = substituteChannels(`var(${channel})`, channels);
+    const shifted = new Map(channels);
+    shifted.set(shift, "23%");
+    expect(substituteChannels(`var(${channel})`, shifted)).not.toBe(baseline);
+    const unrelated = new Map(channels);
+    unrelated.set("--ds-type-body-font-size", "24px");
+    unrelated.set("--ds-type-supporting-font-size", "21px");
+    const shifts = ["--ds-state-hover-shift", "--ds-state-active-shift", "--ds-state-selected-shift"];
+    shifts.filter((name) => name !== shift).forEach((name) => unrelated.set(name, "29%"));
+    expect(substituteChannels(`var(${channel})`, unrelated)).toBe(baseline);
+  });
+
+  it.each(EMPHASIS_TARGETS)("$channel keeps the resting fallback and gives authored family paint priority", ({ channel, material }) => {
+    const channels = emphasisChannels("strong");
+    channels.delete(material);
+    const fallback = skinFallbacks(channel).at(0);
+    expect(fallback).toBeDefined();
+    expect(substituteChannels(`var(${channel})`, channels)).toBe(substituteChannels(fallback!, channels));
+    const resting = emphasisChannels("medium");
+    resting.delete(material);
+    expect(substituteChannels(`var(${channel})`, channels)).toBe(substituteChannels(`var(${channel})`, resting));
+    channels.set(channel, "#c7548d");
+    expect(substituteChannels(`var(${channel})`, channels)).toBe("#c7548d");
+  });
+
+  it.each(EMPHASIS_TARGETS)("$channel skin fallback uses material without a family statement, then the original resting ground", ({ channel, material, rest }) => {
+    const fallback = skinFallbacks(channel).at(0)!;
+    const expression = `var(${channel}, ${fallback})`;
+    const channels = emphasisChannels("strong");
+    channels.delete(channel);
+    expect(substituteChannels(expression, channels)).toBe(substituteChannels(`var(${material})`, channels));
+    channels.delete(material);
+    expect(substituteChannels(expression, channels)).toBe(substituteChannels(rest, channels));
+    channels.set(channel, "#c7548d");
+    expect(substituteChannels(expression, channels)).toBe("#c7548d");
+  });
+
+  it("honors authored material state grounds through the existing material producer", () => {
+    const authored: FlatTheme = { ...MINIMAL_THEME, surfaces: { materials: { control: { backgroundHover: "#aabbcc", backgroundActive: "#ccbbaa" } } } };
+    const channels = emphasisChannels("strong", authored);
+    expect(substituteChannels("var(--ds-tabs-line-hover-bg)", channels)).toBe("#aabbcc");
+    expect(substituteChannels("var(--ds-tabs-line-active-bg)", channels)).toBe("#ccbbaa");
+  });
+
+  it("yields both emphasis grounds to vertical and tenant statements in the ranked pipeline", () => {
+    const ranks = ["verticalOverride", "tenant"] as const;
+    for (const rank of ranks) {
+      const stated: FamilyDeriver = {
+        family: `stated-tabs-${rank}`,
+        rank,
+        consumes: ["chrome.*"],
+        produces: EMPHASIS_TARGETS.map(({ channel }) => channel),
+        derive: () => Object.fromEntries(EMPHASIS_TARGETS.map(({ channel }) => [channel, "#c7548d"])),
+      };
+      const result = runDerivation(buildLoweringContext({ theme: MINIMAL_THEME }), [tabsChromeDeriver, stated]);
+      const channels = new Map(Object.entries(result.channels));
+      for (const { channel } of EMPHASIS_TARGETS) {
+        expect(channels.get(channel)).toBe("#c7548d");
         expect(result.provenance.get(channel)?.rank).toBe(rank);
       }
     }
