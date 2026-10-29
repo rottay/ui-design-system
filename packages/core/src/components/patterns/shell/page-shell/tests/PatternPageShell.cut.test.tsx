@@ -163,10 +163,9 @@ describe('PatternPageShell — the FAM-11 cut', () => {
     );
     // Named, adjudicated and left to the authority that already owns them:
     // the expressive motif and type axes, the edge-width emphasis axis, and
-    // the three names `collection-header` reads through at a second rest.
+    // the two names `collection-header` reads through at a second rest.
     const ownedElsewhere = new Set([
       '--ds-page-header-bg',
-      '--ds-page-header-eyebrow-size',
       '--ds-page-header-eyebrow-tracking',
       '--ds-page-header-eyebrow-text-transform',
       '--ds-page-header-title-max-width',

@@ -4,6 +4,17 @@
 
 ### Patch Changes
 
+- Size the Modern PageShell eyebrow from the label role through its own
+  `--ds-page-shell-eyebrow-size` channel, so it follows `typography.scale` and
+  an authored label size like the eyebrow weight already does. The eyebrow
+  rests at the label role size instead of the fixed 10px it painted before,
+  which is an intentional visible change. The shared
+  `--ds-page-header-eyebrow-size` stays unproduced and PageShell no longer
+  reads it; CollectionHeader's overline is unchanged and still reads that name
+  through to `var(--ds-font-size-xs, 12px)`. Eyebrow tracking, transform and
+  title measure are unchanged. No public API or dependency
+  change. Source and focal checks cover the correction; generated artifacts,
+  browser/computed-style and public-package acceptance remain pending.
 - Refuse a v2/v3 tenant document over the v1 schema's payload ceilings (depth
   10, 512 fields, 65,536 canonical bytes) with `invalid_value` at `$.document`
   and the v1 messages, after the identity stations and before admission walks

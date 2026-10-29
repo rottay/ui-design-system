@@ -1,7 +1,7 @@
 /**
  * @fileoverview The `page-shell` family: the page identity panel's ground,
- * frame, sheen and radius, its identity tile corner, the supporting measure
- * and the opt-in glass channel of the actions cluster.
+ * frame, sheen and radius, its identity tile corner, the eyebrow size, the
+ * supporting measure and the opt-in glass channel of the actions cluster.
  *
  * @remarks
  * Every produced value is the single chained fallback its skin reads it with,
@@ -25,15 +25,21 @@
  * - `--ds-page-header-bg` is already authored at `profile` rank by the
  *   expressive `contour` motif. A `derived` producer outranks a profile, so
  *   producing it would silently retire that motif's page-header treatment.
- * - `--ds-page-header-eyebrow-size` (10px here), `-eyebrow-tracking` (0.11em)
- *   and `-title-max-width` (32ch) have a SECOND correct rest:
- *   `collection-header` reads each one through to
- *   `var(--ds-font-size-xs, 12px)`, `0.13em` and `35rem` / `42.5rem`. One
- *   name, two rests — producing either silently repaints the other family.
+ * - `--ds-page-header-eyebrow-tracking` (0.11em) and `-title-max-width` (32ch)
+ *   have a SECOND correct rest: `collection-header` reads each one through to
+ *   `0.13em` and `35rem` / `42.5rem`. One name, two rests — producing either
+ *   silently repaints the other family.
  *
  * The supporting measure left that group (WO-FAM-11 x EVI-03): nothing ever
  * produced the shared name this skin read it through, so the read always
  * painted its fallback, and the skin now declares that rest (72ch) directly.
+ *
+ * The eyebrow size left it too. The shared `--ds-page-header-eyebrow-size`
+ * has the same two rests (was 10px here, `var(--ds-font-size-xs, 12px)` in
+ * `collection-header`), so it stays unproduced, and a 10px literal is out of
+ * reach of `typography.scale`. The skin reads the family's own
+ * `--ds-page-shell-eyebrow-size`, stated on the label role size the eyebrow's
+ * weight already follows.
  *
  * `palette.*` and `motion` are NOT claimed. The browser probes measured that
  * neither plane reaches a channel this deriver states: the panel's ground is
@@ -59,7 +65,7 @@ import type { FamilyDeriver } from "../../../../foundation/contract";
 export const pageShellChromeDeriver: FamilyDeriver = {
   family: "page-shell",
   rank: "derived",
-  consumes: ["surfaces.*", "shape.*"],
+  consumes: ["surfaces.*", "shape.*", "typography.roles", "typography.scale"],
   produces: [
     // The identity panel
     "--ds-page-shell-header-radius",
@@ -69,6 +75,8 @@ export const pageShellChromeDeriver: FamilyDeriver = {
     "--ds-page-shell-header-sheen-duration",
     // The identity tile
     "--ds-page-shell-header-icon-radius",
+    // The eyebrow
+    "--ds-page-shell-eyebrow-size",
     // The actions cluster's opt-in glass
     "--ds-page-shell-actions-backdrop",
   ],
@@ -90,6 +98,10 @@ export function derivePageShellChannels(): Record<string, string> {
 
   // The identity tile sits one corner rung below the panel it lives in.
   vars["--ds-page-shell-header-icon-radius"] = "var(--ds-radius-lg)";
+
+  // The eyebrow is a label: its size rides the label role, and with it the
+  // type scale and an authored label size.
+  vars["--ds-page-shell-eyebrow-size"] = "var(--ds-type-label-font-size)";
 
   // Glass on the actions cluster is opt-in: a default-ON blur taxes every
   // scroll frame, so the rest is no filter at all.
