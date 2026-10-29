@@ -46,9 +46,9 @@
  * What travels inline on the root is the caller's own `style` prop plus the
  * `--ds-page-shell-max-width` channel this skin consumes.
  *
- * Values were transcribed verbatim from `engines/modern.tsx`; the wave R2+R3
- * pass moved the remaining inline typography (title, subtitle, crumbs, tabs,
- * separators) here as well, so the engine emits only structure and state.
+ * Typography lives in the skin; the engine emits structure and state.
+ * Eyebrow and terminal crumb weights follow the label role with a semibold
+ * fallback; ordinary crumbs retain their medium reading weight.
  *
  * WAVE p612b: crumb links gain the governed `:focus-visible` ring; crumbs,
  * tabs and the back button gain the coarse-pointer 44px floor (the crumb is
@@ -294,13 +294,11 @@
 .ds-pattern-page-shell.ds-engine-modern [data-part='eyebrow'] {
   margin-bottom: 4px;
   color: var(--ds-color-text-muted);
-  /* C0-07: the overline family is the one facet the expressive type axis
-     does not own (it moves case/tracking only, B1.2). The shared proto opens
-     it — an editorial profile can set the heading serif here while every
-     profile-less tenant keeps the exact mono render. */
+  /* The shared overline family channel preserves mono as its fallback;
+     weight independently follows the semantic label role. */
   font-family: var(--_ds-page-hierarchy-eyebrow-family, var(--ds-font-family-mono, ui-monospace, monospace));
   font-size: var(--ds-page-header-eyebrow-size, 10px);
-  font-weight: var(--ds-font-weight-semibold, 600);
+  font-weight: var(--ds-type-label-font-weight, var(--ds-font-weight-semibold, 600));
   letter-spacing: var(--ds-page-header-eyebrow-tracking, 0.11em);
   line-height: 1.25;
   /* Overline case rides the expressive type axis (C1b); fallback preserves
@@ -410,7 +408,7 @@
 }
 .ds-pattern-page-shell.ds-engine-modern [data-part='crumb'][data-interactive='false'][data-last='true'] {
   color: var(--ds-color-text-secondary);
-  font-weight: var(--ds-font-weight-semibold, 600);
+  font-weight: var(--ds-type-label-font-weight, var(--ds-font-weight-semibold, 600));
 }
 .ds-pattern-page-shell.ds-engine-modern [data-part='crumb'][data-interactive='false'][data-last='false'] {
   color: var(--ds-color-text-muted);

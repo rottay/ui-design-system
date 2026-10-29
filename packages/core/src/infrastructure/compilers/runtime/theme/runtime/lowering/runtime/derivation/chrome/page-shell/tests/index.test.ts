@@ -23,6 +23,8 @@ import { firstPartyFixture } from "@tests/support/theme-lowering";
 import type { FamilyDeriver } from "../../../../../foundation/contract";
 import { buildLoweringContext, runDerivation } from "../../../../pipeline";
 import { pageShellChromeDeriver } from "..";
+import { deriveTypeRoleChannels } from "../../../typography/roles";
+import { deriveTypeWeightChannels, roleWeightOverlay } from "../../../typography/weights";
 
 const MINIMAL_THEME: FlatTheme = { id: "minimal", name: "Minimal" };
 
@@ -156,5 +158,82 @@ describe("chrome/page-shell", () => {
         expect(result.provenance.get(channel)?.rank).toBe(rank);
       }
     }
+  });
+});
+
+const LABEL_WEIGHT = "var(--ds-type-label-font-weight, var(--ds-font-weight-semibold, 600))";
+const LABEL_PARTS = [
+  { part: "eyebrow", selector: ".ds-pattern-page-shell.ds-engine-modern [data-part='eyebrow']" },
+  { part: "terminal crumb", selector: ".ds-pattern-page-shell.ds-engine-modern [data-part='crumb'][data-interactive='false'][data-last='true']" },
+] as const;
+
+/** Source guard only: this reads declarations, not browser computed styles. */
+function declaredWeights(selector: string): string[] {
+  return Array.from(SKIN.matchAll(/([^{}]+)\{([^{}]*)\}/g)).flatMap((match) => {
+    const [, selectors, body] = match;
+    if (!selectors?.split(",").some((value) => value.trim() === selector)) return [];
+    return Array.from((body ?? "").matchAll(/(?:^|;)\s*font-weight:\s*([^;]+);/g))
+      .map((declaration) => normalise(declaration.at(1) ?? ""));
+  });
+}
+
+/** Real typography producers; no PageShell-specific weight channel is needed. */
+function weightChannels(typography: FlatTheme["typography"]): Map<string, string> {
+  const theme: FlatTheme = { ...MINIMAL_THEME, typography };
+  return new Map(Object.entries({
+    ...deriveTypeWeightChannels(theme),
+    ...deriveTypeRoleChannels(theme, undefined, {
+      numeric: {},
+      weights: roleWeightOverlay(theme),
+    }),
+  }));
+}
+
+describe("chrome/page-shell label-weight source contract", () => {
+  it.each(LABEL_PARTS)("binds $part to label weight with the exact semibold fallback", ({ selector }) => {
+    expect(declaredWeights(selector)).toEqual([LABEL_WEIGHT]);
+  });
+
+  const postures = [
+    { roleWeights: "light", expected: "500" },
+    { roleWeights: "regular", expected: "600" },
+    { roleWeights: "strong", expected: "700" },
+  ] as const;
+  it.each(postures)("produces $roleWeights label weight while preserving reading floors", ({ roleWeights, expected }) => {
+    const channels = weightChannels({ roleWeights });
+    expect(channels.get("--ds-type-label-font-weight")).toBe(expected);
+    expect(channels.get("--ds-font-weight-medium")).toBe("500");
+    expect(channels.get("--ds-font-weight-semibold")).toBe("600");
+    expect(channels.get("--ds-type-body-font-weight")).toBe("400");
+    expect(channels.get("--ds-type-supporting-font-weight")).toBe("400");
+    expect(channels.get("--ds-type-caption-font-weight")).toBe("400");
+    expect(channels.get("--ds-type-code-font-weight")).toBe("400");
+  });
+
+  const authoredWeights = [300, 800] as const;
+  it.each(authoredWeights)("preserves authored label weight %i above strong posture and other roles", (fontWeight) => {
+    const channels = weightChannels({
+      roleWeights: "strong",
+      roles: { label: { fontWeight }, pageTitle: { fontWeight: 900 }, sectionTitle: { fontWeight: 400 } },
+    });
+    expect(channels.get("--ds-type-label-font-weight")).toBe(String(fontWeight));
+    expect(channels.get("--ds-type-page-title-font-weight")).toBe("900");
+    expect(channels.get("--ds-type-section-title-font-weight")).toBe("400");
+    expect(channels.get("--ds-font-weight-semibold")).toBe("600");
+  });
+
+  it("keeps ordinary crumbs at medium and supporting/caption reads unchanged", () => {
+    expect(declaredWeights(".ds-pattern-page-shell.ds-engine-modern .ds-pattern-page-shell__crumb"))
+      .toEqual(["var(--ds-font-weight-medium, 500)"]);
+    expect(declaredWeights(".ds-pattern-page-shell.ds-engine-modern [data-part='subtitle']"))
+      .toEqual(["var(--ds-type-supporting-font-weight, var(--ds-font-weight-normal, 400))"]);
+    expect(declaredWeights(".ds-pattern-page-shell.ds-engine-modern [data-part='caption']"))
+      .toEqual(["var(--ds-type-caption-font-weight, var(--ds-font-weight-normal, 400))"]);
+  });
+
+  it("retains the resting label weight without adding a family producer", () => {
+    expect(weightChannels({}).get("--ds-type-label-font-weight")).toBe("600");
+    expect(pageShellChromeDeriver.produces).not.toContain("--ds-type-label-font-weight");
+    expect(pageShellChromeDeriver.produces.some((channel) => /weight/.test(channel))).toBe(false);
   });
 });

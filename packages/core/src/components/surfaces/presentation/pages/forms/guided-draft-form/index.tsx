@@ -17,10 +17,8 @@
  *   BEFORE the engine skins (`rottay-engines`): declarations painted over a
  *   composed primitive would lose by layer, while channel overrides resolve
  *   per-element and hold honestly.
- * - The heading weight the personality profile resolves (title, section
- *   titles, nav eyebrow) is stamped once on the root as the
- *   `--ds-guided-draft-form-heading-font-weight` channel and inherited by the
- *   skin's rules — one runtime value, no per-element inline paint.
+ * - An explicitly authored personality heading bias is stamped once on the
+ *   root; the neutral default inherits the derived family heading channel.
  * - Keyboard submit: Enter anywhere on the surface commits the form through
  *   the shared submit-intent kernel's delegated arm. A press the sections
  *   below have already consumed, or one that started inside any interactive
@@ -69,6 +67,8 @@ import { useBreakpoints } from '@/infrastructure/runtime/responsive';
 import { useResponsive } from '@/infrastructure/runtime/responsive';
 import { resolveDelegatedSubmitIntent } from '@/foundation/behavior/runtime/submit-intent';
 import { resolveSurfacePosture } from '../../../../foundation/contracts/adaptive';
+import { getProductProfile, useProductProfile } from '@/infrastructure/runtime/product-profiles';
+import { useEngineVisualDeclaration } from '@/infrastructure/runtime/foundation/engine-visual';
 import { useSurfaceProfileDefaults } from '../../../../../structures/foundation/chrome/runtime/profile-defaults';
 import {
   resolveStackSpacing,
@@ -601,7 +601,18 @@ function GuidedDraftFormSurfaceContent(props: GuidedDraftFormSurfaceProps) {
   const { hasResolvedViewport, activeBreakpoint } = useResponsive();
   const resolvedMobile = hasResolvedViewport && isMobile;
   const sectionSpacing = resolveStackSpacing(profileDefaults.sectionSpacing);
-  const headingWeight = resolveHeadingFontWeight(profileDefaults.headerWeight);
+  const { profile } = useProductProfile();
+  const compiledPersonality = useEngineVisualDeclaration()?.runtime.personality;
+  // The neutral registry profile is a fallback; an authored copy, even with
+  // the same key and normal bias, is an explicit personality decision.
+  const headingWeightBias =
+    compiledPersonality?.typography?.headingWeightBias ??
+    (profile !== getProductProfile()
+      ? profile.personality?.typography?.headingWeightBias
+      : undefined);
+  const headingWeight = headingWeightBias === undefined
+    ? undefined
+    : resolveHeadingFontWeight(headingWeightBias);
 
   // Adaptive posture resolution. `adaptive` is the surface's viewport-keyed
   // baseline and becomes the BASE layer; the family narrows it on a compact

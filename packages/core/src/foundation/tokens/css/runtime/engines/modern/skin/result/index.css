@@ -1,6 +1,5 @@
 /**
- * Modern Result skin (K1 Lane C premium pass; supersedes the WO-SKIN-03
- * checkpoint-O color-only rules).
+ * Modern Result skin: governed layout, typography and status paint.
  *
  * LAYER: `layer(rottay-engines)`. The canonical order lives in
  * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
@@ -14,7 +13,7 @@
  * here now, on governed tokens, so density/typography/elevation retunes reach
  * Result like every other family.
  *
- * SLOT CONFINEMENT (K1 sighted-review fix): every part selector below is a
+ * SLOT CONFINEMENT: every part selector below is a
  * DIRECT CHILD of the Result root (`>`). The engine renders icon/title/
  * description/extra/content as direct children, so paint is unchanged -- but
  * components slotted into `extra` or `children` can carry colliding
@@ -134,13 +133,14 @@
   color: var(--ds-color-error);
 }
 
-/* ---- hierarchy: title vs guidance (direct children only) ---- */
+/* The title follows the section-title role weight; guidance keeps its own
+   typography. Both rules target direct children only. */
 .rottay-result--modern.rottay-result--modern[data-part='root'] > [data-part='title'][data-part='title'] {
   margin: 0;
   color: var(--ds-color-text-primary);
   font-family: var(--ds-font-family-heading, var(--ds-font-family-base));
   font-size: var(--ds-result-title-size, var(--ds-font-size-2xl, var(--ds-font-size-xl)));
-  font-weight: var(--ds-font-weight-semibold);
+  font-weight: var(--ds-type-section-title-font-weight, var(--ds-font-weight-semibold));
   letter-spacing: var(--ds-letter-spacing-heading);
   line-height: var(--ds-line-height-tight);
   text-wrap: balance;

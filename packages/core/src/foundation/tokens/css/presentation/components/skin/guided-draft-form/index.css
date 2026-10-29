@@ -21,7 +21,7 @@
  *   - the two Heading titles carry the engine's inline role read
  *     `var(--ds-type-section-title-font-weight)`; the family retunes that
  *     channel per element onto `--ds-guided-draft-form-heading-font-weight`,
- *     the single runtime value the root stamps from the personality profile.
+ *     inherited by default; an explicit personality bias stamps the root.
  *   Channel defaults live at `:root`, so an element-scoped override resolves
  *   per-element and survives the layer order honestly — no specificity war,
  *   no repeated attribute/class selectors (4th-tanda prohibition).
@@ -71,9 +71,8 @@
 .ds-surface.ds-guided-draft-form [data-part='title-copy'] .ds-guided-draft-form__title,
 .ds-surface.ds-guided-draft-form .ds-guided-draft-form__title-copy .ds-guided-draft-form__title {
   margin-block-end: var(--ds-spacing-1);
-  /* The Modern engine paints these two headings' weight inline off the
-     governed section-title role; the family retunes that channel onto its own
-     heading-weight channel so the personality profile bias reaches them. */
+  /* The family inherits the section-title weight by default; an explicit
+     personality bias supplies a local root override. */
   --ds-type-section-title-font-weight: var(--ds-guided-draft-form-heading-font-weight, var(--ds-font-weight-semibold, 600));
 }
 
@@ -150,11 +149,8 @@
    Section navigation -- dropdown | pills | sidebar
    ========================================================================== */
 
-/* Eyebrow label. text-transform/letter-spacing are safe declarations here:
-   typography.css only paints them under `data-text-style`, which these plain
-   size/weight Texts never stamp. The weight rides the family's
-   heading-weight channel (the personality profile bias), not the caption
-   role the tier would otherwise bind to. */
+/* Plain Text leaves case/tracking to this skin; its family weight is inherited
+   by default and locally overridden only by an explicit personality bias. */
 .ds-surface.ds-guided-draft-form .ds-guided-draft-form__section-nav-label {
   display: block;
   margin-block-end: var(--ds-spacing-2);

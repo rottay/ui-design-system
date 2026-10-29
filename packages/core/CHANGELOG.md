@@ -4,6 +4,15 @@
 
 ### Patch Changes
 
+- Follow semantic role weights for Modern Result titles and PageShell eyebrow/
+  terminal-crumb labels, preserving Result's bold HTTP codes, ordinary crumb
+  weights and existing semibold fallbacks. Let GuidedDraftForm inherit the
+  section-title family weight by default; an explicit compiled heading bias
+  takes precedence over an authored product-profile bias and retains the
+  lighter/normal/heavier family-root values 500/600/800. Preserve inherited
+  family overrides, caller styles and the public API. Source and focal checks
+  cover these corrections; integration, browser/computed-style and public-package
+  acceptance remain pending.
 - Correct Modern Avatar light-secondary solid fills to 64% tenant seed / 36%
   neutral-900 so Rottay/Evnto white initials reach at least 4.5:1 contrast.
   This resolves the light-secondary residual recorded below; preserve accepted
