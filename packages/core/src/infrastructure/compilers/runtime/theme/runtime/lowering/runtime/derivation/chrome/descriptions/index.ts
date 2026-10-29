@@ -111,7 +111,7 @@ export function deriveDescriptionsChannels(): Record<string, string> {
   vars["--ds-descriptions-shadow"] = "var(--ds-elevation-1)";
   vars["--ds-descriptions-title-font-family"] = "var(--ds-font-family-heading)";
   vars["--ds-descriptions-title-font-size"] = "var(--ds-font-size-lg)";
-  vars["--ds-descriptions-title-font-weight"] = "var(--ds-font-weight-semibold)";
+  vars["--ds-descriptions-title-font-weight"] = "var(--ds-type-section-title-font-weight, var(--ds-font-weight-semibold))";
   vars["--ds-descriptions-title-letter-spacing"] = "-0.02em";
   vars["--ds-descriptions-title-line-height"] = "1.25";
   return vars;

@@ -4,6 +4,8 @@
 
 ### Patch Changes
 
+- Follow the section-title role weight for Modern Descriptions titles while
+  preserving the semibold fallback and every other family channel.
 - Neutralize spreadsheet-formula prefixes after optional whitespace in shared
   CSV header and data cells before RFC 4180 quoting. Ordinary values and custom
   cell-escape policies retain their existing behavior.
