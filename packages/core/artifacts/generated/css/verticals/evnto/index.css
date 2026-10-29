@@ -7630,9 +7630,9 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   --ds-tag-input-gap: var(--ds-spacing-1);
   --ds-tag-input-padding-y: var(--ds-spacing-1);
   --ds-tag-input-padding-x: var(--ds-spacing-2);
-  --ds-tag-input-sm-height: 32px;
-  --ds-tag-input-md-height: 40px;
-  --ds-tag-input-lg-height: 48px;
+  --ds-tag-input-sm-height: var(--ds-input-sm-height);
+  --ds-tag-input-md-height: var(--ds-input-md-height);
+  --ds-tag-input-lg-height: var(--ds-input-lg-height);
   --ds-tag-input-border-width: var(--ds-edge-standard-width);
   --ds-tag-input-input-min-width: 60px;
   --ds-tag-input-line-height: var(--ds-line-height-normal);
@@ -11012,7 +11012,7 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   --ds-list-header-padding-vertical: 12px;
   --ds-list-header-padding-horizontal: 16px;
   --ds-list-header-font-size: 14px;
-  --ds-list-header-font-weight: var(--ds-font-weight-semibold, 600);
+  --ds-list-header-font-weight: var(--ds-type-section-title-font-weight, var(--ds-font-weight-semibold, 600));
   --ds-list-header-background-color: var(--ds-color-neutral-50, #f9fafb);
 
   --ds-list-footer-padding-vertical: 12px;
@@ -21299,6 +21299,12 @@ html[data-ds-motion='reduced'] .ds-table tbody tr {
 .ds-card.ds-card--modern[data-part='root'] {
   position: relative;
   container: ds-card / inline-size;
+  --_ds-card-intrinsic-scale: var(--ds-card-scale-md, 1);
+  /* Size containment needs a family footprint when the parent shrink-wraps. */
+  contain-intrinsic-inline-size: calc(
+    var(--ds-card-min-inline-size, calc(16rem * var(--ds-density-effective-scale, 1) * var(--ds-type-scale, 1)))
+    * var(--ds-card-scale, var(--_ds-card-intrinsic-scale, var(--ds-card-scale-md, 1)))
+  );
   min-inline-size: 0;
   min-block-size: var(--ds-premium-card-min-height);
   overflow: hidden;
@@ -21591,6 +21597,19 @@ html[data-ds-motion='reduced'] .ds-table tbody tr {
 }
 .ds-card.ds-card--modern[data-part='root'][data-padding='xl'] {
   --ds-card-instance-padding: calc(var(--ds-card-padding-xl, var(--ds-card-xl-padding)) * var(--ds-rhythm-effective-scale, 1));
+}
+
+.ds-card.ds-card--modern[data-part='root'][data-size='xs'],
+.ds-card.ds-card--modern[data-part='root'][data-size='sm'] {
+  --_ds-card-intrinsic-scale: var(--ds-card-scale-sm, calc(var(--ds-card-scale-md, 1) * 0.875));
+}
+.ds-card.ds-card--modern[data-part='root'][data-size='lg'] {
+  --_ds-card-intrinsic-scale: var(--ds-card-scale-lg, calc(var(--ds-card-scale-md, 1) * 1.25));
+}
+.ds-card.ds-card--modern[data-part='root'][data-size='xl'],
+.ds-card.ds-card--modern[data-part='root'][data-size='2xl'],
+.ds-card.ds-card--modern[data-part='root'][data-size='3xl'] {
+  --_ds-card-intrinsic-scale: var(--ds-card-scale-xl, calc(var(--ds-card-scale-md, 1) * 1.5));
 }
 
 /* size axis: compact sizes de-escalate the copy, amplified sizes scale it up;
@@ -26258,7 +26277,6 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
   margin-bottom: 0;
 }
 
-.ds-pattern-data-table.ds-engine-modern [data-part="toolbar-stack"],
 .ds-pattern-data-table.ds-engine-modern .ds-data-table__toolbar-stack,
 .ds-pattern-data-table.ds-engine-modern [data-part="filters"] {
   width: 100%;
@@ -28464,7 +28482,6 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
   container-type: inline-size;
 }
 
-.ds-pattern-data-table.ds-data-table--mobile[data-part="mobile-root"],
 .ds-pattern-data-table.ds-data-table--mobile.ds-data-table__mobile-root {
   --ds-card-bg: var(--ds-collection-card-bg, var(--ds-premium-card-bg));
   --ds-card-border: var(
@@ -28494,17 +28511,14 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
   container-type: inline-size;
 }
 
-.ds-pattern-data-table.ds-data-table--mobile[data-part="mobile-root"][data-density="compact"],
 .ds-pattern-data-table.ds-data-table--mobile.ds-data-table__mobile-root[data-density="compact"] {
   --ds-density-local-factor: var(--ds-density-factor-compact, 0.85);
 }
 
-.ds-pattern-data-table.ds-data-table--mobile[data-part="mobile-root"][data-density="comfortable"],
 .ds-pattern-data-table.ds-data-table--mobile.ds-data-table__mobile-root[data-density="comfortable"] {
   --ds-density-local-factor: var(--ds-density-factor-comfortable, 1);
 }
 
-.ds-pattern-data-table.ds-data-table--mobile[data-part="mobile-root"][data-density="spacious"],
 .ds-pattern-data-table.ds-data-table--mobile.ds-data-table__mobile-root[data-density="spacious"] {
   --ds-density-local-factor: var(--ds-density-factor-spacious, 1.15);
 }
@@ -28569,7 +28583,6 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
   );
 }
 
-.ds-pattern-data-table.ds-data-table--mobile [data-part="mobile-card-primary"],
 .ds-pattern-data-table.ds-data-table--mobile .ds-data-table__mobile-card-primary {
   flex: 1;
   min-width: 0;
@@ -28847,9 +28860,7 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
    affordance and meta line are painted here on the channels the cards already
    use. The swipe affordance and the row-actions menu are painted with them:
    they are the same records' trailing controls. */
-.ds-pattern-data-table.ds-data-table--mobile [data-part="record-cards"],
 .ds-pattern-data-table.ds-data-table--mobile .ds-data-table__record-cards,
-.ds-pattern-data-table.ds-data-table--mobile [data-part="record-list"],
 .ds-pattern-data-table.ds-data-table--mobile .ds-data-table__record-list {
   min-inline-size: 0;
 }
@@ -42826,8 +42837,7 @@ html[data-ds-motion='reduced'] .rottay-undo-toast [data-part='fill'] {
 }
 @layer rottay-engines {
 /**
- * Modern Result skin (K1 Lane C premium pass; supersedes the WO-SKIN-03
- * checkpoint-O color-only rules).
+ * Modern Result skin: governed layout, typography and status paint.
  *
  * LAYER: `layer(rottay-engines)`. The canonical order lives in
  * `facade/entrypoints/base/index.css`: rottay-components -> rottay-engines ->
@@ -42841,7 +42851,7 @@ html[data-ds-motion='reduced'] .rottay-undo-toast [data-part='fill'] {
  * here now, on governed tokens, so density/typography/elevation retunes reach
  * Result like every other family.
  *
- * SLOT CONFINEMENT (K1 sighted-review fix): every part selector below is a
+ * SLOT CONFINEMENT: every part selector below is a
  * DIRECT CHILD of the Result root (`>`). The engine renders icon/title/
  * description/extra/content as direct children, so paint is unchanged -- but
  * components slotted into `extra` or `children` can carry colliding
@@ -42961,13 +42971,14 @@ html[data-ds-motion='reduced'] .rottay-undo-toast [data-part='fill'] {
   color: var(--ds-color-error);
 }
 
-/* ---- hierarchy: title vs guidance (direct children only) ---- */
+/* The title follows the section-title role weight; guidance keeps its own
+   typography. Both rules target direct children only. */
 .rottay-result--modern.rottay-result--modern[data-part='root'] > [data-part='title'][data-part='title'] {
   margin: 0;
   color: var(--ds-color-text-primary);
   font-family: var(--ds-font-family-heading, var(--ds-font-family-base));
   font-size: var(--ds-result-title-size, var(--ds-font-size-2xl, var(--ds-font-size-xl)));
-  font-weight: var(--ds-font-weight-semibold);
+  font-weight: var(--ds-type-section-title-font-weight, var(--ds-font-weight-semibold));
   letter-spacing: var(--ds-letter-spacing-heading);
   line-height: var(--ds-line-height-tight);
   text-wrap: balance;
@@ -43911,7 +43922,7 @@ html[data-ds-motion='reduced'] .rottay-undo-toast [data-part='fill'] {
   .ds-breadcrumb--modern[data-part='root'] [data-part='crumb'][data-clickable='true']:is([data-state~='hovered'], :hover),
   .ds-breadcrumb--modern[data-part='root'] [data-part='overflow-trigger']:is([data-state~='hovered'], :hover) {
     border-color: var(--ds-breadcrumb-hover-border, color-mix(in srgb, var(--ds-color-primary) 18%, var(--ds-color-border-subtle)));
-    background: var(--ds-breadcrumb-hover-bg, color-mix(in srgb, var(--ds-color-primary) 6%, var(--ds-card-bg, var(--ds-surface-card))));
+    background: var(--ds-breadcrumb-hover-bg, var(--ds-material-card-background-hover, color-mix(in srgb, var(--ds-color-primary) 6%, var(--ds-card-bg, var(--ds-surface-card)))));
     color: var(--ds-breadcrumb-color-hover, var(--ds-color-text-primary));
     box-shadow: var(--ds-breadcrumb-hover-shadow, var(--ds-elevation-1));
     transform: translateY(var(--ds-breadcrumb-hover-lift, calc(-1px * var(--ds-motion-intensity))));
@@ -43930,7 +43941,7 @@ html[data-ds-motion='reduced'] .rottay-undo-toast [data-part='fill'] {
 .ds-breadcrumb--modern[data-part='root'] [data-part='crumb'][data-clickable='true']:is([data-state~='pressed'], :active),
 .ds-breadcrumb--modern[data-part='root'] [data-part='overflow-trigger']:is([data-state~='pressed'], :active) {
   border-color: var(--ds-breadcrumb-hover-border, color-mix(in srgb, var(--ds-color-primary) 18%, var(--ds-color-border-subtle)));
-  background: var(--ds-breadcrumb-hover-bg, color-mix(in srgb, var(--ds-color-primary) 6%, var(--ds-card-bg, var(--ds-surface-card))));
+  background: var(--ds-breadcrumb-hover-bg, var(--ds-material-card-background-hover, color-mix(in srgb, var(--ds-color-primary) 6%, var(--ds-card-bg, var(--ds-surface-card)))));
   color: var(--ds-breadcrumb-color-hover, var(--ds-color-text-primary));
   box-shadow: none;
   transform: translateY(0);
@@ -43945,7 +43956,7 @@ html[data-ds-motion='reduced'] .rottay-undo-toast [data-part='fill'] {
 
 .ds-breadcrumb--modern[data-part='root'] [data-part='crumb'][data-current='true'] {
   border-color: var(--ds-breadcrumb-current-border, color-mix(in srgb, var(--ds-color-primary) 22%, var(--ds-color-border-subtle)));
-  background: var(--ds-breadcrumb-current-bg, color-mix(in srgb, var(--ds-color-primary) 8%, var(--ds-card-bg, var(--ds-surface-card))));
+  background: var(--ds-breadcrumb-current-bg, var(--ds-material-card-background-selected, color-mix(in srgb, var(--ds-color-primary) 8%, var(--ds-card-bg, var(--ds-surface-card)))));
   color: var(--ds-breadcrumb-active-color, var(--ds-color-text-primary));
   font-weight: var(--ds-breadcrumb-current-font-weight, var(--ds-font-weight-semibold));
   box-shadow: var(--ds-breadcrumb-current-keyline, inset 0 1px 0 color-mix(in srgb, var(--ds-color-white) calc(58% * var(--ds-effect-intensity)), transparent));
@@ -49639,7 +49650,7 @@ html[data-ds-motion='reduced'] .ds-stepper--modern[data-part='root'] [data-part=
   }
 
   .ds-tabs--modern[data-part='root']:is([data-variant='underline'], [data-variant='line']) [data-part='tab-button'][data-selected='false']:not([data-state~='disabled']):not([data-loading]):is([data-state~='hovered'], :hover) {
-    background: var(--ds-tabs-line-hover-bg, color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent));
+    background: var(--ds-tabs-line-hover-bg, var(--ds-material-control-background-hover, color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent)));
   }
 
   .ds-tabs--modern[data-part='root']:is([data-variant='contained'], [data-variant='card'], [data-variant='segmented']) [data-part='tab-button'][data-selected='false']:not([data-state~='disabled']):not([data-loading]):is([data-state~='hovered'], :hover) {
@@ -49712,7 +49723,7 @@ html[data-ds-motion='reduced'] .ds-stepper--modern[data-part='root'] [data-part=
 }
 
 .ds-tabs--modern[data-part='root']:is([data-variant='underline'], [data-variant='line']) [data-part='tab-button'][data-selected='true']:not([data-state~='disabled']) {
-  background: var(--ds-tabs-line-active-bg, linear-gradient(180deg, color-mix(in srgb, var(--ds-color-primary) 8%, transparent), color-mix(in srgb, var(--ds-color-primary) 3%, transparent)));
+  background: var(--ds-tabs-line-active-bg, var(--ds-material-control-background-active, linear-gradient(180deg, color-mix(in srgb, var(--ds-color-primary) 8%, transparent), color-mix(in srgb, var(--ds-color-primary) 3%, transparent))));
 }
 
 .ds-tabs--modern[data-part='root']:is([data-variant='contained'], [data-variant='card'], [data-variant='segmented']) [data-part='tab-button'][data-selected='true']:not([data-state~='disabled']) {
@@ -53185,20 +53196,9 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
    ink (the canonical `--ds-avatar-default-*` pair), never a dark ink token on
    a light surface token.
 
-   CONTRAST LAW (R0/Axe): chromatic solid fills deepen toward the tenant-safe
-   dark neutral ramp (`--ds-color-neutral-900`, the theme's strongest neutral
-   ink) until white initials clear WCAG AA on EVERY governed source -- the
-   raw 500-level hues fail (white on rottay #22C55E = 2.28, on bithire
-   #D6A04E = 2.33) and no static ink survives both light (rottay) and dark
-   (TMM #8A6B00) semantic hues. The mix derives from the tenant's own
-   resolved hue, so the ramp stays hue-faithful with no ramp lookup. Measured
-   white-ink ratios (worst source): success 62% >= 5.41, warning 55% >= 6.20,
-   error 78% >= 5.74, secondary 82% >= 6.51, primary unmixed >= 5.15 (the
-   ramp swap from flat black to neutral-900 shifts the fill luminance by
-   ~0.004 at most -- ratios hold within ~2%).
-   The darkened variants' ink fallback is a guaranteed light ink: fills are
-   darkened specifically to host white initials, and a text-on-primary token
-   may itself resolve dark on sources with a light primary (TMM). */
+   Light secondary deepens its palette seed for white initials. Dark solids use the stable
+   neutral ink anchor instead of the inverted neutral-900 ramp; their seed
+   weight is bounded so white initials remain legible even on a white seed. */
 .rottay-avatar.rottay-avatar--modern > [data-part='mask'] > [data-part='fallback'] {
   background: var(--ds-avatar-custom-bg, var(--ds-avatar-default-bg, var(--ds-color-neutral-100)));
   color: var(--ds-avatar-default-color, var(--ds-color-neutral-600));
@@ -53211,7 +53211,7 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
   --ds-avatar-ink-resting: var(--ds-avatar-primary-ink, var(--ds-color-primary-foreground, var(--ds-color-text-inverse)));
 }
 .rottay-avatar.rottay-avatar--modern[data-variant='secondary'] > [data-part='mask'] > [data-part='fallback'] {
-  background: var(--ds-avatar-custom-bg, var(--ds-avatar-secondary-solid-bg, color-mix(in srgb, var(--ds-color-secondary) 82%, var(--ds-color-neutral-900) 18%)));
+  background: var(--ds-avatar-custom-bg, var(--ds-avatar-secondary-solid-bg, color-mix(in srgb, var(--ds-color-secondary) 64%, var(--ds-color-neutral-900) 36%)));
   --ds-avatar-ink-resting: var(--ds-avatar-secondary-ink, var(--ds-color-white));
 }
 .rottay-avatar.rottay-avatar--modern[data-variant='success'] > [data-part='mask'] > [data-part='fallback'] {
@@ -53225,6 +53225,21 @@ html[data-ds-motion='reduced'] .ds-stepper-connector[data-part='connector'] {
 .rottay-avatar.rottay-avatar--modern[data-variant='error'] > [data-part='mask'] > [data-part='fallback'] {
   background: var(--ds-avatar-custom-bg, var(--ds-avatar-error-solid-bg, color-mix(in srgb, var(--ds-color-error) 78%, var(--ds-color-neutral-900) 22%)));
   --ds-avatar-ink-resting: var(--ds-avatar-error-ink, var(--ds-color-white));
+}
+
+/* Uncompiled fallbacks follow the foundation's document dark selectors.
+   Compiled mode blocks and authored family/caller channels still win. */
+:where(:root[data-theme='dark'], html.dark) .rottay-avatar.rottay-avatar--modern[data-variant='secondary'] > [data-part='mask'] > [data-part='fallback'] {
+  background: var(--ds-avatar-custom-bg, var(--ds-avatar-secondary-solid-bg, color-mix(in srgb, var(--ds-color-secondary) 45%, var(--ds-color-neutral-ink, var(--ds-color-black)) 55%)));
+}
+:where(:root[data-theme='dark'], html.dark) .rottay-avatar.rottay-avatar--modern[data-variant='success'] > [data-part='mask'] > [data-part='fallback'] {
+  background: var(--ds-avatar-custom-bg, var(--ds-avatar-success-solid-bg, color-mix(in srgb, var(--ds-color-success) 45%, var(--ds-color-neutral-ink, var(--ds-color-black)) 55%)));
+}
+:where(:root[data-theme='dark'], html.dark) .rottay-avatar.rottay-avatar--modern[data-variant='warning'] > [data-part='mask'] > [data-part='fallback'] {
+  background: var(--ds-avatar-custom-bg, var(--ds-avatar-warning-solid-bg, color-mix(in srgb, var(--ds-color-warning) 45%, var(--ds-color-neutral-ink, var(--ds-color-black)) 55%)));
+}
+:where(:root[data-theme='dark'], html.dark) .rottay-avatar.rottay-avatar--modern[data-variant='error'] > [data-part='mask'] > [data-part='fallback'] {
+  background: var(--ds-avatar-custom-bg, var(--ds-avatar-error-solid-bg, color-mix(in srgb, var(--ds-color-error) 45%, var(--ds-color-neutral-ink, var(--ds-color-black)) 55%)));
 }
 
 /* ---- gradient is the only variant that diverges on ink, and the only one that
@@ -64322,9 +64337,9 @@ html[data-ds-motion='reduced']
  * What travels inline on the root is the caller's own `style` prop plus the
  * `--ds-page-shell-max-width` channel this skin consumes.
  *
- * Values were transcribed verbatim from `engines/modern.tsx`; the wave R2+R3
- * pass moved the remaining inline typography (title, subtitle, crumbs, tabs,
- * separators) here as well, so the engine emits only structure and state.
+ * Typography lives in the skin; the engine emits structure and state.
+ * Eyebrow and terminal crumb weights follow the label role with a semibold
+ * fallback; ordinary crumbs retain their medium reading weight.
  *
  * WAVE p612b: crumb links gain the governed `:focus-visible` ring; crumbs,
  * tabs and the back button gain the coarse-pointer 44px floor (the crumb is
@@ -64570,13 +64585,11 @@ html[data-ds-motion='reduced']
 .ds-pattern-page-shell.ds-engine-modern [data-part='eyebrow'] {
   margin-bottom: 4px;
   color: var(--ds-color-text-muted);
-  /* C0-07: the overline family is the one facet the expressive type axis
-     does not own (it moves case/tracking only, B1.2). The shared proto opens
-     it — an editorial profile can set the heading serif here while every
-     profile-less tenant keeps the exact mono render. */
+  /* The shared overline family channel preserves mono as its fallback;
+     weight independently follows the semantic label role. */
   font-family: var(--_ds-page-hierarchy-eyebrow-family, var(--ds-font-family-mono, ui-monospace, monospace));
   font-size: var(--ds-page-header-eyebrow-size, 10px);
-  font-weight: var(--ds-font-weight-semibold, 600);
+  font-weight: var(--ds-type-label-font-weight, var(--ds-font-weight-semibold, 600));
   letter-spacing: var(--ds-page-header-eyebrow-tracking, 0.11em);
   line-height: 1.25;
   /* Overline case rides the expressive type axis (C1b); fallback preserves
@@ -64686,7 +64699,7 @@ html[data-ds-motion='reduced']
 }
 .ds-pattern-page-shell.ds-engine-modern [data-part='crumb'][data-interactive='false'][data-last='true'] {
   color: var(--ds-color-text-secondary);
-  font-weight: var(--ds-font-weight-semibold, 600);
+  font-weight: var(--ds-type-label-font-weight, var(--ds-font-weight-semibold, 600));
 }
 .ds-pattern-page-shell.ds-engine-modern [data-part='crumb'][data-interactive='false'][data-last='false'] {
   color: var(--ds-color-text-muted);
@@ -70641,7 +70654,7 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
  *   - the two Heading titles carry the engine's inline role read
  *     `var(--ds-type-section-title-font-weight)`; the family retunes that
  *     channel per element onto `--ds-guided-draft-form-heading-font-weight`,
- *     the single runtime value the root stamps from the personality profile.
+ *     inherited by default; an explicit personality bias stamps the root.
  *   Channel defaults live at `:root`, so an element-scoped override resolves
  *   per-element and survives the layer order honestly — no specificity war,
  *   no repeated attribute/class selectors (4th-tanda prohibition).
@@ -70691,9 +70704,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
 .ds-surface.ds-guided-draft-form [data-part='title-copy'] .ds-guided-draft-form__title,
 .ds-surface.ds-guided-draft-form .ds-guided-draft-form__title-copy .ds-guided-draft-form__title {
   margin-block-end: var(--ds-spacing-1);
-  /* The Modern engine paints these two headings' weight inline off the
-     governed section-title role; the family retunes that channel onto its own
-     heading-weight channel so the personality profile bias reaches them. */
+  /* The family inherits the section-title weight by default; an explicit
+     personality bias supplies a local root override. */
   --ds-type-section-title-font-weight: var(--ds-guided-draft-form-heading-font-weight, var(--ds-font-weight-semibold, 600));
 }
 
@@ -70770,11 +70782,8 @@ div.ds-structure.ds-form-sections:is([data-part='facts-card'], .ds-form-sections
    Section navigation -- dropdown | pills | sidebar
    ========================================================================== */
 
-/* Eyebrow label. text-transform/letter-spacing are safe declarations here:
-   typography.css only paints them under `data-text-style`, which these plain
-   size/weight Texts never stamp. The weight rides the family's
-   heading-weight channel (the personality profile bias), not the caption
-   role the tier would otherwise bind to. */
+/* Plain Text leaves case/tracking to this skin; its family weight is inherited
+   by default and locally overridden only by an explicit personality bias. */
 .ds-surface.ds-guided-draft-form .ds-guided-draft-form__section-nav-label {
   display: block;
   margin-block-end: var(--ds-spacing-2);
@@ -109193,7 +109202,7 @@ html[lang]:lang(ar) {
   --ds-alert-title-color: var(--ds-color-text-primary);
   --ds-alert-title-font-family: var(--ds-type-label-font-family);
   --ds-alert-title-font-size: var(--ds-type-label-font-size);
-  --ds-alert-title-font-weight: var(--ds-font-weight-semibold);
+  --ds-alert-title-font-weight: var(--ds-type-section-title-font-weight);
   --ds-alert-title-letter-spacing: var(--ds-letter-spacing-heading);
   --ds-alert-title-line-height: var(--ds-type-label-line-height);
   --ds-alert-title-urgent-font-weight: var(--ds-font-weight-bold);
@@ -109313,7 +109322,7 @@ html[lang]:lang(ar) {
   --ds-avatar-primary-ink: var(--ds-color-primary-foreground, var(--ds-color-text-inverse));
   --ds-avatar-primary-solid-bg: var(--ds-color-primary);
   --ds-avatar-secondary-ink: var(--ds-color-white);
-  --ds-avatar-secondary-solid-bg: color-mix(in srgb, var(--ds-color-secondary) 82%, var(--ds-color-neutral-900) 18%);
+  --ds-avatar-secondary-solid-bg: color-mix(in srgb, var(--ds-color-secondary) 64%, var(--ds-color-neutral-900) 36%);
   --ds-avatar-success-ink: var(--ds-color-white);
   --ds-avatar-success-solid-bg: color-mix(in srgb, var(--ds-color-success) 62%, var(--ds-color-neutral-900) 38%);
   --ds-avatar-warning-ink: var(--ds-color-white);
@@ -109419,7 +109428,7 @@ html[lang]:lang(ar) {
   --ds-breadcrumb-border: var(--ds-color-border-subtle);
   --ds-breadcrumb-color: var(--ds-color-text-secondary);
   --ds-breadcrumb-color-hover: var(--ds-color-text-primary);
-  --ds-breadcrumb-current-bg: color-mix(in srgb, var(--ds-color-primary) 8%, var(--ds-card-bg, var(--ds-surface-card)));
+  --ds-breadcrumb-current-bg: var(--ds-material-card-background-selected, color-mix(in srgb, var(--ds-color-primary) 8%, var(--ds-card-bg, var(--ds-surface-card))));
   --ds-breadcrumb-current-border: color-mix(in srgb, var(--ds-color-primary) 22%, var(--ds-color-border-subtle));
   --ds-breadcrumb-current-font-weight: var(--ds-font-weight-semibold);
   --ds-breadcrumb-current-keyline: inset 0 1px 0 color-mix(in srgb, var(--ds-color-white) calc(58% * var(--ds-effect-intensity)), transparent);
@@ -109432,7 +109441,7 @@ html[lang]:lang(ar) {
   --ds-breadcrumb-font-family: var(--ds-type-supporting-font-family);
   --ds-breadcrumb-font-size: var(--ds-type-supporting-font-size);
   --ds-breadcrumb-font-weight: var(--ds-font-weight-medium);
-  --ds-breadcrumb-hover-bg: color-mix(in srgb, var(--ds-color-primary) 6%, var(--ds-card-bg, var(--ds-surface-card)));
+  --ds-breadcrumb-hover-bg: var(--ds-material-card-background-hover, color-mix(in srgb, var(--ds-color-primary) 6%, var(--ds-card-bg, var(--ds-surface-card))));
   --ds-breadcrumb-hover-border: color-mix(in srgb, var(--ds-color-primary) 18%, var(--ds-color-border-subtle));
   --ds-breadcrumb-hover-lift: calc(-1px * var(--ds-motion-intensity));
   --ds-breadcrumb-hover-shadow: var(--ds-elevation-1);
@@ -109560,7 +109569,7 @@ html[lang]:lang(ar) {
   --ds-cascader-error-border: var(--ds-color-error);
   --ds-cascader-font-family: var(--ds-input-font-family, var(--ds-type-body-font-family));
   --ds-cascader-ink: var(--ds-color-text-primary);
-  --ds-cascader-option-bg-hover: var(--ds-color-bg-hover, var(--ds-material-control-background-hover));
+  --ds-cascader-option-bg-hover: var(--ds-material-control-background-hover, var(--ds-color-bg-hover));
   --ds-cascader-option-bg-selected: color-mix(in srgb, var(--ds-color-primary) 10%, transparent);
   --ds-cascader-option-border-selected: color-mix(in srgb, var(--ds-color-primary) 24%, transparent);
   --ds-cascader-option-ink: var(--ds-color-text-primary);
@@ -110033,7 +110042,7 @@ html[lang]:lang(ar) {
   --ds-date-picker-border: var(--ds-input-border, var(--ds-material-control-border));
   --ds-date-picker-border-focus: var(--ds-color-primary);
   --ds-date-picker-border-hover: var(--ds-material-control-border-hover);
-  --ds-date-picker-cell-bg-hover: var(--ds-color-bg-hover, var(--ds-material-control-background-hover));
+  --ds-date-picker-cell-bg-hover: var(--ds-material-control-background-hover, var(--ds-color-bg-hover));
   --ds-date-picker-cell-bg-selected: var(--ds-color-primary);
   --ds-date-picker-cell-ink: var(--ds-color-text-primary);
   --ds-date-picker-cell-ink-selected: var(--ds-color-text-on-primary);
@@ -110044,7 +110053,7 @@ html[lang]:lang(ar) {
   --ds-date-picker-filled-bg: var(--ds-input-filled-bg, var(--ds-material-inset-background));
   --ds-date-picker-font-family: var(--ds-input-font-family, var(--ds-type-body-font-family));
   --ds-date-picker-icon-color: var(--ds-type-color-muted);
-  --ds-date-picker-nav-bg-hover: var(--ds-color-bg-hover, var(--ds-material-control-background-hover));
+  --ds-date-picker-nav-bg-hover: var(--ds-material-control-background-hover, var(--ds-color-bg-hover));
   --ds-date-picker-nav-ink: var(--ds-color-text-primary);
   --ds-date-picker-panel-bg: var(--ds-color-bg-elevated, var(--ds-material-overlay-background));
   --ds-date-picker-panel-shadow: var(--ds-shadow-popover, var(--ds-elevation-3));
@@ -110101,7 +110110,7 @@ html[lang]:lang(ar) {
   --ds-descriptions-shadow: var(--ds-elevation-1);
   --ds-descriptions-title-font-family: var(--ds-font-family-heading);
   --ds-descriptions-title-font-size: var(--ds-font-size-lg);
-  --ds-descriptions-title-font-weight: var(--ds-font-weight-semibold);
+  --ds-descriptions-title-font-weight: var(--ds-type-section-title-font-weight, var(--ds-font-weight-semibold));
   --ds-descriptions-title-letter-spacing: -0.02em;
   --ds-descriptions-title-line-height: 1.25;
   --ds-detail-form-surface-error-banner-padding: calc(var(--ds-spacing-3, 12px) * var(--ds-rhythm-effective-scale, 1));
@@ -110334,7 +110343,7 @@ html[lang]:lang(ar) {
   --ds-form-surface-error-banner-padding: calc(var(--ds-spacing-3, 12px) * var(--ds-rhythm-effective-scale, 1));
   --ds-grid-gap: var(--ds-spacing-4, 1rem);
   --ds-grid-reflow-transition: var(--ds-transition-rearrange);
-  --ds-guided-draft-form-heading-font-weight: var(--ds-font-weight-semibold, 600);
+  --ds-guided-draft-form-heading-font-weight: var(--ds-type-section-title-font-weight, var(--ds-font-weight-semibold, 600));
   --ds-header-back-focus-ring: var(--ds-focus-ring, 0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 24%, transparent));
   --ds-header-tone-error-bd: color-mix(in srgb, var(--ds-color-error) 18%, var(--ds-color-border-secondary) 82%);
   --ds-header-tone-error-bg: color-mix(in srgb, var(--ds-color-error) 10%, var(--ds-color-bg-secondary) 90%);
@@ -110805,7 +110814,7 @@ html[lang]:lang(ar) {
   --ds-notifier-success-well-edge: color-mix(in srgb, var(--ds-color-success) 26%, var(--ds-color-border-subtle));
   --ds-notifier-title-font-family: var(--ds-type-label-font-family);
   --ds-notifier-title-font-size: var(--ds-type-label-font-size);
-  --ds-notifier-title-font-weight: var(--ds-font-weight-semibold);
+  --ds-notifier-title-font-weight: var(--ds-type-label-font-weight);
   --ds-notifier-title-letter-spacing: var(--ds-letter-spacing-heading);
   --ds-notifier-title-line-height: var(--ds-type-label-line-height);
   --ds-notifier-title-urgent-font-weight: var(--ds-font-weight-bold);
@@ -111278,7 +111287,7 @@ html[lang]:lang(ar) {
   --ds-shortcuts-overlay-search-padding-inline: var(--ds-spacing-5, 20px);
   --ds-shortcuts-overlay-title-color: var(--ds-color-text-primary);
   --ds-shortcuts-overlay-title-font-size: var(--ds-font-size-base, 16px);
-  --ds-shortcuts-overlay-title-font-weight: var(--ds-font-weight-semibold, 600);
+  --ds-shortcuts-overlay-title-font-weight: var(--ds-type-section-title-font-weight, var(--ds-font-weight-semibold, 600));
   --ds-sidebar-bg: var(--ds-color-bg-secondary);
   --ds-sidebar-item-bg-active: var(--ds-color-primary-100);
   --ds-sidebar-item-bg-hover: var(--ds-color-bg-hover);
@@ -111414,7 +111423,7 @@ html[lang]:lang(ar) {
   --ds-stepper-item-font-size-lg: var(--ds-type-body-font-size);
   --ds-stepper-item-font-size-md: var(--ds-type-supporting-font-size);
   --ds-stepper-item-font-size-sm: var(--ds-type-caption-font-size);
-  --ds-stepper-item-font-weight: var(--ds-font-weight-semibold);
+  --ds-stepper-item-font-weight: var(--ds-type-section-title-font-weight, var(--ds-font-weight-semibold));
   --ds-stepper-item-gap: var(--ds-spacing-3);
   --ds-stepper-item-radius: var(--ds-radius-md);
   --ds-stepper-item-size-lg: var(--ds-spacing-10);
@@ -111429,7 +111438,7 @@ html[lang]:lang(ar) {
   --ds-stepper-label-font-size-md: var(--ds-type-body-font-size);
   --ds-stepper-label-font-size-sm: var(--ds-type-supporting-font-size);
   --ds-stepper-label-font-weight: var(--ds-font-weight-medium);
-  --ds-stepper-label-font-weight-process: var(--ds-font-weight-semibold);
+  --ds-stepper-label-font-weight-process: var(--ds-type-section-title-font-weight, var(--ds-font-weight-semibold));
   --ds-stepper-label-line-height: var(--ds-type-body-line-height);
   --ds-stepper-motion-duration: var(--ds-motion-feedback);
   --ds-stepper-motion-easing: var(--ds-motion-ease-standard);
@@ -111455,13 +111464,13 @@ html[lang]:lang(ar) {
   --ds-table-cell-numeric: tabular-nums;
   --ds-table-col-min-width: var(--ds-spacing-0, 0);
   --ds-table-footer-margin-block-start: var(--ds-spacing-2);
-  --ds-table-pagination-current-font-weight: var(--ds-font-weight-semibold);
+  --ds-table-pagination-current-font-weight: var(--ds-type-label-font-weight, var(--ds-font-weight-semibold));
   --ds-table-pagination-font-size: var(--ds-type-supporting-font-size);
   --ds-table-pagination-margin-block-start: var(--ds-spacing-4);
   --ds-table-pagination-numeric: tabular-nums;
   --ds-table-selection-control-coarse-size: calc(var(--ds-spacing-5) * var(--ds-control-height-scale, 1));
   --ds-table-sticky-top: var(--ds-spacing-0, 0);
-  --ds-table-title-font-weight: var(--ds-font-weight-semibold);
+  --ds-table-title-font-weight: var(--ds-type-section-title-font-weight, var(--ds-font-weight-semibold));
   --ds-table-title-margin-block-end: var(--ds-spacing-2);
   --ds-table-touch-target-min: var(--ds-touch-target-min);
   --ds-table-virtual-spacer: var(--ds-spacing-0, 0);
@@ -111521,8 +111530,8 @@ html[lang]:lang(ar) {
   --ds-tabs-lg-height: calc(2.5rem * var(--ds-density-effective-scale, 1) * var(--ds-control-height-scale, 1));
   --ds-tabs-lg-icon-size: var(--ds-icon-md-size);
   --ds-tabs-lg-padding: 0 var(--ds-spacing-4, 16px);
-  --ds-tabs-line-active-bg: linear-gradient(180deg, color-mix(in srgb, var(--ds-color-primary) 8%, transparent), color-mix(in srgb, var(--ds-color-primary) 3%, transparent));
-  --ds-tabs-line-hover-bg: color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent);
+  --ds-tabs-line-active-bg: var(--ds-material-control-background-active, linear-gradient(180deg, color-mix(in srgb, var(--ds-color-primary) 8%, transparent), color-mix(in srgb, var(--ds-color-primary) 3%, transparent)));
+  --ds-tabs-line-hover-bg: var(--ds-material-control-background-hover, color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent));
   --ds-tabs-line-item-radius: var(--ds-radius-md);
   --ds-tabs-list-bg: linear-gradient(145deg, color-mix(in srgb, var(--ds-surface-inset) 90%, var(--ds-color-primary) 10%), var(--ds-surface-inset));
   --ds-tabs-list-blur: 0px;
@@ -111830,7 +111839,7 @@ html[lang]:lang(ar) {
   --ds-toolbar-sheen-opacity: 0;
   --ds-toolbar-title-font-family: var(--ds-type-section-title-font-family, var(--ds-font-family-heading));
   --ds-toolbar-title-font-size: var(--ds-font-size-md);
-  --ds-toolbar-title-font-weight: var(--ds-font-weight-semibold, 600);
+  --ds-toolbar-title-font-weight: var(--ds-type-section-title-font-weight, var(--ds-font-weight-semibold, 600));
   --ds-toolbar-title-gap: var(--ds-spacing-2, 0.5rem);
   --ds-toolbar-title-icon-size: 2rem;
   --ds-toolbar-title-letter-spacing: var(--ds-type-section-title-letter-spacing, -0.015em);
@@ -112205,7 +112214,7 @@ html[lang]:lang(ar) {
   --ds-input-sm-font-size: calc(0.8125rem * var(--ds-type-scale, 1));
   --ds-input-transition-duration: var(--ds-motion-feedback);
   --ds-input-transition-timing: var(--ds-motion-ease-out);
-  --ds-list-header-font-weight: var(--ds-font-weight-semibold, 600);
+  --ds-list-header-font-weight: var(--ds-type-section-title-font-weight, var(--ds-font-weight-semibold, 600));
   --ds-list-meta-title-font-weight: var(--ds-font-weight-medium, 500);
   --ds-list-transition-duration: var(--ds-motion-reveal);
   --ds-mentions-border-width: var(--ds-edge-standard-width);
@@ -113033,6 +113042,10 @@ html[lang]:lang(ar) {
 :is(html[data-tenant='evnto'], :where([data-ds-root][data-vertical='evnto']))[data-theme='dark'], :is(html[data-tenant='evnto'], :where([data-ds-root][data-vertical='evnto'])).dark {
   color-scheme: dark;
   --ds-app-shell-navigation-footer-color: var(--ds-sidebar-text, var(--ds-color-text-primary));
+  --ds-avatar-error-solid-bg: color-mix(in srgb, var(--ds-color-error) 45%, var(--ds-color-neutral-ink, var(--ds-color-black)) 55%);
+  --ds-avatar-secondary-solid-bg: color-mix(in srgb, var(--ds-color-secondary) 45%, var(--ds-color-neutral-ink, var(--ds-color-black)) 55%);
+  --ds-avatar-success-solid-bg: color-mix(in srgb, var(--ds-color-success) 45%, var(--ds-color-neutral-ink, var(--ds-color-black)) 55%);
+  --ds-avatar-warning-solid-bg: color-mix(in srgb, var(--ds-color-warning) 45%, var(--ds-color-neutral-ink, var(--ds-color-black)) 55%);
   --ds-elevation-1: inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 1px 2px rgba(0, 0, 0, 0.40), 0 2px 6px rgba(0, 0, 0, 0.28);
   --ds-elevation-2: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 2px 4px rgba(0, 0, 0, 0.44), 0 6px 16px rgba(0, 0, 0, 0.34);
   --ds-elevation-3: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 6px 12px rgba(0, 0, 0, 0.46), 0 12px 28px rgba(0, 0, 0, 0.40);

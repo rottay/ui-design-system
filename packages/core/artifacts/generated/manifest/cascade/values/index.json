@@ -15,9 +15,9 @@
     "verticals": 3,
     "scopes": 6,
     "channels": 18032,
-    "unresolved": 9409,
+    "unresolved": 9405,
     "unresolvedByReason": {
-      "missing": 9379,
+      "missing": 9375,
       "guaranteed-invalid": 24,
       "cascade-keyword": 6
     }
@@ -3087,7 +3087,7 @@
       "scope": "base",
       "channel": "--ds-cascader-option-bg-hover",
       "reason": "missing",
-      "cause": "--ds-material-control-background-hover"
+      "cause": "--ds-color-bg-hover"
     },
     {
       "vertical": "rottay",
@@ -3766,7 +3766,7 @@
       "scope": "base",
       "channel": "--ds-date-picker-nav-bg-hover",
       "reason": "missing",
-      "cause": "--ds-material-control-background-hover"
+      "cause": "--ds-color-bg-hover"
     },
     {
       "vertical": "rottay",
@@ -3780,7 +3780,7 @@
       "scope": "base",
       "channel": "--ds-date-picker-cell-bg-hover",
       "reason": "missing",
-      "cause": "--ds-material-control-background-hover"
+      "cause": "--ds-color-bg-hover"
     },
     {
       "vertical": "rottay",
@@ -14805,7 +14805,7 @@
       "scope": "light",
       "channel": "--ds-cascader-option-bg-hover",
       "reason": "missing",
-      "cause": "--ds-material-control-background-hover"
+      "cause": "--ds-color-bg-hover"
     },
     {
       "vertical": "rottay",
@@ -15505,7 +15505,7 @@
       "scope": "light",
       "channel": "--ds-date-picker-nav-bg-hover",
       "reason": "missing",
-      "cause": "--ds-material-control-background-hover"
+      "cause": "--ds-color-bg-hover"
     },
     {
       "vertical": "rottay",
@@ -15519,7 +15519,7 @@
       "scope": "light",
       "channel": "--ds-date-picker-cell-bg-hover",
       "reason": "missing",
-      "cause": "--ds-material-control-background-hover"
+      "cause": "--ds-color-bg-hover"
     },
     {
       "vertical": "rottay",
@@ -26096,7 +26096,7 @@
       "scope": "base",
       "channel": "--ds-cascader-option-bg-hover",
       "reason": "missing",
-      "cause": "--ds-material-control-background-hover"
+      "cause": "--ds-color-bg-hover"
     },
     {
       "vertical": "bithire",
@@ -26530,7 +26530,7 @@
       "scope": "base",
       "channel": "--ds-date-picker-nav-bg-hover",
       "reason": "missing",
-      "cause": "--ds-material-control-background-hover"
+      "cause": "--ds-color-bg-hover"
     },
     {
       "vertical": "bithire",
@@ -26544,7 +26544,7 @@
       "scope": "base",
       "channel": "--ds-date-picker-cell-bg-hover",
       "reason": "missing",
-      "cause": "--ds-material-control-background-hover"
+      "cause": "--ds-color-bg-hover"
     },
     {
       "vertical": "bithire",
@@ -35406,7 +35406,7 @@
       "scope": "dark",
       "channel": "--ds-cascader-option-bg-hover",
       "reason": "missing",
-      "cause": "--ds-material-control-background-hover"
+      "cause": "--ds-color-bg-hover"
     },
     {
       "vertical": "bithire",
@@ -35819,7 +35819,7 @@
       "scope": "dark",
       "channel": "--ds-date-picker-nav-bg-hover",
       "reason": "missing",
-      "cause": "--ds-material-control-background-hover"
+      "cause": "--ds-color-bg-hover"
     },
     {
       "vertical": "bithire",
@@ -35833,7 +35833,7 @@
       "scope": "dark",
       "channel": "--ds-date-picker-cell-bg-hover",
       "reason": "missing",
-      "cause": "--ds-material-control-background-hover"
+      "cause": "--ds-color-bg-hover"
     },
     {
       "vertical": "bithire",
@@ -39999,34 +39999,6 @@
       "channel": "--ds-data-table-mobile-summary-divider",
       "reason": "missing",
       "cause": "--ds-color-border-subtle"
-    },
-    {
-      "vertical": "bithire",
-      "scope": "dark",
-      "channel": "--ds-avatar-secondary-solid-bg",
-      "reason": "missing",
-      "cause": "--ds-color-neutral-900"
-    },
-    {
-      "vertical": "bithire",
-      "scope": "dark",
-      "channel": "--ds-avatar-success-solid-bg",
-      "reason": "missing",
-      "cause": "--ds-color-neutral-900"
-    },
-    {
-      "vertical": "bithire",
-      "scope": "dark",
-      "channel": "--ds-avatar-warning-solid-bg",
-      "reason": "missing",
-      "cause": "--ds-color-neutral-900"
-    },
-    {
-      "vertical": "bithire",
-      "scope": "dark",
-      "channel": "--ds-avatar-error-solid-bg",
-      "reason": "missing",
-      "cause": "--ds-color-neutral-900"
     },
     {
       "vertical": "bithire",
@@ -45241,7 +45213,7 @@
       "scope": "base",
       "channel": "--ds-cascader-option-bg-hover",
       "reason": "missing",
-      "cause": "--ds-material-control-background-hover"
+      "cause": "--ds-color-bg-hover"
     },
     {
       "vertical": "evnto",
@@ -45941,7 +45913,7 @@
       "scope": "base",
       "channel": "--ds-date-picker-nav-bg-hover",
       "reason": "missing",
-      "cause": "--ds-material-control-background-hover"
+      "cause": "--ds-color-bg-hover"
     },
     {
       "vertical": "evnto",
@@ -45955,7 +45927,7 @@
       "scope": "base",
       "channel": "--ds-date-picker-cell-bg-hover",
       "reason": "missing",
-      "cause": "--ds-material-control-background-hover"
+      "cause": "--ds-color-bg-hover"
     },
     {
       "vertical": "evnto",
@@ -57302,7 +57274,7 @@
       "scope": "dark",
       "channel": "--ds-cascader-option-bg-hover",
       "reason": "missing",
-      "cause": "--ds-material-control-background-hover"
+      "cause": "--ds-color-bg-hover"
     },
     {
       "vertical": "evnto",
@@ -57981,7 +57953,7 @@
       "scope": "dark",
       "channel": "--ds-date-picker-nav-bg-hover",
       "reason": "missing",
-      "cause": "--ds-material-control-background-hover"
+      "cause": "--ds-color-bg-hover"
     },
     {
       "vertical": "evnto",
@@ -57995,7 +57967,7 @@
       "scope": "dark",
       "channel": "--ds-date-picker-cell-bg-hover",
       "reason": "missing",
-      "cause": "--ds-material-control-background-hover"
+      "cause": "--ds-color-bg-hover"
     },
     {
       "vertical": "evnto",
@@ -66081,7 +66053,7 @@
         "--ds-auto-complete-warning-border": "var(--ds-color-warning)",
         "--ds-auto-complete-warning-shadow-focus": "var(--ds-focus-ring)",
         "--ds-avatar-error-ink": "var(--ds-color-white)",
-        "--ds-avatar-error-solid-bg": "color-mix(in srgb, var(--ds-color-error) 78%, var(--ds-color-neutral-900) 22%)",
+        "--ds-avatar-error-solid-bg": "color-mix(in srgb, var(--ds-color-error) 45%, var(--ds-color-neutral-ink, var(--ds-color-black)) 55%)",
         "--ds-avatar-focus-ring": "0 0 0 var(--ds-avatar-focus-ring-offset) var(--ds-surface-card-bg, var(--ds-color-bg-elevated)), 0 0 0 calc(var(--ds-avatar-focus-ring-offset) + var(--ds-avatar-focus-ring-width)) var(--ds-avatar-focus-ring-color, var(--ds-color-primary-500, var(--ds-color-primary)))",
         "--ds-avatar-group-surplus-radius": "var(--ds-radius-full)",
         "--ds-avatar-hover-transform": "scale(var(--ds-avatar-hover-scale))",
@@ -66090,11 +66062,11 @@
         "--ds-avatar-primary-ink": "var(--ds-color-text-inverse)",
         "--ds-avatar-primary-solid-bg": "var(--ds-color-primary)",
         "--ds-avatar-secondary-ink": "var(--ds-color-white)",
-        "--ds-avatar-secondary-solid-bg": "color-mix(in srgb, var(--ds-color-secondary) 82%, var(--ds-color-neutral-900) 18%)",
+        "--ds-avatar-secondary-solid-bg": "color-mix(in srgb, var(--ds-color-secondary) 45%, var(--ds-color-neutral-ink, var(--ds-color-black)) 55%)",
         "--ds-avatar-success-ink": "var(--ds-color-white)",
-        "--ds-avatar-success-solid-bg": "color-mix(in srgb, var(--ds-color-success) 62%, var(--ds-color-neutral-900) 38%)",
+        "--ds-avatar-success-solid-bg": "color-mix(in srgb, var(--ds-color-success) 45%, var(--ds-color-neutral-ink, var(--ds-color-black)) 55%)",
         "--ds-avatar-warning-ink": "var(--ds-color-white)",
-        "--ds-avatar-warning-solid-bg": "color-mix(in srgb, var(--ds-color-warning) 55%, var(--ds-color-neutral-900) 45%)",
+        "--ds-avatar-warning-solid-bg": "color-mix(in srgb, var(--ds-color-warning) 45%, var(--ds-color-neutral-ink, var(--ds-color-black)) 55%)",
         "--ds-badge-avatar-bg": "var(--ds-surface-raised)",
         "--ds-badge-avatar-border": "color-mix(in srgb, currentColor 18%, transparent)",
         "--ds-badge-avatar-border-width": "1px",
@@ -66337,7 +66309,7 @@
         "--ds-cascader-error-border": "var(--ds-color-error)",
         "--ds-cascader-font-family": "var(--ds-type-body-font-family)",
         "--ds-cascader-ink": "var(--ds-color-text-primary)",
-        "--ds-cascader-option-bg-hover": "var(--ds-material-control-background-hover)",
+        "--ds-cascader-option-bg-hover": "var(--ds-color-bg-hover)",
         "--ds-cascader-option-bg-selected": "color-mix(in srgb, var(--ds-color-primary) 10%, transparent)",
         "--ds-cascader-option-border-selected": "color-mix(in srgb, var(--ds-color-primary) 24%, transparent)",
         "--ds-cascader-option-ink": "var(--ds-color-text-primary)",
@@ -66810,7 +66782,7 @@
         "--ds-date-picker-border": "var(--ds-material-control-border)",
         "--ds-date-picker-border-focus": "var(--ds-color-primary)",
         "--ds-date-picker-border-hover": "var(--ds-material-control-border-hover)",
-        "--ds-date-picker-cell-bg-hover": "var(--ds-material-control-background-hover)",
+        "--ds-date-picker-cell-bg-hover": "var(--ds-color-bg-hover)",
         "--ds-date-picker-cell-bg-selected": "var(--ds-color-primary)",
         "--ds-date-picker-cell-ink": "var(--ds-color-text-primary)",
         "--ds-date-picker-cell-ink-selected": "var(--ds-color-text-on-primary)",
@@ -66821,7 +66793,7 @@
         "--ds-date-picker-filled-bg": "var(--ds-material-inset-background)",
         "--ds-date-picker-font-family": "var(--ds-type-body-font-family)",
         "--ds-date-picker-icon-color": "var(--ds-type-color-muted)",
-        "--ds-date-picker-nav-bg-hover": "var(--ds-material-control-background-hover)",
+        "--ds-date-picker-nav-bg-hover": "var(--ds-color-bg-hover)",
         "--ds-date-picker-nav-ink": "var(--ds-color-text-primary)",
         "--ds-date-picker-panel-bg": "var(--ds-material-overlay-background)",
         "--ds-date-picker-panel-shadow": "inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 6px 12px rgba(0, 0, 0, 0.46), 0 12px 28px rgba(0, 0, 0, 0.40)",
@@ -69052,7 +69024,7 @@
         "--ds-avatar-primary-ink": "var(--ds-color-text-inverse)",
         "--ds-avatar-primary-solid-bg": "var(--ds-color-primary)",
         "--ds-avatar-secondary-ink": "var(--ds-color-white)",
-        "--ds-avatar-secondary-solid-bg": "color-mix(in srgb, var(--ds-color-secondary) 82%, var(--ds-color-neutral-900) 18%)",
+        "--ds-avatar-secondary-solid-bg": "color-mix(in srgb, var(--ds-color-secondary) 64%, var(--ds-color-neutral-900) 36%)",
         "--ds-avatar-success-ink": "var(--ds-color-white)",
         "--ds-avatar-success-solid-bg": "color-mix(in srgb, var(--ds-color-success) 62%, var(--ds-color-neutral-900) 38%)",
         "--ds-avatar-warning-ink": "var(--ds-color-white)",
@@ -69299,7 +69271,7 @@
         "--ds-cascader-error-border": "var(--ds-color-error)",
         "--ds-cascader-font-family": "var(--ds-type-body-font-family)",
         "--ds-cascader-ink": "var(--ds-color-text-primary)",
-        "--ds-cascader-option-bg-hover": "var(--ds-material-control-background-hover)",
+        "--ds-cascader-option-bg-hover": "var(--ds-color-bg-hover)",
         "--ds-cascader-option-bg-selected": "color-mix(in srgb, var(--ds-color-primary) 10%, transparent)",
         "--ds-cascader-option-border-selected": "color-mix(in srgb, var(--ds-color-primary) 24%, transparent)",
         "--ds-cascader-option-ink": "var(--ds-color-text-primary)",
@@ -69772,7 +69744,7 @@
         "--ds-date-picker-border": "var(--ds-material-control-border)",
         "--ds-date-picker-border-focus": "var(--ds-color-primary)",
         "--ds-date-picker-border-hover": "var(--ds-material-control-border-hover)",
-        "--ds-date-picker-cell-bg-hover": "var(--ds-material-control-background-hover)",
+        "--ds-date-picker-cell-bg-hover": "var(--ds-color-bg-hover)",
         "--ds-date-picker-cell-bg-selected": "var(--ds-color-primary)",
         "--ds-date-picker-cell-ink": "var(--ds-color-text-primary)",
         "--ds-date-picker-cell-ink-selected": "var(--ds-color-text-on-primary)",
@@ -69783,7 +69755,7 @@
         "--ds-date-picker-filled-bg": "var(--ds-material-inset-background)",
         "--ds-date-picker-font-family": "var(--ds-type-body-font-family)",
         "--ds-date-picker-icon-color": "var(--ds-type-color-muted)",
-        "--ds-date-picker-nav-bg-hover": "var(--ds-material-control-background-hover)",
+        "--ds-date-picker-nav-bg-hover": "var(--ds-color-bg-hover)",
         "--ds-date-picker-nav-ink": "var(--ds-color-text-primary)",
         "--ds-date-picker-panel-bg": "var(--ds-material-overlay-background)",
         "--ds-date-picker-panel-shadow": "var(--ds-elevation-3)",
@@ -71896,7 +71868,7 @@
         "--ds-alert-title-color": "var(--ds-color-text-primary)",
         "--ds-alert-title-font-family": "var(--ds-type-label-font-family)",
         "--ds-alert-title-font-size": "calc(0.75rem * 0.94)",
-        "--ds-alert-title-font-weight": "600",
+        "--ds-alert-title-font-weight": "700",
         "--ds-alert-title-letter-spacing": "0.01em",
         "--ds-alert-title-line-height": "1.3",
         "--ds-alert-title-urgent-font-weight": "700",
@@ -72016,7 +71988,7 @@
         "--ds-avatar-primary-ink": "#ffffff",
         "--ds-avatar-primary-solid-bg": "#2F5BE8",
         "--ds-avatar-secondary-ink": "var(--ds-color-white)",
-        "--ds-avatar-secondary-solid-bg": "color-mix(in srgb, #0F172A 82%, var(--ds-color-neutral-900) 18%)",
+        "--ds-avatar-secondary-solid-bg": "color-mix(in srgb, #0F172A 64%, var(--ds-color-neutral-900) 36%)",
         "--ds-avatar-success-ink": "var(--ds-color-white)",
         "--ds-avatar-success-solid-bg": "color-mix(in srgb, #16794A 62%, var(--ds-color-neutral-900) 38%)",
         "--ds-avatar-warning-ink": "var(--ds-color-white)",
@@ -72268,7 +72240,7 @@
         "--ds-cascader-error-border": "#C62828",
         "--ds-cascader-font-family": "var(--ds-type-body-font-family)",
         "--ds-cascader-ink": "var(--ds-color-text-primary)",
-        "--ds-cascader-option-bg-hover": "var(--ds-material-control-background-hover)",
+        "--ds-cascader-option-bg-hover": "var(--ds-color-bg-hover)",
         "--ds-cascader-option-bg-selected": "color-mix(in srgb, #2F5BE8 10%, transparent)",
         "--ds-cascader-option-border-selected": "color-mix(in srgb, #2F5BE8 24%, transparent)",
         "--ds-cascader-option-ink": "var(--ds-color-text-primary)",
@@ -72850,7 +72822,7 @@
         "--ds-date-picker-border": "var(--ds-material-control-border)",
         "--ds-date-picker-border-focus": "#2F5BE8",
         "--ds-date-picker-border-hover": "var(--ds-material-control-border-hover)",
-        "--ds-date-picker-cell-bg-hover": "var(--ds-material-control-background-hover)",
+        "--ds-date-picker-cell-bg-hover": "var(--ds-color-bg-hover)",
         "--ds-date-picker-cell-bg-selected": "#2F5BE8",
         "--ds-date-picker-cell-ink": "var(--ds-color-text-primary)",
         "--ds-date-picker-cell-ink-selected": "#ffffff",
@@ -72861,7 +72833,7 @@
         "--ds-date-picker-filled-bg": "var(--ds-material-inset-background)",
         "--ds-date-picker-font-family": "var(--ds-type-body-font-family)",
         "--ds-date-picker-icon-color": "var(--ds-type-color-muted)",
-        "--ds-date-picker-nav-bg-hover": "var(--ds-material-control-background-hover)",
+        "--ds-date-picker-nav-bg-hover": "var(--ds-color-bg-hover)",
         "--ds-date-picker-nav-ink": "var(--ds-color-text-primary)",
         "--ds-date-picker-panel-bg": "var(--ds-material-overlay-background)",
         "--ds-date-picker-panel-shadow": "var(--ds-elevation-3)",
@@ -72918,7 +72890,7 @@
         "--ds-descriptions-shadow": "var(--ds-elevation-1)",
         "--ds-descriptions-title-font-family": "var(--ds-font-family-heading)",
         "--ds-descriptions-title-font-size": "var(--ds-font-size-lg)",
-        "--ds-descriptions-title-font-weight": "600",
+        "--ds-descriptions-title-font-weight": "700",
         "--ds-descriptions-title-letter-spacing": "-0.02em",
         "--ds-descriptions-title-line-height": "1.25",
         "--ds-detail-form-surface-error-banner-padding": "calc(12px * 1)",
@@ -73157,7 +73129,7 @@
         "--ds-form-surface-error-banner-padding": "calc(12px * 1)",
         "--ds-grid-gap": "1rem",
         "--ds-grid-reflow-transition": "var(--ds-transition-rearrange)",
-        "--ds-guided-draft-form-heading-font-weight": "600",
+        "--ds-guided-draft-form-heading-font-weight": "700",
         "--ds-header-back-focus-ring": "0 0 0 2px #FFFFFF, 0 0 0 calc(2px + 2px) #2F5BE8",
         "--ds-header-tone-error-bd": "color-mix(in srgb, #C62828 18%, var(--ds-color-border-secondary) 82%)",
         "--ds-header-tone-error-bg": "color-mix(in srgb, #C62828 10%, var(--ds-color-bg-secondary) 90%)",
@@ -73637,7 +73609,7 @@
         "--ds-notifier-success-well-edge": "color-mix(in srgb, #16794A 26%, var(--ds-color-border-subtle))",
         "--ds-notifier-title-font-family": "var(--ds-type-label-font-family)",
         "--ds-notifier-title-font-size": "calc(0.75rem * 0.94)",
-        "--ds-notifier-title-font-weight": "600",
+        "--ds-notifier-title-font-weight": "700",
         "--ds-notifier-title-letter-spacing": "0.01em",
         "--ds-notifier-title-line-height": "1.3",
         "--ds-notifier-title-urgent-font-weight": "700",
@@ -74114,7 +74086,7 @@
         "--ds-shortcuts-overlay-search-padding-inline": "20px",
         "--ds-shortcuts-overlay-title-color": "var(--ds-color-text-primary)",
         "--ds-shortcuts-overlay-title-font-size": "16px",
-        "--ds-shortcuts-overlay-title-font-weight": "600",
+        "--ds-shortcuts-overlay-title-font-weight": "700",
         "--ds-sidebar-bg": "var(--ds-color-neutral-900)",
         "--ds-sidebar-item-bg-active": "var(--ds-color-neutral-700)",
         "--ds-sidebar-item-bg-hover": "var(--ds-color-neutral-800)",
@@ -74250,7 +74222,7 @@
         "--ds-stepper-item-font-size-lg": "var(--ds-type-body-font-size)",
         "--ds-stepper-item-font-size-md": "calc(0.8125rem * 0.94)",
         "--ds-stepper-item-font-size-sm": "calc(0.6875rem * 0.94)",
-        "--ds-stepper-item-font-weight": "600",
+        "--ds-stepper-item-font-weight": "700",
         "--ds-stepper-item-gap": "var(--ds-spacing-3)",
         "--ds-stepper-item-radius": "var(--ds-radius-md)",
         "--ds-stepper-item-size-lg": "var(--ds-spacing-10)",
@@ -74265,7 +74237,7 @@
         "--ds-stepper-label-font-size-md": "var(--ds-type-body-font-size)",
         "--ds-stepper-label-font-size-sm": "calc(0.8125rem * 0.94)",
         "--ds-stepper-label-font-weight": "500",
-        "--ds-stepper-label-font-weight-process": "600",
+        "--ds-stepper-label-font-weight-process": "700",
         "--ds-stepper-label-line-height": "1.6",
         "--ds-stepper-motion-duration": "calc(120ms * 0.8)",
         "--ds-stepper-motion-easing": "cubic-bezier(0.4, 0, 0.2, 1)",
@@ -74294,13 +74266,13 @@
         "--ds-table-header-bg": "var(--ds-color-bg-secondary)",
         "--ds-table-header-letter-spacing": "0.05em",
         "--ds-table-header-text-transform": "uppercase",
-        "--ds-table-pagination-current-font-weight": "600",
+        "--ds-table-pagination-current-font-weight": "700",
         "--ds-table-pagination-font-size": "calc(0.8125rem * 0.94)",
         "--ds-table-pagination-margin-block-start": "var(--ds-spacing-4)",
         "--ds-table-pagination-numeric": "tabular-nums",
         "--ds-table-selection-control-coarse-size": "calc(var(--ds-spacing-5) * var(--ds-control-height-scale, 1))",
         "--ds-table-sticky-top": "0",
-        "--ds-table-title-font-weight": "600",
+        "--ds-table-title-font-weight": "700",
         "--ds-table-title-margin-block-end": "var(--ds-spacing-2)",
         "--ds-table-touch-target-min": "var(--ds-touch-target-min)",
         "--ds-table-virtual-spacer": "0",
@@ -74669,7 +74641,7 @@
         "--ds-toolbar-sheen-opacity": "0",
         "--ds-toolbar-title-font-family": "var(--ds-font-family-heading)",
         "--ds-toolbar-title-font-size": "var(--ds-font-size-md)",
-        "--ds-toolbar-title-font-weight": "600",
+        "--ds-toolbar-title-font-weight": "700",
         "--ds-toolbar-title-gap": "0.5rem",
         "--ds-toolbar-title-icon-size": "2rem",
         "--ds-toolbar-title-letter-spacing": "0.01em",
@@ -74994,7 +74966,7 @@
         "--ds-alert-title-color": "var(--ds-color-text-primary)",
         "--ds-alert-title-font-family": "var(--ds-type-label-font-family)",
         "--ds-alert-title-font-size": "calc(0.75rem * 0.94)",
-        "--ds-alert-title-font-weight": "600",
+        "--ds-alert-title-font-weight": "700",
         "--ds-alert-title-letter-spacing": "0.01em",
         "--ds-alert-title-line-height": "1.3",
         "--ds-alert-title-urgent-font-weight": "700",
@@ -75105,7 +75077,7 @@
         "--ds-auto-complete-warning-border": "#DF814B",
         "--ds-auto-complete-warning-shadow-focus": "0 0 0 2px #0A0A0A, 0 0 0 calc(2px + 2px) #2A55E0",
         "--ds-avatar-error-ink": "var(--ds-color-white)",
-        "--ds-avatar-error-solid-bg": "color-mix(in srgb, #F8675D 78%, var(--ds-color-neutral-900) 22%)",
+        "--ds-avatar-error-solid-bg": "color-mix(in srgb, #F8675D 45%, #010204 55%)",
         "--ds-avatar-focus-ring": "0 0 0 var(--ds-avatar-focus-ring-offset) var(--ds-surface-card-bg, var(--ds-color-bg-elevated)), 0 0 0 calc(var(--ds-avatar-focus-ring-offset) + var(--ds-avatar-focus-ring-width)) var(--ds-avatar-focus-ring-color, var(--ds-color-primary-500, var(--ds-color-primary)))",
         "--ds-avatar-group-surplus-radius": "var(--ds-radius-full)",
         "--ds-avatar-hover-transform": "scale(var(--ds-avatar-hover-scale))",
@@ -75114,11 +75086,11 @@
         "--ds-avatar-primary-ink": "#ffffff",
         "--ds-avatar-primary-solid-bg": "#2F5BE8",
         "--ds-avatar-secondary-ink": "var(--ds-color-white)",
-        "--ds-avatar-secondary-solid-bg": "color-mix(in srgb, #0F172A 82%, var(--ds-color-neutral-900) 18%)",
+        "--ds-avatar-secondary-solid-bg": "color-mix(in srgb, #0F172A 45%, #010204 55%)",
         "--ds-avatar-success-ink": "var(--ds-color-white)",
-        "--ds-avatar-success-solid-bg": "color-mix(in srgb, #60B182 62%, var(--ds-color-neutral-900) 38%)",
+        "--ds-avatar-success-solid-bg": "color-mix(in srgb, #60B182 45%, #010204 55%)",
         "--ds-avatar-warning-ink": "var(--ds-color-white)",
-        "--ds-avatar-warning-solid-bg": "color-mix(in srgb, #DF814B 55%, var(--ds-color-neutral-900) 45%)",
+        "--ds-avatar-warning-solid-bg": "color-mix(in srgb, #DF814B 45%, #010204 55%)",
         "--ds-badge-avatar-bg": "var(--ds-surface-raised)",
         "--ds-badge-avatar-border": "color-mix(in srgb, currentColor 18%, transparent)",
         "--ds-badge-avatar-border-width": "1px",
@@ -75366,7 +75338,7 @@
         "--ds-cascader-error-border": "#F8675D",
         "--ds-cascader-font-family": "var(--ds-type-body-font-family)",
         "--ds-cascader-ink": "var(--ds-color-text-primary)",
-        "--ds-cascader-option-bg-hover": "var(--ds-material-control-background-hover)",
+        "--ds-cascader-option-bg-hover": "var(--ds-color-bg-hover)",
         "--ds-cascader-option-bg-selected": "color-mix(in srgb, #2F5BE8 10%, transparent)",
         "--ds-cascader-option-border-selected": "color-mix(in srgb, #2F5BE8 24%, transparent)",
         "--ds-cascader-option-ink": "var(--ds-color-text-primary)",
@@ -75948,7 +75920,7 @@
         "--ds-date-picker-border": "var(--ds-material-control-border)",
         "--ds-date-picker-border-focus": "#2F5BE8",
         "--ds-date-picker-border-hover": "var(--ds-material-control-border-hover)",
-        "--ds-date-picker-cell-bg-hover": "var(--ds-material-control-background-hover)",
+        "--ds-date-picker-cell-bg-hover": "var(--ds-color-bg-hover)",
         "--ds-date-picker-cell-bg-selected": "#2F5BE8",
         "--ds-date-picker-cell-ink": "var(--ds-color-text-primary)",
         "--ds-date-picker-cell-ink-selected": "#ffffff",
@@ -75959,7 +75931,7 @@
         "--ds-date-picker-filled-bg": "var(--ds-material-inset-background)",
         "--ds-date-picker-font-family": "var(--ds-type-body-font-family)",
         "--ds-date-picker-icon-color": "var(--ds-type-color-muted)",
-        "--ds-date-picker-nav-bg-hover": "var(--ds-material-control-background-hover)",
+        "--ds-date-picker-nav-bg-hover": "var(--ds-color-bg-hover)",
         "--ds-date-picker-nav-ink": "var(--ds-color-text-primary)",
         "--ds-date-picker-panel-bg": "var(--ds-material-overlay-background)",
         "--ds-date-picker-panel-shadow": "inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 6px 12px rgba(0, 0, 0, 0.46), 0 12px 28px rgba(0, 0, 0, 0.40)",
@@ -76016,7 +75988,7 @@
         "--ds-descriptions-shadow": "inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 1px 2px rgba(0, 0, 0, 0.40), 0 2px 6px rgba(0, 0, 0, 0.28)",
         "--ds-descriptions-title-font-family": "var(--ds-font-family-heading)",
         "--ds-descriptions-title-font-size": "var(--ds-font-size-lg)",
-        "--ds-descriptions-title-font-weight": "600",
+        "--ds-descriptions-title-font-weight": "700",
         "--ds-descriptions-title-letter-spacing": "-0.02em",
         "--ds-descriptions-title-line-height": "1.25",
         "--ds-detail-form-surface-error-banner-padding": "calc(12px * 1)",
@@ -76255,7 +76227,7 @@
         "--ds-form-surface-error-banner-padding": "calc(12px * 1)",
         "--ds-grid-gap": "1rem",
         "--ds-grid-reflow-transition": "var(--ds-transition-rearrange)",
-        "--ds-guided-draft-form-heading-font-weight": "600",
+        "--ds-guided-draft-form-heading-font-weight": "700",
         "--ds-header-back-focus-ring": "0 0 0 2px #0A0A0A, 0 0 0 calc(2px + 2px) #2A55E0",
         "--ds-header-tone-error-bd": "color-mix(in srgb, #F8675D 18%, var(--ds-color-border-secondary) 82%)",
         "--ds-header-tone-error-bg": "color-mix(in srgb, #F8675D 10%, var(--ds-color-bg-secondary) 90%)",
@@ -76735,7 +76707,7 @@
         "--ds-notifier-success-well-edge": "color-mix(in srgb, #60B182 26%, var(--ds-color-border-subtle))",
         "--ds-notifier-title-font-family": "var(--ds-type-label-font-family)",
         "--ds-notifier-title-font-size": "calc(0.75rem * 0.94)",
-        "--ds-notifier-title-font-weight": "600",
+        "--ds-notifier-title-font-weight": "700",
         "--ds-notifier-title-letter-spacing": "0.01em",
         "--ds-notifier-title-line-height": "1.3",
         "--ds-notifier-title-urgent-font-weight": "700",
@@ -77212,7 +77184,7 @@
         "--ds-shortcuts-overlay-search-padding-inline": "20px",
         "--ds-shortcuts-overlay-title-color": "var(--ds-color-text-primary)",
         "--ds-shortcuts-overlay-title-font-size": "16px",
-        "--ds-shortcuts-overlay-title-font-weight": "600",
+        "--ds-shortcuts-overlay-title-font-weight": "700",
         "--ds-sidebar-bg": "var(--ds-color-neutral-900)",
         "--ds-sidebar-item-bg-active": "var(--ds-color-neutral-700)",
         "--ds-sidebar-item-bg-hover": "var(--ds-color-neutral-800)",
@@ -77348,7 +77320,7 @@
         "--ds-stepper-item-font-size-lg": "var(--ds-type-body-font-size)",
         "--ds-stepper-item-font-size-md": "calc(0.8125rem * 0.94)",
         "--ds-stepper-item-font-size-sm": "calc(0.6875rem * 0.94)",
-        "--ds-stepper-item-font-weight": "600",
+        "--ds-stepper-item-font-weight": "700",
         "--ds-stepper-item-gap": "var(--ds-spacing-3)",
         "--ds-stepper-item-radius": "var(--ds-radius-md)",
         "--ds-stepper-item-size-lg": "var(--ds-spacing-10)",
@@ -77363,7 +77335,7 @@
         "--ds-stepper-label-font-size-md": "var(--ds-type-body-font-size)",
         "--ds-stepper-label-font-size-sm": "calc(0.8125rem * 0.94)",
         "--ds-stepper-label-font-weight": "500",
-        "--ds-stepper-label-font-weight-process": "600",
+        "--ds-stepper-label-font-weight-process": "700",
         "--ds-stepper-label-line-height": "1.6",
         "--ds-stepper-motion-duration": "calc(120ms * 0.8)",
         "--ds-stepper-motion-easing": "cubic-bezier(0.4, 0, 0.2, 1)",
@@ -77392,13 +77364,13 @@
         "--ds-table-header-bg": "var(--ds-color-bg-secondary)",
         "--ds-table-header-letter-spacing": "0.05em",
         "--ds-table-header-text-transform": "uppercase",
-        "--ds-table-pagination-current-font-weight": "600",
+        "--ds-table-pagination-current-font-weight": "700",
         "--ds-table-pagination-font-size": "calc(0.8125rem * 0.94)",
         "--ds-table-pagination-margin-block-start": "var(--ds-spacing-4)",
         "--ds-table-pagination-numeric": "tabular-nums",
         "--ds-table-selection-control-coarse-size": "calc(var(--ds-spacing-5) * var(--ds-control-height-scale, 1))",
         "--ds-table-sticky-top": "0",
-        "--ds-table-title-font-weight": "600",
+        "--ds-table-title-font-weight": "700",
         "--ds-table-title-margin-block-end": "var(--ds-spacing-2)",
         "--ds-table-touch-target-min": "var(--ds-touch-target-min)",
         "--ds-table-virtual-spacer": "0",
@@ -77767,7 +77739,7 @@
         "--ds-toolbar-sheen-opacity": "0",
         "--ds-toolbar-title-font-family": "var(--ds-font-family-heading)",
         "--ds-toolbar-title-font-size": "var(--ds-font-size-md)",
-        "--ds-toolbar-title-font-weight": "600",
+        "--ds-toolbar-title-font-weight": "700",
         "--ds-toolbar-title-gap": "0.5rem",
         "--ds-toolbar-title-icon-size": "2rem",
         "--ds-toolbar-title-letter-spacing": "0.01em",
@@ -78214,7 +78186,7 @@
         "--ds-avatar-primary-ink": "var(--ds-color-text-inverse)",
         "--ds-avatar-primary-solid-bg": "var(--ds-color-primary)",
         "--ds-avatar-secondary-ink": "var(--ds-color-white)",
-        "--ds-avatar-secondary-solid-bg": "color-mix(in srgb, var(--ds-color-secondary) 82%, var(--ds-color-neutral-900) 18%)",
+        "--ds-avatar-secondary-solid-bg": "color-mix(in srgb, var(--ds-color-secondary) 64%, var(--ds-color-neutral-900) 36%)",
         "--ds-avatar-success-ink": "var(--ds-color-white)",
         "--ds-avatar-success-solid-bg": "color-mix(in srgb, var(--ds-color-success) 62%, var(--ds-color-neutral-900) 38%)",
         "--ds-avatar-warning-ink": "var(--ds-color-white)",
@@ -78461,7 +78433,7 @@
         "--ds-cascader-error-border": "var(--ds-color-error)",
         "--ds-cascader-font-family": "var(--ds-type-body-font-family)",
         "--ds-cascader-ink": "var(--ds-color-text-primary)",
-        "--ds-cascader-option-bg-hover": "var(--ds-material-control-background-hover)",
+        "--ds-cascader-option-bg-hover": "var(--ds-color-bg-hover)",
         "--ds-cascader-option-bg-selected": "color-mix(in srgb, var(--ds-color-primary) 10%, transparent)",
         "--ds-cascader-option-border-selected": "color-mix(in srgb, var(--ds-color-primary) 24%, transparent)",
         "--ds-cascader-option-ink": "var(--ds-color-text-primary)",
@@ -78934,7 +78906,7 @@
         "--ds-date-picker-border": "var(--ds-material-control-border)",
         "--ds-date-picker-border-focus": "var(--ds-color-primary)",
         "--ds-date-picker-border-hover": "var(--ds-material-control-border-hover)",
-        "--ds-date-picker-cell-bg-hover": "var(--ds-material-control-background-hover)",
+        "--ds-date-picker-cell-bg-hover": "var(--ds-color-bg-hover)",
         "--ds-date-picker-cell-bg-selected": "var(--ds-color-primary)",
         "--ds-date-picker-cell-ink": "var(--ds-color-text-primary)",
         "--ds-date-picker-cell-ink-selected": "var(--ds-color-text-on-primary)",
@@ -78945,7 +78917,7 @@
         "--ds-date-picker-filled-bg": "var(--ds-material-inset-background)",
         "--ds-date-picker-font-family": "var(--ds-type-body-font-family)",
         "--ds-date-picker-icon-color": "var(--ds-type-color-muted)",
-        "--ds-date-picker-nav-bg-hover": "var(--ds-material-control-background-hover)",
+        "--ds-date-picker-nav-bg-hover": "var(--ds-color-bg-hover)",
         "--ds-date-picker-nav-ink": "var(--ds-color-text-primary)",
         "--ds-date-picker-panel-bg": "var(--ds-material-overlay-background)",
         "--ds-date-picker-panel-shadow": "var(--ds-elevation-3)",
@@ -81167,7 +81139,7 @@
         "--ds-auto-complete-warning-border": "var(--ds-color-warning)",
         "--ds-auto-complete-warning-shadow-focus": "var(--ds-focus-ring)",
         "--ds-avatar-error-ink": "var(--ds-color-white)",
-        "--ds-avatar-error-solid-bg": "color-mix(in srgb, var(--ds-color-error) 78%, var(--ds-color-neutral-900) 22%)",
+        "--ds-avatar-error-solid-bg": "color-mix(in srgb, var(--ds-color-error) 45%, var(--ds-color-neutral-ink, var(--ds-color-black)) 55%)",
         "--ds-avatar-focus-ring": "0 0 0 var(--ds-avatar-focus-ring-offset) var(--ds-surface-card-bg, var(--ds-color-bg-elevated)), 0 0 0 calc(var(--ds-avatar-focus-ring-offset) + var(--ds-avatar-focus-ring-width)) var(--ds-avatar-focus-ring-color, var(--ds-color-primary-500, var(--ds-color-primary)))",
         "--ds-avatar-group-surplus-radius": "var(--ds-radius-full)",
         "--ds-avatar-hover-transform": "scale(var(--ds-avatar-hover-scale))",
@@ -81176,11 +81148,11 @@
         "--ds-avatar-primary-ink": "var(--ds-color-text-inverse)",
         "--ds-avatar-primary-solid-bg": "var(--ds-color-primary)",
         "--ds-avatar-secondary-ink": "var(--ds-color-white)",
-        "--ds-avatar-secondary-solid-bg": "color-mix(in srgb, var(--ds-color-secondary) 82%, var(--ds-color-neutral-900) 18%)",
+        "--ds-avatar-secondary-solid-bg": "color-mix(in srgb, var(--ds-color-secondary) 45%, var(--ds-color-neutral-ink, var(--ds-color-black)) 55%)",
         "--ds-avatar-success-ink": "var(--ds-color-white)",
-        "--ds-avatar-success-solid-bg": "color-mix(in srgb, var(--ds-color-success) 62%, var(--ds-color-neutral-900) 38%)",
+        "--ds-avatar-success-solid-bg": "color-mix(in srgb, var(--ds-color-success) 45%, var(--ds-color-neutral-ink, var(--ds-color-black)) 55%)",
         "--ds-avatar-warning-ink": "var(--ds-color-white)",
-        "--ds-avatar-warning-solid-bg": "color-mix(in srgb, var(--ds-color-warning) 55%, var(--ds-color-neutral-900) 45%)",
+        "--ds-avatar-warning-solid-bg": "color-mix(in srgb, var(--ds-color-warning) 45%, var(--ds-color-neutral-ink, var(--ds-color-black)) 55%)",
         "--ds-badge-avatar-bg": "var(--ds-surface-raised)",
         "--ds-badge-avatar-border": "color-mix(in srgb, currentColor 18%, transparent)",
         "--ds-badge-avatar-border-width": "1px",
@@ -81423,7 +81395,7 @@
         "--ds-cascader-error-border": "var(--ds-color-error)",
         "--ds-cascader-font-family": "var(--ds-type-body-font-family)",
         "--ds-cascader-ink": "var(--ds-color-text-primary)",
-        "--ds-cascader-option-bg-hover": "var(--ds-material-control-background-hover)",
+        "--ds-cascader-option-bg-hover": "var(--ds-color-bg-hover)",
         "--ds-cascader-option-bg-selected": "color-mix(in srgb, var(--ds-color-primary) 10%, transparent)",
         "--ds-cascader-option-border-selected": "color-mix(in srgb, var(--ds-color-primary) 24%, transparent)",
         "--ds-cascader-option-ink": "var(--ds-color-text-primary)",
@@ -81896,7 +81868,7 @@
         "--ds-date-picker-border": "var(--ds-material-control-border)",
         "--ds-date-picker-border-focus": "var(--ds-color-primary)",
         "--ds-date-picker-border-hover": "var(--ds-material-control-border-hover)",
-        "--ds-date-picker-cell-bg-hover": "var(--ds-material-control-background-hover)",
+        "--ds-date-picker-cell-bg-hover": "var(--ds-color-bg-hover)",
         "--ds-date-picker-cell-bg-selected": "var(--ds-color-primary)",
         "--ds-date-picker-cell-ink": "var(--ds-color-text-primary)",
         "--ds-date-picker-cell-ink-selected": "var(--ds-color-text-on-primary)",
@@ -81907,7 +81879,7 @@
         "--ds-date-picker-filled-bg": "var(--ds-material-inset-background)",
         "--ds-date-picker-font-family": "var(--ds-type-body-font-family)",
         "--ds-date-picker-icon-color": "var(--ds-type-color-muted)",
-        "--ds-date-picker-nav-bg-hover": "var(--ds-material-control-background-hover)",
+        "--ds-date-picker-nav-bg-hover": "var(--ds-color-bg-hover)",
         "--ds-date-picker-nav-ink": "var(--ds-color-text-primary)",
         "--ds-date-picker-panel-bg": "var(--ds-material-overlay-background)",
         "--ds-date-picker-panel-shadow": "inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 6px 12px rgba(0, 0, 0, 0.46), 0 12px 28px rgba(0, 0, 0, 0.40)",
@@ -83939,5 +83911,5 @@
       }
     }
   },
-  "digest": "32760bc6f4355fc92e3ea5493cd4b729a68cbd5c7e915e383ea32b1ec95221a9"
+  "digest": "11ceda5f668d4ef838b8a3adb4da49b3cb745a58b05bda9e2fcdb3a061a428d2"
 }

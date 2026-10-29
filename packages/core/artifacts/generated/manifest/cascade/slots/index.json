@@ -60,8 +60,8 @@
     },
     "rowsWithRoot": 26,
     "rowsEmittingNoChannel": 51,
-    "channelEmissions": 366,
-    "distinctChannelsReached": 195,
+    "channelEmissions": 370,
+    "distinctChannelsReached": 199,
     "metadataRows": 21,
     "paintDenominator": 95,
     "metadataRosterSize": 4,
@@ -2945,6 +2945,10 @@
       "isMetadata": true,
       "emitsChannels": [
         "--ds-app-shell-navigation-footer-color",
+        "--ds-avatar-error-solid-bg",
+        "--ds-avatar-secondary-solid-bg",
+        "--ds-avatar-success-solid-bg",
+        "--ds-avatar-warning-solid-bg",
         "--ds-elevation-1",
         "--ds-elevation-2",
         "--ds-elevation-3",
@@ -2958,6 +2962,10 @@
       ],
       "emitsScoped": [
         "base|--ds-app-shell-navigation-footer-color",
+        "base|--ds-avatar-error-solid-bg",
+        "base|--ds-avatar-secondary-solid-bg",
+        "base|--ds-avatar-success-solid-bg",
+        "base|--ds-avatar-warning-solid-bg",
         "base|--ds-elevation-1",
         "base|--ds-elevation-2",
         "base|--ds-elevation-3",
@@ -2969,6 +2977,10 @@
         "base|--ds-overlay-medium",
         "base|--ds-sidebar-item-bg-active",
         "dark|--ds-app-shell-navigation-footer-color",
+        "dark|--ds-avatar-error-solid-bg",
+        "dark|--ds-avatar-secondary-solid-bg",
+        "dark|--ds-avatar-success-solid-bg",
+        "dark|--ds-avatar-warning-solid-bg",
         "dark|--ds-elevation-1",
         "dark|--ds-elevation-2",
         "dark|--ds-elevation-3",
@@ -2980,6 +2992,10 @@
         "dark|--ds-overlay-medium",
         "dark|--ds-sidebar-item-bg-active",
         "light|--ds-app-shell-navigation-footer-color",
+        "light|--ds-avatar-error-solid-bg",
+        "light|--ds-avatar-secondary-solid-bg",
+        "light|--ds-avatar-success-solid-bg",
+        "light|--ds-avatar-warning-solid-bg",
         "light|--ds-elevation-1",
         "light|--ds-elevation-2",
         "light|--ds-elevation-3",
@@ -2994,6 +3010,10 @@
       "rootId": null,
       "headRootIds": [
         "elevation.ladder",
+        "ramp.seed.error",
+        "ramp.seed.secondary",
+        "ramp.seed.success",
+        "ramp.seed.warning",
         "tier.base.fg"
       ],
       "rootAttribution": "slot-spans-several-roots",
@@ -3770,5 +3790,5 @@
       }
     }
   ],
-  "digest": "5b08b03d12618fa16163fc3f83609ce4729d5756992b393c638b37567c089c90"
+  "digest": "686f4ff64270daf8d69915d7a3c0371a4bd82236c1ae3c6ae28c90481a686d9f"
 }

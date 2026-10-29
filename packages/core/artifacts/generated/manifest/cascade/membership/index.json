@@ -28,25 +28,26 @@
     "parentByDesignFailures": []
   },
   "stats": {
-    "rows": 195,
+    "rows": 199,
     "byVia": {
       "unattributed": 148,
-      "head-exact": 25,
-      "declared-fallback": 22
+      "declared-fallback": 26,
+      "head-exact": 25
     },
     "byTier": {
-      "sin-tier": 189,
+      "sin-tier": 193,
       "control": 1,
       "base": 4,
       "page": 1
     },
     "byProperty": {
       "sin-propiedad": 62,
+      "seed.error": 4,
+      "seed.secondary": 1,
+      "seed.success": 3,
+      "seed.warning": 3,
       "fg": 100,
       "radius": 8,
-      "seed.error": 3,
-      "seed.success": 2,
-      "seed.warning": 2,
       "seed.info": 1,
       "height": 1,
       "border": 3,
@@ -60,7 +61,7 @@
       "delta.selected": 1,
       "scale": 1
     },
-    "withRoot": 47,
+    "withRoot": 51,
     "withoutRoot": 148,
     "sharedHeadsResolved": 9,
     "sharedHeadsUnresolved": 0,
@@ -71,7 +72,7 @@
     "rowsRefinedByStep": 0,
     "rowsParentByDesign": 0,
     "byStep": {
-      "sin-paso": 195
+      "sin-paso": 199
     },
     "r2Floor": 13,
     "r2FloorRoots": [
@@ -209,7 +210,7 @@
       }
     },
     "THEME.appearance": {
-      "channels": 11,
+      "channels": 15,
       "unattributed": 9,
       "properties": {
         "sin-propiedad": 5,
@@ -276,6 +277,106 @@
       "rootHasDerivationLaw": false,
       "step": null,
       "stepNote": "sin raiz que refinar"
+    },
+    {
+      "channel": "--ds-avatar-error-solid-bg",
+      "rootId": "ramp.seed.error",
+      "via": "declared-fallback",
+      "evidence": {
+        "fallbackFrom": "--ds-color-error",
+        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/avatar/index.css:180",
+        "edgeClass": "leaf-fallback",
+        "guardPrimary": "--ds-avatar-error-solid-bg",
+        "coincidenceGuard": "no-value-match-used"
+      },
+      "tier": null,
+      "property": "seed.error",
+      "state": null,
+      "owners": [
+        "THEME.appearance"
+      ],
+      "contributingSlots": [
+        "rottay:THEME.appearance.defaultMode"
+      ],
+      "rootExposure": "tenant-dial",
+      "rootHasDerivationLaw": false,
+      "step": null,
+      "stepNote": "la raiz no es un tier.<nivel>.<fg|border> refinable"
+    },
+    {
+      "channel": "--ds-avatar-secondary-solid-bg",
+      "rootId": "ramp.seed.secondary",
+      "via": "declared-fallback",
+      "evidence": {
+        "fallbackFrom": "--ds-color-secondary",
+        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/avatar/index.css:168",
+        "edgeClass": "leaf-fallback",
+        "guardPrimary": "--ds-avatar-secondary-solid-bg",
+        "coincidenceGuard": "no-value-match-used"
+      },
+      "tier": null,
+      "property": "seed.secondary",
+      "state": null,
+      "owners": [
+        "THEME.appearance"
+      ],
+      "contributingSlots": [
+        "rottay:THEME.appearance.defaultMode"
+      ],
+      "rootExposure": "tenant-dial",
+      "rootHasDerivationLaw": false,
+      "step": null,
+      "stepNote": "la raiz no es un tier.<nivel>.<fg|border> refinable"
+    },
+    {
+      "channel": "--ds-avatar-success-solid-bg",
+      "rootId": "ramp.seed.success",
+      "via": "declared-fallback",
+      "evidence": {
+        "fallbackFrom": "--ds-color-success",
+        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/avatar/index.css:172",
+        "edgeClass": "leaf-fallback",
+        "guardPrimary": "--ds-avatar-success-solid-bg",
+        "coincidenceGuard": "no-value-match-used"
+      },
+      "tier": null,
+      "property": "seed.success",
+      "state": null,
+      "owners": [
+        "THEME.appearance"
+      ],
+      "contributingSlots": [
+        "rottay:THEME.appearance.defaultMode"
+      ],
+      "rootExposure": "tenant-dial",
+      "rootHasDerivationLaw": false,
+      "step": null,
+      "stepNote": "la raiz no es un tier.<nivel>.<fg|border> refinable"
+    },
+    {
+      "channel": "--ds-avatar-warning-solid-bg",
+      "rootId": "ramp.seed.warning",
+      "via": "declared-fallback",
+      "evidence": {
+        "fallbackFrom": "--ds-color-warning",
+        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/avatar/index.css:176",
+        "edgeClass": "leaf-fallback",
+        "guardPrimary": "--ds-avatar-warning-solid-bg",
+        "coincidenceGuard": "no-value-match-used"
+      },
+      "tier": null,
+      "property": "seed.warning",
+      "state": null,
+      "owners": [
+        "THEME.appearance"
+      ],
+      "contributingSlots": [
+        "rottay:THEME.appearance.defaultMode"
+      ],
+      "rootExposure": "tenant-dial",
+      "rootHasDerivationLaw": false,
+      "step": null,
+      "stepNote": "la raiz no es un tier.<nivel>.<fg|border> refinable"
     },
     {
       "channel": "--ds-badge-selected-ink",
@@ -1645,7 +1746,7 @@
       "via": "declared-fallback",
       "evidence": {
         "fallbackFrom": "--ds-color-info",
-        "site": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states/index.css:137",
+        "site": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states/index.css:139",
         "edgeClass": "leaf-fallback",
         "guardPrimary": "--ds-color-info-border",
         "coincidenceGuard": "no-value-match-used"
@@ -1670,7 +1771,7 @@
       "via": "declared-fallback",
       "evidence": {
         "fallbackFrom": "--ds-color-primary",
-        "site": "packages/core/src/foundation/tokens/css/presentation/components/skin/guided-draft-form/index.css:404",
+        "site": "packages/core/src/foundation/tokens/css/presentation/components/skin/guided-draft-form/index.css:434",
         "edgeClass": "leaf-fallback",
         "guardPrimary": "--ds-color-link",
         "coincidenceGuard": "no-value-match-used"
@@ -1938,7 +2039,7 @@
       "via": "declared-fallback",
       "evidence": {
         "fallbackFrom": "--ds-color-primary",
-        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/avatar/index.css:283",
+        "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/avatar/index.css:287",
         "edgeClass": "leaf-fallback",
         "guardPrimary": "--ds-color-primary-300",
         "coincidenceGuard": "no-value-match-used"
@@ -5123,5 +5224,5 @@
       "stepNote": "sin raiz que refinar"
     }
   ],
-  "digest": "ba7c30a524bc75bce9af369e5ce56aedfc867dc0b40a71d278e65fdcb4cc82b1"
+  "digest": "2223b50afeeb25efee1fc482ecd690856048a3b71409037326d8a1c77279342f"
 }
