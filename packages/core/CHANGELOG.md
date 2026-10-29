@@ -4,6 +4,8 @@
 
 ### Patch Changes
 
+- Follow the section-title role weight for Modern Stepper items and current-process
+  titles while preserving semibold fallbacks and ordinary medium labels.
 - Follow the section-title role weight for Modern Descriptions titles while
   preserving the semibold fallback and every other family channel.
 - Neutralize spreadsheet-formula prefixes after optional whitespace in shared

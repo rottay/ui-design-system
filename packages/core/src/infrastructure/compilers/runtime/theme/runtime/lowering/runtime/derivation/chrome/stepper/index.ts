@@ -124,7 +124,7 @@ export function deriveStepperChannels(): Record<string, string> {
   vars["--ds-stepper-item-bg"] = "var(--ds-steps-wait-bg, var(--ds-steps-item-bg, var(--ds-card-bg, var(--ds-surface-card))))";
   vars["--ds-stepper-item-color"] = "var(--ds-steps-item-color, var(--ds-color-text-secondary))";
   vars["--ds-stepper-item-border"] = "var(--ds-steps-wait-border, var(--ds-color-border))";
-  vars["--ds-stepper-item-font-weight"] = "var(--ds-font-weight-semibold)";
+  vars["--ds-stepper-item-font-weight"] = "var(--ds-type-section-title-font-weight, var(--ds-font-weight-semibold))";
   vars["--ds-stepper-numeric"] = "tabular-nums";
   vars["--ds-stepper-icon-border-width"] = "var(--ds-border-width-2)";
 
@@ -163,7 +163,7 @@ export function deriveStepperChannels(): Record<string, string> {
   vars["--ds-stepper-label-color-error"] = "var(--ds-color-error)";
   vars["--ds-stepper-label-color-hover"] = "var(--ds-color-primary)";
   vars["--ds-stepper-label-font-weight"] = "var(--ds-font-weight-medium)";
-  vars["--ds-stepper-label-font-weight-process"] = "var(--ds-font-weight-semibold)";
+  vars["--ds-stepper-label-font-weight-process"] = "var(--ds-type-section-title-font-weight, var(--ds-font-weight-semibold))";
   vars["--ds-stepper-label-line-height"] = "var(--ds-type-body-line-height)";
   vars["--ds-stepper-subtitle-color"] = "var(--ds-color-text-tertiary)";
   vars["--ds-stepper-description-color"] = "var(--ds-color-text-secondary)";
