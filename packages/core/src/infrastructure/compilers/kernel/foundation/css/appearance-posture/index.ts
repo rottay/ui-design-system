@@ -15,6 +15,7 @@ import {
   TENANT_THEME_TYPE_SCALE_BOUNDS,
 } from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
 import { MOTION_DIAL_BOUNDS } from "@/foundation/contracts/runtime/motion";
+import type { RampSurface } from "@/foundation/kernel/color/oklch/ramp";
 import { clamp } from "@/foundation/kernel/math";
 import { withArabicSafeFallback } from "@/foundation/kernel/typography";
 import {
@@ -109,8 +110,42 @@ const ELEVATION_PRESET: Readonly<
   },
 };
 
+const DARK_ELEVATION_PRESET: typeof ELEVATION_PRESET = {
+  flat: {
+    "--ds-elevation-0": "none",
+    "--ds-elevation-1": "none",
+    "--ds-elevation-2": "none",
+    "--ds-elevation-3":
+      "inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 1px 2px rgba(0, 0, 0, 0.40), 0 2px 6px rgba(0, 0, 0, 0.28)",
+    "--ds-elevation-4":
+      "inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 1px 3px rgba(0, 0, 0, 0.44), 0 3px 8px rgba(0, 0, 0, 0.32)",
+    "--ds-elevation-5":
+      "inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 2px 4px rgba(0, 0, 0, 0.48), 0 4px 10px rgba(0, 0, 0, 0.36)",
+    "--ds-elevation-6":
+      "inset 0 1px 0 rgba(255, 255, 255, 0.07), 0 2px 6px rgba(0, 0, 0, 0.52), 0 6px 14px rgba(0, 0, 0, 0.40)",
+  },
+  soft: {},
+  elevated: {
+    "--ds-elevation-0": "none",
+    "--ds-elevation-1":
+      "inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 2px 4px rgba(0, 0, 0, 0.44), 0 4px 8px rgba(0, 0, 0, 0.32)",
+    "--ds-elevation-2":
+      "inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 4px 8px rgba(0, 0, 0, 0.48), 0 8px 16px rgba(0, 0, 0, 0.36)",
+    "--ds-elevation-3":
+      "inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 8px 16px rgba(0, 0, 0, 0.52), 0 16px 32px rgba(0, 0, 0, 0.40)",
+    "--ds-elevation-4":
+      "inset 0 1px 0 rgba(255, 255, 255, 0.07), 0 16px 32px rgba(0, 0, 0, 0.56), 0 24px 48px rgba(0, 0, 0, 0.44)",
+    "--ds-elevation-5":
+      "inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 24px 48px rgba(0, 0, 0, 0.60), 0 36px 72px rgba(0, 0, 0, 0.48)",
+    "--ds-elevation-6":
+      "inset 0 1px 0 rgba(255, 255, 255, 0.09), 0 32px 64px rgba(0, 0, 0, 0.64), 0 48px 96px rgba(0, 0, 0, 0.52)",
+  },
+};
+
+/** Lowers postures against the caller's effective canvas; soft states no ladder. */
 export function appearancePostureToVariables(
-  posture: AppearancePostureFields
+  posture: AppearancePostureFields,
+  surface: RampSurface = "light"
 ): Record<string, string> {
   const vars: Record<string, string> = {};
 
@@ -196,7 +231,14 @@ export function appearancePostureToVariables(
   }
 
   if (posture.elevation) {
-    Object.assign(vars, ELEVATION_PRESET[posture.elevation]);
+    const presets = surface === "dark" ? DARK_ELEVATION_PRESET : ELEVATION_PRESET;
+    const ladder =
+      posture.elevation === "flat"
+        ? presets.flat
+        : posture.elevation === "elevated"
+          ? presets.elevated
+          : presets.soft;
+    Object.assign(vars, ladder);
   }
 
   return vars;

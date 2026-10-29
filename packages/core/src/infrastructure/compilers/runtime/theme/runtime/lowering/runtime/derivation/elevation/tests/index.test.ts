@@ -223,7 +223,7 @@ describe("elevation/ladder on a dark ground", () => {
 
   it("yields to a stated posture and to an authored level", () => {
     for (const posture of ["flat", "elevated"] as const) {
-      expect(onGround("#0A0A0C", { elevation: posture })).toEqual(
+      expect(onGround("#0A0A0C", { elevation: posture })).not.toEqual(
         ladderFor({ elevation: posture })
       );
     }
@@ -320,5 +320,39 @@ describe("surfaces.border-style (kit row 18)", () => {
     expect(channels["--ds-elevation-3"]).toBe(
       ladderFor({ elevation: "elevated" })["--ds-elevation-3"]
     );
+  });
+});
+
+const ELEVATION_POSTURES = ['flat', 'elevated'] as const;
+const ELEVATION_SURFACES = ['light', 'dark'] as const;
+
+describe('elevation posture ground and authored precedence', () => {
+  it.each(ELEVATION_POSTURES)('%s uses actual ground before declared surface', (elevation) => {
+    const lower = (backgroundColor: string | undefined, surface: 'light' | 'dark') => {
+      const bt: FlatTheme = { id: 'ground', name: 'Ground', surfaces: { elevation },
+        ...(backgroundColor ? { palette: { primaryColor: '#336699', backgroundColor } } : {}),
+      };
+      return deriveElevationLadder(bt, buildLoweringContext({ theme: bt }).expressive.expansion, surface);
+    };
+    expect(lower('#101014', 'light')).toEqual(lower(undefined, 'dark'));
+    expect(lower('#ffffff', 'dark')).toEqual(ladderFor({ elevation }));
+    expect(lower('#101014', 'light')).not.toEqual(ladderFor({ elevation }));
+  });
+  it.each(ELEVATION_SURFACES)('%s keeps every authored level over either posture', (surface) => {
+    const elevations = {
+      level0: '0 0 0 1px #010101', level1: '0 0 0 2px #020202',
+      level2: '0 0 0 3px #030303', level3: '0 0 0 4px #040404',
+      level4: '0 0 0 5px #050505', level5: '0 0 0 6px #060606',
+    };
+    ELEVATION_POSTURES.forEach((elevation) => {
+      const bt: FlatTheme = { id: 'authored', name: 'Authored', surfaces: { elevation, elevations } };
+      const expansion = buildLoweringContext({ theme: bt }).expressive.expansion;
+      const refined = new Map(Object.entries(deriveElevationLadder(bt, expansion, surface)));
+      Object.entries(elevations).forEach(([level, value]) => {
+        expect(refined.get(`--ds-elevation-${level.slice(-1)}`)).toBe(value);
+      });
+      const unrefined = new Map(Object.entries(deriveElevationLadder({ ...bt, surfaces: { elevation } }, expansion, surface)));
+      expect(refined.get('--ds-elevation-6')).toBe(unrefined.get('--ds-elevation-6'));
+    });
   });
 });

@@ -57,6 +57,13 @@
   inference of business tone and icons while preserving explicit consumer
   metadata.
 
+- Correct ACT-07/DSA-TC-003 flat and elevated shadows on dark ground with
+  top hairlines and ambient depth selected from the effective background.
+  Preserve literal light ladders, soft inheritance, none roles, authored levels
+  and static/serialized-DB parity without changing the public API or controls.
+  Source checks do not certify browser rendering, generated snapshots or package
+  acceptance.
+
 ## 2.19.34
 
 ### Patch Changes

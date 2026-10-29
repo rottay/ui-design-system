@@ -9,6 +9,11 @@
 
 import { withArabicSafeFallback } from "@/foundation/kernel/typography";
 import { appearancePostureToVariables } from "@/infrastructure/compilers/kernel/foundation/css/appearance-posture";
+import { isDarkSurface } from "@/infrastructure/compilers/kernel/foundation/css/color-math";
+import {
+  DARK_DEFAULT_GROUND,
+  LIGHT_DEFAULT_GROUND,
+} from "../../../foundation/ground";
 import type { FamilyDeriver } from "../../../foundation/contract";
 import {
   buttonRadiusChannels,
@@ -66,7 +71,13 @@ export const tenantDeriver: FamilyDeriver = {
     if (!tenant) return vars;
     const posture = tenant.posture;
     if (posture) {
-      Object.assign(vars, appearancePostureToVariables(posture));
+      const ground =
+        context.theme.palette?.backgroundColor ??
+        (context.surface === "dark" ? DARK_DEFAULT_GROUND : LIGHT_DEFAULT_GROUND);
+      Object.assign(
+        vars,
+        appearancePostureToVariables(posture, isDarkSurface(ground) ? "dark" : "light")
+      );
       // The silhouette is the tenant's statement, at the tenant's rank: it has
       // to outrank the vertical's authored button chrome, which is exactly what
       // the DB transport used to buy by expanding the word into a chrome leaf

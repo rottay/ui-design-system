@@ -72,12 +72,13 @@ export const LIGHT_GROUND_ELEVATION_LADDER: Readonly<Record<string, string>> =
 
 /** The ladder a bounded posture presets, and nothing else the table computes. */
 function posturePreset(
-  elevation: ElevationPosture | undefined
+  elevation: ElevationPosture | undefined,
+  surface: RampSurface
 ): Record<string, string> {
   if (!elevation) return {};
   const vars: Record<string, string> = {};
   for (const [channel, value] of Object.entries(
-    appearancePostureToVariables({ elevation })
+    appearancePostureToVariables({ elevation }, surface)
   )) {
     if (ELEVATION_CHANNELS.has(channel)) vars[channel] = value;
   }
@@ -102,10 +103,13 @@ export function deriveElevationLadder(
 ): Record<string, string> {
   const su = bt.surfaces;
   const posture = su?.elevation ?? expansion.fieldDefaults.elevation;
+  const ground =
+    bt.palette?.backgroundColor ??
+    (surface === "dark" ? DARK_DEFAULT_GROUND : LIGHT_DEFAULT_GROUND);
   const vars =
     posture === undefined || posture === "soft"
       ? { ...groundLadder(bt, surface, overlay || carriesDarkOverlay) }
-      : posturePreset(posture);
+      : posturePreset(posture, isDarkSurface(ground) ? "dark" : "light");
   const authored = su?.elevations;
   if (authored) {
     if (authored.level0) vars["--ds-elevation-0"] = authored.level0;
