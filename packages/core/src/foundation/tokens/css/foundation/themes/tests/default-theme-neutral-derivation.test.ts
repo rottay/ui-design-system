@@ -205,6 +205,21 @@ const DARK_PINS_HOLDING_THE_LIGHT_REWIRE: Record<string, string> = {
 };
 
 /**
+ * The dark primary role is ramp step 500, so it follows that step instead of
+ * restating its hex: the literal was a pin on a declared root head.
+ */
+const DARK_PRIMARY_ROLE = {
+  token: "--ds-color-primary",
+  step: "--ds-color-primary-500",
+  derivation: "var(--ds-color-primary-500)",
+  retiredLiteral: "#e5e5e5",
+  resolvesTo: "#e5e5e5",
+  rgb: "229, 229, 229",
+  foreground: "#171717",
+  light: "#171717",
+} as const;
+
+/**
  * Semantic neutrals that are DERIVED rather than literal, each with the exact
  * derivation it must carry and the literal it was rescued from.
  *
@@ -299,6 +314,33 @@ describe("default theme semantic neutral derivation (TOK-01)", () => {
       DARK_PINS_HOLDING_THE_LIGHT_REWIRE
     )) {
       expect(darkOwnScope.get(token), `dark ${token}`).toBe(literal);
+    }
+  });
+
+  it("derives the dark primary role from ramp step 500 without moving its value", () => {
+    const darkOwnScope = parseDeclarations(css.slice(darkStart));
+    const { token, step } = DARK_PRIMARY_ROLE;
+    expect(darkOwnScope.get(token), `dark ${token}`).toBe(DARK_PRIMARY_ROLE.derivation);
+    expect(
+      darkOwnScope.get(token),
+      `dark ${token} re-pinned ${DARK_PRIMARY_ROLE.retiredLiteral} on a declared root head`
+    ).not.toBe(DARK_PRIMARY_ROLE.retiredLiteral);
+    expect(darkOwnScope.get(step), `dark ${step}`).toBe(DARK_PRIMARY_ROLE.resolvesTo);
+    expect(resolveVarGraph(token, darkScope), `dark ${token} chain`).toBe(
+      DARK_PRIMARY_ROLE.resolvesTo
+    );
+    expect(resolveVarGraph(token, darkScope)).toBe(resolveVarGraph(step, darkScope));
+    expect(darkOwnScope.get(`${token}-rgb`)).toBe(DARK_PRIMARY_ROLE.rgb);
+    expect(darkOwnScope.get(`${token}-foreground`)).toBe(DARK_PRIMARY_ROLE.foreground);
+    expect(rootScope.get(token), `root ${token}`).toBe(DARK_PRIMARY_ROLE.light);
+  });
+
+  it("tells a dark primary that drifts off step 500 apart from the role", () => {
+    for (const drift of ["var(--ds-color-primary-400)", "#e5e5e6"]) {
+      const drifted = new Map(darkScope).set(DARK_PRIMARY_ROLE.token, drift);
+      expect(resolveVarGraph(DARK_PRIMARY_ROLE.token, drifted), drift).not.toBe(
+        DARK_PRIMARY_ROLE.resolvesTo
+      );
     }
   });
 

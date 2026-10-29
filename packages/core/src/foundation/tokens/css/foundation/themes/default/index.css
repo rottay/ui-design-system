@@ -2100,7 +2100,7 @@ html.dark {
   --ds-color-primary-700: #fafafa;
   --ds-color-primary-800: #ffffff;
   --ds-color-primary-900: #ffffff;
-  --ds-color-primary: #e5e5e5;
+  --ds-color-primary: var(--ds-color-primary-500);
   --ds-color-primary-rgb: 229, 229, 229;
   --ds-color-primary-foreground: #171717;
 
