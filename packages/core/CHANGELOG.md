@@ -4,6 +4,12 @@
 
 ### Patch Changes
 
+- Correct Modern Avatar light-secondary solid fills to 64% tenant seed / 36%
+  neutral-900 so Rottay/Evnto white initials reach at least 4.5:1 contrast.
+  This resolves the light-secondary residual recorded below; preserve accepted
+  dark recipes and caller overrides without changing the public API.
+  Source and focal checks cover first-party palettes; integrated browser and
+  public-package proof remain pending.
 - Route Modern Tabs line hover/active and Breadcrumb hover/current backgrounds
   through their existing material state channels and tenant emphasis, retaining
   authored family overrides and the original absent-material fallbacks.

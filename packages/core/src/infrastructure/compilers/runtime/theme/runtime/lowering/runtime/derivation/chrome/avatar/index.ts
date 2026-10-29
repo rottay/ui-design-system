@@ -37,7 +37,7 @@ export const avatarChromeDeriver: FamilyDeriver = {
   derive: (context) => deriveAvatarChannels(context.mode),
 };
 
-/** Derive the block's solid fills without changing light-mode chrome. */
+/** Derive mode-safe solids; light secondary deepens its seed for white initials. */
 export function deriveAvatarChannels(mode: LoweringContext["mode"] = "light"): Record<string, string> {
   const vars: Record<string, string> = {};
 
@@ -47,7 +47,7 @@ export function deriveAvatarChannels(mode: LoweringContext["mode"] = "light"): R
   vars["--ds-avatar-secondary-solid-bg"] =
     mode === "dark"
       ? "color-mix(in srgb, var(--ds-color-secondary) 45%, var(--ds-color-neutral-ink, var(--ds-color-black)) 55%)"
-      : "color-mix(in srgb, var(--ds-color-secondary) 82%, var(--ds-color-neutral-900) 18%)";
+      : "color-mix(in srgb, var(--ds-color-secondary) 64%, var(--ds-color-neutral-900) 36%)";
   vars["--ds-avatar-success-solid-bg"] =
     mode === "dark"
       ? "color-mix(in srgb, var(--ds-color-success) 45%, var(--ds-color-neutral-ink, var(--ds-color-black)) 55%)"

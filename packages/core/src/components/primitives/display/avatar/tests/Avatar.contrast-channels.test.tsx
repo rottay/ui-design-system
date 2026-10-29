@@ -82,10 +82,10 @@ const SOURCES: Record<string, Record<string, string>> = {
   },
 };
 
-/** Solid-fill darkening percentages owned by the skin (must match tag.css). */
+/** Skin mix weights: secondary uses 64% seed / 36% neutral-900. */
 const SOLID_MIX: Record<string, number> = {
   primary: 0,
-  secondary: 18,
+  secondary: 36,
   success: 38,
   warning: 45,
   error: 22,

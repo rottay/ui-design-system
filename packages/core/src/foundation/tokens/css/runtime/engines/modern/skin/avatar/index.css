@@ -150,7 +150,7 @@
    ink (the canonical `--ds-avatar-default-*` pair), never a dark ink token on
    a light surface token.
 
-   Light solid fills keep their existing mixes. Dark solids use the stable
+   Light secondary deepens its palette seed for white initials. Dark solids use the stable
    neutral ink anchor instead of the inverted neutral-900 ramp; their seed
    weight is bounded so white initials remain legible even on a white seed. */
 .rottay-avatar.rottay-avatar--modern > [data-part='mask'] > [data-part='fallback'] {
@@ -165,7 +165,7 @@
   --ds-avatar-ink-resting: var(--ds-avatar-primary-ink, var(--ds-color-primary-foreground, var(--ds-color-text-inverse)));
 }
 .rottay-avatar.rottay-avatar--modern[data-variant='secondary'] > [data-part='mask'] > [data-part='fallback'] {
-  background: var(--ds-avatar-custom-bg, var(--ds-avatar-secondary-solid-bg, color-mix(in srgb, var(--ds-color-secondary) 82%, var(--ds-color-neutral-900) 18%)));
+  background: var(--ds-avatar-custom-bg, var(--ds-avatar-secondary-solid-bg, color-mix(in srgb, var(--ds-color-secondary) 64%, var(--ds-color-neutral-900) 36%)));
   --ds-avatar-ink-resting: var(--ds-avatar-secondary-ink, var(--ds-color-white));
 }
 .rottay-avatar.rottay-avatar--modern[data-variant='success'] > [data-part='mask'] > [data-part='fallback'] {

@@ -225,14 +225,19 @@ describe("chrome/avatar mode contrast", () => {
     }
   });
 
-  it("keeps every light-mode derived channel and resolved ratio at its existing value", () => {
+  it("changes only the light secondary recipe and never reduces a passing tone's contrast", () => {
     const light = new Map(Object.entries(avatarChromeDeriver.derive(context("light"), {})));
-    for (const [channel, value] of LIGHT_FILLS) expect(light.get(channel)).toBe(value);
-    for (const { compilation } of COMPILED) {
+    for (const [channel, value] of LIGHT_FILLS) {
+      if (channel !== "--ds-avatar-secondary-solid-bg") expect(light.get(channel)).toBe(value);
+    }
+    for (const { vertical, compilation } of COMPILED) {
       const before = resolvedScope(compilation, "light");
       for (const entry of LIGHT_FILLS) before.set(...entry);
       const after = resolvedScope(compilation, "light");
-      for (const tone of SOLID_TONES) expect(solidRatio(after, tone)).toBe(solidRatio(before, tone));
+      for (const tone of SOLID_TONES) {
+        expect(solidRatio(after, tone), `${vertical}/${tone}`).toBeGreaterThanOrEqual(solidRatio(before, tone));
+        if (tone !== "secondary") expect(solidRatio(after, tone)).toBe(solidRatio(before, tone));
+      }
     }
   });
 
@@ -308,5 +313,75 @@ describe("chrome/avatar mode contrast", () => {
       expect(matching).toEqual([`var(--ds-avatar-custom-bg, var(--ds-avatar-${tone}-solid-bg, ${dark.get(`--ds-avatar-${tone}-solid-bg`)}))`]);
     }
     expect(SKIN).toContain("color: var(--ds-avatar-ink, var(--ds-avatar-ink-resting, inherit));");
+  });
+});
+
+
+const NAMED_SOLIDS = ["primary", ...SOLID_TONES] as const;
+
+describe("chrome/avatar light secondary contrast", () => {
+  it("reproduces only the two current light failures against actual initials ink", () => {
+    for (const { vertical, compilation } of COMPILED) {
+      const scope = resolvedScope(compilation, "light");
+      for (const entry of LIGHT_FILLS) scope.set(...entry);
+      for (const tone of NAMED_SOLIDS) {
+        const ratio = solidRatio(scope, tone);
+        if (vertical !== "bithire" && tone === "secondary") {
+          expect(resolvedColor(scope, "--ds-avatar-secondary-ink")).toEqual({ r: 255, g: 255, b: 255 });
+          expect(ratio).toBeCloseTo(3.1947975038587746, 12);
+          expect(ratio).toBeLessThan(4.5);
+        } else expect(ratio, `${vertical}/${tone} passing control`).toBeGreaterThanOrEqual(4.5);
+      }
+    }
+  });
+
+  it("clears 4.5:1 for all named solids in all first-party light and dark palettes", () => {
+    for (const { vertical, compilation } of COMPILED) {
+      for (const mode of MODES) {
+        const scope = resolvedScope(compilation, mode);
+        for (const tone of NAMED_SOLIDS) {
+          expect(solidRatio(scope, tone), `${vertical}/${mode}/${tone}`).toBeGreaterThanOrEqual(4.5);
+        }
+      }
+    }
+  });
+
+  it("keeps accepted dark recipes and light primary, inks and non-secondary channels exact", () => {
+    const light = new Map(Object.entries(avatarChromeDeriver.derive(context("light"), {})));
+    const dark = new Map(Object.entries(avatarChromeDeriver.derive(context("dark"), {})));
+    for (const tone of SOLID_TONES) {
+      expect(dark.get(`--ds-avatar-${tone}-solid-bg`)).toBe(
+        `color-mix(in srgb, var(--ds-color-${tone}) 45%, var(--ds-color-neutral-ink, var(--ds-color-black)) 55%)`
+      );
+      expect(light.get(`--ds-avatar-${tone}-ink`)).toBe("var(--ds-color-white)");
+      expect(dark.get(`--ds-avatar-${tone}-ink`)).toBe(light.get(`--ds-avatar-${tone}-ink`));
+    }
+    for (const [name, value] of light) {
+      if (!LIGHT_FILLS.has(name)) expect(dark.get(name)).toBe(value);
+    }
+    expect(light.get("--ds-avatar-primary-solid-bg")).toBe("var(--ds-color-primary)");
+    expect(light.get("--ds-avatar-primary-ink")).toBe("var(--ds-color-primary-foreground, var(--ds-color-text-inverse))");
+  });
+
+  it("matches the uncompiled light fallback and keeps secondary responsive to each palette seed", () => {
+    const light = new Map(Object.entries(avatarChromeDeriver.derive(context("light"), {})));
+    const recipe = light.get("--ds-avatar-secondary-solid-bg");
+    const matching: string[] = [];
+    postcss.parse(SKIN).walkRules((rule) => {
+      if (rule.selector.startsWith(".rottay-avatar.rottay-avatar--modern[data-variant='secondary']")) {
+        rule.walkDecls("background", (declaration) => { matching.push(declaration.value); });
+      }
+    });
+    expect(matching).toEqual([`var(--ds-avatar-custom-bg, var(--ds-avatar-secondary-solid-bg, ${recipe}))`]);
+    const fills = new Map<string, Rgb255>();
+    for (const { vertical, compilation } of COMPILED) {
+      const scope = resolvedScope(compilation, "light");
+      fills.set(vertical, resolvedColor(scope, "--ds-avatar-secondary-solid-bg"));
+      const changed = new Map(scope);
+      changed.set("--ds-color-secondary", "#abcdef");
+      expect(resolvedColor(changed, "--ds-avatar-secondary-solid-bg")).not.toEqual(fills.get(vertical));
+    }
+    expect(fills.get("rottay")).not.toEqual(fills.get("bithire"));
+    expect(fills.get("evnto")).toEqual(fills.get("rottay"));
   });
 });
