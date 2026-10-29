@@ -59,7 +59,7 @@
   --ds-list-header-padding-vertical: 12px;
   --ds-list-header-padding-horizontal: 16px;
   --ds-list-header-font-size: 14px;
-  --ds-list-header-font-weight: var(--ds-font-weight-semibold, 600);
+  --ds-list-header-font-weight: var(--ds-type-section-title-font-weight, var(--ds-font-weight-semibold, 600));
   --ds-list-header-background-color: var(--ds-color-neutral-50, #f9fafb);
 
   --ds-list-footer-padding-vertical: 12px;

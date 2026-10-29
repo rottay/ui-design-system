@@ -93,7 +93,7 @@
   --ds-alert-title-color: var(--ds-color-text-primary);
   --ds-alert-title-font-family: var(--ds-type-label-font-family);
   --ds-alert-title-font-size: var(--ds-type-label-font-size);
-  --ds-alert-title-font-weight: var(--ds-font-weight-semibold);
+  --ds-alert-title-font-weight: var(--ds-type-section-title-font-weight);
   --ds-alert-title-letter-spacing: var(--ds-letter-spacing-heading);
   --ds-alert-title-line-height: var(--ds-type-label-line-height);
   --ds-alert-title-urgent-font-weight: var(--ds-font-weight-bold);
@@ -213,7 +213,7 @@
   --ds-avatar-primary-ink: var(--ds-color-primary-foreground, var(--ds-color-text-inverse));
   --ds-avatar-primary-solid-bg: var(--ds-color-primary);
   --ds-avatar-secondary-ink: var(--ds-color-white);
-  --ds-avatar-secondary-solid-bg: color-mix(in srgb, var(--ds-color-secondary) 82%, var(--ds-color-neutral-900) 18%);
+  --ds-avatar-secondary-solid-bg: color-mix(in srgb, var(--ds-color-secondary) 64%, var(--ds-color-neutral-900) 36%);
   --ds-avatar-success-ink: var(--ds-color-white);
   --ds-avatar-success-solid-bg: color-mix(in srgb, var(--ds-color-success) 62%, var(--ds-color-neutral-900) 38%);
   --ds-avatar-warning-ink: var(--ds-color-white);
@@ -319,7 +319,7 @@
   --ds-breadcrumb-border: var(--ds-color-border-subtle);
   --ds-breadcrumb-color: var(--ds-color-text-secondary);
   --ds-breadcrumb-color-hover: var(--ds-color-text-primary);
-  --ds-breadcrumb-current-bg: color-mix(in srgb, var(--ds-color-primary) 8%, var(--ds-card-bg, var(--ds-surface-card)));
+  --ds-breadcrumb-current-bg: var(--ds-material-card-background-selected, color-mix(in srgb, var(--ds-color-primary) 8%, var(--ds-card-bg, var(--ds-surface-card))));
   --ds-breadcrumb-current-border: color-mix(in srgb, var(--ds-color-primary) 22%, var(--ds-color-border-subtle));
   --ds-breadcrumb-current-font-weight: var(--ds-font-weight-semibold);
   --ds-breadcrumb-current-keyline: inset 0 1px 0 color-mix(in srgb, var(--ds-color-white) calc(58% * var(--ds-effect-intensity)), transparent);
@@ -332,7 +332,7 @@
   --ds-breadcrumb-font-family: var(--ds-type-supporting-font-family);
   --ds-breadcrumb-font-size: var(--ds-type-supporting-font-size);
   --ds-breadcrumb-font-weight: var(--ds-font-weight-medium);
-  --ds-breadcrumb-hover-bg: color-mix(in srgb, var(--ds-color-primary) 6%, var(--ds-card-bg, var(--ds-surface-card)));
+  --ds-breadcrumb-hover-bg: var(--ds-material-card-background-hover, color-mix(in srgb, var(--ds-color-primary) 6%, var(--ds-card-bg, var(--ds-surface-card))));
   --ds-breadcrumb-hover-border: color-mix(in srgb, var(--ds-color-primary) 18%, var(--ds-color-border-subtle));
   --ds-breadcrumb-hover-lift: calc(-1px * var(--ds-motion-intensity));
   --ds-breadcrumb-hover-shadow: var(--ds-elevation-1);
@@ -465,7 +465,7 @@
   --ds-cascader-error-border: var(--ds-color-error);
   --ds-cascader-font-family: var(--ds-input-font-family, var(--ds-type-body-font-family));
   --ds-cascader-ink: var(--ds-color-text-primary);
-  --ds-cascader-option-bg-hover: var(--ds-color-bg-hover, var(--ds-material-control-background-hover));
+  --ds-cascader-option-bg-hover: var(--ds-material-control-background-hover, var(--ds-color-bg-hover));
   --ds-cascader-option-bg-selected: color-mix(in srgb, var(--ds-color-primary) 10%, transparent);
   --ds-cascader-option-border-selected: color-mix(in srgb, var(--ds-color-primary) 24%, transparent);
   --ds-cascader-option-ink: var(--ds-color-text-primary);
@@ -1047,7 +1047,7 @@
   --ds-date-picker-border: var(--ds-input-border, var(--ds-material-control-border));
   --ds-date-picker-border-focus: var(--ds-color-primary);
   --ds-date-picker-border-hover: var(--ds-material-control-border-hover);
-  --ds-date-picker-cell-bg-hover: var(--ds-color-bg-hover, var(--ds-material-control-background-hover));
+  --ds-date-picker-cell-bg-hover: var(--ds-material-control-background-hover, var(--ds-color-bg-hover));
   --ds-date-picker-cell-bg-selected: var(--ds-color-primary);
   --ds-date-picker-cell-ink: var(--ds-color-text-primary);
   --ds-date-picker-cell-ink-selected: var(--ds-color-text-on-primary);
@@ -1058,7 +1058,7 @@
   --ds-date-picker-filled-bg: var(--ds-input-filled-bg, var(--ds-material-inset-background));
   --ds-date-picker-font-family: var(--ds-input-font-family, var(--ds-type-body-font-family));
   --ds-date-picker-icon-color: var(--ds-type-color-muted);
-  --ds-date-picker-nav-bg-hover: var(--ds-color-bg-hover, var(--ds-material-control-background-hover));
+  --ds-date-picker-nav-bg-hover: var(--ds-material-control-background-hover, var(--ds-color-bg-hover));
   --ds-date-picker-nav-ink: var(--ds-color-text-primary);
   --ds-date-picker-panel-bg: var(--ds-color-bg-elevated, var(--ds-material-overlay-background));
   --ds-date-picker-panel-shadow: var(--ds-shadow-popover, var(--ds-elevation-3));
@@ -1115,7 +1115,7 @@
   --ds-descriptions-shadow: var(--ds-elevation-1);
   --ds-descriptions-title-font-family: var(--ds-font-family-heading);
   --ds-descriptions-title-font-size: var(--ds-font-size-lg);
-  --ds-descriptions-title-font-weight: var(--ds-font-weight-semibold);
+  --ds-descriptions-title-font-weight: var(--ds-type-section-title-font-weight, var(--ds-font-weight-semibold));
   --ds-descriptions-title-letter-spacing: -0.02em;
   --ds-descriptions-title-line-height: 1.25;
   --ds-detail-form-surface-error-banner-padding: calc(var(--ds-spacing-3, 12px) * var(--ds-rhythm-effective-scale, 1));
@@ -1354,7 +1354,7 @@
   --ds-form-surface-error-banner-padding: calc(var(--ds-spacing-3, 12px) * var(--ds-rhythm-effective-scale, 1));
   --ds-grid-gap: var(--ds-spacing-4, 1rem);
   --ds-grid-reflow-transition: var(--ds-transition-rearrange);
-  --ds-guided-draft-form-heading-font-weight: var(--ds-font-weight-semibold, 600);
+  --ds-guided-draft-form-heading-font-weight: var(--ds-type-section-title-font-weight, var(--ds-font-weight-semibold, 600));
   --ds-header-back-focus-ring: var(--ds-focus-ring, 0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 24%, transparent));
   --ds-header-tone-error-bd: color-mix(in srgb, var(--ds-color-error) 18%, var(--ds-color-border-secondary) 82%);
   --ds-header-tone-error-bg: color-mix(in srgb, var(--ds-color-error) 10%, var(--ds-color-bg-secondary) 90%);
@@ -1834,7 +1834,7 @@
   --ds-notifier-success-well-edge: color-mix(in srgb, var(--ds-color-success) 26%, var(--ds-color-border-subtle));
   --ds-notifier-title-font-family: var(--ds-type-label-font-family);
   --ds-notifier-title-font-size: var(--ds-type-label-font-size);
-  --ds-notifier-title-font-weight: var(--ds-font-weight-semibold);
+  --ds-notifier-title-font-weight: var(--ds-type-label-font-weight);
   --ds-notifier-title-letter-spacing: var(--ds-letter-spacing-heading);
   --ds-notifier-title-line-height: var(--ds-type-label-line-height);
   --ds-notifier-title-urgent-font-weight: var(--ds-font-weight-bold);
@@ -2311,7 +2311,7 @@
   --ds-shortcuts-overlay-search-padding-inline: var(--ds-spacing-5, 20px);
   --ds-shortcuts-overlay-title-color: var(--ds-color-text-primary);
   --ds-shortcuts-overlay-title-font-size: var(--ds-font-size-base, 16px);
-  --ds-shortcuts-overlay-title-font-weight: var(--ds-font-weight-semibold, 600);
+  --ds-shortcuts-overlay-title-font-weight: var(--ds-type-section-title-font-weight, var(--ds-font-weight-semibold, 600));
   --ds-sidebar-bg: var(--ds-color-neutral-900);
   --ds-sidebar-item-bg-active: var(--ds-color-neutral-700);
   --ds-sidebar-item-bg-hover: var(--ds-color-neutral-800);
@@ -2447,7 +2447,7 @@
   --ds-stepper-item-font-size-lg: var(--ds-type-body-font-size);
   --ds-stepper-item-font-size-md: var(--ds-type-supporting-font-size);
   --ds-stepper-item-font-size-sm: var(--ds-type-caption-font-size);
-  --ds-stepper-item-font-weight: var(--ds-font-weight-semibold);
+  --ds-stepper-item-font-weight: var(--ds-type-section-title-font-weight, var(--ds-font-weight-semibold));
   --ds-stepper-item-gap: var(--ds-spacing-3);
   --ds-stepper-item-radius: var(--ds-radius-md);
   --ds-stepper-item-size-lg: var(--ds-spacing-10);
@@ -2462,7 +2462,7 @@
   --ds-stepper-label-font-size-md: var(--ds-type-body-font-size);
   --ds-stepper-label-font-size-sm: var(--ds-type-supporting-font-size);
   --ds-stepper-label-font-weight: var(--ds-font-weight-medium);
-  --ds-stepper-label-font-weight-process: var(--ds-font-weight-semibold);
+  --ds-stepper-label-font-weight-process: var(--ds-type-section-title-font-weight, var(--ds-font-weight-semibold));
   --ds-stepper-label-line-height: var(--ds-type-body-line-height);
   --ds-stepper-motion-duration: var(--ds-motion-feedback);
   --ds-stepper-motion-easing: var(--ds-motion-ease-standard);
@@ -2491,13 +2491,13 @@
   --ds-table-header-bg: var(--ds-color-bg-secondary);
   --ds-table-header-letter-spacing: 0.05em;
   --ds-table-header-text-transform: uppercase;
-  --ds-table-pagination-current-font-weight: var(--ds-font-weight-semibold);
+  --ds-table-pagination-current-font-weight: var(--ds-type-label-font-weight, var(--ds-font-weight-semibold));
   --ds-table-pagination-font-size: var(--ds-type-supporting-font-size);
   --ds-table-pagination-margin-block-start: var(--ds-spacing-4);
   --ds-table-pagination-numeric: tabular-nums;
   --ds-table-selection-control-coarse-size: calc(var(--ds-spacing-5) * var(--ds-control-height-scale, 1));
   --ds-table-sticky-top: var(--ds-spacing-0, 0);
-  --ds-table-title-font-weight: var(--ds-font-weight-semibold);
+  --ds-table-title-font-weight: var(--ds-type-section-title-font-weight, var(--ds-font-weight-semibold));
   --ds-table-title-margin-block-end: var(--ds-spacing-2);
   --ds-table-touch-target-min: var(--ds-touch-target-min);
   --ds-table-virtual-spacer: var(--ds-spacing-0, 0);
@@ -2557,8 +2557,8 @@
   --ds-tabs-lg-height: calc(2.5rem * var(--ds-density-effective-scale, 1) * var(--ds-control-height-scale, 1));
   --ds-tabs-lg-icon-size: var(--ds-icon-md-size);
   --ds-tabs-lg-padding: 0 var(--ds-spacing-4, 16px);
-  --ds-tabs-line-active-bg: linear-gradient(180deg, color-mix(in srgb, var(--ds-color-primary) 8%, transparent), color-mix(in srgb, var(--ds-color-primary) 3%, transparent));
-  --ds-tabs-line-hover-bg: color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent);
+  --ds-tabs-line-active-bg: var(--ds-material-control-background-active, linear-gradient(180deg, color-mix(in srgb, var(--ds-color-primary) 8%, transparent), color-mix(in srgb, var(--ds-color-primary) 3%, transparent)));
+  --ds-tabs-line-hover-bg: var(--ds-material-control-background-hover, color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent));
   --ds-tabs-line-item-radius: var(--ds-radius-md);
   --ds-tabs-list-bg: linear-gradient(145deg, color-mix(in srgb, var(--ds-surface-inset) 90%, var(--ds-color-primary) 10%), var(--ds-surface-inset));
   --ds-tabs-list-blur: 0px;
@@ -2866,7 +2866,7 @@
   --ds-toolbar-sheen-opacity: 0;
   --ds-toolbar-title-font-family: var(--ds-type-section-title-font-family, var(--ds-font-family-heading));
   --ds-toolbar-title-font-size: var(--ds-font-size-md);
-  --ds-toolbar-title-font-weight: var(--ds-font-weight-semibold, 600);
+  --ds-toolbar-title-font-weight: var(--ds-type-section-title-font-weight, var(--ds-font-weight-semibold, 600));
   --ds-toolbar-title-gap: var(--ds-spacing-2, 0.5rem);
   --ds-toolbar-title-icon-size: 2rem;
   --ds-toolbar-title-letter-spacing: var(--ds-type-section-title-letter-spacing, -0.015em);
@@ -3403,7 +3403,7 @@
   --ds-input-warning-icon-color: var(--ds-color-warning-500);
   --ds-list-actions-color: var(--ds-color-primary, #1890ff);
   --ds-list-actions-hover-color: var(--ds-color-primary-600, #0066cc);
-  --ds-list-header-font-weight: var(--ds-font-weight-semibold, 600);
+  --ds-list-header-font-weight: var(--ds-type-section-title-font-weight, var(--ds-font-weight-semibold, 600));
   --ds-list-loading-spinner-color: var(--ds-color-primary, #1890ff);
   --ds-list-meta-title-font-weight: var(--ds-font-weight-medium, 500);
   --ds-list-transition-duration: var(--ds-motion-reveal);
@@ -4462,6 +4462,10 @@
 :is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire']))[data-theme='dark'], :is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])).dark {
   color-scheme: dark;
   --ds-app-shell-navigation-footer-color: var(--ds-sidebar-text, var(--ds-color-text-primary));
+  --ds-avatar-error-solid-bg: color-mix(in srgb, var(--ds-color-error) 45%, var(--ds-color-neutral-ink, var(--ds-color-black)) 55%);
+  --ds-avatar-secondary-solid-bg: color-mix(in srgb, var(--ds-color-secondary) 45%, var(--ds-color-neutral-ink, var(--ds-color-black)) 55%);
+  --ds-avatar-success-solid-bg: color-mix(in srgb, var(--ds-color-success) 45%, var(--ds-color-neutral-ink, var(--ds-color-black)) 55%);
+  --ds-avatar-warning-solid-bg: color-mix(in srgb, var(--ds-color-warning) 45%, var(--ds-color-neutral-ink, var(--ds-color-black)) 55%);
   --ds-badge-selected-ink: #597ced;
   --ds-chart-series-1: #6993FA;
   --ds-chart-series-10: #007AC2;

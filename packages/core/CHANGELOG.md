@@ -4,6 +4,20 @@
 
 ### Patch Changes
 
+- Follow the section-title role weight for the List header, keeping its
+  semibold fallback, in the authored List tokens, the root-alias table and the
+  Rottay, BitHire and Evnto served artifacts. List meta stays on the medium
+  weight, and no vertical's outright alias exclusions drop the header, so scoped
+  tenant emission restates it. The served artifacts, root-alias table, cascade
+  edges/producers/fanout inventories and hooks manifest are regenerated against
+  current source. That lands the Alert, Notifier, Toolbar, Descriptions,
+  Stepper, GuidedDraftForm, ShortcutsOverlay and Table weights, the Tabs,
+  Breadcrumb, Cascader and DatePicker material grounds and the Avatar solid
+  fills recorded below in the served CSS, with no new behaviour beyond those
+  entries. No public API or dependency change. The theme-graph, resolved
+  values, slot/membership/purity inventories, base-environment tokens and
+  generated CSS mirrors still need a built-dist window; browser/computed-style
+  and public-package acceptance remain pending.
 - Follow the section-title role weight for Modern ShortcutsOverlay titles and
   the label role weight for the Table pagination current page, each keeping its
   semibold fallback; ShortcutsOverlay category weight, its Modal chamber and the

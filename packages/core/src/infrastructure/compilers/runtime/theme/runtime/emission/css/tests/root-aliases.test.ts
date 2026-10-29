@@ -5,6 +5,11 @@ import { gzipSync } from "node:zlib";
 
 import { describe, expect, it } from "vitest";
 
+import type { FlatTheme } from "@/foundation/contracts/composition/tenants/themes";
+import { buildLoweringContext, runDerivation } from "../../../lowering/runtime/pipeline";
+import { typographyDeriver } from "../../../lowering/runtime/derivation/typography";
+import { listChromeDeriver } from "../../../lowering/runtime/derivation/chrome/list";
+
 import type { FirstPartyVerticalId } from "@/foundation/contracts/kernel/verticals";
 
 import { compileTheme } from "../../../lowering";
@@ -19,12 +24,14 @@ import {
   emitOverlayDeclarations,
   emitThemeCss,
   firstPartyScope,
+  withRootAliases,
 } from "..";
 import {
   CONTAINER_ALIAS_CONTEXTS,
   CONTAINER_ALIASES,
   CONTAINER_MODE_TEXTS,
   containerReach,
+  containerAliasRedeclarations,
   ROOT_ALIASES,
   rootAliasRedeclarations,
   rootModeTexts,
@@ -546,5 +553,89 @@ describe("the cascade winner among a left-out alias's root texts", () => {
     });
     expect(winner("--ds-shadow-focus-ring")?.site).toBe("foundation/themes/default/index.css:841");
     expect(CONTAINER_ALIASES.length).toBe(deriveRootAliases().excluded.contextVarying.length + deriveRootAliases().excluded.divergentRootText.length);
+  });
+});
+
+
+describe("List header scoped role-weight emission", () => {
+  const header = "--ds-list-header-font-weight";
+  const meta = "--ds-list-meta-title-font-weight";
+  const chain = "var(--ds-type-section-title-font-weight, var(--ds-font-weight-semibold, 600))";
+  const postures = [
+    { roleWeights: "light", expected: "500" },
+    { roleWeights: "regular", expected: "600" },
+    { roleWeights: "strong", expected: "700" },
+  ] as const;
+  const authoredWeights = [300, 800];
+
+  function weight(value: string | undefined, channels: Record<string, string>, depth = 0): string {
+    if (value === undefined || depth > 8) throw new Error("Missing or cyclic weight reference");
+    const reference = /^var\((--ds-[a-z0-9-]+)(?:,\s*(.*))?\)$/u.exec(value);
+    if (reference === null) return value;
+    const [, channel, fallback] = reference;
+    if (channel === undefined) throw new Error("Missing weight channel");
+    return weight(Reflect.get(channels, channel) ?? fallback, channels, depth + 1);
+  }
+
+  function channels(typography?: FlatTheme["typography"]): Record<string, string> {
+    return runDerivation(
+      buildLoweringContext({ theme: { id: "list-emission", name: "List emission", typography } }),
+      [typographyDeriver, listChromeDeriver]
+    ).channels;
+  }
+
+  function container(own: Record<string, string>): Record<string, string> {
+    const { declarations } = containerAliasRedeclarations(Object.keys(own), new Set(Object.keys(own)));
+    return { ...own, ...declarations };
+  }
+
+  function assertWeights(emitted: Record<string, string>, expected: string): void {
+    expect(weight(Reflect.get(emitted, header), emitted)).toBe(expected);
+    expect(Reflect.get(emitted, header)).toBe(chain);
+    expect(weight(Reflect.get(emitted, meta), emitted)).toBe("500");
+    expect(Reflect.get(emitted, meta)).toBe("var(--ds-font-weight-medium, 500)");
+  }
+
+  function assertControls(emit: (own: Record<string, string>) => Record<string, string>): void {
+    postures.forEach(({ roleWeights, expected }) => {
+      const own = channels({ roleWeights });
+      expect(Reflect.get(own, "--ds-type-section-title-font-weight")).toBe(expected);
+      assertWeights(emit(own), expected);
+      authoredWeights.forEach((fontWeight) => {
+        assertWeights(emit(channels({
+          roleWeights,
+          roles: { sectionTitle: { fontWeight }, label: { fontWeight: 900 } },
+        })), String(fontWeight));
+      });
+    });
+    assertWeights(emit(channels()), "600");
+    assertWeights(emit({ "--ds-font-weight-semibold": "550", "--ds-font-weight-medium": "500" }), "550");
+    expect(weight(chain, {})).toBe("600");
+  }
+
+  it("root/light resolves the emitted header to 500 and keeps meta at 500", () => {
+    assertWeights(withRootAliases(channels({ roleWeights: "light" })), "500");
+    assertControls(withRootAliases);
+  });
+
+  it("container/strong resolves the emitted header to 700 and keeps meta at 500", () => {
+    assertWeights(container(channels({ roleWeights: "strong" })), "700");
+    assertControls(container);
+  });
+
+  function tenant(verticalKey: FirstPartyVerticalId): (own: Record<string, string>) => Record<string, string> {
+    return (own) => {
+      const css = emitTenantArtifactCss({ verticalKey, slug: "t", compilerVersion: "v", digest: "d", variables: own });
+      const base = /\{([^{}]*)\}/u.exec(css)?.at(1) ?? "";
+      return Object.fromEntries(
+        [...base.matchAll(/^\s*(--[\w-]+):\s*(.*);$/gmu)].map((match) => [match.at(1), match.at(2)])
+      );
+    };
+  }
+
+  it.each(slugs)("%s tenant artifact restates the header through its vertical's outright exclusions", (slug) => {
+    expect(Reflect.get(VERTICAL_OUTRIGHT, slug)).not.toContain(header);
+    assertWeights(tenant(slug)(channels({ roleWeights: "light" })), "500");
+    assertControls(tenant(slug));
   });
 });
