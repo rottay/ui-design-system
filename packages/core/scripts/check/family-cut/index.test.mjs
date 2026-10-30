@@ -6,15 +6,16 @@
  * `resolveFamily` takes a root, so each drill mirrors the calibration family
  * into a tmpdir sandbox, edits the copy, and measures that.
  *
- * The producer set stays the REAL one throughout. A sandbox holds three skin
- * files and no authored token CSS, so a sandbox-local producer set would call
- * every channel debt and every drill would pass for the wrong reason.
+ * The producer set stays the REAL one throughout, and the sandbox also mirrors
+ * every authored stylesheet: a read is credited only by a declaration that
+ * reaches it, so a sandbox without the authored token CSS would call every
+ * channel debt and every drill would pass for the wrong reason.
  */
 
 import assert from 'node:assert/strict';
-import { cpSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, symlinkSync, writeFileSync } from 'node:fs';
+import { cpSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, realpathSync, rmSync, symlinkSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { dirname, join, posix, sep } from 'node:path';
+import { dirname, join, posix, relative, sep } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import test from 'node:test';
 
@@ -22,7 +23,7 @@ import ts from 'typescript';
 
 import { collectSkinFiles } from '../../libraries/engine/skins/files/index.mjs';
 import { packageRoot as findPackageRoot } from '../../libraries/repo-root/index.mjs';
-import { collectChannelProducers } from '../../libraries/tokens/producers/index.mjs';
+import { collectAuthoredStylesheets, collectChannelProducers } from '../../libraries/tokens/producers/index.mjs';
 import {
   BASELINE_PATH,
   CALLER_PART_PIN,
@@ -63,6 +64,18 @@ const SANDBOX_SOURCES = [
   'src/components/primitives/feedback/skeleton/runtime/anatomy-renderer',
 ];
 
+/** The authored stylesheets a read's production evidence is drawn from. */
+const AUTHORED_STYLESHEETS = collectAuthoredStylesheets(ROOT).map((file) => relative(ROOT, file));
+
+/** Copies the calibration family and the authored producer corpus into `sandbox`. */
+function mirrorFamily(sandbox) {
+  for (const relativePath of [...SANDBOX_SOURCES, ...AUTHORED_STYLESHEETS]) {
+    const target = join(sandbox, relativePath);
+    mkdirSync(dirname(target), { recursive: true });
+    cpSync(join(ROOT, relativePath), target, { recursive: true });
+  }
+}
+
 function expectFinding(findings, fragment, message) {
   assert.ok(
     findings.some((finding) => finding.includes(fragment)),
@@ -85,18 +98,18 @@ function expectNoFinding(findings, fragment, message) {
 function withPlantedFamily(edit, run) {
   const sandbox = mkdtempSync(join(tmpdir(), 'family-cut-drill-'));
   try {
-    for (const relativePath of SANDBOX_SOURCES) {
-      const target = join(sandbox, relativePath);
-      mkdirSync(dirname(target), { recursive: true });
-      cpSync(join(ROOT, relativePath), target, { recursive: true });
-    }
+    mirrorFamily(sandbox);
     edit(sandbox);
     const measured = measureFamily(resolveFamily(FAMILY, sandbox), { producers: PRODUCERS });
-    run(judgeFamily(measured, readBaseline().families[FAMILY]), measured);
+    run(judgeFamily(measured, readBaseline().families[FAMILY]), measured, sandbox);
   } finally {
     rmSync(sandbox, { recursive: true, force: true });
   }
 }
+
+/** A measurement with its root's absolute prefix dropped, so two roots compare. */
+const rooted = (value, root) =>
+  JSON.parse([root, realpathSync(root)].reduce((text, prefix) => text.split(`${prefix}/`).join(''), JSON.stringify(value)));
 
 const patch = (sandbox, relativePath, replace) => {
   const file = join(sandbox, relativePath);
@@ -106,8 +119,53 @@ const patch = (sandbox, relativePath, replace) => {
 const MODERN_TSX = 'src/components/primitives/inputs/button/engines/modern/index.tsx';
 /** The calibration family's pins: a drill grows one of them by exactly one. */
 const PIN = readBaseline().families[FAMILY];
-const grew = (key) => `\`${key}\` GREW from ${PIN[key]} to ${PIN[key] + 1}`;
+/** The finding for exactly one more; the ` --` stops `from 1 to 2` matching `from 1 to 259`. */
+const grew = (key, from = PIN[key]) => `\`${key}\` GREW from ${from} to ${from + 1} --`;
 const MODERN_SKIN = 'src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css';
+
+/**
+ * A planted read is judged against the same sandbox before the plant, never
+ * against the pin: while the pin and the tree disagree, `pin + 1` proves nothing.
+ */
+const judgeRead = (measured, unplanted) =>
+  judgeFamily(measured, { ...PIN, readWithoutProducer: unplanted.ratchets.readWithoutProducer });
+
+function expectPlantedRead(measured, unplanted, name, message) {
+  assert.ok(!unplanted.detail.readWithoutProducer.includes(name), `${name} is not debt before the plant`);
+  assert.ok(measured.detail.readWithoutProducer.includes(name), message);
+  assert.equal(
+    measured.ratchets.readWithoutProducer,
+    unplanted.ratchets.readWithoutProducer + 1,
+    `${message}: the plant adds exactly one`,
+  );
+  expectFinding(
+    judgeRead(measured, unplanted),
+    grew('readWithoutProducer', unplanted.ratchets.readWithoutProducer),
+    `${message}: and turns the gate red`,
+  );
+}
+
+function expectReadHeld(measured, unplanted, message) {
+  assert.deepEqual(measured.detail.readWithoutProducer, unplanted.detail.readWithoutProducer, message);
+  expectNoFinding(judgeRead(measured, unplanted), '`readWithoutProducer` GREW', message);
+}
+
+/**
+ * The calibration sandbox measured before and after `edit`, both through
+ * `measure`; `run` receives the planted and the unplanted measurement.
+ */
+function withPlantedRead(edit, run, { pin, measure = (resolved) => measureFamily(resolved, { producers: PRODUCERS }) } = {}) {
+  const sandbox = mkdtempSync(join(tmpdir(), 'family-cut-read-'));
+  try {
+    mirrorFamily(sandbox);
+    const unplanted = measure(resolveFamily(FAMILY, sandbox, pin));
+    edit(sandbox);
+    const resolved = resolveFamily(FAMILY, sandbox, pin);
+    run(measure(resolved), unplanted, resolved, sandbox);
+  } finally {
+    rmSync(sandbox, { recursive: true, force: true });
+  }
+}
 
 // ---------------------------------------------------------------------------
 // The tree as it stands
@@ -132,6 +190,22 @@ test('the pinned numbers are the measured numbers, not a guess', () => {
 test('the sandbox mirror measures exactly what the real tree measures', () => {
   // The control for every drill below: if the mirror did not reproduce the
   // real measurement, a planted red would prove nothing about the real gate.
+  const live = measureFamily(resolveFamily(FAMILY), { producers: PRODUCERS });
+  withPlantedFamily(() => {}, (findings, measured, sandbox) => {
+    assert.deepEqual(measured.ratchets, live.ratchets);
+    assert.deepEqual(measured.denominators, live.denominators);
+    const { p88Census: mirroredCensus, ...mirrored } = rooted(measured.detail, sandbox);
+    const { p88Census: liveCensus, ...real } = rooted(live.detail, ROOT);
+    assert.deepEqual(mirrored, real);
+    // A bare package root has no workspace, so the caller-part census cannot run in it.
+    assert.deepEqual([mirroredCensus, liveCensus], [false, true]);
+    assert.deepEqual(rooted(findings, sandbox), rooted(judgeFamily(live, PIN), ROOT));
+  });
+});
+
+test('the sandbox mirror holds the pins', () => {
+  // The pin judgment, kept apart from the mirror control above: while the tree
+  // and the pin disagree this stays red, as the live baseline does.
   withPlantedFamily(() => {}, (findings) => {
     assert.deepEqual(findings, []);
   });
@@ -185,20 +259,15 @@ test('CONTROL: an inline block of only `--ds-*` custom properties is NOT a viola
 });
 
 test('PLANT: a `--ds-button-x` read with no producer grows the ratchet', () => {
-  withPlantedFamily(
+  withPlantedRead(
     (sandbox) => patch(sandbox, MODERN_SKIN, (text) =>
       `${text}\n.ds-button--planted { color: var(--ds-button-x, #ff0000); }\n`),
-    (findings, measured) => {
-      assert.ok(
-        measured.detail.readWithoutProducer.includes('--ds-button-x'),
-        'the planted name has no producer and must be classified as debt',
-      );
-      expectFinding(
-        findings,
-        grew('readWithoutProducer'),
-        'a name the skin reads that nobody writes must grow the ratchet and turn the gate red',
-      );
-    },
+    (measured, unplanted) => expectPlantedRead(
+      measured,
+      unplanted,
+      '--ds-button-x',
+      'a name the skin reads that nobody writes must grow the ratchet and turn the gate red',
+    ),
   );
 });
 
@@ -209,64 +278,44 @@ test('PLANT: a read with no producer in a PRESENTATION-tier skin grows the ratch
   // whose channels are read from a presentation-tier skin understated its debt
   // (data-table read 1 of its 4 skins). Every skin `resolveFamily` admits is
   // measured.
-  withPlantedFamily(
+  withPlantedRead(
     (sandbox) => patch(sandbox, PRESENTATION_SKIN, (text) =>
       `${text}\n.ds-button-group--planted { color: var(--ds-button-group-y, #ff0000); }\n`),
-    (findings, measured) => {
-      assert.ok(
-        measured.detail.readWithoutProducer.includes('--ds-button-group-y'),
-        'a presentation-tier skin read with no producer is the family\'s debt',
-      );
-      expectFinding(
-        findings,
-        grew('readWithoutProducer'),
-        'the presentation-tier read must turn the family red',
-      );
-    },
+    (measured, unplanted) => expectPlantedRead(
+      measured,
+      unplanted,
+      '--ds-button-group-y',
+      'a presentation-tier skin read with no producer is the family\'s debt',
+    ),
   );
 });
 
 test('CONTROL: the presentation-tier skin is in the measured corpus and its produced reads are not debt', () => {
-  withPlantedFamily(
+  withPlantedRead(
     (sandbox) => patch(sandbox, PRESENTATION_SKIN, (text) => text),
-    (findings, measured) => {
+    (measured, unplanted) => {
       assert.ok(
         measured.denominators.skinFiles > 1,
         'the family measures its presentation-tier skins, not only engines/modern',
       );
-      expectNoFinding(findings, '`readWithoutProducer` GREW', 'an untouched corpus cannot grow the ratchet');
+      expectReadHeld(measured, unplanted, 'an untouched corpus cannot grow the ratchet');
     },
   );
 });
 
 test('CONTROL: the same `--ds-button-x` WITH a producer does not grow the ratchet', () => {
   // Proves the red above is caused by the MISSING PRODUCER and not by the
-  // appearance of a new name.
-  withPlantedFamily(
+  // appearance of a new name. The producer is a declaration the read reaches:
+  // a name in the producer set alone supplies no value.
+  withPlantedRead(
     (sandbox) => patch(sandbox, MODERN_SKIN, (text) =>
-      `${text}\n.ds-button--planted { color: var(--ds-button-x, #ff0000); }\n`),
-    () => {},
+      `${text}\n:root { --ds-button-x: #ff0000; }\n.ds-button--planted { color: var(--ds-button-x, #ff0000); }\n`),
+    (measured, unplanted) => {
+      assert.ok(!measured.detail.readWithoutProducer.includes('--ds-button-x'));
+      expectReadHeld(measured, unplanted, 'giving the name a producer cannot grow the ratchet');
+    },
+    { measure: (resolved) => measureFamily(resolved, { producers: new Set([...PRODUCERS, '--ds-button-x']) }) },
   );
-  const sandbox = mkdtempSync(join(tmpdir(), 'family-cut-control-'));
-  try {
-    for (const relativePath of SANDBOX_SOURCES) {
-      const target = join(sandbox, relativePath);
-      mkdirSync(dirname(target), { recursive: true });
-      cpSync(join(ROOT, relativePath), target, { recursive: true });
-    }
-    patch(sandbox, MODERN_SKIN, (text) =>
-      `${text}\n.ds-button--planted { color: var(--ds-button-x, #ff0000); }\n`);
-    const measured = measureFamily(resolveFamily(FAMILY, sandbox), {
-      producers: new Set([...PRODUCERS, '--ds-button-x']),
-    });
-    expectNoFinding(
-      judgeFamily(measured, readBaseline().families[FAMILY]),
-      '`readWithoutProducer` GREW',
-      'giving the name a producer cannot grow the ratchet',
-    );
-  } finally {
-    rmSync(sandbox, { recursive: true, force: true });
-  }
 });
 
 // ---------------------------------------------------------------------------
@@ -311,113 +360,87 @@ test('a declaration on a root selector is package-wide; one under a component cl
   }
 });
 
+/** An authored sheet outside every family's skins: what it declares is evidence, not paint. */
+const PLANTED_SHEET = 'src/foundation/tokens/css/planted/index.css';
+
+const plantSheet = (sandbox, css) => {
+  const file = join(sandbox, PLANTED_SHEET);
+  mkdirSync(dirname(file), { recursive: true });
+  writeFileSync(file, `${css}\n`);
+};
+
+/** The measurement with the producer set and compiled set named, scoped by `scopeFile` alone. */
+const measureScoped = ({ producers, compiled = new Set(), scopeFile }) => (resolved) =>
+  measureFamily(resolved, {
+    producers,
+    compiled,
+    scopes: collectDeclarationScopes({ files: [join(resolved.root, scopeFile)] }),
+  });
+
 test('PLANT: a scoped-only declaration does NOT clear a read in another family', () => {
   const planted = '--ds-planted-frame';
-  const scoped = scopeFixture(
-    `.ds-pattern-command-palette [data-part='shortcut'] { ${planted}: 1px solid red; }`,
+  // The family reads the planted name, and something in the package declares
+  // it -- so the flat producer set calls it produced whatever the scope is.
+  const arm = (declaration, run) => withPlantedRead(
+    (sandbox) => {
+      patch(sandbox, MODERN_SKIN, (text) =>
+        `${text}\n.ds-button--planted { border: var(${planted}, 1px solid currentColor); }\n`);
+      plantSheet(sandbox, declaration);
+    },
+    run,
+    { measure: measureScoped({ producers: new Set([...PRODUCERS, planted]), scopeFile: PLANTED_SHEET }) },
   );
-  const owned = scopeFixture(`.ds-button { ${planted}: 1px solid red; }`);
-  const wide = scopeFixture(`:root { ${planted}: 1px solid red; }`);
-  const sandbox = mkdtempSync(join(tmpdir(), 'family-cut-scope-family-'));
-  try {
-    for (const relativePath of SANDBOX_SOURCES) {
-      const target = join(sandbox, relativePath);
-      mkdirSync(dirname(target), { recursive: true });
-      cpSync(join(ROOT, relativePath), target, { recursive: true });
-    }
-    // The family reads the planted name, and something in the package declares
-    // it -- so the flat producer set calls it produced whatever the scope is.
-    patch(sandbox, MODERN_SKIN, (text) =>
-      `${text}\n.ds-button--planted { border: var(${planted}, 1px solid currentColor); }\n`);
-    const producers = new Set([...PRODUCERS, planted]);
-    const measure = (scopes) =>
-      judgeFamily(
-        measureFamily(resolveFamily(FAMILY, sandbox), { producers, compiled: new Set(), scopes }),
-        readBaseline().families[FAMILY],
-      );
 
-    expectFinding(
-      measure(scoped.scopes),
-      grew('readWithoutProducer'),
+  arm(`.ds-pattern-command-palette [data-part='shortcut'] { ${planted}: 1px solid red; }`, (measured, unplanted) =>
+    expectPlantedRead(
+      measured,
+      unplanted,
+      planted,
       'a declaration living only inside another family\'s selector produces nothing here',
-    );
-    expectNoFinding(
-      measure(owned.scopes),
-      '`readWithoutProducer` GREW',
-      'a declaration scoped to a class THIS family owns does reach it',
-    );
-    expectNoFinding(
-      measure(wide.scopes),
-      '`readWithoutProducer` GREW',
-      'a package-wide declaration reaches every family',
-    );
-  } finally {
-    rmSync(sandbox, { recursive: true, force: true });
-    for (const fixture of [scoped, owned, wide]) rmSync(fixture.dir, { recursive: true, force: true });
-  }
+    ));
+  arm(`.ds-button { ${planted}: 1px solid red; }`, (measured, unplanted) =>
+    expectReadHeld(measured, unplanted, 'a declaration scoped to a class THIS family owns does reach it'));
+  arm(`:root { ${planted}: 1px solid red; }`, (measured, unplanted) =>
+    expectReadHeld(measured, unplanted, 'a package-wide declaration reaches every family'));
 });
 
 test('a scoped declaration inside the family\'s OWN skin still produces for it', () => {
   const planted = '--ds-planted-local';
-  const sandbox = mkdtempSync(join(tmpdir(), 'family-cut-scope-local-'));
-  try {
-    for (const relativePath of SANDBOX_SOURCES) {
-      const target = join(sandbox, relativePath);
-      mkdirSync(dirname(target), { recursive: true });
-      cpSync(join(ROOT, relativePath), target, { recursive: true });
-    }
+  withPlantedRead(
     // Declared under a non-family class, in the family's own skin file: the
     // corpus route is what keeps it produced.
-    patch(sandbox, MODERN_SKIN, (text) =>
+    (sandbox) => patch(sandbox, MODERN_SKIN, (text) =>
       `${text}\n.ds-engine-modern [data-part='label'] { ${planted}: 1px; }\n`
-      + `.ds-button--planted { border-width: var(${planted}, 1px); }\n`);
-    const scopes = collectDeclarationScopes({ files: [join(sandbox, MODERN_SKIN)] });
-    assert.equal(scopes.get(planted).packageWide, false);
-    expectNoFinding(
-      judgeFamily(
-        measureFamily(resolveFamily(FAMILY, sandbox), {
-          producers: new Set([...PRODUCERS, planted]),
-          compiled: new Set(),
-          scopes,
-        }),
-        readBaseline().families[FAMILY],
-      ),
-      '`readWithoutProducer` GREW',
-      'the family declares it in its own paint',
-    );
-  } finally {
-    rmSync(sandbox, { recursive: true, force: true });
-  }
+      + `.ds-button--planted { border-width: var(${planted}, 1px); }\n`),
+    (measured, unplanted, resolved) => {
+      assert.equal(
+        collectDeclarationScopes({ files: [join(resolved.root, MODERN_SKIN)] }).get(planted).packageWide,
+        false,
+      );
+      expectReadHeld(measured, unplanted, 'the family declares it in its own paint');
+    },
+    { measure: measureScoped({ producers: new Set([...PRODUCERS, planted]), scopeFile: MODERN_SKIN }) },
+  );
 });
 
 test('a compiler-emitted channel is never demoted by a scoped re-declaration', () => {
   const planted = '--ds-planted-emitted';
-  const scoped = scopeFixture(`.ds-pattern-command-palette { ${planted}: 1px; }`);
-  const sandbox = mkdtempSync(join(tmpdir(), 'family-cut-scope-emitted-'));
-  try {
-    for (const relativePath of SANDBOX_SOURCES) {
-      const target = join(sandbox, relativePath);
-      mkdirSync(dirname(target), { recursive: true });
-      cpSync(join(ROOT, relativePath), target, { recursive: true });
-    }
-    patch(sandbox, MODERN_SKIN, (text) =>
-      `${text}\n.ds-button--planted { border-width: var(${planted}, 1px); }\n`);
-    expectNoFinding(
-      judgeFamily(
-        measureFamily(resolveFamily(FAMILY, sandbox), {
-          producers: new Set([...PRODUCERS, planted]),
-          compiled: new Set([planted]),
-          scopes: scoped.scopes,
-        }),
-        readBaseline().families[FAMILY],
-      ),
-      '`readWithoutProducer` GREW',
-      'the compiler writes it on the theme root, so no selector scopes it',
-    );
-  } finally {
-    rmSync(sandbox, { recursive: true, force: true });
-    rmSync(scoped.dir, { recursive: true, force: true });
-  }
+  withPlantedRead(
+    (sandbox) => {
+      patch(sandbox, MODERN_SKIN, (text) =>
+        `${text}\n.ds-button--planted { border-width: var(${planted}, 1px); }\n`);
+      plantSheet(sandbox, `.ds-pattern-command-palette { ${planted}: 1px; }`);
+    },
+    (measured, unplanted) =>
+      expectReadHeld(measured, unplanted, 'the compiler writes it on the theme root, so no selector scopes it'),
+    {
+      measure: measureScoped({
+        producers: new Set([...PRODUCERS, planted]),
+        compiled: new Set([planted]),
+        scopeFile: PLANTED_SHEET,
+      }),
+    },
+  );
 });
 
 // ---------------------------------------------------------------------------
@@ -1371,11 +1394,7 @@ test('the baseline path the gate reads is the one this suite pins', () => {
 function withResolvedSandbox(edit, pin, run) {
   const sandbox = mkdtempSync(join(tmpdir(), 'family-cut-resolve-'));
   try {
-    for (const relativePath of SANDBOX_SOURCES) {
-      const target = join(sandbox, relativePath);
-      mkdirSync(dirname(target), { recursive: true });
-      cpSync(join(ROOT, relativePath), target, { recursive: true });
-    }
+    mirrorFamily(sandbox);
     edit(sandbox);
     const resolved = resolveFamily(FAMILY, sandbox, pin);
     const measured = measureFamily(resolved, { producers: PRODUCERS });
@@ -1459,15 +1478,15 @@ test('PLANT: a sibling owner directory never discharges a skin that paints the m
 });
 
 test('PLANT: a sibling-named Modern skin reading an unproduced channel on the measured root turns the family red', () => {
-  withResolvedSandbox((sandbox) => {
+  withPlantedRead((sandbox) => {
     plantSiblingOwner(sandbox);
     const skin = join(sandbox, 'src/foundation/tokens/css/runtime/engines/modern/skin/button-planted/index.css');
     mkdirSync(dirname(skin), { recursive: true });
     writeFileSync(skin, ".ds-button.ds-button--modern[data-part='root'] {\n  color: var(--ds-button-audit-unproduced, var(--ds-color-primary));\n}\n");
-  }, {}, (findings, resolved) => {
+  }, (measured, unplanted, resolved) => {
     assert.ok(resolved.skins.some((file) => file.includes('button-planted')));
-    expectFinding(findings, grew('readWithoutProducer'), 'the unproduced read is the button family\'s debt');
-  });
+    expectPlantedRead(measured, unplanted, '--ds-button-audit-unproduced', 'the unproduced read is the button family\'s debt');
+  }, { pin: {} });
 });
 
 test('PLANT: a prefixed skin that selects no class the family names is another owner\'s paint', () => {
@@ -1536,18 +1555,18 @@ const plantTierSkin = (sandbox, dir, css) => {
 };
 
 test('PLANT: a `pattern-<family>` skin painting the family\'s tier class is the family\'s', () => {
-  withResolvedSandbox((sandbox) => {
+  withPlantedRead((sandbox) => {
     plantTierSkin(
       sandbox,
       'pattern-button',
       ".ds-pattern-button[data-part='root'] { color: var(--ds-button-tier-unproduced, var(--ds-color-primary)); }\n",
     );
-  }, {}, (findings, resolved) => {
+  }, (measured, unplanted, resolved) => {
     // A pattern names its skin and its class for the TIER, never for the owner;
     // reading the directory literally left those families measuring zero skins.
     assert.ok(resolved.skins.some((file) => file.includes('pattern-button')), 'the tier skin is measured');
-    expectFinding(findings, grew('readWithoutProducer'), "the tier skin's debt is the family's");
-  });
+    expectPlantedRead(measured, unplanted, '--ds-button-tier-unproduced', "the tier skin's debt is the family's");
+  }, { pin: {} });
 });
 
 test("CONTROL: a `pattern-<other>` skin is still another family's", () => {
