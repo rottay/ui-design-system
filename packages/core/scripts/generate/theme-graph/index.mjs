@@ -499,8 +499,19 @@ export function render(graph) {
     families: graph.families.length,
     edges: Object.fromEntries(Object.keys(EDGE_KINDS).map((kind) => [kind, graph.edges.filter((e) => e.kind === kind).length])),
   };
+  // Interned like `files[]`: a consumer's property is `properties[propertyRef]`.
+  const propertyTable = [...new Set(graph.nodes.filter((node) => node.kind === "consumer").map((node) => node.property))].sort();
+  const propertyIndex = new Map(propertyTable.map((property, index) => [property, index]));
+  const nodes = graph.nodes.map((node) => {
+    if (node.kind !== "consumer") return node;
+    const { property, ...rest } = node;
+    return { ...rest, propertyRef: propertyIndex.get(property) };
+  });
   const files = {
-    nodes: stableStringify({ generated: true, generator: "scripts/generate/theme-graph", schemaVersion: 1, counts, files: graph.fileTable, nodes: graph.nodes }),
+    nodes: stableStringify({
+      generated: true, generator: "scripts/generate/theme-graph", schemaVersion: 1, counts,
+      files: graph.fileTable, properties: propertyTable, nodes,
+    }),
     edges: stableStringify({ generated: true, generator: "scripts/generate/theme-graph", schemaVersion: 1, kinds: EDGE_KINDS, edges: graph.edges }),
     "by-control": stableStringify({ generated: true, schemaVersion: 1, controls }, { pretty: true }),
     "by-family": stableStringify({ generated: true, schemaVersion: 1, families }, { pretty: true }),

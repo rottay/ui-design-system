@@ -15,8 +15,8 @@
       "tier": "pro"
     },
     {
-      "channels": 335,
-      "channelsThroughAliases": 1230,
+      "channels": 336,
+      "channelsThroughAliases": 1231,
       "decision": "density.mode",
       "derivers": [
         "app-shell",
@@ -253,7 +253,7 @@
     },
     {
       "channels": 226,
-      "channelsThroughAliases": 1908,
+      "channelsThroughAliases": 1909,
       "decision": "experience.profile",
       "derivers": [
         "axes",
@@ -1018,7 +1018,7 @@
     },
     {
       "channels": 2526,
-      "channelsThroughAliases": 4123,
+      "channelsThroughAliases": 4125,
       "decision": "palette.contrast-posture",
       "derivers": [
         "action-dock",
@@ -1374,7 +1374,7 @@
     },
     {
       "channels": 2526,
-      "channelsThroughAliases": 4123,
+      "channelsThroughAliases": 4125,
       "decision": "palette.neutral-temperature",
       "derivers": [
         "action-dock",
@@ -1722,7 +1722,7 @@
     },
     {
       "channels": 2624,
-      "channelsThroughAliases": 4326,
+      "channelsThroughAliases": 4328,
       "decision": "palette.seeds",
       "derivers": [
         "action-dock",
@@ -2074,7 +2074,7 @@
     },
     {
       "channels": 2612,
-      "channelsThroughAliases": 4302,
+      "channelsThroughAliases": 4304,
       "decision": "palette.status-seeds",
       "derivers": [
         "action-dock",
@@ -2425,7 +2425,7 @@
     },
     {
       "channels": 226,
-      "channelsThroughAliases": 1908,
+      "channelsThroughAliases": 1909,
       "decision": "profiles.expressive",
       "derivers": [
         "axes",
@@ -2712,8 +2712,8 @@
       "tier": "pro"
     },
     {
-      "channels": 364,
-      "channelsThroughAliases": 1067,
+      "channels": 365,
+      "channelsThroughAliases": 1068,
       "decision": "shape.button-style",
       "derivers": [
         "app-shell",
@@ -2958,8 +2958,8 @@
       "tier": "standard"
     },
     {
-      "channels": 502,
-      "channelsThroughAliases": 664,
+      "channels": 503,
+      "channelsThroughAliases": 665,
       "decision": "shape.control-height",
       "derivers": [
         "app-shell",
@@ -3070,8 +3070,8 @@
       "tier": "standard"
     },
     {
-      "channels": 343,
-      "channelsThroughAliases": 467,
+      "channels": 344,
+      "channelsThroughAliases": 468,
       "decision": "shape.nesting",
       "derivers": [
         "app-shell",
@@ -3161,8 +3161,8 @@
       "tier": "pro"
     },
     {
-      "channels": 1295,
-      "channelsThroughAliases": 1941,
+      "channels": 1296,
+      "channelsThroughAliases": 1943,
       "decision": "shape.radius-scale",
       "derivers": [
         "app-shell",
@@ -3433,8 +3433,8 @@
       "tier": "standard"
     },
     {
-      "channels": 334,
-      "channelsThroughAliases": 540,
+      "channels": 335,
+      "channelsThroughAliases": 541,
       "decision": "spacing.rhythm",
       "derivers": [
         "app-shell",
@@ -3517,8 +3517,8 @@
       "tier": "standard"
     },
     {
-      "channels": 391,
-      "channelsThroughAliases": 1219,
+      "channels": 392,
+      "channelsThroughAliases": 1222,
       "decision": "states.emphasis",
       "derivers": [
         "app-shell",
@@ -3745,8 +3745,8 @@
       "tier": "standard"
     },
     {
-      "channels": 677,
-      "channelsThroughAliases": 1487,
+      "channels": 678,
+      "channelsThroughAliases": 1490,
       "decision": "states.focus-style",
       "derivers": [
         "app-shell",
@@ -3982,8 +3982,8 @@
       "tier": "standard"
     },
     {
-      "channels": 490,
-      "channelsThroughAliases": 896,
+      "channels": 491,
+      "channelsThroughAliases": 898,
       "decision": "surfaces.border-style",
       "derivers": [
         "app-shell",
@@ -4186,8 +4186,8 @@
       "tier": "standard"
     },
     {
-      "channels": 333,
-      "channelsThroughAliases": 415,
+      "channels": 334,
+      "channelsThroughAliases": 416,
       "decision": "surfaces.effect-intensity",
       "derivers": [
         "app-shell",
@@ -4245,8 +4245,8 @@
       "tier": "standard"
     },
     {
-      "channels": 1711,
-      "channelsThroughAliases": 2069,
+      "channels": 1712,
+      "channelsThroughAliases": 2071,
       "decision": "surfaces.elevation-posture",
       "derivers": [
         "action-dock",
@@ -4483,7 +4483,7 @@
     },
     {
       "channels": 126,
-      "channelsThroughAliases": 404,
+      "channelsThroughAliases": 405,
       "decision": "typography.families",
       "derivers": [
         "tenant",
@@ -4649,7 +4649,7 @@
     },
     {
       "channels": 254,
-      "channelsThroughAliases": 521,
+      "channelsThroughAliases": 522,
       "decision": "typography.numeric",
       "derivers": [
         "pagination",
@@ -4818,7 +4818,7 @@
     },
     {
       "channels": 128,
-      "channelsThroughAliases": 954,
+      "channelsThroughAliases": 955,
       "decision": "typography.pairing",
       "derivers": [
         "axes",
@@ -5049,16 +5049,18 @@
       "tier": "standard"
     },
     {
-      "channels": 427,
-      "channelsThroughAliases": 701,
+      "channels": 466,
+      "channelsThroughAliases": 748,
       "decision": "typography.role-weights",
       "derivers": [
         "badge",
         "button",
         "descriptions",
         "divider",
+        "guided-draft-form",
         "input",
         "segmented",
+        "shortcuts-overlay",
         "table",
         "tag",
         "tenant",
@@ -5224,8 +5226,8 @@
       "tier": "standard"
     },
     {
-      "channels": 408,
-      "channelsThroughAliases": 1193,
+      "channels": 416,
+      "channelsThroughAliases": 1200,
       "decision": "typography.scale",
       "derivers": [
         "axes",
@@ -5239,6 +5241,7 @@
         "guided-draft-form",
         "header-surface",
         "mobile-header",
+        "page-shell",
         "record",
         "section-frame",
         "stats-header",

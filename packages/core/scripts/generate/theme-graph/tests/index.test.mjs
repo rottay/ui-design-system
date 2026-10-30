@@ -173,6 +173,59 @@ describe("theme-graph drills -- a graph that cannot move is not derived", () => 
   });
 });
 
+describe("theme-graph -- the property table is an encoding, never a loss", () => {
+  const consumer = (id, property, line) => ({
+    kind: "consumer", id, fileRef: 0, line, property, selector: `.ds-x[data-part='${id}']`,
+  });
+  const graphOf = (consumers) => ({
+    nodes: [{ kind: "family", id: "x", tier: "primitive" }, ...consumers],
+    edges: [], decisions: [], derivers: [], channels: [], consumers,
+    families: [{ kind: "family", id: "x", tier: "primitive" }],
+    fileTable: ["packages/core/x/index.css"], run: { blocks: [] }, cascade: { digest: "0".repeat(64) },
+  });
+  const decode = (document) => document.nodes.map((node) => {
+    if (node.kind !== "consumer") return node;
+    const { propertyRef, ...rest } = node;
+    return { ...rest, property: document.properties[propertyRef] };
+  });
+  const consumers = [consumer("b", "color", 2), consumer("a", "background-color", 1), consumer("c", "color", 3)];
+
+  it("each property is emitted once and every consumer decodes back to its own row", () => {
+    const graph = graphOf(consumers);
+    const document = JSON.parse(render(graph).files.nodes);
+    assert.deepEqual(document.properties, ["background-color", "color"]);
+    for (const node of document.nodes.filter((row) => row.kind === "consumer")) {
+      assert.ok(!("property" in node), "the string itself is not repeated on the row");
+      assert.equal(typeof node.propertyRef, "number");
+    }
+    assert.equal(stableStringify(decode(document)), stableStringify(graph.nodes));
+  });
+
+  it("the encoding touches nothing but nodes.json", () => {
+    const { files } = render(graphOf(consumers));
+    const flat = render(graphOf(consumers.map((row) => ({ ...row, property: "color" })))).files;
+    assert.equal(files.edges, flat.edges);
+    assert.equal(files["by-control"], flat["by-control"]);
+    assert.equal(files["by-family"], flat["by-family"]);
+  });
+
+  it("MUTANT: a dropped table entry or a moved ref no longer decodes to the graph", () => {
+    const graph = graphOf(consumers);
+    const document = JSON.parse(render(graph).files.nodes);
+    const clean = stableStringify(graph.nodes);
+    assert.notEqual(stableStringify(decode({ ...document, properties: document.properties.slice(1) })), clean);
+    const moved = document.nodes.map((node) => (node.kind === "consumer" ? { ...node, propertyRef: 0 } : node));
+    assert.notEqual(stableStringify(decode({ ...document, nodes: moved })), clean);
+  });
+
+  it("MUTANT: a consumer removed from the graph moves nodes.json and its digest", () => {
+    const clean = render(graphOf(consumers)).files;
+    const mutant = render(graphOf(consumers.slice(1))).files;
+    assert.notEqual(mutant.nodes, clean.nodes);
+    assert.notEqual(mutant.digest, clean.digest);
+  });
+});
+
 describe("theme-graph -- the joins are the measured ones", () => {
   it("a catalog keypath expands the way the catalog writes it", () => {
     assert.deepEqual(expandKeypath("palette.{primaryColor,secondaryColor}"), [
@@ -454,7 +507,7 @@ describe("theme-graph walker -- the tier is the declared root, never the depth",
       tier: "primitive", family: "notifier",
     });
     assert.deepEqual(
-      familyNodes(process.cwd()).find((node) => node.id === "notifier"),
+      familyNodes(join(OUT_DIR, "../../..")).find((node) => node.id === "notifier"),
       { kind: "family", id: "notifier", tier: "primitive" },
       "the live tree's notifier lost its tier",
     );

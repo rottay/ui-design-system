@@ -8,39 +8,39 @@
 > `produced` counts the channels the decision's derivers emit; `via aliases` counts what those
 > channels can still reach through the measured alias chain.
 
-digest: 0e27afe5bf0b9ecb2a5c32ef829ea05a3d64f5b92c63e29e595926da0e35faa9
+digest: 4790b1c1a25f0e42b97556bd3794ba4c770a2689b9314826afbd4424abb459ca
 
 | decision | tier | derivers | produced | via aliases | families reached |
 |---|---|---|---|---|---|
 | `chrome.anatomy` | pro | 1 | 6 | 14 | 3 |
-| `density.mode` | standard | 11 | 335 | 1230 | 216 |
-| `experience.profile` | standard | 8 | 226 | 1908 | 249 |
+| `density.mode` | standard | 11 | 336 | 1231 | 216 |
+| `experience.profile` | standard | 8 | 226 | 1909 | 249 |
 | `motion.character` | pro | 30 | 1052 | 1319 | 202 |
 | `motion.dial` | standard | 30 | 1052 | 1319 | 202 |
 | `navigation.sidebar-tone` | standard | 1 | 6 | 14 | 3 |
-| `palette.contrast-posture` | pro | 86 | 2526 | 4123 | 252 |
+| `palette.contrast-posture` | pro | 86 | 2526 | 4125 | 252 |
 | `palette.dark-mode` | pro | — | 0 | 0 | **none** |
-| `palette.neutral-temperature` | standard | 86 | 2526 | 4123 | 252 |
-| `palette.seeds` | standard | 90 | 2624 | 4326 | 252 |
-| `palette.status-seeds` | standard | 89 | 2612 | 4302 | 252 |
-| `profiles.expressive` | pro | 8 | 226 | 1908 | 249 |
+| `palette.neutral-temperature` | standard | 86 | 2526 | 4125 | 252 |
+| `palette.seeds` | standard | 90 | 2624 | 4328 | 252 |
+| `palette.status-seeds` | standard | 89 | 2612 | 4304 | 252 |
+| `profiles.expressive` | pro | 8 | 226 | 1909 | 249 |
 | `recipe-profile` | pro | — | 0 | 0 | **none** |
 | `responsive.posture` | pro | 2 | 27 | 28 | 1 |
-| `shape.button-style` | standard | 13 | 364 | 1067 | 223 |
-| `shape.control-height` | standard | 14 | 502 | 664 | 88 |
-| `shape.nesting` | pro | 11 | 343 | 467 | 70 |
-| `shape.radius-scale` | standard | 37 | 1295 | 1941 | 225 |
-| `spacing.rhythm` | standard | 11 | 334 | 540 | 63 |
-| `states.emphasis` | standard | 13 | 391 | 1219 | 205 |
-| `states.focus-style` | standard | 21 | 677 | 1487 | 206 |
-| `surfaces.border-style` | standard | 17 | 490 | 896 | 177 |
-| `surfaces.effect-intensity` | standard | 10 | 333 | 415 | 39 |
-| `surfaces.elevation-posture` | standard | 45 | 1711 | 2069 | 182 |
-| `typography.families` | pro | 2 | 126 | 404 | 154 |
-| `typography.numeric` | pro | 5 | 254 | 521 | 154 |
-| `typography.pairing` | standard | 3 | 128 | 954 | 219 |
-| `typography.role-weights` | standard | 11 | 427 | 701 | 154 |
-| `typography.scale` | standard | 18 | 408 | 1193 | 220 |
+| `shape.button-style` | standard | 13 | 365 | 1068 | 223 |
+| `shape.control-height` | standard | 14 | 503 | 665 | 88 |
+| `shape.nesting` | pro | 11 | 344 | 468 | 70 |
+| `shape.radius-scale` | standard | 37 | 1296 | 1943 | 225 |
+| `spacing.rhythm` | standard | 11 | 335 | 541 | 63 |
+| `states.emphasis` | standard | 13 | 392 | 1222 | 205 |
+| `states.focus-style` | standard | 21 | 678 | 1490 | 206 |
+| `surfaces.border-style` | standard | 17 | 491 | 898 | 177 |
+| `surfaces.effect-intensity` | standard | 10 | 334 | 416 | 39 |
+| `surfaces.elevation-posture` | standard | 45 | 1712 | 2071 | 182 |
+| `typography.families` | pro | 2 | 126 | 405 | 154 |
+| `typography.numeric` | pro | 5 | 254 | 522 | 154 |
+| `typography.pairing` | standard | 3 | 128 | 955 | 219 |
+| `typography.role-weights` | standard | 13 | 466 | 748 | 154 |
+| `typography.scale` | standard | 19 | 416 | 1200 | 220 |
 
 ## Decisions that reach no family
 
