@@ -17,8 +17,12 @@ Cross-app guides, applying to every consumer at once:
   major (owner 2026-10-15): the P-88 caller `data-part`/`data-state` break and
   the legacy sync-SSR break, shipped under the owner's express overlap
   exception; per-family inventory against 2.19.37, consumer census, the
-  `className` replacement. Skeleton: the sync-SSR section awaits Suspense
-  Phase B.
+  `className` replacement. Legacy sync-SSR migration steps are in the guide
+  below.
+- [`legacy-sync-ssr/index.md`](./legacy-sync-ssr/index.md) — WO-CON-09 step 2:
+  the 4.0 cold-lazy sync-SSR break, the async helper and controlled lint opt-in;
+  delegable briefs for the seven app-bithire and two app-platform test files.
+  Step 3's `guaranteed` flip awaits a real census-measured app consumer.
 - [`db-first-paint-probe/index.md`](./db-first-paint-probe/index.md) — WO-ARC-21:
   the frozen dispatch record for the DB-to-first-paint probe in each
   application (route, tenant fixture, first-paint assertions, rollback, disable,

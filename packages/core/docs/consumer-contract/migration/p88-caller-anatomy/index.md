@@ -1,11 +1,11 @@
 # Guide — the P-88 caller-anatomy break and the sync-SSR break (next major)
 
-Cross-app guide. **Status: skeleton** (release-reconciliation lot, 2026-10-15).
+Cross-app guide (release-reconciliation lot, 2026-10-15).
 The per-family inventory is complete for the P-88 strips integrated on `main`
-at `1e4c40c62`. The sync-SSR section waits for the Suspense Phase B
-implementation. The release declarations are the `major` changesets named in
-each section. Authority: `roadmap/owner-decisions-2026-10-15.md` rulings 1 and
-6.
+at `1e4c40c62`. The major-line cold-lazy sync-SSR behavior is implemented;
+current migration guidance is linked in the sync-SSR section below. The release
+declarations are the `major` changesets named in each section. Authority:
+`roadmap/owner-decisions-2026-10-15.md` rulings 1 and 6.
 
 These breaks ship directly in the major, by the owner's express exception to
 the one-minor overlap rule of `docs/releasing.md`. That exception covers only
@@ -116,12 +116,15 @@ application. Each packet (`../app-bithire/index.md`) carries its own work.
 
 ## Legacy sync SSR (`renderToString` / `renderToStaticMarkup`)
 
-Pending Suspense Phase B (owner ruling 6). Today a cold lazy family renders its
-empty fallback silently. After Phase B, React raises its own error. The section
-will name the factory fiche, the shared test helper, the negative that pins the
-behavior, the consumer census (application test files that use
-`renderToStaticMarkup`, reported and never edited) and its `major` changeset.
-Phase B owns that changeset; its class is `major`.
+In the major line, synchronous `renderToString` / `renderToStaticMarkup` over a
+cold lazy engine family raises React's own "suspended while responding to
+synchronous input" error when no ancestor Suspense boundary catches it (owner
+ruling 6). This behavior is implemented and declared by the `major` changeset
+`suspense-phase-b-w1`.
+
+See the [legacy sync-SSR migration guide](../legacy-sync-ssr/index.md) for the
+public async helper, intended `allowSubpaths` opt-in and registered nine-file
+application test census. The DS reports those app targets and edits no application.
 
 ## Verification
 
