@@ -3036,7 +3036,7 @@ test('CONTROL: an open cut that declares the debt it inherited reports it and do
     assert.deepEqual(judgeFamily(measured, pinned), []);
     expectFinding(
       describeOpenDebt(measured, pinned),
-      'inlineStyleViolations=1',
+      'inlineStyleViolations=1 ',
       'an admitted row states its debt on every run',
     );
   });
