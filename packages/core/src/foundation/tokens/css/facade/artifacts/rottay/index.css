@@ -2628,7 +2628,7 @@
   --ds-time-picker-now-bg: var(--ds-color-primary);
   --ds-time-picker-now-bg-hover: var(--ds-color-primary-hover, var(--ds-color-primary));
   --ds-time-picker-now-ink: var(--ds-color-text-on-primary);
-  --ds-time-picker-option-bg-hover: var(--ds-color-bg-hover, var(--ds-material-control-background-hover));
+  --ds-time-picker-option-bg-hover: var(--ds-material-control-background-hover, var(--ds-color-bg-hover));
   --ds-time-picker-option-bg-selected: var(--ds-color-primary);
   --ds-time-picker-option-ink: var(--ds-color-text-primary);
   --ds-time-picker-option-ink-selected: var(--ds-color-text-on-primary);
@@ -2849,7 +2849,7 @@
   --ds-tree-select-highlight-ink: var(--ds-color-primary);
   --ds-tree-select-ink: var(--ds-color-text-primary);
   --ds-tree-select-line: var(--ds-color-border-subtle);
-  --ds-tree-select-option-bg-hover: var(--ds-color-bg-hover, var(--ds-material-control-background-hover));
+  --ds-tree-select-option-bg-hover: var(--ds-material-control-background-hover, var(--ds-color-bg-hover));
   --ds-tree-select-option-bg-selected: color-mix(in srgb, var(--ds-color-primary) 10%, transparent);
   --ds-tree-select-option-border-selected: color-mix(in srgb, var(--ds-color-primary) 24%, transparent);
   --ds-tree-select-option-ink: var(--ds-color-text-primary);

@@ -69,7 +69,7 @@ export function deriveTimePickerChannels(): Record<string, string> {
   vars["--ds-time-picker-divider"] = "var(--ds-color-border)";
   vars["--ds-time-picker-label-ink"] = "var(--ds-type-color-muted)";
   vars["--ds-time-picker-option-ink"] = "var(--ds-color-text-primary)";
-  vars["--ds-time-picker-option-bg-hover"] = "var(--ds-color-bg-hover, var(--ds-material-control-background-hover))";
+  vars["--ds-time-picker-option-bg-hover"] = "var(--ds-material-control-background-hover, var(--ds-color-bg-hover))";
   vars["--ds-time-picker-option-bg-selected"] = "var(--ds-color-primary)";
   vars["--ds-time-picker-option-ink-selected"] = "var(--ds-color-text-on-primary)";
   vars["--ds-time-picker-now-bg"] = "var(--ds-color-primary)";

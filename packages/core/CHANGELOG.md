@@ -4,6 +4,10 @@
 
 ### Patch Changes
 
+- Let Modern TimePicker and TreeSelect option hover backgrounds follow the
+  control material and tenant emphasis, retaining the palette hover as the
+  fallback and preserving every other channel. No public API or dependency
+  change.
 - Size the Modern PageShell eyebrow from the label role through its own
   `--ds-page-shell-eyebrow-size` channel, so it follows `typography.scale` and
   an authored label size like the eyebrow weight already does. The eyebrow

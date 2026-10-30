@@ -3269,7 +3269,7 @@
       "scope": "base",
       "channel": "--ds-tree-select-option-bg-hover",
       "reason": "missing",
-      "cause": "--ds-material-control-background-hover"
+      "cause": "--ds-color-bg-hover"
     },
     {
       "vertical": "rottay",
@@ -3577,7 +3577,7 @@
       "scope": "base",
       "channel": "--ds-time-picker-option-bg-hover",
       "reason": "missing",
-      "cause": "--ds-material-control-background-hover"
+      "cause": "--ds-color-bg-hover"
     },
     {
       "vertical": "rottay",
@@ -14994,7 +14994,7 @@
       "scope": "light",
       "channel": "--ds-tree-select-option-bg-hover",
       "reason": "missing",
-      "cause": "--ds-material-control-background-hover"
+      "cause": "--ds-color-bg-hover"
     },
     {
       "vertical": "rottay",
@@ -15309,7 +15309,7 @@
       "scope": "light",
       "channel": "--ds-time-picker-option-bg-hover",
       "reason": "missing",
-      "cause": "--ds-material-control-background-hover"
+      "cause": "--ds-color-bg-hover"
     },
     {
       "vertical": "rottay",
@@ -26208,7 +26208,7 @@
       "scope": "base",
       "channel": "--ds-tree-select-option-bg-hover",
       "reason": "missing",
-      "cause": "--ds-material-control-background-hover"
+      "cause": "--ds-color-bg-hover"
     },
     {
       "vertical": "bithire",
@@ -26411,7 +26411,7 @@
       "scope": "base",
       "channel": "--ds-time-picker-option-bg-hover",
       "reason": "missing",
-      "cause": "--ds-material-control-background-hover"
+      "cause": "--ds-color-bg-hover"
     },
     {
       "vertical": "bithire",
@@ -35511,7 +35511,7 @@
       "scope": "dark",
       "channel": "--ds-tree-select-option-bg-hover",
       "reason": "missing",
-      "cause": "--ds-material-control-background-hover"
+      "cause": "--ds-color-bg-hover"
     },
     {
       "vertical": "bithire",
@@ -35707,7 +35707,7 @@
       "scope": "dark",
       "channel": "--ds-time-picker-option-bg-hover",
       "reason": "missing",
-      "cause": "--ds-material-control-background-hover"
+      "cause": "--ds-color-bg-hover"
     },
     {
       "vertical": "bithire",
@@ -45402,7 +45402,7 @@
       "scope": "base",
       "channel": "--ds-tree-select-option-bg-hover",
       "reason": "missing",
-      "cause": "--ds-material-control-background-hover"
+      "cause": "--ds-color-bg-hover"
     },
     {
       "vertical": "evnto",
@@ -45717,7 +45717,7 @@
       "scope": "base",
       "channel": "--ds-time-picker-option-bg-hover",
       "reason": "missing",
-      "cause": "--ds-material-control-background-hover"
+      "cause": "--ds-color-bg-hover"
     },
     {
       "vertical": "evnto",
@@ -57456,7 +57456,7 @@
       "scope": "dark",
       "channel": "--ds-tree-select-option-bg-hover",
       "reason": "missing",
-      "cause": "--ds-material-control-background-hover"
+      "cause": "--ds-color-bg-hover"
     },
     {
       "vertical": "evnto",
@@ -57764,7 +57764,7 @@
       "scope": "dark",
       "channel": "--ds-time-picker-option-bg-hover",
       "reason": "missing",
-      "cause": "--ds-material-control-background-hover"
+      "cause": "--ds-color-bg-hover"
     },
     {
       "vertical": "evnto",
@@ -68477,7 +68477,7 @@
         "--ds-time-picker-now-bg": "var(--ds-color-primary)",
         "--ds-time-picker-now-bg-hover": "var(--ds-color-primary)",
         "--ds-time-picker-now-ink": "var(--ds-color-text-on-primary)",
-        "--ds-time-picker-option-bg-hover": "var(--ds-material-control-background-hover)",
+        "--ds-time-picker-option-bg-hover": "var(--ds-color-bg-hover)",
         "--ds-time-picker-option-bg-selected": "var(--ds-color-primary)",
         "--ds-time-picker-option-ink": "var(--ds-color-text-primary)",
         "--ds-time-picker-option-ink-selected": "var(--ds-color-text-on-primary)",
@@ -68698,7 +68698,7 @@
         "--ds-tree-select-highlight-ink": "var(--ds-color-primary)",
         "--ds-tree-select-ink": "var(--ds-color-text-primary)",
         "--ds-tree-select-line": "var(--ds-color-border-subtle)",
-        "--ds-tree-select-option-bg-hover": "var(--ds-material-control-background-hover)",
+        "--ds-tree-select-option-bg-hover": "var(--ds-color-bg-hover)",
         "--ds-tree-select-option-bg-selected": "color-mix(in srgb, var(--ds-color-primary) 10%, transparent)",
         "--ds-tree-select-option-border-selected": "color-mix(in srgb, var(--ds-color-primary) 24%, transparent)",
         "--ds-tree-select-option-ink": "var(--ds-color-text-primary)",
@@ -71440,7 +71440,7 @@
         "--ds-time-picker-now-bg": "var(--ds-color-primary)",
         "--ds-time-picker-now-bg-hover": "var(--ds-color-primary)",
         "--ds-time-picker-now-ink": "var(--ds-color-text-on-primary)",
-        "--ds-time-picker-option-bg-hover": "var(--ds-material-control-background-hover)",
+        "--ds-time-picker-option-bg-hover": "var(--ds-color-bg-hover)",
         "--ds-time-picker-option-bg-selected": "var(--ds-color-primary)",
         "--ds-time-picker-option-ink": "var(--ds-color-text-primary)",
         "--ds-time-picker-option-ink-selected": "var(--ds-color-text-on-primary)",
@@ -71661,7 +71661,7 @@
         "--ds-tree-select-highlight-ink": "var(--ds-color-primary)",
         "--ds-tree-select-ink": "var(--ds-color-text-primary)",
         "--ds-tree-select-line": "var(--ds-color-border-subtle)",
-        "--ds-tree-select-option-bg-hover": "var(--ds-material-control-background-hover)",
+        "--ds-tree-select-option-bg-hover": "var(--ds-color-bg-hover)",
         "--ds-tree-select-option-bg-selected": "color-mix(in srgb, var(--ds-color-primary) 10%, transparent)",
         "--ds-tree-select-option-border-selected": "color-mix(in srgb, var(--ds-color-primary) 24%, transparent)",
         "--ds-tree-select-option-ink": "var(--ds-color-text-primary)",
@@ -74541,7 +74541,7 @@
         "--ds-time-picker-now-bg": "#2F5BE8",
         "--ds-time-picker-now-bg-hover": "#2F5BE8",
         "--ds-time-picker-now-ink": "#ffffff",
-        "--ds-time-picker-option-bg-hover": "var(--ds-material-control-background-hover)",
+        "--ds-time-picker-option-bg-hover": "var(--ds-color-bg-hover)",
         "--ds-time-picker-option-bg-selected": "#2F5BE8",
         "--ds-time-picker-option-ink": "var(--ds-color-text-primary)",
         "--ds-time-picker-option-ink-selected": "#ffffff",
@@ -74762,7 +74762,7 @@
         "--ds-tree-select-highlight-ink": "#2F5BE8",
         "--ds-tree-select-ink": "var(--ds-color-text-primary)",
         "--ds-tree-select-line": "var(--ds-color-border-subtle)",
-        "--ds-tree-select-option-bg-hover": "var(--ds-material-control-background-hover)",
+        "--ds-tree-select-option-bg-hover": "var(--ds-color-bg-hover)",
         "--ds-tree-select-option-bg-selected": "color-mix(in srgb, #2F5BE8 10%, transparent)",
         "--ds-tree-select-option-border-selected": "color-mix(in srgb, #2F5BE8 24%, transparent)",
         "--ds-tree-select-option-ink": "var(--ds-color-text-primary)",
@@ -77640,7 +77640,7 @@
         "--ds-time-picker-now-bg": "#2F5BE8",
         "--ds-time-picker-now-bg-hover": "#2F5BE8",
         "--ds-time-picker-now-ink": "#ffffff",
-        "--ds-time-picker-option-bg-hover": "var(--ds-material-control-background-hover)",
+        "--ds-time-picker-option-bg-hover": "var(--ds-color-bg-hover)",
         "--ds-time-picker-option-bg-selected": "#2F5BE8",
         "--ds-time-picker-option-ink": "var(--ds-color-text-primary)",
         "--ds-time-picker-option-ink-selected": "#ffffff",
@@ -77861,7 +77861,7 @@
         "--ds-tree-select-highlight-ink": "#2F5BE8",
         "--ds-tree-select-ink": "var(--ds-color-text-primary)",
         "--ds-tree-select-line": "var(--ds-color-border-subtle)",
-        "--ds-tree-select-option-bg-hover": "var(--ds-material-control-background-hover)",
+        "--ds-tree-select-option-bg-hover": "var(--ds-color-bg-hover)",
         "--ds-tree-select-option-bg-selected": "color-mix(in srgb, #2F5BE8 10%, transparent)",
         "--ds-tree-select-option-border-selected": "color-mix(in srgb, #2F5BE8 24%, transparent)",
         "--ds-tree-select-option-ink": "var(--ds-color-text-primary)",
@@ -80605,7 +80605,7 @@
         "--ds-time-picker-now-bg": "var(--ds-color-primary)",
         "--ds-time-picker-now-bg-hover": "var(--ds-color-primary)",
         "--ds-time-picker-now-ink": "var(--ds-color-text-on-primary)",
-        "--ds-time-picker-option-bg-hover": "var(--ds-material-control-background-hover)",
+        "--ds-time-picker-option-bg-hover": "var(--ds-color-bg-hover)",
         "--ds-time-picker-option-bg-selected": "var(--ds-color-primary)",
         "--ds-time-picker-option-ink": "var(--ds-color-text-primary)",
         "--ds-time-picker-option-ink-selected": "var(--ds-color-text-on-primary)",
@@ -80826,7 +80826,7 @@
         "--ds-tree-select-highlight-ink": "var(--ds-color-primary)",
         "--ds-tree-select-ink": "var(--ds-color-text-primary)",
         "--ds-tree-select-line": "var(--ds-color-border-subtle)",
-        "--ds-tree-select-option-bg-hover": "var(--ds-material-control-background-hover)",
+        "--ds-tree-select-option-bg-hover": "var(--ds-color-bg-hover)",
         "--ds-tree-select-option-bg-selected": "color-mix(in srgb, var(--ds-color-primary) 10%, transparent)",
         "--ds-tree-select-option-border-selected": "color-mix(in srgb, var(--ds-color-primary) 24%, transparent)",
         "--ds-tree-select-option-ink": "var(--ds-color-text-primary)",
@@ -83568,7 +83568,7 @@
         "--ds-time-picker-now-bg": "var(--ds-color-primary)",
         "--ds-time-picker-now-bg-hover": "var(--ds-color-primary)",
         "--ds-time-picker-now-ink": "var(--ds-color-text-on-primary)",
-        "--ds-time-picker-option-bg-hover": "var(--ds-material-control-background-hover)",
+        "--ds-time-picker-option-bg-hover": "var(--ds-color-bg-hover)",
         "--ds-time-picker-option-bg-selected": "var(--ds-color-primary)",
         "--ds-time-picker-option-ink": "var(--ds-color-text-primary)",
         "--ds-time-picker-option-ink-selected": "var(--ds-color-text-on-primary)",
@@ -83789,7 +83789,7 @@
         "--ds-tree-select-highlight-ink": "var(--ds-color-primary)",
         "--ds-tree-select-ink": "var(--ds-color-text-primary)",
         "--ds-tree-select-line": "var(--ds-color-border-subtle)",
-        "--ds-tree-select-option-bg-hover": "var(--ds-material-control-background-hover)",
+        "--ds-tree-select-option-bg-hover": "var(--ds-color-bg-hover)",
         "--ds-tree-select-option-bg-selected": "color-mix(in srgb, var(--ds-color-primary) 10%, transparent)",
         "--ds-tree-select-option-border-selected": "color-mix(in srgb, var(--ds-color-primary) 24%, transparent)",
         "--ds-tree-select-option-ink": "var(--ds-color-text-primary)",
@@ -83917,5 +83917,5 @@
       }
     }
   },
-  "digest": "9a8e78f0e39dc0eae372b15836fbc9ce6babecc62d57751d836169cb771d3e69"
+  "digest": "605b93ec075c230aeb6291d7892643b4188616b0b09e6b3f5dd276b7605f23e2"
 }
