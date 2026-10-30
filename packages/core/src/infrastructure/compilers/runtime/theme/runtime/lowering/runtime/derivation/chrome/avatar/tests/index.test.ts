@@ -27,7 +27,7 @@ import {
   FIXTURE_TENANT_FACTS,
   type FamilyFixture,
 } from "@tests/support/family-contract";
-import { firstPartyFixture, lowerFlatThemeFixture } from "@tests/support/theme-lowering";
+import { firstPartyFixture, lowerFlatThemeFixture, themeSourceOf } from "@tests/support/theme-lowering";
 import type { FamilyDeriver } from "../../../../../foundation/contract";
 import { buildLoweringContext, runDerivation } from "../../../../pipeline";
 import { avatarChromeDeriver } from "..";
@@ -265,8 +265,9 @@ describe("chrome/avatar mode contrast", () => {
   it("bounds dark fills even at white and black seeds with each governed neutral temperature", () => {
     const temperatures = ["neutral", "warm", "cool"] as const;
     const extremes = ["#ffffff", "#000000"] as const;
+    const { primaryColor } = themeSourceOf(firstPartyFixture("bithire")).palette;
     for (const neutralTemperature of temperatures) {
-      const theme: FlatTheme = { ...firstPartyFixture("bithire"), palette: { neutralTemperature } };
+      const theme: FlatTheme = { ...firstPartyFixture("bithire"), palette: { primaryColor, neutralTemperature } };
       const compilation = lowerFlatThemeFixture({ flatTheme: theme });
       for (const tone of SOLID_TONES) {
         for (const seed of extremes) {

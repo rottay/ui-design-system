@@ -21,6 +21,7 @@ import { renderWithEngine, librarySeedEngineVisual } from '@tests/support/engine
 import type { FlatTheme } from '@/foundation/contracts/composition/tenants/themes';
 import type { ProductProfile } from '@/foundation/contracts/composition/tenants/product-profiles';
 import { getProductProfile, ProductProfileProvider } from '@/infrastructure/runtime/product-profiles';
+import { DEFAULT_PERSONALITY } from '@/infrastructure/runtime/personality/foundation/defaults';
 import { EngineVisualDeclarationProvider } from '@/infrastructure/runtime/foundation/engine-visual';
 import { flatThemeToPersonality } from '@/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/personality';
 import { buildLoweringContext, runDerivation } from '@/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/pipeline';
@@ -382,7 +383,10 @@ function authoredProfile(bias: 'lighter' | 'normal' | 'heavier'): ProductProfile
   const neutral = getProductProfile();
   return {
     ...neutral,
-    personality: { ...neutral.personality, typography: { headingWeightBias: bias } },
+    personality: {
+      ...neutral.personality,
+      typography: { ...DEFAULT_PERSONALITY.typography, headingWeightBias: bias },
+    },
   };
 }
 
@@ -457,7 +461,7 @@ describe('GuidedDraftFormSurface heading channel precedence (DOM, not computed C
   it('keeps an explicit family parent override available and unrelated personality unstamped', async () => {
     const { container, channels } = renderWeightCase({
       theme: { id: 'weight-test', name: 'Weight test', typography: { roleWeights: 'light', headingLetterSpacing: '0.02em' } },
-      profile: { ...getProductProfile(), personality: { typography: { labelStyle: 'uppercase' } } },
+      profile: { ...getProductProfile(), personality: { accent: { ...DEFAULT_PERSONALITY.accent } } },
       parentFamily: '333',
     });
     const root = await waitForPart(container, 'root');

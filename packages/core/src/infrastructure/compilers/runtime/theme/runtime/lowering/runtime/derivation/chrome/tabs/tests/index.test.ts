@@ -22,7 +22,7 @@ import {
   type FamilyFixture,
 } from "@tests/support/family-contract";
 import { firstPartyFixture } from "@tests/support/theme-lowering";
-import type { FamilyDeriver } from "../../../../../foundation/contract";
+import type { ChannelName, FamilyDeriver } from "../../../../../foundation/contract";
 import { buildLoweringContext, runDerivation } from "../../../../pipeline";
 import { tabsChromeDeriver } from "..";
 
@@ -229,7 +229,12 @@ const EMPHASIS_TARGETS = [
     "shift": "--ds-state-active-shift",
     "rest": "linear-gradient(180deg, color-mix(in srgb, var(--ds-color-primary) 8%, transparent), color-mix(in srgb, var(--ds-color-primary) 3%, transparent))"
   }
-];
+] as const satisfies readonly {
+  readonly channel: ChannelName;
+  readonly material: ChannelName;
+  readonly shift: ChannelName;
+  readonly rest: string;
+}[];
 
 function emphasisChannels(posture: typeof EMPHASIS_POSTURES[number], theme: FlatTheme = MINIMAL_THEME): Map<string, string> {
   const themed: FlatTheme = { ...theme, surfaces: { ...theme.surfaces, stateEmphasis: posture } };

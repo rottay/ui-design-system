@@ -27,7 +27,7 @@ import {
 } from "@tests/support/family-contract";
 import { firstPartyFixture } from "@tests/support/theme-lowering";
 import { FAMILY_DERIVERS } from "../../..";
-import type { FamilyDeriver } from "../../../../../foundation/contract";
+import type { ChannelName, FamilyDeriver } from "../../../../../foundation/contract";
 import { buildLoweringContext, runDerivation } from "../../../../pipeline";
 import { breadcrumbChromeDeriver } from "..";
 
@@ -192,7 +192,12 @@ const EMPHASIS_TARGETS = [
     "shift": "--ds-state-selected-shift",
     "rest": "color-mix(in srgb, var(--ds-color-primary) 8%, var(--ds-card-bg, var(--ds-surface-card)))"
   }
-];
+] as const satisfies readonly {
+  readonly channel: ChannelName;
+  readonly material: ChannelName;
+  readonly shift: ChannelName;
+  readonly rest: string;
+}[];
 
 function emphasisChannels(posture: typeof EMPHASIS_POSTURES[number], theme: FlatTheme = MINIMAL_THEME): Map<string, string> {
   const themed: FlatTheme = { ...theme, surfaces: { ...theme.surfaces, stateEmphasis: posture } };
