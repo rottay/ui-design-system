@@ -63,3 +63,110 @@ describe.each(ENGINES)('$name engine: a card that is merely styled clickable is 
     expect(root(container)).not.toHaveAttribute('tabindex');
   });
 });
+
+const NESTED_CONTROLS = [
+  { name: 'button', control: <button type="button" data-testid="nested">Act</button> },
+  { name: 'descendant of a button', control: <button type="button"><span data-testid="nested">Act</span></button> },
+  { name: 'a[href]', control: <a href="#target" data-testid="nested">Link</a> },
+  { name: 'text input', control: <input aria-label="Note" data-testid="nested" /> },
+  { name: 'checkbox input', control: <input type="checkbox" aria-label="Select" data-testid="nested" /> },
+  { name: 'select', control: <select aria-label="Pick" data-testid="nested"><option>One</option></select> },
+  { name: 'textarea', control: <textarea aria-label="Note" data-testid="nested" /> },
+  { name: 'details', control: <details data-testid="nested"><summary>More</summary></details> },
+  { name: 'summary', control: <details><summary data-testid="nested">More</summary></details> },
+  { name: 'contenteditable', control: <div contentEditable suppressContentEditableWarning data-testid="nested" /> },
+  { name: 'role=button', control: <span role="button" tabIndex={0} data-testid="nested">Act</span> },
+  { name: 'role=link', control: <span role="link" tabIndex={0} data-testid="nested">Go</span> },
+  { name: 'role=checkbox', control: <span role="checkbox" aria-checked="false" tabIndex={0} data-testid="nested">Pick</span> },
+  { name: 'role=menuitem', control: <span role="menuitem" tabIndex={0} data-testid="nested">Item</span> },
+  { name: 'role=option', control: <span role="option" aria-selected="false" tabIndex={0} data-testid="nested">Option</span> },
+  { name: 'role=radio', control: <span role="radio" aria-checked="false" tabIndex={0} data-testid="nested">Radio</span> },
+  { name: 'role=switch', control: <span role="switch" aria-checked="false" tabIndex={0} data-testid="nested">Switch</span> },
+] as const;
+
+const nested = (container: HTMLElement) => container.querySelector('[data-testid="nested"]') as HTMLElement;
+
+describe.each(ENGINES)('$name engine: Enter and Space on a nested control belong to that control', ({ Card }) => {
+  it.each(NESTED_CONTROLS)('$name does not activate the card or lose its default', ({ control }) => {
+    const onClick = vi.fn();
+    const { container } = render(<Card onClick={onClick} title="Card">{control}</Card>);
+
+    const enterKept = fireEvent.keyDown(nested(container), { key: 'Enter' });
+    const spaceKept = fireEvent.keyDown(nested(container), { key: ' ' });
+    expect({ enterKept, spaceKept }).toEqual({ enterKept: true, spaceKept: true });
+    expect(onClick).not.toHaveBeenCalled();
+  });
+
+  it('still hands the key to the nested control', () => {
+    const onClick = vi.fn();
+    const onNestedKeyDown = vi.fn();
+    const { container } = render(
+      <Card onClick={onClick} title="Card">
+        <button type="button" data-testid="nested" onKeyDown={onNestedKeyDown}>Act</button>
+      </Card>,
+    );
+
+    fireEvent.keyDown(nested(container), { key: 'Enter' });
+    fireEvent.keyDown(nested(container), { key: ' ' });
+    expect(onNestedKeyDown).toHaveBeenCalledTimes(2);
+    expect(onClick).not.toHaveBeenCalled();
+  });
+
+  it.each(['Enter', ' '])('activates exactly once and prevents the default for %s on the root', (key) => {
+    const onClick = vi.fn();
+    const { container } = render(
+      <Card onClick={onClick} title="Card">
+        <button type="button">Act</button>
+      </Card>,
+    );
+
+    expect(fireEvent.keyDown(root(container), { key })).toBe(false);
+    expect(onClick).toHaveBeenCalledTimes(1);
+  });
+
+  it.each(['Enter', ' '])('activates for %s from a non-interactive descendant', (key) => {
+    const onClick = vi.fn();
+    const { container } = render(
+      <Card onClick={onClick} title="Card">
+        <span data-testid="plain">Body</span>
+      </Card>,
+    );
+
+    const plain = container.querySelector('[data-testid="plain"]') as HTMLElement;
+    expect(fireEvent.keyDown(plain, { key })).toBe(false);
+    expect(onClick).toHaveBeenCalledTimes(1);
+  });
+
+  it('leaves every key alone without onClick', () => {
+    const { container } = render(
+      <Card clickable title="Card">
+        <button type="button" data-testid="nested">Act</button>
+      </Card>,
+    );
+
+    const kept = [
+      fireEvent.keyDown(root(container), { key: 'Enter' }),
+      fireEvent.keyDown(root(container), { key: ' ' }),
+      fireEvent.keyDown(nested(container), { key: 'Enter' }),
+      fireEvent.keyDown(nested(container), { key: ' ' }),
+    ];
+    expect(kept).toEqual([true, true, true, true]);
+  });
+
+  it('keeps pointer activation on the root and on the nested control', () => {
+    const onClick = vi.fn();
+    const onNestedClick = vi.fn();
+    const { container } = render(
+      <Card onClick={onClick} title="Card">
+        <button type="button" data-testid="nested" onClick={onNestedClick}>Act</button>
+      </Card>,
+    );
+
+    fireEvent.keyDown(nested(container), { key: 'Enter' });
+    fireEvent.click(root(container));
+    expect(onClick).toHaveBeenCalledTimes(1);
+
+    fireEvent.click(nested(container));
+    expect(onNestedClick).toHaveBeenCalledTimes(1);
+  });
+});

@@ -62,6 +62,30 @@ import type { CardProps } from '../../contracts';
 import { CARD_DEFAULTS, PADDING_MAP } from '../../contracts';
 import { isResponsiveValue, generateResponsiveCSS, type ResponsivePropEntry } from '@/infrastructure/runtime/responsive/viewport/style-properties';
 
+const NESTED_INTERACTIVE_SELECTOR = [
+  'button',
+  'a[href]',
+  'input',
+  'select',
+  'textarea',
+  'details',
+  'summary',
+  '[contenteditable="true"]',
+  '[role="button"]',
+  '[role="link"]',
+  '[role="checkbox"]',
+  '[role="menuitem"]',
+  '[role="option"]',
+  '[role="radio"]',
+  '[role="switch"]',
+].join(', ');
+
+function isNestedInteractiveTarget(target: EventTarget | null, root: HTMLElement): boolean {
+  if (target === root || !(target instanceof Element)) return false;
+  const interactiveAncestor = target.closest(NESTED_INTERACTIVE_SELECTOR);
+  return interactiveAncestor !== null && interactiveAncestor !== root && root.contains(interactiveAncestor);
+}
+
 /**
  * Rustic engine Card component using pure HTML/CSS.
  * Provides a lightweight, accessible card implementation without external dependencies.
@@ -161,6 +185,7 @@ export default function RusticCard(props: CardProps): React.ReactElement {
 
   const handleKeyDown = useCallback(
     (event: React.KeyboardEvent<HTMLDivElement>) => {
+      if (isNestedInteractiveTarget(event.target, event.currentTarget)) return;
       if (onClick && (event.key === 'Enter' || event.key === ' ')) {
         event.preventDefault();
         onClick();
