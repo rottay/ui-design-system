@@ -1951,9 +1951,10 @@ function sharedChannelProducers() {
 
 /**
  * The producer set as THIS family sees it: every package-wide producer, plus
- * the scoped declarations whose scope can reach it. Compiler emissions are
- * always package-wide -- the compiler writes on the theme root -- so only
- * authored declarations are ever demoted.
+ * the scoped declarations whose scope can reach it. This bounds eligibility
+ * only; credit still needs an effective authored declaration that reaches the
+ * reader. The `compiled` skip keeps a name eligible but never credits it:
+ * compiled CSS is emitted on tenant/provider-scoped roots, not the theme root.
  */
 export function producersReaching({ producers, scopes, compiled, ownsClass, corpus }) {
   const reaching = new Set(producers);

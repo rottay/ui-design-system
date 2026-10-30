@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "law": "Un nombre --ds-* que la pintura Modern LEE y que nadie escribe resuelve siempre a su literal inline: el canal parece personalizable y no lo es (F-09). Decrease-only: el baseline sigue al arbol HACIA ABAJO, nunca hacia arriba.",
   "scope": "engines/modern unicamente. Classic y Rustic estan congelados (owner, 2026-09-05) y su pintura no es deuda que ninguna orden de trabajo vaya a bajar.",
-  "producer": "declarado en el CSS autorado (src/foundation/tokens/css, src/components) o emitido por el compilador -- el registro de derivacion, el kernel (src/infrastructure/compilers/kernel) o lowering/foundation -- libraries/tokens/producers, el mismo conjunto que usa el arma transitiva de cascade-wiring",
+  "producer": "una declaracion EFECTIVA en el CSS autorado (src/foundation/tokens/css, src/components): valor resoluble y selector que alcanza al lector, medida por collectProductionEvidence de cascade-wiring, el mismo evaluador de su arma transitiva. libraries/tokens/producers (CSS autorado mas emisiones del compilador: registro de derivacion, kernel, lowering/foundation) es solo el censo de elegibilidad y nunca acredita por nombre; los artefactos compilados (facade/artifacts) quedan fuera del corpus y declaran sobre raices de tenant/proveedor, no :root/html (3a12afd34)",
   "corpus": "libraries/engine/skins/files/collectSkinFiles() filtrado a /engines/modern/ -- un solo walker, importado",
   "denominator": 4786,
   "produced": 4366,

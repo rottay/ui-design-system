@@ -4,7 +4,7 @@
   "rules": {
     "a": "las raices/rampas (destinos de fallback) quedan FUERA del denominador",
     "b": "un fallback funcional que alcanza raiz -- incluso envuelto en color-mix() -- cuenta como cableado",
-    "c": "cableado NO es transitivo: `transitivelyUnwired` sigue la cadena de fallbacks hasta un nombre CON PRODUCTOR (declarado en CSS autorado o emitido por un derivador de familia). Es la cota superior de la misma deuda; `debt` es la inferior"
+    "c": "cableado NO es transitivo: `transitivelyUnwired` sigue la cadena de fallbacks hasta un nombre con VALOR PRODUCIDO (declaracion efectiva en CSS autorado: valor resoluble y selector que alcanza al lector; pertenecer al censo o ser emitido por un derivador no termina la cadena). Es la cota superior de la misma deuda; `debt` es la inferior"
   },
   "producedOn": "cascade-wiring-census",
   "corpus": "libraries/engine/skins/files/collectSkinFiles() -- un solo walker, importado",

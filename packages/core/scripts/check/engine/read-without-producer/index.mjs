@@ -342,7 +342,7 @@ export function collectFindings({
   if (result.debt.length > pinned) {
     findings.push(
       `debt GREW from ${pinned} to ${result.debt.length}: a Modern skin now reads a --ds-* name nobody writes. ` +
-        'Give the name a producer (declare it in the authored CSS, or emit it from a family deriver) instead of raising the baseline',
+        'Give the name a producer (an authored CSS declaration with a resolvable value whose selector reaches the reader; deriver or compiler emission alone is census, not credit) instead of raising the baseline',
     );
   } else if (result.debt.length < pinned) {
     findings.push(
