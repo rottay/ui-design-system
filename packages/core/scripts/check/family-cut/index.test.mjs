@@ -2567,8 +2567,8 @@ test('both DnD ratchets are decrease-only, so a new independent implementation r
     pinned,
   );
 
-  expectFinding(grown('dndTransportOwners'), '`dndTransportOwners` GREW from 0 to 1', 'the transport ratchet holds');
-  expectFinding(grown('dndDropZoneOwners'), '`dndDropZoneOwners` GREW from 0 to 1', 'the drop-zone ratchet holds');
+  expectFinding(grown('dndTransportOwners'), '`dndTransportOwners` GREW from 0 to 1 --', 'the transport ratchet holds');
+  expectFinding(grown('dndDropZoneOwners'), '`dndDropZoneOwners` GREW from 0 to 1 --', 'the drop-zone ratchet holds');
 });
 
 test('the live DnD census: all six owners adopted the kernel', () => {
@@ -3046,7 +3046,7 @@ test('PLANT: an open cut whose debt GROWS is red', () => {
   withOnePlantedPaint((measured) => {
     expectFinding(
       judgeFamily(measured, openRow({ inlineStyleViolations: 0 })),
-      'open-cut debt `inlineStyleViolations` GREW from 0 to 1',
+      'open-cut debt `inlineStyleViolations` GREW from 0 to 1 --',
       'an open cut declares the debt it inherited, never debt it added',
     );
   });
@@ -3056,7 +3056,7 @@ test('PLANT: an arm the open cut does not declare at all is debt it added', () =
   withOnePlantedPaint((measured) => {
     expectFinding(
       judgeFamily(measured, openRow({})),
-      'open-cut debt `inlineStyleViolations` GREW from 0 to 1',
+      'open-cut debt `inlineStyleViolations` GREW from 0 to 1 --',
       'an undeclared arm is declared at zero',
     );
   });
@@ -3671,7 +3671,7 @@ test("M1 PLANT: the family's OWN lost stamp reds even when a rendered primitive 
   assert.deepEqual(lost.detail.partsComposedFrom, []);
   expectFinding(
     judgeFamily(lost, { ...stamped.ratchets, denominators: stamped.denominators }),
-    '`partsConsumedNotStamped` GREW from 0 to 1',
+    '`partsConsumedNotStamped` GREW from 0 to 1 --',
     'the lost stamp GROWS the debt',
   );
 });
@@ -3729,7 +3729,7 @@ test("M1 LIVE: file-manager losing its OWN `root` stamp GROWS the debt and never
   assert.deepEqual(lost.detail.partsComposedFrom, [{ part: 'label', primitive: MODERN_TSX }], 'the anchored credit survives beside it');
   expectFinding(
     judgeFamily(lost, { ...control.ratchets, denominators: control.denominators }),
-    '`partsConsumedNotStamped` GREW from 0 to 1',
+    '`partsConsumedNotStamped` GREW from 0 to 1 --',
     'against the credited pin the lost stamp GROWS',
   );
   expectNoFinding(
@@ -3826,7 +3826,7 @@ test('G1 (i): a dead native stamp (intrinsic element, no rule) still turns parts
     assert.deepEqual(measured.detail.partsStampedNotConsumed, ['dead-native']);
     assert.equal(measured.ratchets.p88CallerParts, 1, 'the native stamp is not a caller part');
     const findings = judgeFamily(measured, pin);
-    expectFinding(findings, '`partsStampedNotConsumed` GREW from 0 to 1', 'the dead native stamp is red');
+    expectFinding(findings, '`partsStampedNotConsumed` GREW from 0 to 1 --', 'the dead native stamp is red');
     expectNoFinding(findings, '`p88CallerParts` GREW', 'and it does not move the caller-part arm');
   });
 });
@@ -3838,7 +3838,7 @@ test('G1 (iii) anti-gaming: a class written beside a dead native literal does NO
     const measured = measure();
     assert.deepEqual(measured.detail.partsStampedNotConsumed, ['dead-native'], 'the discriminator is the TARGET ELEMENT, not a class beside the literal');
     assert.equal(measured.ratchets.p88CallerParts, 1);
-    expectFinding(judgeFamily(measured, pin), '`partsStampedNotConsumed` GREW from 0 to 1', 'still red with the class');
+    expectFinding(judgeFamily(measured, pin), '`partsStampedNotConsumed` GREW from 0 to 1 --', 'still red with the class');
   });
 });
 
@@ -3850,7 +3850,7 @@ test('G1 (iv): a new P-88 caller part added to a family grows p88CallerParts (re
     assert.equal(measured.ratchets.p88CallerParts, 2);
     assert.ok(measured.detail.p88CallerParts.some((row) => /<ZzChild> handed-two \(-> zz-child\)$/.test(row)));
     const findings = judgeFamily(measured, pin);
-    expectFinding(findings, '`p88CallerParts` GREW from 1 to 2', 'a new caller part is red');
+    expectFinding(findings, '`p88CallerParts` GREW from 1 to 2 --', 'a new caller part is red');
     expectNoFinding(findings, '`partsStampedNotConsumed` GREW', 'and never surfaces as dead anatomy');
   });
 });
