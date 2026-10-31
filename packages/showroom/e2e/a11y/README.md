@@ -44,6 +44,7 @@ deleted; `axe-baseline.spec.ts` checks the literals against the disk instead.
 | `axe-baseline.json` | the ledger. |
 | `focus.spec.ts` | the focus-visible sweep (WO-GAT-04), untouched. |
 | `contrast-channel-arms.spec.ts` | WO-INV-03 Lot B's increased-contrast arms, also gated (`DS_CONTRAST_ARMS=1`). |
+| `visible-label-names.spec.ts` | Chromium's own accessible name (CDP Accessibility domain) for Input.Search and Modern BackTop on `/probe/interactions/accessible-names` (en, es) and the docs BackTop preview: visible text, localized defaults, and the lazy engine child's pre-resolution window, measured and reported rather than pinned. Not a screen-reader check. |
 
 ## The batch is gated, and that is a deliberate coverage gap
 
