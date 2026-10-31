@@ -159,6 +159,25 @@
   Source checks do not certify browser rendering, generated snapshots or package
   acceptance.
 
+- Name the Input.Search action button from visible `searchButtonText`, and
+  the Modern BackTop from visible text children, so the accessible name
+  contains the visible label (WCAG 2.5.3 label in name). Input.Search is the
+  shared compound, so this applies under every engine. Content with no letter
+  or digit (icons, arrows, other symbols), and text that is `aria-hidden` or
+  inside a `hidden` element, keeps the localized "Search" / "Back to top"
+  name, and both defaults are unchanged. Text that a custom component renders
+  without receiving it as `children` is not detected and keeps the localized
+  name. Conversely, text passed as `children` to a custom component that does
+  not render it leaves the button with an empty accessible name; render the
+  text instead. onSearch, Enter and composition, loading, disabled,
+  showSearchButton, and the BackTop scroll journey, reduced motion, focus
+  return and late target are unchanged. Classic and Rustic BackTop are frozen
+  and not changed. Their naming stays open. No public API or dependency
+  change. Source and focal checks cover the correction;
+  browser/assistive-technology and public-package acceptance remain pending.
+  The name a lazily loaded child exposes before its engine resolves is left
+  to that browser/assistive-technology check and is not claimed as tested.
+
 ## 2.19.34
 
 ### Patch Changes

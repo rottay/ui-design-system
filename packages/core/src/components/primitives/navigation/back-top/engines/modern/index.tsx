@@ -10,7 +10,9 @@
  * The Modern engine provides:
  * - Conditional rendering (unmounts when below the visibility threshold)
  * - The governed semantic icon (`navigation-up`) as the default glyph
- * - A localized aria-label via the components catalog (English fallback)
+ * - A localized aria-label via the components catalog (English fallback) for
+ *   the default glyph and icon-only children; visible text children name the
+ *   button themselves
  * - Skin-owned fixed placement (P2-20: the pass-1 `end-8` bridge utility is
  *   drained; the skin already owned the same 2rem logical inline-end value)
  * - Focus return on activation (P2-20): the trigger unmounts itself once the
@@ -99,6 +101,20 @@ function animateScrollToTop(source: Window | HTMLElement, duration: number): voi
   requestAnimationFrame(step);
 }
 
+// WCAG 2.5.3 label in name: readable text names the button by its content, so
+// the fixed localized label only stands in for icon- or symbol-only content.
+function hasVisibleText(node: React.ReactNode, depth = 0): boolean {
+  if (typeof node === 'string' || typeof node === 'number') return /[\p{L}\p{N}]/u.test(String(node));
+  if (depth > 8) return false;
+  if (Array.isArray(node)) return node.some((child) => hasVisibleText(child, depth + 1));
+  if (React.isValidElement<{ children?: React.ReactNode; hidden?: unknown; 'aria-hidden'?: unknown }>(node)) {
+    const { children, hidden, 'aria-hidden': ariaHidden } = node.props;
+    if (hidden === true || ariaHidden === true || ariaHidden === 'true') return false;
+    return hasVisibleText(children, depth + 1);
+  }
+  return false;
+}
+
 // ============================================================================
 // Component
 // ============================================================================
@@ -112,7 +128,8 @@ function animateScrollToTop(source: Window | HTMLElement, duration: number): voi
  * - Skin-owned circular chrome, 44px sizing, and interaction states
  * - Fixed positioning via logical placement utilities
  * - Native smooth scroll behavior
- * - Localized aria-label (components catalog, English fallback)
+ * - Localized aria-label (components catalog, English fallback) unless
+ *   visible text children name the button
  *
  * @remarks
  * Unlike the Rustic engine which uses opacity transitions, Modern
@@ -286,6 +303,8 @@ export const BackTop = React.forwardRef<HTMLButtonElement, BackTopProps>(
     // Render
     // ========================================================================
 
+    const namedByContent = Boolean(children) && hasVisibleText(children);
+
     // Conditional rendering (vs CSS opacity) fully removes the element from
     // the DOM, preventing accidental focus or click interactions when hidden
     if (!visible) return null;
@@ -300,7 +319,7 @@ export const BackTop = React.forwardRef<HTMLButtonElement, BackTopProps>(
         className={`rottay-backtop rottay-backtop--modern ${className}`}
         style={style}
         onClick={handleClick}
-        aria-label={ariaLabel}
+        aria-label={namedByContent ? undefined : ariaLabel}
         {...partAttributes('trigger', trigger.state)}
         {...trigger.handlers}
       >

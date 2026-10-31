@@ -17,6 +17,7 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { BackTop } from '../engines/modern';
+import { I18nProvider } from '@/infrastructure/runtime/i18n';
 
 const SKIN = readFileSync(
   resolve(__dirname, '../../../../../foundation/tokens/css/runtime/engines/modern/skin/back-top/index.css'),
@@ -114,6 +115,7 @@ describe('BackTop modern contract: anatomy', () => {
       </BackTop>
     );
     expect(screen.getByText('Top')).toBeInTheDocument();
+    expect(screen.getByRole('button')).toHaveAccessibleName('Top');
   });
 
   it('scrolls the window to top on click and reports onClick', async () => {
@@ -137,5 +139,71 @@ describe('BackTop modern contract: anatomy', () => {
     render(<BackTop visibilityHeight={0} style={{ backgroundColor: 'rgb(1, 2, 3)' }} />);
     const button = screen.getByRole('button', { name: 'Back to top' });
     expect(button.style.backgroundColor).toBe('rgb(1, 2, 3)');
+  });
+});
+
+describe('BackTop modern contract: visible-label accessible name (WCAG 2.5.3)', () => {
+  it('names the button from visible text children instead of the fixed label', () => {
+    render(<BackTop visibilityHeight={0}>Go up</BackTop>);
+    const button = screen.getByRole('button', { name: 'Go up' });
+    expect(button).not.toHaveAttribute('aria-label');
+    expect(button.getAttribute('data-part')).toBe('trigger');
+  });
+
+  it('names the button from nested visible text', () => {
+    render(
+      <BackTop visibilityHeight={0}>
+        <span>
+          Back <strong>up</strong>
+        </span>
+      </BackTop>
+    );
+    expect(screen.getByRole('button')).toHaveAccessibleName('Back up');
+  });
+
+  it.each([
+    ['the default glyph', undefined],
+    ['a symbol-only glyph', <span>^</span>],
+    ['an arrow character', '↑'],
+    ['icon-only markup', <svg aria-hidden="true" />],
+    ['text hidden from assistive technology', <span aria-hidden="true">Top</span>],
+    ['text in a hidden element', <span hidden>Top</span>],
+  ])('keeps the localized default name for %s', (_case, content) => {
+    render(<BackTop visibilityHeight={0}>{content}</BackTop>);
+    const button = screen.getByRole('button');
+    expect(button).toHaveAttribute('aria-label', 'Back to top');
+    expect(button).toHaveAccessibleName('Back to top');
+  });
+
+  it('prefers visible text over the catalog label and keeps the catalog default otherwise', async () => {
+    render(
+      <I18nProvider locale="es" fallbackLocale="en">
+        <BackTop visibilityHeight={0}>Subir</BackTop>
+        <BackTop visibilityHeight={0} />
+      </I18nProvider>
+    );
+    expect(await screen.findByRole('button', { name: 'Subir' })).not.toHaveAttribute('aria-label');
+    expect(await screen.findByRole('button', { name: 'Volver arriba' })).toHaveAttribute('aria-label', 'Volver arriba');
+  });
+
+  it('keeps the scroll journey, onClick and focus return with text children', async () => {
+    const scrollTo = vi.fn();
+    Object.defineProperty(window, 'scrollTo', { configurable: true, writable: true, value: scrollTo });
+    const handleClick = vi.fn();
+    scrollWindowTo(600);
+    render(
+      <BackTop visibilityHeight={0} onClick={handleClick}>
+        Go up
+      </BackTop>
+    );
+
+    const button = screen.getByRole('button', { name: 'Go up' });
+    button.focus();
+    fireEvent.click(button);
+    expect(handleClick).toHaveBeenCalledTimes(1);
+    expect(document.activeElement).toBe(document.body);
+    await vi.waitFor(() => {
+      expect(scrollTo.mock.calls.at(-1)?.[0]?.top).toBe(0);
+    });
   });
 });

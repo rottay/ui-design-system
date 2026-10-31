@@ -11,7 +11,8 @@
  * **Key Features:**
  * - Built-in governed search icon (semantic `action.search` role)
  * - `onSearch` callback triggered on Enter key or button click
- * - Optional custom search button text via `searchButtonText`
+ * - Optional custom search button text via `searchButtonText`; visible text
+ *   names the button, icon- or symbol-only content keeps the localized "Search"
  * - Toggleable search button visibility via `showSearchButton`
  * - Inherits all BaseInput props (size, variant, status, etc.)
  *
@@ -47,12 +48,26 @@
 
 "use client";
 
-import { useEffect, useRef, type KeyboardEvent } from "react";
+import { isValidElement, useEffect, useRef, type KeyboardEvent, type ReactNode } from "react";
 import { partAttributes, resolveSubmitIntent, useFieldAction } from "@/foundation/behavior";
 import type { InputSearchProps } from "../../contracts";
 import { BaseInput } from "../../engines";
 import { ActionSearchIcon } from "@/graphics/icons/semantic/generated/roles/action-search";
 import { useOptionalTranslation } from "@/infrastructure/runtime/i18n";
+
+// WCAG 2.5.3 label in name: readable text names the button by its content, so
+// the fixed localized label only stands in for icon- or symbol-only content.
+function hasVisibleText(node: ReactNode, depth = 0): boolean {
+  if (typeof node === "string" || typeof node === "number") return /[\p{L}\p{N}]/u.test(String(node));
+  if (depth > 8) return false;
+  if (Array.isArray(node)) return node.some((child) => hasVisibleText(child, depth + 1));
+  if (isValidElement<{ children?: ReactNode; hidden?: unknown; "aria-hidden"?: unknown }>(node)) {
+    const { children, hidden, "aria-hidden": ariaHidden } = node.props;
+    if (hidden === true || ariaHidden === true || ariaHidden === "true") return false;
+    return hasVisibleText(children, depth + 1);
+  }
+  return false;
+}
 
 /**
  * Search input with integrated search action button.
@@ -107,13 +122,15 @@ export const InputSearch = (props: InputSearchProps) => {
   const searchDisabled = Boolean(loading || inputProps.disabled);
   const action = useFieldAction({ disabled: searchDisabled });
 
+  const namedByContent = Boolean(searchButtonText) && hasVisibleText(searchButtonText);
+
   const searchButton = showSearchButton ? (
     <button
       type="button"
       {...partAttributes("search-button", action.state)}
       {...action.handlers}
       onClick={() => onSearch?.(queryRef.current)}
-      aria-label={translation?.t("search") ?? "Search"}
+      aria-label={namedByContent ? undefined : translation?.t("search") ?? "Search"}
       disabled={searchDisabled}
     >
       {searchButtonText || <ActionSearchIcon decorative size="sm" />}

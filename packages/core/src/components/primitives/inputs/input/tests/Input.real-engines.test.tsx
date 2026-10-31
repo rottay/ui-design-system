@@ -700,3 +700,88 @@ describe("Input CSS-first skin (WO-ARC-07)", () => {
     expect(rulesOnly).not.toContain("[data-state~='hovered']");
   });
 });
+
+describe("Input.Search visible-label accessible name (WCAG 2.5.3)", () => {
+  it("names the button from visible searchButtonText instead of the fixed label", async () => {
+    const onSearch = vi.fn();
+    render(
+      <InputSearch engine="modern" value="ada" onSearch={onSearch} searchButtonText="Find users" aria-label="People" />
+    );
+
+    const button = await screen.findByRole("button", { name: "Find users" });
+    expect(button).not.toHaveAttribute("aria-label");
+    expect(button).toHaveAttribute("data-part", "search-button");
+    expect(screen.queryByRole("button", { name: "Search" })).toBeNull();
+    fireEvent.click(button);
+    expect(onSearch).toHaveBeenCalledWith("ada");
+  });
+
+  it("names the button from nested visible text", async () => {
+    render(
+      <InputSearch
+        engine="modern"
+        searchButtonText={
+          <span>
+            <strong>Find</strong> users
+          </span>
+        }
+        aria-label="People"
+      />
+    );
+
+    expect(await screen.findByRole("button")).toHaveAccessibleName("Find users");
+  });
+
+  it.each([
+    ["no custom content", undefined],
+    ["an empty string", ""],
+    ["a symbol-only glyph", "→"],
+    ["icon-only markup", <svg aria-hidden="true" />],
+    ["text hidden from assistive technology", <span aria-hidden="true">Find</span>],
+    ["text in a hidden element", <span hidden>Find</span>],
+  ] as const)("keeps the localized default name for %s", async (_case, content) => {
+    render(<InputSearch engine="modern" searchButtonText={content} aria-label="People" />);
+
+    const button = await screen.findByRole("button");
+    expect(button).toHaveAttribute("aria-label", "Search");
+    expect(button).toHaveAccessibleName("Search");
+  });
+
+  it("prefers visible text over the catalog label and keeps the catalog default otherwise", async () => {
+    render(
+      <I18nProvider locale="es" fallbackLocale="en">
+        <InputSearch engine="modern" searchButtonText="Encontrar" aria-label="Personas" />
+        <InputSearch engine="modern" aria-label="Consulta" />
+      </I18nProvider>
+    );
+
+    expect(await screen.findByRole("button", { name: "Encontrar" })).toBeInTheDocument();
+    expect(await screen.findByRole("button", { name: "Buscar" })).toHaveAttribute("aria-label", "Buscar");
+  });
+
+  it("keeps Enter, loading, disabled and hidden-button behavior with custom text", async () => {
+    const onSearch = vi.fn();
+    const { rerender } = render(
+      <InputSearch engine="modern" onSearch={onSearch} searchButtonText="Find" aria-label="Query" />
+    );
+
+    const input = screen.getByRole("textbox", { name: "Query" });
+    fireEvent.change(input, { target: { value: "grace" } });
+    fireEvent.keyDown(input, { key: "Enter" });
+    expect(onSearch).toHaveBeenCalledWith("grace");
+
+    rerender(<InputSearch engine="modern" onSearch={onSearch} loading searchButtonText="Find" aria-label="Query" />);
+    const loadingButton = await screen.findByRole("button", { name: "Find" });
+    expect(loadingButton).toBeDisabled();
+    fireEvent.click(loadingButton);
+    expect(onSearch).toHaveBeenCalledTimes(1);
+
+    rerender(<InputSearch engine="modern" onSearch={onSearch} disabled searchButtonText="Find" aria-label="Query" />);
+    expect(await screen.findByRole("button", { name: "Find" })).toBeDisabled();
+
+    rerender(
+      <InputSearch engine="modern" onSearch={onSearch} showSearchButton={false} searchButtonText="Find" aria-label="Query" />
+    );
+    await waitFor(() => expect(screen.queryByRole("button")).toBeNull());
+  });
+});
