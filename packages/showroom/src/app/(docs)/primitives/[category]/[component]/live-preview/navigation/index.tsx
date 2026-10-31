@@ -45,7 +45,7 @@ function BackTopPreview() {
         ref={scrollRef}
         style={{
           position: 'relative',
-          height: '100%',
+          height: 208,
           overflow: 'auto',
           padding: 14,
         }}
