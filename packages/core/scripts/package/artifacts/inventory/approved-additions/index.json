@@ -356,6 +356,74 @@
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/link/index.js",
       "reason": "ACT-07 DSA-FC-003: the link family deriver, the root producer of the Modern Link hover ink share"
+    },
+    {
+      "path": "dist/components/primitives/layout/grid/runtime/item-placement/index.cjs",
+      "reason": "PACKINV-P1 (attribution bdec42e4, 2026-10-31): ec3077cea fix(grid) -- the internal Grid item-placement owner (GridTrackLimit context and limitAutomaticColumnSpan), imported by grid, grid/compound and the Modern Grid engine; internal chunk, not a public subpath"
+    },
+    {
+      "path": "dist/components/primitives/layout/grid/runtime/item-placement/index.d.ts",
+      "reason": "PACKINV-P1 (attribution bdec42e4, 2026-10-31): ec3077cea fix(grid) -- the internal Grid item-placement owner (GridTrackLimit context and limitAutomaticColumnSpan), imported by grid, grid/compound and the Modern Grid engine; internal chunk, not a public subpath"
+    },
+    {
+      "path": "dist/components/primitives/layout/grid/runtime/item-placement/index.js",
+      "reason": "PACKINV-P1 (attribution bdec42e4, 2026-10-31): ec3077cea fix(grid) -- the internal Grid item-placement owner (GridTrackLimit context and limitAutomaticColumnSpan), imported by grid, grid/compound and the Modern Grid engine; internal chunk, not a public subpath"
+    },
+    {
+      "path": "dist/components/structures/foundation/content-boundary/policy/index.cjs",
+      "reason": "PACKINV-P1 (attribution bdec42e4, 2026-10-31): 484dc122e suspense phase B W3 -- the internal content-boundary policy owner (activeContentBoundaryRegions), the DS-owned ancestor Suspense boundary placements, shipped dark; internal chunk, not a public subpath"
+    },
+    {
+      "path": "dist/components/structures/foundation/content-boundary/policy/index.d.ts",
+      "reason": "PACKINV-P1 (attribution bdec42e4, 2026-10-31): 484dc122e suspense phase B W3 -- the internal content-boundary policy owner (activeContentBoundaryRegions), the DS-owned ancestor Suspense boundary placements, shipped dark; internal chunk, not a public subpath"
+    },
+    {
+      "path": "dist/components/structures/foundation/content-boundary/policy/index.js",
+      "reason": "PACKINV-P1 (attribution bdec42e4, 2026-10-31): 484dc122e suspense phase B W3 -- the internal content-boundary policy owner (activeContentBoundaryRegions), the DS-owned ancestor Suspense boundary placements, shipped dark; internal chunk, not a public subpath"
+    },
+    {
+      "path": "dist/components/structures/foundation/content-boundary/region/index.cjs",
+      "reason": "PACKINV-P1 (attribution bdec42e4, 2026-10-31): 484dc122e suspense phase B W3 -- the internal content-boundary region owner (withContentBoundary), imported by the app-shell, workspace-shell, surface-chrome and page-shell-surface structures, shipped dark; internal chunk, not a public subpath"
+    },
+    {
+      "path": "dist/components/structures/foundation/content-boundary/region/index.d.ts",
+      "reason": "PACKINV-P1 (attribution bdec42e4, 2026-10-31): 484dc122e suspense phase B W3 -- the internal content-boundary region owner (withContentBoundary), imported by the app-shell, workspace-shell, surface-chrome and page-shell-surface structures, shipped dark; internal chunk, not a public subpath"
+    },
+    {
+      "path": "dist/components/structures/foundation/content-boundary/region/index.js",
+      "reason": "PACKINV-P1 (attribution bdec42e4, 2026-10-31): 484dc122e suspense phase B W3 -- the internal content-boundary region owner (withContentBoundary), imported by the app-shell, workspace-shell, surface-chrome and page-shell-surface structures, shipped dark; internal chunk, not a public subpath"
+    },
+    {
+      "path": "dist/entrypoints/server/static-markup/index.d.ts",
+      "reason": "PACKINV-P1 (attribution bdec42e4, 2026-10-31): 8ea65afd8 + a62fe436f SUSPENSE Phase B W1 + FIX-W1-CC -- the entrypoint declaration of ./server/static-markup (renderResolvedStaticMarkup), package.json releaseSync.lab owner WO-CON-09; public LAB tier, NOT a stable-tier promotion"
+    },
+    {
+      "path": "dist/foundation/contracts/kernel/adaptation/composition/families/charts/index.d.ts",
+      "reason": "PACKINV-P1 (attribution bdec42e4, 2026-10-31): ca26cdd58 feat(core) posture-aware compact charts -- the type-only charts kernel adaptation contract, read by the shipped charts contracts and compact-mode declarations; declaration only, no runtime chunk, not a public subpath"
+    },
+    {
+      "path": "dist/infrastructure/runtime/engines/composition/react/rendered-families/index.cjs",
+      "reason": "PACKINV-P1 (attribution bdec42e4, 2026-10-31): 715726bf0 / e76b53d3f suspense phase B W2 + O-1 fix -- the internal rendered-families warming channel owner, imported by DesignSystemProvider and the component factory, shipped dark; internal chunk, not a public subpath"
+    },
+    {
+      "path": "dist/infrastructure/runtime/engines/composition/react/rendered-families/index.d.ts",
+      "reason": "PACKINV-P1 (attribution bdec42e4, 2026-10-31): 715726bf0 / e76b53d3f suspense phase B W2 + O-1 fix -- the internal rendered-families warming channel owner, imported by DesignSystemProvider and the component factory, shipped dark; internal chunk, not a public subpath"
+    },
+    {
+      "path": "dist/infrastructure/runtime/engines/composition/react/rendered-families/index.js",
+      "reason": "PACKINV-P1 (attribution bdec42e4, 2026-10-31): 715726bf0 / e76b53d3f suspense phase B W2 + O-1 fix -- the internal rendered-families warming channel owner, imported by DesignSystemProvider and the component factory, shipped dark; internal chunk, not a public subpath"
+    },
+    {
+      "path": "dist/server-static-markup.cjs",
+      "reason": "PACKINV-P1 (attribution bdec42e4, 2026-10-31): 8ea65afd8 + a62fe436f SUSPENSE Phase B W1 + FIX-W1-CC -- an exports target of ./server/static-markup (renderResolvedStaticMarkup), package.json releaseSync.lab owner WO-CON-09; public LAB tier, NOT a stable-tier promotion"
+    },
+    {
+      "path": "dist/server-static-markup.d.ts",
+      "reason": "PACKINV-P1 (attribution bdec42e4, 2026-10-31): 8ea65afd8 + a62fe436f SUSPENSE Phase B W1 + FIX-W1-CC -- an exports target of ./server/static-markup (renderResolvedStaticMarkup), package.json releaseSync.lab owner WO-CON-09; public LAB tier, NOT a stable-tier promotion"
+    },
+    {
+      "path": "dist/server-static-markup.js",
+      "reason": "PACKINV-P1 (attribution bdec42e4, 2026-10-31): 8ea65afd8 + a62fe436f SUSPENSE Phase B W1 + FIX-W1-CC -- an exports target of ./server/static-markup (renderResolvedStaticMarkup), package.json releaseSync.lab owner WO-CON-09; public LAB tier, NOT a stable-tier promotion"
     }
   ],
   "$reason": "WO-EMI-03. The emission owner's declared grammar is finished: `emission/index.ts` became a barrel and its implementation moved to `css/` (declaration/rule assembler, value admission) and `artifact/` (the tenant stylesheet format), with `tokens/` added as the third child -- the resolved token document, its var() resolver and its expression evaluator. `facade/runtime/tokens` is the intent-shaped door over that emitter and `contracts/theme/runtime/compilation` is the document's contract. Every path here is a new owner of published code, not a new dependency: the two shrinks reported beside them (`emission/index.{js,cjs}`) are the same code under its new owners, and the barrel is source-only because it re-exports and nothing else."
