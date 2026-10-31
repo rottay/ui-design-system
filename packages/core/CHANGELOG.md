@@ -173,10 +173,13 @@
   showSearchButton, and the BackTop scroll journey, reduced motion, focus
   return and late target are unchanged. Classic and Rustic BackTop are frozen
   and not changed. Their naming stays open. No public API or dependency
-  change. Source and focal checks cover the correction;
-  browser/assistive-technology and public-package acceptance remain pending.
-  The name a lazily loaded child exposes before its engine resolves is left
-  to that browser/assistive-technology check and is not claimed as tested.
+  change. Source, focal checks and Chromium accessible-name checks cover the
+  correction, including default and icon-only names, the shipped BackTop
+  preview and the lazy-child window. Assistive-technology and public-package
+  acceptance remain pending. In Chromium, a lazily loaded child has an empty
+  accessible name until its engine resolves, then its visible text names the
+  button; this residual is disclosed and is not claimed as assistive-technology
+  tested.
 
 ## 2.19.34
 
