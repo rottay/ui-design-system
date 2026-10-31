@@ -432,6 +432,7 @@ describe("channel minting and CSS text have declared owners", () => {
       `${LOWERING_ROOT}/runtime/derivation/chrome/input-number/index.ts`,
       `${LOWERING_ROOT}/runtime/derivation/chrome/input/index.ts`,
       `${LOWERING_ROOT}/runtime/derivation/chrome/kanban-board/index.ts`,
+      `${LOWERING_ROOT}/runtime/derivation/chrome/link/index.ts`,
       `${LOWERING_ROOT}/runtime/derivation/chrome/list/index.ts`,
       `${LOWERING_ROOT}/runtime/derivation/chrome/mentions/index.ts`,
       `${LOWERING_ROOT}/runtime/derivation/chrome/menu/index.ts`,

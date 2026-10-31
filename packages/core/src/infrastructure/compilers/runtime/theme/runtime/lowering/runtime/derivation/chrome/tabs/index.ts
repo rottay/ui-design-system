@@ -240,11 +240,12 @@ export function deriveTabsChannels(): Record<string, string> {
   vars["--ds-tabs-disabled-color"] = "var(--ds-color-text-tertiary)";
   vars["--ds-tabs-disabled-opacity"] = "0.48";
 
-  // Icon well, loading arc and badge.
+  // Icon well, loading arc and badge; the active well rides the selected shift
+  // and rests at the skin's 10% under medium emphasis.
   vars["--ds-tabs-icon-padding"] = "var(--ds-spacing-1)";
   vars["--ds-tabs-icon-radius"] = "var(--ds-radius-sm)";
   vars["--ds-tabs-icon-bg"] = "color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent)";
-  vars["--ds-tabs-icon-bg-active"] = "color-mix(in srgb, var(--ds-color-primary) 10%, transparent)";
+  vars["--ds-tabs-icon-bg-active"] = "color-mix(in srgb, var(--ds-color-primary) calc(var(--ds-state-selected-shift, 9%) + 1%), transparent)";
   vars["--ds-tabs-icon-color"] = "currentColor";
   vars["--ds-tabs-icon-shadow"] = "inset 0 0 0 1px color-mix(in srgb, var(--ds-color-border-subtle) 72%, transparent)";
   vars["--ds-tabs-icon-shadow-active"] = "inset 0 0 0 1px color-mix(in srgb, var(--ds-color-primary) 14%, transparent), 0 3px 8px color-mix(in srgb, var(--ds-color-primary) 8%, transparent)";

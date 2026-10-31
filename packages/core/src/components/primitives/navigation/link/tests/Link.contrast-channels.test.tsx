@@ -115,6 +115,26 @@ describe('Link modern skin: base-ink contrast channel (R0/Axe round 2)', () => {
     }
   });
 
+  it('keeps every emphasis hover posture above AA and below the active ramp', () => {
+    for (const { variant, source, tone, surface } of CASES) {
+      const surf = hexLuminance(surface);
+      const subtle = mixWithBlack(tone, 72);
+      const medium = mixWithBlack(tone, 70);
+      const strong = mixWithBlack(tone, 66);
+      const active = mixWithBlack(tone, 58);
+      const subtleRatio = contrastRatio(subtle, surf);
+      const mediumRatio = contrastRatio(medium, surf);
+      const strongRatio = contrastRatio(strong, surf);
+      const activeRatio = contrastRatio(active, surf);
+      expect(subtleRatio, `${variant}/${source} subtle hover = ${subtleRatio.toFixed(2)}:1`).toBeGreaterThanOrEqual(4.5);
+      expect(mediumRatio, `${variant}/${source} medium hover = ${mediumRatio.toFixed(2)}:1`).toBeGreaterThanOrEqual(4.5);
+      expect(strongRatio, `${variant}/${source} strong hover = ${strongRatio.toFixed(2)}:1`).toBeGreaterThanOrEqual(4.5);
+      expect(mediumRatio).toBeGreaterThan(subtleRatio);
+      expect(strongRatio).toBeGreaterThan(mediumRatio);
+      expect(activeRatio).toBeGreaterThan(strongRatio);
+    }
+  });
+
   it('keeps the visited pairing legible (mix of tone and text-secondary)', () => {
     // Visited is intentionally the muted state: TMM secondary visited =
     // mix(#8C6D46 76%, #5C4F3D 24%) = 5.00:1 on #FBF6EC.

@@ -45,6 +45,7 @@ import { dropdownChromeDeriver } from "./chrome/dropdown";
 import { menuChromeDeriver } from "./chrome/menu";
 import { tabsChromeDeriver } from "./chrome/tabs";
 import { breadcrumbChromeDeriver } from "./chrome/breadcrumb";
+import { linkChromeDeriver } from "./chrome/link";
 import { paginationChromeDeriver } from "./chrome/pagination";
 import { stepperChromeDeriver } from "./chrome/stepper";
 import { sidebarSurfaceChromeDeriver } from "./chrome/sidebar-surface";
@@ -193,6 +194,7 @@ export const FAMILY_DERIVERS: readonly FamilyDeriver[] = Object.freeze([
   menuChromeDeriver,
   tabsChromeDeriver,
   breadcrumbChromeDeriver,
+  linkChromeDeriver,
   paginationChromeDeriver,
   stepperChromeDeriver,
   sidebarSurfaceChromeDeriver,

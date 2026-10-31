@@ -45605,10 +45605,12 @@ html[data-ds-motion='reduced'] .ds-breadcrumb--modern[data-part='root'] [data-pa
     text-decoration-line: underline;
   }
 
+  /* The emphasis share is a root scalar; the mix resolves here, on the element
+     that declares the variant tone (medium share 30%, so tone 70%). */
   .rottay-link-shell.rottay-link-shell--modern[data-part='root']:is([data-state~='hovered'], :hover) {
     color: var(
       --ds-link-hover-color,
-      color-mix(in srgb, var(--ds-link-tone) 70%, var(--ds-color-neutral-900) 30%)
+      color-mix(in srgb, var(--ds-link-tone), var(--ds-color-neutral-900) var(--ds-link-hover-mix, 30%))
     );
     text-underline-offset: var(--ds-link-underline-offset-hover, 3px);
     text-decoration-thickness: var(--ds-link-underline-thickness-hover, 1.5px);
@@ -110546,6 +110548,7 @@ html[lang]:lang(ar) {
   --ds-kanban-board-touch-target: var(--ds-touch-target-min, 44px);
   --ds-letter-spacing-heading: 0.01em;
   --ds-line-height-display: 1.12;
+  --ds-link-hover-mix: calc(var(--ds-state-hover-shift, 4%) + 26%);
   --ds-list-border-width: var(--ds-edge-hairline-width);
   --ds-list-meta-description-ink: color-mix(in srgb, var(--ds-list-meta-description-color, var(--ds-color-text-secondary)) 70%, var(--ds-color-text-primary) 30%);
   --ds-material-canvas-background: var(--ds-surface-canvas);
@@ -111642,7 +111645,7 @@ html[lang]:lang(ar) {
   --ds-tabs-focus-ring-width: var(--ds-focus-ring-width);
   --ds-tabs-gap: var(--ds-spacing-1);
   --ds-tabs-icon-bg: color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent);
-  --ds-tabs-icon-bg-active: color-mix(in srgb, var(--ds-color-primary) 10%, transparent);
+  --ds-tabs-icon-bg-active: color-mix(in srgb, var(--ds-color-primary) calc(var(--ds-state-selected-shift, 9%) + 1%), transparent);
   --ds-tabs-icon-color: currentColor;
   --ds-tabs-icon-padding: var(--ds-spacing-1);
   --ds-tabs-icon-radius: var(--ds-radius-sm);

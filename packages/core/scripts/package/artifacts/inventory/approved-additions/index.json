@@ -344,6 +344,18 @@
     {
       "path": "dist/infrastructure/compilers/runtime/theme/runtime/ingress/foundation/scrim-doors/index.js",
       "reason": "W26-Q4 Phase 1 (owner decision Q4): the scrim-door census DocumentAdmission.scrimDoors reports"
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/link/index.cjs",
+      "reason": "ACT-07 DSA-FC-003: the link family deriver, the root producer of the Modern Link hover ink share"
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/link/index.d.ts",
+      "reason": "ACT-07 DSA-FC-003: the link family deriver, the root producer of the Modern Link hover ink share"
+    },
+    {
+      "path": "dist/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome/link/index.js",
+      "reason": "ACT-07 DSA-FC-003: the link family deriver, the root producer of the Modern Link hover ink share"
     }
   ],
   "$reason": "WO-EMI-03. The emission owner's declared grammar is finished: `emission/index.ts` became a barrel and its implementation moved to `css/` (declaration/rule assembler, value admission) and `artifact/` (the tenant stylesheet format), with `tokens/` added as the third child -- the resolved token document, its var() resolver and its expression evaluator. `facade/runtime/tokens` is the intent-shaped door over that emitter and `contracts/theme/runtime/compilation` is the document's contract. Every path here is a new owner of published code, not a new dependency: the two shrinks reported beside them (`emission/index.{js,cjs}`) are the same code under its new owners, and the barrel is source-only because it re-exports and nothing else."

@@ -107,7 +107,6 @@ const WIRED: Record<string, string> = {
   "--ds-tabs-icon-bg": "color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent)",
   "--ds-tabs-icon-shadow":
     "inset 0 0 0 1px color-mix(in srgb, var(--ds-color-border-subtle) 72%, transparent)",
-  "--ds-tabs-icon-bg-active": "color-mix(in srgb, var(--ds-color-primary) 10%, transparent)",
   "--ds-tabs-icon-shadow-active":
     "inset 0 0 0 1px color-mix(in srgb, var(--ds-color-primary) 14%, transparent), 0 3px 8px color-mix(in srgb, var(--ds-color-primary) 8%, transparent)",
   "--ds-tabs-item-lift": "calc(-1px * var(--ds-motion-intensity))",
@@ -321,6 +320,60 @@ describe("tabs emphasis grounds", () => {
         expect(channels.get(channel)).toBe("#c7548d");
         expect(result.provenance.get(channel)?.rank).toBe(rank);
       }
+    }
+  });
+});
+
+/** Settle the one `calc(a% + b%)` form the icon well uses; not a CSS engine. */
+const settlePercentSums = (value: string) =>
+  value.replace(/calc\((\d+(?:\.\d+)?)% \+ (\d+(?:\.\d+)?)%\)/g, (_, a: string, b: string) => `${Number(a) + Number(b)}%`);
+
+const ICON_WELL = "--ds-tabs-icon-bg-active";
+const ICON_WELL_REST = "color-mix(in srgb, var(--ds-color-primary) 10%, transparent)";
+const ICON_WELL_STILL = ["--ds-tabs-icon-bg", "--ds-tabs-icon-shadow-active", "--ds-tabs-icon-radius", "--ds-tabs-line-item-radius"] as const;
+
+describe("tabs icon well emphasis", () => {
+  it("rests at the skin's fallback under medium emphasis and travels with the selected shift", () => {
+    expect(skinFallbacks(ICON_WELL)).toEqual([ICON_WELL_REST]);
+    const wells = EMPHASIS_POSTURES.map((posture) => {
+      const channels = emphasisChannels(posture);
+      expect(substituteChannels(`var(${ICON_WELL})`, channels)).toContain(channels.get("--ds-state-selected-shift"));
+      return settlePercentSums(substituteChannels(`var(${ICON_WELL})`, channels));
+    });
+    const rest = substituteChannels(ICON_WELL_REST, emphasisChannels("medium"));
+    expect(wells).toEqual([
+      "color-mix(in srgb, #2457a7 6%, transparent)",
+      rest,
+      "color-mix(in srgb, #2457a7 18%, transparent)",
+    ]);
+  });
+
+  it("responds to the selected shift only", () => {
+    const channels = emphasisChannels("medium");
+    const baseline = substituteChannels(`var(${ICON_WELL})`, channels);
+    const shifted = new Map(channels);
+    shifted.set("--ds-state-selected-shift", "23%");
+    expect(substituteChannels(`var(${ICON_WELL})`, shifted)).not.toBe(baseline);
+    const unrelated = new Map(channels);
+    unrelated.set("--ds-state-hover-shift", "29%");
+    unrelated.set("--ds-state-active-shift", "29%");
+    unrelated.set("--ds-type-body-font-size", "24px");
+    unrelated.set("--ds-type-supporting-font-size", "21px");
+    expect(substituteChannels(`var(${ICON_WELL})`, unrelated)).toBe(baseline);
+  });
+
+  it("rests at the skin fallback without the states root and yields to authored family paint", () => {
+    const channels = emphasisChannels("strong");
+    channels.delete("--ds-state-selected-shift");
+    expect(settlePercentSums(substituteChannels(`var(${ICON_WELL})`, channels))).toBe(substituteChannels(ICON_WELL_REST, channels));
+    channels.set(ICON_WELL, "#c7548d");
+    expect(substituteChannels(`var(${ICON_WELL}, ${ICON_WELL_REST})`, channels)).toBe("#c7548d");
+  });
+
+  it("leaves the resting well, the active keyline and the radii unmoved by emphasis", () => {
+    for (const channel of ICON_WELL_STILL) {
+      const resolved = EMPHASIS_POSTURES.map((posture) => substituteChannels(`var(${channel})`, emphasisChannels(posture)));
+      expect({ channel, postures: new Set(resolved).size }).toEqual({ channel, postures: 1 });
     }
   });
 });

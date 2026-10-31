@@ -99,6 +99,10 @@ async function focusSweep(page: Page): Promise<SweepResult> {
       const outlineVisible =
         cs.outlineStyle !== 'none' && outlineWidth > 0 && alphaOf(cs.outlineColor) > 0;
       const boxShadowVisible = !!cs.boxShadow && cs.boxShadow !== 'none';
+      const pseudoBoxShadow = el.matches('[role="tab"]')
+        ? getComputedStyle(el, '::before').boxShadow
+        : 'none';
+      const pseudoBoxShadowVisible = !!pseudoBoxShadow && pseudoBoxShadow !== 'none';
 
       const interactiveSelector =
         'button, [role="button"], a[href], input, select, textarea, [role="tab"], [role="switch"], [role="checkbox"], [contenteditable="true"], [tabindex]:not([tabindex="-1"]):not([role="tabpanel"])';
@@ -110,12 +114,12 @@ async function focusSweep(page: Page): Promise<SweepResult> {
       return {
         exit: false as const,
         isInteractive,
-        indicator: outlineVisible || boxShadowVisible,
+        indicator: outlineVisible || boxShadowVisible || pseudoBoxShadowVisible,
         tag: el.tagName.toLowerCase(),
         role: el.getAttribute('role') || '',
         label,
         outline: `${cs.outlineStyle} ${cs.outlineWidth} ${cs.outlineColor}`,
-        boxShadow: cs.boxShadow,
+        boxShadow: pseudoBoxShadowVisible ? `::before ${pseudoBoxShadow}` : cs.boxShadow,
         sig: `${el.tagName}:${el.getAttribute('role') || ''}:${Math.round(rect.x)},${Math.round(rect.y)}:${label}`,
       };
     });

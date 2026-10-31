@@ -1,6 +1,6 @@
 {
   "tool": "decisions-lit",
-  "producedAt": "2026-10-08T01:21:33.608Z",
+  "producedAt": "2026-10-31T13:49:46.734Z",
   "headline": "decisions lit = 7/22 (+0/0 new)",
   "measuredHeadline": "measured on the 4-family sample: 15/22 move at least one sampled family",
   "denominators": {
@@ -18,7 +18,7 @@
   "provenance": {
     "build": {
       "dist": "packages/core/dist/server.js",
-      "builtAt": "2026-10-08T00:26:47.103Z"
+      "builtAt": "2026-10-31T12:24:55.472Z"
     },
     "sources": {
       "door": {
@@ -26,13 +26,13 @@
           "src/foundation",
           "src/infrastructure/compilers"
         ],
-        "fileCount": 934,
-        "digest": "7518010814145f9d11f61921e88ec043d243ce4ca6ede99b5e0e22e99b0a1dac"
+        "fileCount": 961,
+        "digest": "644d0f210f5ecb8f2bb5c57089bd063edf2deb9f707176f99d2fa3cf55101908"
       },
       "instrument": {
         "entry": "scripts/check/decisions-lit/public-cli/index.mjs",
         "fileCount": 18,
-        "digest": "4d5316c7311c6a4cb65582f4fb01834aea5cb43932c2f3034eea73870acd292f"
+        "digest": "8ecb97e9fa84eac18696b3538aa0bed7610413f2dd2e5eb226c88de94f663258"
       }
     },
     "browser": {
@@ -110,7 +110,7 @@
             ]
           }
         ],
-        "bundleSha": "9c62ebfeb1b82bd07938b2cb0986eb1c66d648eb6b17f07cf85c06505d8af110",
+        "bundleSha": "a6ab2d058a7299dd502273c5acd03d524fe473ff67cc86447dca21546603811a",
         "bundleMode": "fresh",
         "theme": "dark"
       },
@@ -182,7 +182,7 @@
             ]
           }
         ],
-        "bundleSha": "a902f99ea2b06e74c5b42c0b9c4cda1949e3081e155cd67d0bf1b06452f64bd9",
+        "bundleSha": "a799c1dd5a638f0309b2df2f9707ca72af4e10875d34a131f39836c979215440",
         "bundleMode": "fresh",
         "theme": "light"
       },
@@ -254,7 +254,7 @@
             ]
           }
         ],
-        "bundleSha": "9b05b9dd5b2631aab08ea1dc6ed4e50f99ab26df67d5f0a166f4371762f1a858",
+        "bundleSha": "e0f100131eca25e1abe0f290d73b418792590b6c748fef7fe9b3888db1eff703",
         "bundleMode": "fresh",
         "theme": "light"
       }

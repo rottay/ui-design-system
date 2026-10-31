@@ -44,6 +44,7 @@ Tier support: `facade/`, `foundation/`, `runtime/`.
 ### foundation/ (support owner)
 
 - `foundation/chrome/`
+- `foundation/content-boundary/`
 - `foundation/shell-contracts/`
 
 ### headers/

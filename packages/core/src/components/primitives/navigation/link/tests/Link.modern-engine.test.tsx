@@ -93,9 +93,11 @@ describe('Link modern skin resilience', () => {
       );
     }
     // States derive from the resolved tone channel along a monotonically
-    // darkening ramp: base 16% -> hover 30% -> active 42% black mix.
+    // darkening ramp: base 16% -> hover 30% (medium emphasis) -> active 42%.
     expect(SKIN).toContain('color-mix(in srgb, var(--ds-link-tone) 84%');
-    expect(SKIN).toContain('color-mix(in srgb, var(--ds-link-tone) 70%');
+    expect(SKIN).toContain(
+      'color-mix(in srgb, var(--ds-link-tone), var(--ds-color-neutral-900) var(--ds-link-hover-mix, 30%))'
+    );
     expect(SKIN).toContain('color-mix(in srgb, var(--ds-link-tone) 58%');
     expect(SKIN).toContain('color-mix(in srgb, var(--ds-link-tone) 76%');
   });

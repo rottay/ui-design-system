@@ -3517,12 +3517,13 @@
       "tier": "standard"
     },
     {
-      "channels": 392,
-      "channelsThroughAliases": 1222,
+      "channels": 393,
+      "channelsThroughAliases": 1224,
       "decision": "states.emphasis",
       "derivers": [
         "app-shell",
         "command-palette",
+        "link",
         "page-shell",
         "search-command-bar",
         "segmented",

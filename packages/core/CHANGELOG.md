@@ -4,6 +4,26 @@
 
 ### Patch Changes
 
+- Let the Modern Link hover ink follow tenant state emphasis. A new `link`
+  family deriver produces `--ds-link-hover-mix`, the share of
+  `--ds-color-neutral-900` in the hover ink, from the hover state delta:
+  subtle 28%, medium 30%, strong 34%. The skin mixes each variant's own tone
+  at that share on the Link element, so medium keeps the previous 70/30 ink and
+  every variant keeps its hue. An authored `--ds-link-hover-color` still wins,
+  and the skin's 30% fallback paints when the share or the states root is
+  absent. Rest, visited, pressed, disabled and focus inks and the hover
+  underline are unchanged. No public API or dependency change. Source, focal,
+  generated-artifact, AA arithmetic and computed-style checks cover the
+  correction; public-package acceptance remains pending.
+- Let the Modern Tabs icon well on a selected or hovered tab follow tenant
+  state emphasis through the selected shift. It still computes the previous
+  10% primary tint under medium emphasis (Rottay, Evnto and unauthored
+  themes), moves to 6% under subtle and 18% under strong (BitHire), and keeps
+  the skin's 10% fallback when the states root is absent. An authored
+  `chrome.tabs.iconBgActive` still wins. The resting icon well, the active
+  keyline and every other Tabs channel are unchanged. No public API or
+  dependency change. Source, focal, generated-artifact and computed-style
+  checks cover the correction; public-package acceptance remains pending.
 - Let Modern TimePicker and TreeSelect option hover backgrounds follow the
   control material and tenant emphasis, retaining the palette hover as the
   fallback and preserving every other channel. No public API or dependency
