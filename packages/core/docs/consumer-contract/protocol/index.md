@@ -33,14 +33,14 @@ upgrades when it chooses.
 ### 2.1 Every shipped change carries a changeset
 
 A pull request that changes anything under `packages/core/` that ships must add
-a changeset. Three path classes, three answers:
+a changeset. Four path classes, four answers:
 
 | Class | Paths | Requirement |
 |---|---|---|
 | signature | `packages/core/src/entrypoints/**`, `packages/core/contracts/package/entrypoints/**` | a changeset **and** a `contract-diff` block |
 | contract | `packages/core/docs/consumer-contract/**` | a changeset |
-| exempt | `packages/core/docs/**` outside the consumer contract | none — those documents are not in the package's `files` and never reach a pinned consumer |
-| library | the rest of `packages/core/**` | a changeset |
+| exempt | `packages/core/docs/**` outside the consumer contract, and `packages/core/scripts/**` outside the build producers | none — neither is in the package's `files`, so neither reaches a pinned consumer |
+| library | the rest of `packages/core/**`, including the build producers, which write `dist/` | a changeset, unless a parser proves the producer edit inert |
 
 A path class is not the whole answer, because an entrypoint is a barrel and the
 declarations it publishes live where they are DEFINED. So the check also derives
