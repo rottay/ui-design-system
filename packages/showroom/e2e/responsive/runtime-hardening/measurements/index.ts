@@ -19,9 +19,8 @@ import { fileURLToPath } from 'node:url';
 // ---------------------------------------------------------------------------
 
 const HERE = dirname(fileURLToPath(import.meta.url));
-// e2e/responsive -> packages/showroom/e2e/responsive; the repository root is
-// four levels up (responsive -> e2e -> showroom -> packages -> repo).
-const REPOSITORY_ROOT = resolve(HERE, '../../../..');
+// runtime-hardening/measurements -> the repository root is six levels up.
+const REPOSITORY_ROOT = resolve(HERE, '../../../../../..');
 const RUN_DIRECTORY = join(
   REPOSITORY_ROOT,
   'test-artifacts',
