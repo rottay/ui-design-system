@@ -46,8 +46,8 @@ export const plugin = { rules };
 
 export const configs = {
   /**
-   * Recommended config -- enables all governance rules as errors.
-   * Use as-is for strict enforcement, or spread and override individual rules.
+   * Recommended config -- errors, except `no-direct-lucide` (warn) and
+   * `no-layout-property-animation` (off). Spread to override a rule.
    */
   recommended: {
     plugins: {

@@ -7,7 +7,7 @@
  * lazy cannot render under synchronous `renderToStaticMarkup`: React throws
  * "suspended while responding to synchronous input". This helper is the
  * supported legacy-SSR path. It runs on the server (or a test realm) only and
- * is published on its own subpath so `./server` keeps its React-free contract.
+ * is published on its own subpath so `./server` stays free of `react-dom`.
  */
 
 import { version, type ReactNode } from 'react';

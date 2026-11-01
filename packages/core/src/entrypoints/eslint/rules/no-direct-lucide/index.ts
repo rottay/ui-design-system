@@ -6,10 +6,10 @@
  * tree-shaking, and future supplier swaps.
  *
  * Type-only imports (`import type { LucideIcon } from 'lucide-react'`) are
- * allowed during the transition period.
+ * erased at build time, so the rule allows them.
  *
- * Files inside the DS compatibility catalog are exempt by default because the
- * temporary legacy catalog itself still wraps Lucide.
+ * The DS glyph catalog is exempt by default; it wraps pinned Phosphor
+ * glyphs, not Lucide.
  *
  * Consumers can add extra exempt paths via the `exempt` option (glob patterns
  * matched against the file path).
@@ -58,7 +58,7 @@ export const noDirectLucide: Rule = {
     ],
     messages: {
       useDS:
-        "Use a semantic '@rottay/design-system/icons/*' entrypoint instead of " +
+        "Use the semantic '@rottay/design-system/icons' entrypoint instead of " +
         "the Lucide supplier module '{{source}}'.",
     },
   },
