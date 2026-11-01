@@ -30,9 +30,7 @@ Enforced in CI via `scripts/check/automation/bundle/index.mjs`. Any violation fa
 | EffectRegistry entry (`dist/effects.js` / `.cjs`) | < 800 B raw each (652/676 B measured + >10%) |
 | EffectRegistry all-export fixture | < 5.5 KB gzipped (4,829 B measured + >10%; ESM/CJS/types supplier-neutral) |
 | Spatial host entry (`dist/spatial.js` / `.cjs`) | < 400/400 B raw (296/356 B measured + >10%) |
-| Spatial specification entry (`dist/spatial-spec.js` / `.cjs`) | < 800/800 B raw (688/724 B measured + >10%) |
 | Spatial host all-export fixture | < 7.8 KB gzipped (7,064 B measured + >10%; includes the supplier-neutral shared continuous-runtime governor, React is the only external) |
-| Spatial specification all-export fixture | < 1.3 KB gzipped (1,097 B measured + >10%; no external/browser runtime) |
 | Named Bar renderer | < 13.9 KB gzipped (12,596 B measured + >10%; accessible interaction/insight runtime, D3/React external) |
 | Named Line renderer | < 12.8 KB gzipped (11,603 B measured + >10%; accessible interaction/insight runtime, D3/React external) |
 | Named HeatMap renderer | < 10.7 KB gzipped (9,665 B measured + >10%; accessible interaction runtime, D3/React external) |
@@ -93,8 +91,6 @@ chosen to approximate the gzipped budgets above (typical 3-4x ratio).
 | `dist/effects.cjs` | 800 B (676 B measured + >10%) |
 | `dist/spatial.js` | 400 B (296 B measured + >10%) |
 | `dist/spatial.cjs` | 400 B (356 B measured + >10%) |
-| `dist/spatial-spec.js` | 800 B (688 B measured + >10%) |
-| `dist/spatial-spec.cjs` | 800 B (724 B measured + >10%) |
 | `dist/tokens.js` | 80 KB |
 | `dist/tokens.cjs` | 80 KB |
 | `dist/i18n.js` | 80 KB |
@@ -134,17 +130,16 @@ chosen to approximate the gzipped budgets above (typical 3-4x ratio).
    both raw facade ceilings. `node scripts/check/automation/bundle/index.mjs --chart-access` runs only this gate.
 7. `node scripts/check/automation/bundle/index.mjs --chart-renderers` runs only that focused renderer gate;
    it does not build the full package or write artifacts.
-8. The SPATIAL-01 gate uses `export *` fixtures and compares both the built-facade and bundled
+8. The SPATIAL-01 gate uses an `export *` fixture and compares both the built-facade and bundled
    runtime export inventories with the supplier contract, so a stale hand-written list cannot
-   hide a new export. The server-safe `./spatial/spec` fixture rejects every external import,
-   React, DOM/browser runtime, Three/R3F, asset and dynamic import. The `./spatial` host fixture
-   permits external React only and rejects Three/R3F, Motion, D3, assets and dynamic imports.
+   hide a new export. The `./spatial` host fixture permits external React only and rejects
+   Three/R3F, Motion, D3, assets and dynamic imports.
    Import expressions are captured from Rollup's parsed module graph before inlining; asset
-   inlining is disabled and both emitted assets and asset module IDs are denied. Both facades
-   independently walk their CJS and declaration closures, including triple-slash path/type/lib
-   references; the spec denies DOM, WebWorker and ScriptHost declaration libraries. The gate
-   also enforces the four raw facade ceilings. `node scripts/check/automation/bundle/index.mjs --spatial` runs
-   only this focused gate.
+   inlining is disabled and both emitted assets and asset module IDs are denied. The facade
+   independently walks its CJS and declaration closures, including triple-slash path/type/lib
+   references. The gate also enforces the two raw host facade ceilings; RET-01-E retired
+   `./spatial/spec`, so that door has no entry, fixture or ceiling here.
+   `node scripts/check/automation/bundle/index.mjs --spatial` runs only this focused gate.
 9. The semantic-asset retention gate selects a generated role subpath, the exact
    104-role BitHire preset, the canonical `./icons` full-corpus facade (the former
    explicit compatibility door, consolidated by RET-01-F), focused `BrandMark` and
@@ -216,12 +211,16 @@ unrelated code.
 ## Spatial Baseline
 
 The canonical-tree 2.19.28 release-candidate build on 2026-07-17 measured the
-host facades at 296/356 B raw, the specification facades at 688/724 B raw, the
-host all-export fixture at 7,064 B gzip and the specification fixture at 1,097 B
-gzip. The single `SPATIAL_BASELINE_BYTES` object records those exact values;
+host facades at 296/356 B raw and the host all-export fixture at 7,064 B gzip.
+The single `SPATIAL_BASELINE_BYTES` object records those three exact values;
 `deriveSpatialBudget()` creates every ceiling as measured +10%, rounded up to
-the next 100 B. Re-measure all six together when the public boundary changes;
+the next 100 B. Re-measure all three together when the public boundary changes;
 never replace exact baselines with rounded limits.
+
+The same build measured the specification facades at 688/724 B raw and the
+specification fixture at 1,097 B gzip. Those values are historic: RET-01-E
+retired `./spatial/spec`, so they are no longer an entry, a budget or a gate
+input.
 
 ## Adjusting Budgets
 

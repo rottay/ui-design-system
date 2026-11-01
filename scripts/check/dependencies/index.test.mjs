@@ -1928,30 +1928,18 @@ test('chart-renderer runtime contract includes the public datum-key utility', ()
   });
 });
 
-test('spatial runtime contracts are exact and supplier-free', () => {
+test('spatial host runtime contract is exact and supplier-free; the spec door stays retired', () => {
   const contract = loadSupplierContract();
   const spatialExports = [
     'SPATIAL_SCENE_MODULE_VERSION',
     'SpatialExperience',
-  ];
-  const spatialSpecExports = [
-    'SPATIAL_QUALITY_BUDGETS',
-    'SPATIAL_SCENE_MODULE_VERSION',
-    'downgradeSpatialMode',
-    'isSpatialSceneModule',
-    'resolveSpatialPolicy',
-    'resolveSpatialQualityBudget',
   ];
   assert.deepEqual(contract.entrypoints['./spatial'], {
     exports: spatialExports,
     symbols: {},
     supplierFreeExports: spatialExports,
   });
-  assert.deepEqual(contract.entrypoints['./spatial/spec'], {
-    exports: spatialSpecExports,
-    symbols: {},
-    supplierFreeExports: spatialSpecExports,
-  });
+  assert.equal(Object.hasOwn(contract.entrypoints, './spatial/spec'), false);
 });
 
 test('root, motion, and effects cannot reach spatial or a Three supplier', () => {
@@ -1959,9 +1947,10 @@ test('root, motion, and effects cannot reach spatial or a Three supplier', () =>
   const sourceRoot = resolve(coreRoot, 'src');
   const entries = collectSourceEntrypoints(manifest, sourceRoot);
   const graphs = new Map(
-    ['.', './motion', './effects', './spatial', './spatial/spec']
+    ['.', './motion', './effects', './spatial']
       .map((subpath) => [subpath, traceSourceEntry(entries.get(subpath), sourceRoot)]),
   );
+  assert.equal(entries.has('./spatial/spec'), false);
   const isSpatialPath = (path) => /\/(?:foundation\/contracts\/kernel\/spatial|infrastructure\/runtime\/spatial|entrypoints\/graphics\/spatial)(?:\/|$)/.test(
     path.replaceAll('\\', '/'),
   );
@@ -1977,15 +1966,12 @@ test('root, motion, and effects cannot reach spatial or a Three supplier', () =>
   }
 
   assert.deepEqual([...graphs.get('./spatial').externalImports.keys()].sort(), ['react']);
-  assert.deepEqual([...graphs.get('./spatial/spec').externalImports.keys()], []);
-  for (const subpath of ['./spatial', './spatial/spec']) {
-    assert.equal(
-      [...graphs.get(subpath).externalImports]
-        .some(([specifier]) => supplierFamilyForSpecifier(specifier) === 'three'),
-      false,
-      subpath,
-    );
-  }
+  assert.equal(
+    [...graphs.get('./spatial').externalImports]
+      .some(([specifier]) => supplierFamilyForSpecifier(specifier) === 'three'),
+    false,
+    './spatial',
+  );
 });
 
 test('runtime closure follows unfortunately named files reached by an exported entry', () => {
@@ -2499,7 +2485,7 @@ test('live core graph has no false optional or zero-importer peer', () => {
   assert.equal(entrypointPath('./motion'), 'entrypoints/graphics/motion/index.ts');
   assert.equal(entrypointPath('./effects'), 'entrypoints/graphics/effects/index.ts');
   assert.equal(entrypointPath('./spatial'), 'entrypoints/graphics/spatial/index.ts');
-  assert.equal(entrypointPath('./spatial/spec'), 'entrypoints/graphics/spatial/spec/index.ts');
+  assert.equal(sourceEntrypoints.has('./spatial/spec'), false);
   const graph = auditCoreDependencyGraph();
   assert.deepEqual(graph.errors, []);
   // The governed corpus emits one supplier-isolated module per semantic role
@@ -2518,7 +2504,7 @@ test('live core graph has no false optional or zero-importer peer', () => {
     rootReachableImporters: 0,
   });
   assert.deepEqual(graph.entries['./spatial'].packages, ['react']);
-  assert.deepEqual(graph.entries['./spatial/spec'].packages, []);
+  assert.equal(Object.hasOwn(graph.entries, './spatial/spec'), false);
 });
 
 test('live lock and installed workspace expose one runtime identity with Motion direct and Framer transitive', () => {
