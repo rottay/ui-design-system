@@ -285,6 +285,85 @@ test("one closed record pins the sealed receipt, and no record holds anything op
   );
 });
 
+test("a fresh live receipt suspends neither the sealed pin nor the open-record law", () => {
+  const sealedSource = readFileSync(
+    resolve(REPOSITORY_ROOT, SEALED_RECEIPT_PATH),
+    "utf8"
+  );
+  const sealed = JSON.parse(sealedSource);
+  const [record] = JSON.parse(
+    readFileSync(
+      resolve(import.meta.dirname, "../obligations/index.json"),
+      "utf8"
+    )
+  ).closed;
+  const { artifact } = auditCra15RuntimeHardening({
+    repositoryRoot: REPOSITORY_ROOT,
+    liveReceiptSourceOverride: null,
+  });
+  const reportSource = '{"suites":[]}\n';
+  const { spatialSpecGzipBytes: _retired, ...bundle } =
+    sealed.assertions.bundle;
+  // In memory only: the sealed shape rebased on today's coordinate, so the
+  // admitted run proves each refusal below comes from the sealed law alone.
+  const live = JSON.stringify({
+    ...sealed,
+    package: artifact.package,
+    sourceFingerprint: artifact.sourceFingerprint,
+    report: {
+      ...sealed.report,
+      sha256: createHash("sha256").update(reportSource).digest("hex"),
+    },
+    assertions: { ...sealed.assertions, bundle },
+  });
+  const run = (options = {}) =>
+    auditCra15RuntimeHardening({
+      repositoryRoot: REPOSITORY_ROOT,
+      sourceOverrides: new Map([[sealed.report.path, reportSource]]),
+      liveReceiptSourceOverride: live,
+      ...options,
+    });
+
+  const admitted = run();
+  assert.deepEqual(admitted.errors, []);
+  assert.equal(
+    admitted.artifact.checks.realBrowserPerformanceAndBundle.status,
+    "pass"
+  );
+
+  for (const [label, options, pattern] of [
+    [
+      "sealed receipt rewritten",
+      { sealedReceiptSourceOverride: `${sealedSource} ` },
+      /sealed browser receipt moved/u,
+    ],
+    [
+      "sealed receipt removed",
+      { sealedReceiptSourceOverride: null },
+      /sealed browser receipt is missing/u,
+    ],
+    [
+      "open record",
+      {
+        supersessionObligationsOverride: {
+          obligations: [record],
+          closed: [record],
+        },
+      },
+      new RegExp(`authorises nothing.*${SEALED_RECORD_ID}`, "u"),
+    ],
+  ]) {
+    const result = run(options);
+    assert.equal(result.ok, false, label);
+    assert.match(result.errors.join("\n"), pattern, label);
+    assert.equal(
+      result.artifact.checks.realBrowserPerformanceAndBundle.status,
+      "fail",
+      label
+    );
+  }
+});
+
 test("the assembler writes the path the gate reads and never the sealed receipt", () => {
   const { liveReceiptPath } = auditCra15RuntimeHardening({
     repositoryRoot: REPOSITORY_ROOT,

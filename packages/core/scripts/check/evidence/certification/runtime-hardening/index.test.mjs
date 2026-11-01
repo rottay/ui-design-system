@@ -96,9 +96,13 @@ function withBundle(evidence, bundle) {
 }
 
 test("canonical CRA15 source produces deterministic structural evidence without a false completion claim", () => {
-  const first = auditCra15RuntimeHardening({ repositoryRoot: REPOSITORY_ROOT });
+  const first = auditCra15RuntimeHardening({
+    repositoryRoot: REPOSITORY_ROOT,
+    liveReceiptSourceOverride: null,
+  });
   const second = auditCra15RuntimeHardening({
     repositoryRoot: REPOSITORY_ROOT,
+    liveReceiptSourceOverride: null,
   });
 
   assert.equal(first.ok, true, first.errors.join("\n"));
@@ -106,11 +110,8 @@ test("canonical CRA15 source produces deterministic structural evidence without 
   assert.equal(first.artifact.structurallyPassed, true);
   assert.equal(first.artifact.completionEligible, false);
   assert.equal(first.artifact.checks.roadmapAuthority.status, "pending");
-  // Real browser evidence is recorded, and it is HISTORICAL: the sealed receipt
-  // measured a source coordinate that no commit reproduces any more, so it is
-  // superseded rather than current. That is a pending item with a named owner,
-  // not a pass and not a silent skip -- and the artifact must still never claim
-  // completion on its own.
+  // The live receipt is pinned absent, so the browser leg stays pending: the
+  // sealed receipt is history and its closed record authorises nothing.
   assert.equal(
     first.artifact.checks.realBrowserPerformanceAndBundle.status,
     "pending"
@@ -119,24 +120,19 @@ test("canonical CRA15 source produces deterministic structural evidence without 
     first.pending.filter(
       (item) =>
         !/Phase 6 remains locked/u.test(item) &&
-        item !== "WO-RET-01 is todo, not done" &&
         !/browser-receipt-superseded-by-canonical-path-refactor/u.test(item)
     ).length,
     0,
     first.pending.join("\n")
   );
   assert.match(first.pending.join("\n"), /Phase 6 remains locked/u);
-  // WO-RET-01 joined CRA-15's dependsOn in 1c56b0399 (the adopted 2026-09-05
-  // programme); until it is done it is a named pending item, never a pass.
-  assert.ok(first.pending.includes("WO-RET-01 is todo, not done"), first.pending.join("\n"));
   assert.match(
     first.pending.join("\n"),
     /sealed browser receipt is superseded/u
   );
 
-  // NEGATIVE CONTROL: without the written record the stale coordinate is an
-  // error, exactly as before. The record is what holds it open, and nothing
-  // else does.
+  // NEGATIVE CONTROL: with no closed record the sealed receipt is unaccounted
+  // for, which is an error. The record pins history and holds nothing open.
   const unrecorded = auditCra15RuntimeHardening({
     repositoryRoot: REPOSITORY_ROOT,
     supersessionObligationsOverride: { obligations: [] },
