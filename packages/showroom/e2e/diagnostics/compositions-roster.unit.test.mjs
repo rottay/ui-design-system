@@ -130,7 +130,7 @@ test('the stacked sidebar rule resets the cross-axis alignment it inherits', () 
     path.join(REPO, 'packages/core/src/foundation/tokens/css/presentation/components/skin/sidebar-surface/index.css'),
     'utf8',
   );
-  const gridStart = skin.indexOf(".ds-structure.ds-sidebar-surface[data-part='root'] {");
+  const gridStart = skin.search(/^\.ds-structure\.ds-sidebar-surface\[data-part='root'\]\s*[,{]/m);
   assert.ok(gridStart !== -1, 'the grid rule must exist');
   const gridRule = skin.slice(gridStart, skin.indexOf('}', gridStart));
   assert.ok(
