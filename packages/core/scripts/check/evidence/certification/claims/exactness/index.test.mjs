@@ -1184,6 +1184,156 @@ test('G7/B-1 CONTROL: package identity is still enforced, and an unproven tag is
   assert.equal(unproven.unresolved[0].syntax, 'jsx-custom-unproven-forwarder');
 });
 
+test('G7 a bare undefined data-part is statically absent on every sink kind', () => {
+  const moduleReader = (base) => (base === '/repo/src/components/primitives/layout/stack'
+    ? {
+      path: `${base}/index.tsx`,
+      text: "export function Stack(props: { 'data-part'?: string }) { return <div {...props} />; }",
+    }
+    : null);
+  const measure = (jsx) => collectDataPartStampsFromText(
+    "import { Stack } from '@/components/primitives/layout/stack';\n"
+    + "import { Mystery } from './nowhere';\n"
+    + `export const Probe = () => ${jsx};\n`,
+    '/repo/src/components/structures/demo.tsx',
+    { moduleReader },
+  );
+  const tags = ['div', 'Stack', 'Mystery'];
+  const values = [
+    'undefined',
+    '(undefined)',
+    'undefined as never',
+    'undefined!',
+    'undefined satisfies never',
+    '((undefined as never)!)',
+  ];
+  for (const tag of tags) {
+    assert.equal(measure(`<${tag} data-part="root" />`).stamps.length, tag === 'Mystery' ? 0 : 1, `${tag} control`);
+    for (const value of values) {
+      const result = measure(`<${tag} data-part={${value}} className="kept" />`);
+      assert.deepEqual(result.unresolved, [], `<${tag}> ${value}`);
+      assert.deepEqual(result.stamps, [], `<${tag}> ${value}`);
+    }
+  }
+
+  const composed = measure(`
+    <Stack data-part={undefined}>
+      <div data-part="inner" />
+      <Stack data-part="nested" />
+      <Mystery data-part="unproven" />
+    </Stack>
+  `);
+  assert.deepEqual(composed.stamps.map(({ part }) => part), ['inner', 'nested']);
+  assert.deepEqual(
+    composed.unresolved.map(({ syntax, expression }) => [syntax, expression]),
+    [['jsx-custom-unproven-forwarder', 'data-part="unproven"']],
+  );
+  assert.equal(evaluateDataPartUnresolved(measure('<Stack data-part={undefined} />').unresolved).ok, true);
+});
+
+test('G7 every other spelling beside a bare undefined data-part stays reported', () => {
+  const measure = (jsx) => collectDataPartStampsFromText(
+    "import { Mystery } from './nowhere';\n"
+    + `export const Probe = ({ on, part, undefinedPart }) => ${jsx};\n`,
+    'source.tsx',
+  );
+  const cases = [
+    ['<Mystery data-part={void 0} />', 'jsx-custom-unproven-forwarder', []],
+    ['<Mystery data-part={on ? undefined : undefined} />', 'jsx-custom-unproven-forwarder', []],
+    ["<Mystery data-part={on ? undefined : 'title'} />", 'jsx-custom-unproven-forwarder', []],
+    ['<Mystery data-part={on && undefined} />', 'jsx-custom-unproven-forwarder', []],
+    ['<Mystery data-part={undefined ?? part} />', 'jsx-custom-unproven-forwarder', []],
+    ['<Mystery data-part={part} />', 'jsx-custom-unproven-forwarder', []],
+    ['<Mystery data-part={undefinedPart} />', 'jsx-custom-unproven-forwarder', []],
+    ['<Mystery data-part={globalThis.undefined} />', 'jsx-custom-unproven-forwarder', []],
+    ['<Mystery data-part={on.undefined} />', 'jsx-custom-unproven-forwarder', []],
+    ["<Mystery data-part={'undefined'} />", 'jsx-custom-unproven-forwarder', ['undefined']],
+    ['<Mystery data-part="undefined" />', 'jsx-custom-unproven-forwarder', ['undefined']],
+    ['<Mystery data-part />', 'jsx-custom-unproven-forwarder', []],
+    ['<Mystery data-part={} />', 'jsx-custom-unproven-forwarder', []],
+    ['<div data-part={void 0} />', 'jsx-intrinsic-dynamic-value', []],
+    ['<div data-part />', 'jsx-intrinsic-dynamic-value', []],
+    ["<Mystery {...{ 'data-part': undefined }} />", 'jsx-spread-data-part', []],
+    ["<div {...{ 'data-part': undefined }} />", 'jsx-spread-data-part', []],
+    ["<Mystery data-part={undefined} {...{ 'data-part': 'late' }} />", 'jsx-spread-data-part', ['late']],
+  ];
+  for (const [jsx, syntax, candidateParts] of cases) {
+    const { stamps, unresolved } = measure(jsx);
+    assert.deepEqual(stamps, [], jsx);
+    assert.deepEqual(unresolved.map((sink) => [sink.syntax, sink.candidateParts]), [[syntax, candidateParts]], jsx);
+  }
+
+  const constBag = collectDataPartStampsFromText(
+    "const bag = { 'data-part': undefined };\nexport const Probe = () => <div {...bag} />;\n",
+  );
+  assert.deepEqual(constBag.unresolved.map(({ syntax }) => syntax), ['jsx-spread-data-part']);
+
+  const competing = [
+    '<div data-part="kept" data-part={undefined} />',
+    '<div data-part={undefined} data-part="kept" />',
+  ];
+  for (const jsx of competing) {
+    const { stamps, unresolved } = measure(jsx);
+    assert.deepEqual(stamps.map(({ part }) => part), ['kept'], jsx);
+    assert.deepEqual(unresolved.map(({ syntax, expression }) => [syntax, expression]), [
+      ['jsx-intrinsic-dynamic-value', 'undefined'],
+    ], jsx);
+  }
+});
+
+test('G7 any declaration named undefined keeps the bare spelling reported', () => {
+  const site = 'const Probe = () => <Mystery data-part={undefined} />;';
+  const reported = (text) => collectDataPartStampsFromText(
+    `import { Mystery } from './nowhere';\n${text}\n`,
+    'source.tsx',
+  ).unresolved.filter(({ expression }) => expression === 'data-part={undefined}').length;
+  assert.equal(reported(site), 0, 'the global spelling is absent');
+
+  const declarations = [
+    'const undefined = "bound";',
+    'let undefined = "bound";',
+    'var undefined = "bound";',
+    'const { undefined } = source;',
+    'const { key: undefined } = source;',
+    'const [undefined] = source;',
+    'function undefined() {}',
+    'class undefined {}',
+    'enum undefined { A }',
+    'namespace undefined { export const a = 1; }',
+    "import undefined from './bound';",
+    "import { undefined } from './bound';",
+    "import { bound as undefined } from './bound';",
+    "import * as undefined from './bound';",
+    "import undefined = require('./bound');",
+    'const first = (undefined) => undefined;',
+    'function first({ undefined }) { return undefined; }',
+    'function first(...undefined) { return undefined; }',
+    'const bound = function undefined() {};',
+    'const bound = class undefined {};',
+    'try { run(); } catch (undefined) { report(undefined); }',
+    'for (const undefined of source) run(undefined);',
+    'function first() { const undefined = 1; return undefined; }\nfunction second() { var undefined = 2; return undefined; }',
+  ];
+  for (const declaration of declarations) {
+    assert.equal(reported(`${declaration}\n${site}`), 1, declaration);
+  }
+
+  const shadowing = 'function Probe(undefined) { return <Mystery data-part={undefined} />; }';
+  assert.equal(reported(shadowing), 1, 'the parameter reaches the attribute');
+
+  const notBindings = [
+    'const undefinedPart = 1;',
+    'const bag = { undefined: 1 };',
+    'run(source.undefined);',
+    'class Holder { undefined = 1; }',
+    'type Holder = { undefined: string };',
+    'export { Probe as undefined };',
+  ];
+  for (const declaration of notBindings) {
+    assert.equal(reported(`${declaration}\n${site}`), 0, declaration);
+  }
+});
+
 test('an evidence path resolves back through the roots this run uses, not through a sibling clone', () => {
   // The same defect one layer up: `join(WORKSPACE_ROOT, 'ui-design-system/…')`
   // reads whatever directory happens to carry that name. In a worktree it read

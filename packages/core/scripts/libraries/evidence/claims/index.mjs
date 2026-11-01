@@ -124,6 +124,14 @@ function uniqueBinding(bindings, name) {
   return entries?.length === 1 ? entries[0] : null;
 }
 
+/** Does `node` hold a declaration of `undefined` that `buildBindings` does not record? */
+function declaresUndefined(node) {
+  const named = ts.isClassLike(node) || ts.isFunctionExpression(node) || ts.isEnumDeclaration(node) ||
+    ts.isModuleDeclaration(node) || ts.isImportEqualsDeclaration(node);
+  if (named && node.name?.text === 'undefined') return true;
+  return Boolean(ts.forEachChild(node, declaresUndefined));
+}
+
 function combineStrings(left, right, limit = 128) {
   const combined = new Set();
   for (const a of left) {
@@ -3557,8 +3565,24 @@ export function collectDataPartStampsFromText(text, fileName = 'source.tsx', opt
     return null;
   }
 
+  /**
+   * `data-part={undefined}` renders no attribute, so it is no sink. It stays reported when the
+   * file rebinds `undefined` anywhere, or when a second `data-part` on the element competes.
+   */
+  function isStaticallyAbsentPart(attribute) {
+    const value = attribute.initializer && ts.isJsxExpression(attribute.initializer)
+      ? unwrap(attribute.initializer.expression)
+      : null;
+    if (!value || !ts.isIdentifier(value) || value.text !== 'undefined') return false;
+    const partKeys = attribute.parent.properties.filter(
+      (property) => ts.isJsxAttribute(property) && property.name.getText(source) === 'data-part',
+    );
+    return partKeys.length === 1 && !bindings.has('undefined') && !declaresUndefined(source);
+  }
+
   function visitCanonical(node) {
     if (ts.isJsxAttribute(node) && node.name.getText(source) === 'data-part') {
+      if (isStaticallyAbsentPart(node)) return;
       const sink = jsxSink(node);
       const valueNode = node.initializer && ts.isJsxExpression(node.initializer)
         ? node.initializer.expression
