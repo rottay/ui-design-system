@@ -270,8 +270,8 @@ export {
 // Icons live behind a dedicated subpath so the root export does not pull
 // the icon catalog into every consumer bundle.
 //
-// `@rottay/design-system/icons` exports the supplier-independent semantic
-// Icon facade plus the temporary named-icon compatibility catalog.
+// `@rottay/design-system/icons` guarantees the supplier-independent semantic
+// Icon facade and its corpus names; named supplier glyphs remain private.
 // Product code should use semantic names; suppliers stay behind adapters.
 //
 // Neither catalog is re-exported from this root barrel.

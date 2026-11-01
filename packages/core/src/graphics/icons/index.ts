@@ -1,7 +1,7 @@
 /**
  * @fileoverview Icon exports - Rottay Design System
- * @description Public icon barrel. The supplier-independent semantic Icon
- * facade, generated named packs, and named glyph catalog share this API.
+ * @description Private in-package barrel: named supplier glyphs, glyph factory
+ * and contracts. The public entry is `@rottay/design-system/icons`.
  */
 
 export { createIcon } from './glyphs/runtime/factory';
