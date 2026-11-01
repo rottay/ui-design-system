@@ -8,18 +8,28 @@
  * roster assertion keeps a class from arriving without a plant.
  */
 import assert from 'node:assert/strict';
+import { execFileSync } from 'node:child_process';
+import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { dirname, join, resolve } from 'node:path';
 import test from 'node:test';
+import { fileURLToPath } from 'node:url';
 
+import { computeBuildInputHash } from '../../../libraries/build/input-hash/index.mjs';
 import {
+  BUILD_PRODUCER_PREFIXES,
   BUMP_LEVELS,
   CONTRACT_DIFF_KINDS,
   CONTRACT_PREFIXES,
   DRILLS,
   LIBRARY_ROOT,
   auditRange,
+  auditWorkingTree,
   classifyPath,
   classifyPaths,
+  isBuildProducer,
   isChangesetFile,
+  isInertProducerEdit,
   parseChangeset,
   pendingContractDiff,
   parseContractDiffRow,
@@ -36,6 +46,10 @@ import {
 
 const changeset = (body) => parseChangeset('planted.md', body);
 
+const PACKAGE_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../../../..');
+const CSS_BUILD = 'packages/core/scripts/build/verticals/css-build/index.mjs';
+const TOOLING = 'packages/core/scripts/check/contract-changeset/index.mjs';
+
 test('every path this gate can see lands in exactly one class', () => {
   assert.equal(classifyPath('packages/core/src/entrypoints/server/index.ts'), 'contract');
   assert.equal(classifyPath('packages/core/docs/consumer-contract/index.md'), 'contract');
@@ -47,6 +61,159 @@ test('every path this gate can see lands in exactly one class', () => {
   assert.equal(classifyPath('packages/core/docs/architecture/index.md'), 'exempt');
   assert.equal(classifyPath('roadmap/registry.json'), 'outside');
   assert.equal(classifyPath('packages/showroom/src/app/page.tsx'), 'outside');
+  assert.equal(classifyPath(TOOLING), 'exempt');
+  assert.equal(classifyPath('packages/core/scripts/generate/tokens/manifest/index.mjs'), 'exempt');
+  assert.equal(classifyPath('packages/core/scripts/libraries/paint/index.mjs'), 'exempt');
+  assert.equal(classifyPath(CSS_BUILD), 'library');
+  assert.equal(classifyPath('packages/core/scripts/libraries/repo-root/index.mjs'), 'library');
+  assert.equal(classifyPath('packages/core/dist/index.js'), 'library');
+  assert.equal(classifyPath('packages/core/contracts/css/hooks/index.json'), 'library');
+  assert.equal(classifyPath('packages/core/vite.config.ts'), 'library');
+  assert.equal(classifyPath('scripts/maintain/roadmap/status/index.mjs'), 'outside');
+});
+
+test('the scripts exemption is true of the real package, not only of this gate', () => {
+  const manifest = JSON.parse(readFileSync(join(PACKAGE_ROOT, 'package.json'), 'utf8'));
+  const reachesScripts = (value) => /^(?:!?\.?\/?)scripts\//u.test(value);
+  assert.ok(manifest.files.length > 0);
+  assert.deepEqual(manifest.files.filter(reachesScripts), []);
+  assert.doesNotMatch(JSON.stringify(manifest.exports), /"\.\/scripts\//u);
+  assert.deepEqual(Object.values(manifest.bin ?? {}).filter(reachesScripts), []);
+});
+
+test('every producer the build-input manifest owns stays out of the exemption', () => {
+  // The manifest walks the `build*` scripts and their imports, so this list and
+  // the freshness gate cannot disagree about what writes `dist/`.
+  const producers = computeBuildInputHash(PACKAGE_ROOT).buildInputManifest.producers
+    .map((record) => /^producer:(.+)$/u.exec(record.id)?.[1])
+    .filter((path) => path !== undefined);
+  assert.ok(producers.length >= 10, `the manifest shrank to ${producers.length} producers`);
+  assert.ok(producers.includes(CSS_BUILD.slice(LIBRARY_ROOT.length)));
+  for (const path of producers) {
+    assert.equal(classifyPath(`${LIBRARY_ROOT}${path}`), 'library', path);
+  }
+  for (const prefix of BUILD_PRODUCER_PREFIXES) {
+    assert.ok(
+      producers.some((path) => `${LIBRARY_ROOT}${path}`.startsWith(prefix)),
+      `${prefix} no longer holds a producer; a stale row only costs a false red, but it is stale`,
+    );
+  }
+});
+
+test('tooling exempts itself and nothing else the range changed', () => {
+  assert.deepEqual(auditRange({ changed: [TOOLING] }), []);
+  for (const [path, leg] of [
+    ['packages/core/src/entrypoints/server/index.ts', 'contract'],
+    ['packages/core/docs/consumer-contract/index.md', 'contract'],
+    ['packages/core/contracts/package/entrypoints/index.json', 'contract'],
+    ['packages/core/src/components/primitives/button/index.tsx', 'library'],
+    ['packages/core/contracts/css/hooks/index.json', 'library'],
+    ['packages/core/dist/index.js', 'library'],
+    ['packages/core/package.json', 'library'],
+    [CSS_BUILD, 'library'],
+  ]) {
+    assert.deepEqual(auditRange({ changed: [TOOLING, path] }).map((finding) => finding.leg), [leg], path);
+  }
+  // The derived leg reads declarations, not paths, so no exemption can touch it.
+  const surfaceChanges = [{ target: '.#root', file: 'packages/core/src/x/index.ts', change: 'changed' }];
+  assert.deepEqual(
+    auditRange({ changed: [TOOLING], surfaceChanges }).map((finding) => finding.leg),
+    ['surface'],
+  );
+  assert.deepEqual(
+    auditRange({ changed: [TOOLING], surfaceUnresolved: [{ subpath: './x', target: './y', reason: 'gone' }] })
+      .map((finding) => finding.leg),
+    ['surface-unresolved'],
+  );
+});
+
+test('the inert proof can only ever exempt a build producer', () => {
+  // A JSDoc edit under `src/` is the case this must refuse: comments there ship
+  // in the declarations, and a caller that named one here must not exempt it.
+  for (const path of [
+    'packages/core/src/components/primitives/button/index.tsx',
+    'packages/core/src/entrypoints/server/index.ts',
+    'packages/core/package.json',
+    'packages/core/dist/index.js',
+  ]) {
+    assert.equal(isBuildProducer(path), false);
+    assert.equal(auditRange({ changed: [path], inertProducers: [path] }).length, 1, path);
+  }
+  assert.deepEqual(auditRange({ changed: [CSS_BUILD], inertProducers: [CSS_BUILD] }), []);
+  assert.deepEqual(classifyPaths([CSS_BUILD], { inertProducers: [CSS_BUILD] }).exempt, [CSS_BUILD]);
+  // No proof supplied is no exemption: the default is the red.
+  assert.equal(auditRange({ changed: [CSS_BUILD] })[0].leg, 'library');
+  assert.match(auditRange({ changed: [CSS_BUILD] })[0].detail, /css-build/);
+});
+
+test('only a parser decides that a producer edit is inert', () => {
+  const inert = (before, after, path = CSS_BUILD) => isInertProducerEdit(path, before, after);
+  const code = 'export const banner = "/* Generated */";\n';
+  assert.equal(inert(`// one\n${code}`, `// two\n${code}`), true);
+  assert.equal(inert(`/** one */\n${code}`, `/**\n * two\n */\n\n${code}`), true);
+  // Comment shapes that are data: each of these reaches the shipped bytes.
+  assert.equal(inert(code, code.replace('Generated', 'Revised')), false);
+  assert.equal(inert('const a = `// x`;\n', 'const a = `// y`;\n'), false);
+  assert.equal(inert('const a = /\\/\\/x/;\n', 'const a = /\\/\\/y/;\n'), false);
+  assert.equal(inert('const a = "//x"; const b = 1;\n', 'const a = "//x"; const b = 2;\n'), false);
+  assert.equal(inert('import "./a.css";\n', 'import "./b.css";\n'), false);
+  assert.equal(inert('import a from "./a.mjs";\n', 'import a from "./b.mjs";\n'), false);
+  assert.equal(
+    inert('import a from "./a";\n', 'import a from "./b";\n', 'packages/core/scripts/build/x/index.ts'),
+    false,
+    'an import the code does not read still runs its module',
+  );
+  // Nothing certifiable, nothing exempt.
+  assert.equal(inert(null, code), false, 'an added producer');
+  assert.equal(inert(code, null), false, 'a removed producer');
+  assert.equal(inert(null, null), false);
+  assert.equal(inert('const = ;\n', 'const = ;\n'), false, 'unparseable at both ends');
+  assert.equal(inert(code, 'const = ;\n'), false, 'unparseable at one end');
+  assert.equal(
+    inert('{"a":1}\n', '{"a":1}\n', 'packages/core/scripts/build/verticals/bundle-build/contrast-baseline/index.json'),
+    false,
+    'data a producer reads has no executable form',
+  );
+});
+
+test('a ref range proves inertness from its merge-base, not from the tip of base', { timeout: 60000 }, () => {
+  // The branch made the edit `main` also made later: the diff still reports it,
+  // and comparing against the tip would call a real code change identical.
+  const repo = mkdtempSync(join(tmpdir(), 'contract-changeset-range-'));
+  const run = (...args) => execFileSync('git', args, { cwd: repo, encoding: 'utf8' });
+  const write = (body) => {
+    mkdirSync(join(repo, dirname(CSS_BUILD)), { recursive: true });
+    writeFileSync(join(repo, CSS_BUILD), body);
+    run('add', '--all');
+    run('commit', '--quiet', '--message', body);
+  };
+  try {
+    run('init', '--quiet', '--initial-branch=main');
+    run('config', 'user.email', 'gate@example.invalid');
+    run('config', 'user.name', 'gate');
+    write('export const a = 1;\n');
+    run('checkout', '--quiet', '-b', 'topic');
+    write('export const a = 2;\n');
+    run('checkout', '--quiet', 'main');
+    write('// the same code, arrived on main\nexport const a = 2;\n');
+    assert.deepEqual(
+      auditWorkingTree({ repoRoot: repo, base: 'main', head: 'topic' }).map((finding) => finding.leg),
+      ['library'],
+    );
+  } finally {
+    rmSync(repo, { recursive: true, force: true });
+  }
+});
+
+test('a build producer that changes its code needs a changeset; its comments do not', {
+  timeout: 300000,
+}, () => {
+  const changed = runDrill('build-producer-changed');
+  assert.equal(changed.landed, 'red');
+  assert.deepEqual(changed.findings.map((finding) => finding.leg), ['library']);
+  assert.match(changed.findings[0].detail, /css-build/);
+  assert.equal(runDrill('build-producer-comment-only').landed, 'green');
+  assert.equal(runDrill('tooling-without-changeset').landed, 'green');
 });
 
 test('the contract documents are never read as ordinary documentation', () => {
@@ -200,6 +367,8 @@ test('every changeset committed in this repository parses', () => {
 
 test('every declared drill class is planted and lands in its declared direction', { timeout: 300000 }, () => {
   assert.deepEqual(Object.keys(DRILLS).sort(), [
+    'build-producer-changed',
+    'build-producer-comment-only',
     'contract-doc-without-diff-block',
     'contract-with-changeset',
     'contract-without-changeset',
@@ -222,6 +391,7 @@ test('every declared drill class is planted and lands in its declared direction'
     'star-export-outside-source-tree',
     'surface-body-only-change',
     'surface-change-declared',
+    'tooling-without-changeset',
   ]);
   for (const [drill, expected] of Object.entries(DRILLS)) {
     const result = runDrill(drill);

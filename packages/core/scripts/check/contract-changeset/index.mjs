@@ -28,13 +28,19 @@
  *              signature half additionally needs a `contract-diff` block
  *              naming what moved, because a version number alone does not tell
  *              a reader which import to re-read.
- *   library  — the rest of `packages/core/`: shipped bytes that need a version
- *              to travel, but not a contract announcement.
- *   exempt   — `packages/core/docs/**` outside the consumer contract.
- *              `packages/core/package.json` ships no `docs/` entry in `files`,
- *              so those documents are not published bytes and cannot reach a
- *              pinned consumer. Demanding a changeset for them trains authors
- *              to open empty changesets, which is how the signal dies.
+ *   library  — the rest of `packages/core/`: shipped bytes, and the inputs that
+ *              produce them, which need a version to travel but not a contract
+ *              announcement.
+ *   exempt   — `packages/core/docs/**` outside the consumer contract, and
+ *              `packages/core/scripts/**` outside the build producers.
+ *              `packages/core/package.json` ships neither in `files`, so they
+ *              are not published bytes and cannot reach a pinned consumer.
+ *              Demanding a changeset for them trains authors to open empty
+ *              changesets, which is how the signal dies.
+ *
+ * A BUILD PRODUCER stays `library`: it is not shipped, but it writes `dist/`,
+ * which is not tracked, so its code can move published bytes with no other path
+ * in the range to witness it. Only an edit a parser proves inert is exempt.
  *
  * THE `contract-diff` BLOCK is the single source for the STATUS "Contract diff"
  * section: the roadmap status tool spawns this file with `--emit-pending` and
@@ -67,6 +73,8 @@ import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, symlinkSync, 
 import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+
+import ts from 'typescript';
 
 import { repoRoot as findRepoRoot } from '../../libraries/repo-root/index.mjs';
 import {
@@ -112,8 +120,21 @@ export const CONTRACT_DOC_PREFIXES = Object.freeze(['packages/core/docs/consumer
 
 export const CONTRACT_PREFIXES = Object.freeze([...SIGNATURE_PREFIXES, ...CONTRACT_DOC_PREFIXES]);
 
-/** Documentation outside the contract: authored for this repository, not shipped. */
-export const EXEMPT_PREFIXES = Object.freeze(['packages/core/docs/']);
+/** Documentation outside the contract and repository tooling: neither ships. */
+export const EXEMPT_PREFIXES = Object.freeze(['packages/core/docs/', 'packages/core/scripts/']);
+
+/**
+ * The scripts that write `dist/`, which the `scripts/` exemption must not reach.
+ * The suite binds this list to the producers of the build-input manifest.
+ */
+export const BUILD_PRODUCER_PREFIXES = Object.freeze([
+  'packages/core/scripts/build/',
+  'packages/core/scripts/libraries/build/input-hash/',
+  'packages/core/scripts/libraries/engine/framework/',
+  'packages/core/scripts/libraries/engine/frozen-mount/',
+  'packages/core/scripts/libraries/repo-root/',
+  'packages/core/scripts/libraries/tokens/base-environment/',
+]);
 
 export const CHANGESET_DIR = '.changeset';
 export const CONTRACT_DIFF_KINDS = Object.freeze(['subpath', 'signature', 'export']);
@@ -123,20 +144,56 @@ export const BUMP_LEVELS = Object.freeze(['major', 'minor', 'patch']);
 
 // ── classification ─────────────────────────────────────────────────────────
 
+export function isBuildProducer(path) {
+  return BUILD_PRODUCER_PREFIXES.some((prefix) => path.startsWith(prefix));
+}
+
 /**
  * One path, one class. `contract` wins over `exempt` so the consumer-contract
- * documents are never read as ordinary documentation.
+ * documents are never read as ordinary documentation, and a build producer wins
+ * over `exempt` so `scripts/` never reads as tooling where it writes `dist/`.
  */
 export function classifyPath(path) {
   if (CONTRACT_PREFIXES.some((prefix) => path.startsWith(prefix))) return 'contract';
   if (!path.startsWith(LIBRARY_ROOT)) return 'outside';
+  if (isBuildProducer(path)) return 'library';
   if (EXEMPT_PREFIXES.some((prefix) => path.startsWith(prefix))) return 'exempt';
   return 'library';
 }
 
-export function classifyPaths(paths, { surfaceFiles = null } = {}) {
+/**
+ * A script as it executes, or `null` when uncertifiable. Parsed, not filtered:
+ * the bundle banners are CSS comments inside strings, and those ship.
+ */
+export function executableForm(path, text) {
+  if (text === null || !/\.[cm]?[jt]s$/u.test(path)) return null;
+  const { outputText, diagnostics } = ts.transpileModule(text, {
+    fileName: path,
+    reportDiagnostics: true,
+    compilerOptions: {
+      allowJs: true,
+      module: ts.ModuleKind.ESNext,
+      removeComments: true,
+      target: ts.ScriptTarget.ESNext,
+      verbatimModuleSyntax: true,
+    },
+  });
+  return diagnostics.length > 0 ? null : outputText;
+}
+
+/** Fail-closed: an end that is absent or unparseable certifies nothing. */
+export function isInertProducerEdit(path, before, after) {
+  const form = executableForm(path, before);
+  return form !== null && form === executableForm(path, after);
+}
+
+export function classifyPaths(paths, { surfaceFiles = null, inertProducers = [] } = {}) {
   const buckets = { contract: [], library: [], exempt: [], outside: [] };
-  for (const path of paths) buckets[classifyPath(path)].push(path);
+  const inert = new Set(inertProducers.filter(isBuildProducer));
+  for (const path of paths) {
+    const kind = classifyPath(path);
+    buckets[kind === 'library' && inert.has(path) ? 'exempt' : kind].push(path);
+  }
   buckets.signature = buckets.contract.filter((path) =>
     SIGNATURE_PREFIXES.some((prefix) => path.startsWith(prefix)));
   // The DERIVED half: a file that DEFINES a published declaration is part of
@@ -354,6 +411,7 @@ export function auditRange({
   surfaceChanges = [],
   surfaceFiles = null,
   surfaceUnresolved = [],
+  inertProducers = [],
 }) {
   const findings = [];
 
@@ -371,7 +429,7 @@ export function auditRange({
         + `uncertified: ${unresolved.slice(0, 5).join('; ')}${unresolved.length > 5 ? '; …' : ''}`,
     });
   }
-  const buckets = classifyPaths(changed, { surfaceFiles });
+  const buckets = classifyPaths(changed, { surfaceFiles, inertProducers });
   const released = consumed.length > 0 && versionBumped;
   const governedDeclared = declared.filter((entry) => declaresGovernedPackage(entry));
 
@@ -640,9 +698,15 @@ export function readRange({ repoRoot = REPO_ROOT, base, head = null } = {}) {
     versionOf(readAt(repoRoot, base, manifest)) !== versionOf(readAt(repoRoot, head, manifest));
 
   const uniqueChanged = [...new Set(changed)].sort();
+  // The same start as the diff above: a ref range is merge-base based, so the
+  // tip of `base` is not what this range changed a producer from.
+  const start = head === null ? base : git(repoRoot, ['merge-base', base, head]).trim();
+  const inertProducers = uniqueChanged.filter((path) => isBuildProducer(path)
+    && isInertProducerEdit(path, readAt(repoRoot, start, path), readAt(repoRoot, head, path)));
   const surface = surfaceDiffFor({ repoRoot, base, head });
   return {
     changed: uniqueChanged,
+    inertProducers,
     declared,
     consumed,
     versionBumped,
@@ -705,6 +769,11 @@ export const DRILLS = Object.freeze({
   // simply refusing to elide: an implementation edit that leaves the inferred
   // type where it was is still not a contract event.
   'inferred-return-body-only': 'green',
+  // Tooling is exempt, a build producer is not, and only a parser separates an
+  // edit of what a producer says from an edit of what it writes.
+  'tooling-without-changeset': 'green',
+  'build-producer-comment-only': 'green',
+  'build-producer-changed': 'red',
 });
 
 const RETAINED_CHANGESET = [
@@ -780,6 +849,16 @@ const MOUNT_MODULE = [
  */
 const INFERRED_RETURN_MODULE = 'export function value() { return 1; }\n';
 
+const TOOLING_SCRIPT = `${LIBRARY_ROOT}scripts/check/planted/index.mjs`;
+const BUILD_PRODUCER_SCRIPT = `${LIBRARY_ROOT}scripts/build/verticals/css-build/index.mjs`;
+
+/** The real shape: a CSS comment in a string is shipped, a script comment is not. */
+const BUILD_PRODUCER_MODULE = [
+  '// Composes the shipped bundle.',
+  'export const banner = "/* Generated */";',
+  '',
+].join('\n');
+
 /** A base commit with one file of every class this gate distinguishes. */
 function sandbox() {
   const workspace = mkdtempSync(join(tmpdir(), 'contract-changeset-drill-'));
@@ -809,6 +888,8 @@ function sandbox() {
   plant(workspace, `${LIBRARY_ROOT}src/runtime/value/index.ts`, INFERRED_RETURN_MODULE);
   plant(workspace, `${LIBRARY_ROOT}docs/consumer-contract/index.md`, '# Consumer contract\n');
   plant(workspace, `${LIBRARY_ROOT}docs/guides/getting-started/index.md`, '# Getting started\n');
+  plant(workspace, TOOLING_SCRIPT, 'export const limit = 1;\n');
+  plant(workspace, BUILD_PRODUCER_SCRIPT, BUILD_PRODUCER_MODULE);
   plant(workspace, `${CHANGESET_DIR}/README.md`, '# Changesets\n');
   plant(workspace, `${CHANGESET_DIR}/retained.md`, RETAINED_CHANGESET);
   for (const args of [
@@ -1071,6 +1152,22 @@ export function runDrill(drill) {
         'export function value() { const one = 1; return one; }\n',
       );
       plant(workspace, `${CHANGESET_DIR}/planted.md`, changeset('patch'));
+    }
+
+    if (drill === 'tooling-without-changeset') {
+      plant(workspace, TOOLING_SCRIPT, 'export const limit = 2;\n');
+    }
+    if (drill === 'build-producer-comment-only') {
+      plant(workspace, BUILD_PRODUCER_SCRIPT, BUILD_PRODUCER_MODULE.replace(
+        '// Composes the shipped bundle.',
+        '// Composes the bundle the package ships.',
+      ));
+    }
+    if (drill === 'build-producer-changed') {
+      plant(workspace, BUILD_PRODUCER_SCRIPT, BUILD_PRODUCER_MODULE.replace(
+        '/* Generated */',
+        '/* Generated, revised */',
+      ));
     }
 
     let findings;
