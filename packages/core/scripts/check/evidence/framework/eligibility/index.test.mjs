@@ -173,7 +173,7 @@ test('NEGATIVE DRILL: ELEVATED without a productive source change is rejected', 
     baseFamilyReceipt({
       sourceFilesChanged: [
         'packages/core/src/components/primitives/inputs/Button/tests/button.test.tsx',
-        'docs-engineering/engineering/design-system/README.md',
+        'docs-engineering/development/design-system/README.md',
       ],
     }),
   );

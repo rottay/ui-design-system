@@ -31,7 +31,7 @@ import { packageRoot as findPackageRoot } from '../../../../../libraries/repo-ro
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = findPackageRoot(HERE);
 const SCRIPT = join(ROOT, 'scripts/generate/tokens/customization/catalog/index.mjs');
-const DOCS = resolve(ROOT, '../../../docs-engineering/engineering/design-system/tokens');
+const DOCS = resolve(ROOT, '../../../docs-engineering/development/design-system/tokens');
 
 function run(...args) {
   const result = spawnSync(process.execPath, [SCRIPT, ...args], {
@@ -169,7 +169,7 @@ test('drill: a dead name inside the operational corpus fails no-mixing', () => {
 
 /**
  * `--write` reaches into the SIBLING repository: it creates
- * `docs-engineering/engineering/design-system/tokens`, writes every generated
+ * `docs-engineering/development/design-system/tokens`, writes every generated
  * view there, and `unlinkSync`s every `.md` under the two family prefixes the
  * run did not produce. Measured read-only that is up to 343 files written and
  * up to 332 prune-eligible, landing on whatever uncommitted state that
@@ -181,7 +181,7 @@ test('drill: a dead name inside the operational corpus fails no-mixing', () => {
  */
 const DOCS_TOKENS_DIR = resolve(
   findPackageRoot(HERE),
-  '../../../docs-engineering/engineering/design-system/tokens',
+  '../../../docs-engineering/development/design-system/tokens',
 );
 
 function snapshotDocs() {

@@ -1,7 +1,7 @@
 /**
  * tokens-catalog (D0 Fase 2/4/5/8 + FASE G) — deterministic PROJECTION of the
  * token authorities into the official living documentation at
- * docs-engineering/engineering/design-system/tokens/. The docs are never a
+ * docs-engineering/development/design-system/tokens/. The docs are never a
  * second authority: every table here is regenerated from
  *
  *   - surface/report/index.json          (derived census; name-level truth)
@@ -61,7 +61,7 @@ const postcss = require('postcss');
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = findPackageRoot(HERE);
-const DOCS_TOKENS_DIR = resolve(ROOT, '../../../docs-engineering/engineering/design-system/tokens');
+const DOCS_TOKENS_DIR = resolve(ROOT, '../../../docs-engineering/development/design-system/tokens');
 const REPORT_PATH = join(HERE, '..', 'surface', 'report', 'index.json');
 const RECONCILIATION_PATH = join(HERE, 'reconciliation', 'index.json');
 const MANIFEST_PATH = join(ROOT, 'contracts/css/hooks/index.json');
@@ -1191,7 +1191,7 @@ function buildReconciliation(report) {
  * IN-REPO-ONLY MODE.
  *
  * `--write` reaches into the sibling repository: it `mkdirSync`s
- * `docs-engineering/engineering/design-system/tokens`, writes every generated
+ * `docs-engineering/development/design-system/tokens`, writes every generated
  * view there, and `unlinkSync`s every `.md` under the two family prefixes that
  * the current run did not produce. Measured read-only, that is up to 343 files
  * written and up to 332 prune-eligible, landing on top of that repository's own
