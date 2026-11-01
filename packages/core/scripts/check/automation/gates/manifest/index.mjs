@@ -1450,7 +1450,7 @@ export const CI_GATES = Object.freeze([
   { id: 'showroom-diagnostics', run: ['pnpm', '--filter', '@rottay/showroom', 'run', 'test:diagnostics'], blocking: true, phase: 'post-build',
     noDrillReason:
       'This entry IS a suite set: eleven-plus node-only diagnostics over the showroom registries and the skin-rule corpus, each with its own assertions. The glob is what makes the set complete; `wiring-coverage` is what proves the glob names real files.',
-    prerequisites: ['showroom-workspace'], },
+    prerequisites: ['showroom-workspace', 'docs-engineering-corpus'], },
 
   // The milestone A exit gate: an application that builds. The static legs prove
   // the fixture is admissible, `packed` compiles it against the `npm pack`
