@@ -293,7 +293,7 @@ const DEFINITIONS = [
       bundleBudgetGzipBytes: 16_384,
       maxLayers: 1,
       maxContinuousLoops: 1,
-      evidence: 'packages/core/scripts/check/automation/bundle/index.mjs --effects',
+      evidence: 'packages/core/scripts/check/evidence/certification/runtime-hardening/index.mjs',
     },
     pauseWhenOffscreen: true,
     pauseWhenPageHidden: true,

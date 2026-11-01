@@ -295,7 +295,6 @@
     "analyze:components": "node scripts/check/automation/bundle/index.mjs --components",
     "analyze:chart-access": "node scripts/check/automation/bundle/index.mjs --chart-access",
     "analyze:chart-spec": "node scripts/check/automation/bundle/index.mjs --chart-spec",
-    "analyze:effects": "node scripts/check/automation/bundle/index.mjs --effects",
     "analyze:asset-retention": "node scripts/check/automation/bundle/index.mjs --asset-retention",
     "effects:provenance": "node ../../scripts/check/effects/index.mjs",
     "lint": "pnpm run lint:eslint && pnpm run graphics-licenses:check && pnpm run effects:provenance && pnpm run lint:folders && pnpm run lint:integration && pnpm run lint:vertical && pnpm run lint:artifacts && node scripts/build/verticals/css-build/index.mjs --check",

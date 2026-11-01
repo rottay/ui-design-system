@@ -112,11 +112,10 @@ chosen to approximate the gzipped budgets above (typical 3-4x ratio).
 3. The semantic motion gate bundles the pure policy and `MotionProvider` separately through the
    public facade. Pure resolution must retain neither React nor Motion; the provider must keep both
    peers external. `node scripts/check/automation/bundle/index.mjs --motion` runs only this focused gate.
-4. RET-01-E retired `./effects`, so that door has no entry, fixture or ceiling here and the build
-   emits no `dist/effects.*`. The analyzer still carries the retired leg: its two raw
-   `dist/effects.*` keys report `SKIP (not found)`, and its EffectRegistry leg fails, alone under
-   `--effects` and inside every normal analysis, because `contracts/runtime/suppliers/index.json`
-   no longer declares `./effects`. That failure measures no bytes.
+4. RET-01-E retired `./effects`, so that door has no entry, fixture, raw key, ceiling or focused
+   flag here and the build emits no `dist/effects.*`. A normal analysis neither measures that door
+   nor counts it as a failure. ParticleField keeps its own 16,384 B gzip ceiling in the CRA-15
+   runtime-hardening gate, `scripts/check/evidence/certification/runtime-hardening/index.mjs`.
 5. The VIZ-03A chart-spec gate bundles every runtime export from `./charts/spec`, rejects React,
    D3, other suppliers, browser/client runtime, dynamic imports and emitted assets, then walks the
    CJS `require()` closure and `.d.ts` graph. `node scripts/check/automation/bundle/index.mjs --chart-spec` runs
