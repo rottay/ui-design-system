@@ -5,7 +5,7 @@ each application's maintainers, in its own repository and roadmap. The design
 system edits no application. This guide does not record app adoption or close
 WO-CON-09.
 
-Authority: the [consumer contract §1.2](../../index.md#12-tabla-ejecutable-los-38-subpaths-publicados),
+Authority: the [consumer contract §1.2](../../index.md#12-tabla-ejecutable-los-33-subpaths-publicados),
 [WO-CON-09](../../../../../../roadmap/consumer-contract.md#wo-con-09-40-adoption-consumers-migrate-legacy-sync-ssr-to-renderresolvedstaticmarkup)
 and [owner decision 6](../../../../../../roadmap/owner-decisions-2026-10-15.md#6--legacy-sync-ssr-is-a-documented-major-break).
 The change ships in the major through `suspense-phase-b-w1`.

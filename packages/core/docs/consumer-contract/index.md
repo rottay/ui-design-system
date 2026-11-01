@@ -78,7 +78,7 @@ disposición es la parte normativa y es la que no puede derivar.
 | Importaciones a superficie garantizada | bithire 2086 · showroom 325 |
 | Importaciones a superficie no garantizada (línea base, decrece) | bithire 16 · showroom 14 |
 
-### 1.2 Tabla ejecutable: los 38 subpaths publicados
+### 1.2 Tabla ejecutable: los 33 subpaths publicados
 
 <!-- consumer-contract:published:start -->
 | Subpath | Disposition | Retire-by | app-bithire | showroom |
@@ -191,7 +191,7 @@ Estado de ejecución por árbol (medido 2026-09-05):
 - **`app-bithire`: todavía no ejecuta la regla, y no puede hacerlo hoy.**
   La app fija `@rottay/design-system` **2.19.37** (`app-bithire/package.json`,
   `pnpm-lock.yaml` y el tarball del registro instalado en `node_modules`; el pin
-  `2.19.35` es el de app-platform, no el de bithire). Ese tarball publicado tiene
+  `2.19.37` es también el de app-platform). Ese tarball publicado tiene
   **45** claves de `exports`, su `dist/eslint.js` **no** contiene esta regla
   (0 coincidencias de `no-unsanctioned`), y **sigue exportando** `./commercial`,
   `./commercial.css` y `./styles/platform`. Es decir: la superficie publicada que
@@ -217,7 +217,7 @@ El borrador registraba «NO VERIFICADO cómo resuelve hoy». Verificado
 
 1. `packages/core/package.json` v2.19.36 **no** exporta `./commercial` ni
    `./commercial.css` (ni `./styles/platform`). La copia publicada que
-   `app-platform` tiene instalada, v2.19.35, sí exportaba los tres.
+   `app-platform` fija, v2.19.37, sí exportaba los tres.
 2. `app-platform/next.config.ts:53,60` además hace *alias* de webpack de
    `@rottay/design-system/commercial` → `<DS>/dist/commercial.js` y de
    `@rottay/design-system/commercial.css` → `<DS>/dist/commercial.css`,
