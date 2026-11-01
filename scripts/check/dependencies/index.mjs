@@ -4862,39 +4862,6 @@ export async function auditPackedArtifact(root = coreRoot) {
       `  type TenantMotionDial,\n` +
       `} from ${JSON.stringify(`${packedManifest.name}/motion`)};\n` +
       `import {\n` +
-      `  EFFECT_DEFINITIONS,\n` +
-      `  EFFECT_IDS,\n` +
-      `  EFFECT_REGISTRY,\n` +
-      `  EFFECT_REGISTRY_VERSION,\n` +
-      `  EFFECT_RESEARCH_PROVENANCE,\n` +
-      `  getEffectDefinition,\n` +
-      `  isEffectDefinition,\n` +
-      `  isEffectId,\n` +
-      `  resolveEffect,\n` +
-      `  type EffectAdmission,\n` +
-      `  type EffectAriaStrategy,\n` +
-      `  type EffectBudget,\n` +
-      `  type EffectDefinition,\n` +
-      `  type EffectEngine,\n` +
-      `  type EffectFallbackDefinition,\n` +
-      `  type EffectId,\n` +
-      `  type EffectLoop,\n` +
-      `  type EffectObservedRuntime,\n` +
-      `  type EffectProvenance,\n` +
-      `  type EffectPurpose,\n` +
-      `  type EffectRenderer,\n` +
-      `  type EffectResolution,\n` +
-      `  type EffectResolutionMode,\n` +
-      `  type EffectResolutionReason,\n` +
-      `  type EffectRuntimeContext,\n` +
-      `  type EffectTier,\n` +
-      `  type EffectVertical,\n` +
-      `  type MeasuredEffectBudget,\n` +
-      `  type ReferencedEffectProvenance,\n` +
-      `  type UnmeasuredEffectBudget,\n` +
-      `  type VerifiedEffectProvenance,\n` +
-      `} from ${JSON.stringify(`${packedManifest.name}/effects`)};\n` +
-      `import {\n` +
       `  SPATIAL_SCENE_MODULE_VERSION,\n` +
       `  SpatialExperience,\n` +
       `  type SpatialBackend,\n` +
@@ -5001,18 +4968,6 @@ export async function auditPackedArtifact(root = coreRoot) {
       `];\n` +
       `const packedMotionTypes = null as unknown as PackedMotionTypes;\n` +
       `const motionValues = [MOTION_DIAL_BOUNDS, MOTION_PROFILE_DEFAULTS, MOTION_PROFILE_ENVELOPES, MOTION_RECIPE_NAMES, MotionProvider, normalizeTenantMotionDial, useMotionPolicy, useMotionPreference, useMotionRecipe];\n` +
-      `const effectId: EffectId = 'glass-card';\n` +
-      `const effectContext: EffectRuntimeContext = { reducedMotion: true, pointer: 'coarse' };\n` +
-      `const effectResolution: EffectResolution = resolveEffect(effectId, effectContext);\n` +
-      `type PackedEffectTypes = [\n` +
-      `  EffectAdmission, EffectAriaStrategy, EffectBudget, EffectDefinition, EffectEngine,\n` +
-      `  EffectFallbackDefinition, EffectLoop, EffectObservedRuntime, EffectProvenance,\n` +
-      `  EffectPurpose, EffectRenderer, EffectResolutionMode, EffectResolutionReason,\n` +
-      `  EffectTier, EffectVertical, MeasuredEffectBudget, ReferencedEffectProvenance,\n` +
-      `  UnmeasuredEffectBudget, VerifiedEffectProvenance,\n` +
-      `];\n` +
-      `const packedEffectTypes = null as unknown as PackedEffectTypes;\n` +
-      `const effectValues = [EFFECT_DEFINITIONS, EFFECT_IDS, EFFECT_REGISTRY, EFFECT_REGISTRY_VERSION, EFFECT_RESEARCH_PROVENANCE, getEffectDefinition, isEffectDefinition, isEffectId];\n` +
       `const spatialMode: SpatialMode = 'live-high';\n` +
       `const spatialBackend: SpatialBackend = 'webgl2';\n` +
       `const spatialReason: SpatialResolutionReason = 'eligible-high';\n` +
@@ -5027,7 +4982,7 @@ export async function auditPackedArtifact(root = coreRoot) {
       `type PackedSpatialTypes = [SpatialInteraction, SpatialLiveMode, SpatialPurpose, SpatialQuality];\n` +
       `const packedSpatialTypes = null as unknown as PackedSpatialTypes;\n` +
       `const spatialValues = [SPATIAL_SCENE_MODULE_VERSION, SpatialExperience, spatialBudget, spatialPerformance, spatialEvent];\n` +
-      'console.log(AreaChart, CountUp, FadeIn, ScaleIn, CopyIcon, Icon, BrandMark, CloudServiceMark, ChartFrame, ChartInsightSummary, resolveChartProjection, chartView, chartPhoneView, chartFrameProps, chartInsightSummaryProps, packedChartTypes, chartGrammar, chartInsight, chartSummary, packedChartSpecTypes, chartSpecValues, accessProps, accessPageStatus, accessCell, accessFile, accessValues, rendererComponents, barProps, heatProps, lineProps, pieProps, scatterProps, lineDatumKey, chartInteractionMeta, chartActiveDatum, chartInteraction, packedChartInteractionTypes, motionPolicy, motionRecipe, packedMotionTypes, motionValues, effectResolution, packedEffectTypes, effectValues, spatialProps, packedSpatialTypes, spatialValues);\n',
+      'console.log(AreaChart, CountUp, FadeIn, ScaleIn, CopyIcon, Icon, BrandMark, CloudServiceMark, ChartFrame, ChartInsightSummary, resolveChartProjection, chartView, chartPhoneView, chartFrameProps, chartInsightSummaryProps, packedChartTypes, chartGrammar, chartInsight, chartSummary, packedChartSpecTypes, chartSpecValues, accessProps, accessPageStatus, accessCell, accessFile, accessValues, rendererComponents, barProps, heatProps, lineProps, pieProps, scatterProps, lineDatumKey, chartInteractionMeta, chartActiveDatum, chartInteraction, packedChartInteractionTypes, motionPolicy, motionRecipe, packedMotionTypes, motionValues, spatialProps, packedSpatialTypes, spatialValues);\n',
     );
     writeFileSync(resolve(consumerRoot, 'tsconfig.json'), JSON.stringify({
       compilerOptions: {
@@ -5059,33 +5014,8 @@ export async function auditPackedArtifact(root = coreRoot) {
     }
 
     // Create this only after the supplier CLI has scanned the positive app
-    // fixture: the intentionally-invalid symbol must fail TypeScript, not be
+    // fixture: the intentionally-invalid import must fail TypeScript, not be
     // misreported as a real consumer import by supplier honesty.
-    const negativeEffectSource = resolve(consumerRoot, 'src/effects-internal-negative.ts');
-    writeFileSync(
-      negativeEffectSource,
-      `// @ts-expect-error definition-level resolution is intentionally internal-only.\n` +
-      `import { resolveEffectDefinition } from ${JSON.stringify(`${packedManifest.name}/effects`)};\n` +
-      `void resolveEffectDefinition;\n`,
-    );
-    writeFileSync(resolve(consumerRoot, 'tsconfig.effects-negative.json'), JSON.stringify({
-      compilerOptions: {
-        lib: ['ES2022', 'DOM'],
-        module: 'ESNext',
-        moduleResolution: 'Bundler',
-        noEmit: true,
-        skipLibCheck: true,
-        strict: true,
-        target: 'ES2022',
-      },
-      include: ['src/effects-internal-negative.ts'],
-    }, null, 2));
-    spawnChecked(
-      'pnpm',
-      ['exec', 'tsc', '--project', 'tsconfig.effects-negative.json'],
-      { cwd: consumerRoot },
-    );
-
     const retiredSpatialSpecSource = resolve(consumerRoot, 'src/spatial-spec-retired-negative.ts');
     writeFileSync(
       retiredSpatialSpecSource,

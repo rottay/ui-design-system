@@ -9,6 +9,7 @@ import {
   analyzeRuntimeModuleEdges,
   auditAppSupplierManifest,
   auditCoreDependencyGraph,
+  auditPackedArtifact,
   auditPlatformExecutableClosure,
   auditRuntimeIdentities,
   assertPackedBuildPrerequisite,
@@ -1942,20 +1943,21 @@ test('spatial host runtime contract is exact and supplier-free; the spec door st
   assert.equal(Object.hasOwn(contract.entrypoints, './spatial/spec'), false);
 });
 
-test('root, motion, and effects cannot reach spatial or a Three supplier', () => {
+test('root and motion cannot reach spatial or a Three supplier; the effects door stays retired', () => {
   const manifest = JSON.parse(readFileSync(resolve(coreRoot, 'package.json'), 'utf8'));
   const sourceRoot = resolve(coreRoot, 'src');
   const entries = collectSourceEntrypoints(manifest, sourceRoot);
   const graphs = new Map(
-    ['.', './motion', './effects', './spatial']
+    ['.', './motion', './spatial']
       .map((subpath) => [subpath, traceSourceEntry(entries.get(subpath), sourceRoot)]),
   );
+  assert.equal(entries.has('./effects'), false);
   assert.equal(entries.has('./spatial/spec'), false);
   const isSpatialPath = (path) => /\/(?:foundation\/contracts\/kernel\/spatial|infrastructure\/runtime\/spatial|entrypoints\/graphics\/spatial)(?:\/|$)/.test(
     path.replaceAll('\\', '/'),
   );
 
-  for (const subpath of ['.', './motion', './effects']) {
+  for (const subpath of ['.', './motion']) {
     const graph = graphs.get(subpath);
     assert.equal([...graph.visited].some(isSpatialPath), false, subpath);
     assert.equal(
@@ -2029,6 +2031,14 @@ test('runtime export inventory includes the public CLI import and every CJS cond
       assert.equal(fixtures[mode].some((entry) => entry.specifier.endsWith(retiredSubpath)), false, retiredSubpath);
     }
   }
+});
+
+test('packed consumer audit keeps motion and spatial but never reaches for the retired effects door', () => {
+  const packedAudit = auditPackedArtifact.toString();
+  for (const subpath of ['/motion', '/spatial', '/spatial/spec']) {
+    assert.ok(packedAudit.includes(`\${packedManifest.name}${subpath}\``), subpath);
+  }
+  assert.doesNotMatch(packedAudit, /\/effects\b|effects-|\bEFFECT_|\beffect[A-Z]|Effect/);
 });
 
 test('offline runtime fixtures localize required packages and omit unavailable optional packages', () => {
@@ -2483,7 +2493,7 @@ test('live core graph has no false optional or zero-importer peer', () => {
   assert.equal(entrypointPath('./charts/access'), 'entrypoints/charts/access/index.ts');
   assert.equal(entrypointPath('./charts/renderers'), 'entrypoints/charts/renderers/index.ts');
   assert.equal(entrypointPath('./motion'), 'entrypoints/graphics/motion/index.ts');
-  assert.equal(entrypointPath('./effects'), 'entrypoints/graphics/effects/index.ts');
+  assert.equal(sourceEntrypoints.has('./effects'), false);
   assert.equal(entrypointPath('./spatial'), 'entrypoints/graphics/spatial/index.ts');
   assert.equal(sourceEntrypoints.has('./spatial/spec'), false);
   const graph = auditCoreDependencyGraph();
