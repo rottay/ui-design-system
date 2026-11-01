@@ -20,11 +20,11 @@
  * `components/structures/feedback/surface-lifecycle`. Both are re-exported below from
  * `components/structures/foundation/chrome/runtime/errors`.
  *
- * The nine are imported for local use and re-exported by name. This barrel is
+ * All nine are re-exported by name and five are imported for local use. This barrel is
  * their only public path (`components/surfaces/index.ts` re-exports it), so the package
- * keeps exporting the same API it exported before the move; and every function
- * below builds on them, which makes this the surfaces tier consuming the tier
- * beneath it rather than a compatibility shim for a retired path.
+ * keeps exporting the same API it exported before the move; and the functions
+ * below that take `access` build on those five, which makes this the surfaces tier
+ * consuming the tier beneath it rather than a compatibility shim for a retired path.
  */
 
 import type { ColumnDef, FieldDef } from '../../../../foundation/contracts/runtime/components/patterns/core';

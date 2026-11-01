@@ -36,8 +36,8 @@ export * from './foundation/contracts';
 
 // -- Runtime builders, helpers, collection workspace and postures, plus chrome profile defaults --
 //
-// Several lines below export from `../structures/foundation/chrome/*`. That
-// chrome cluster -- profile defaults, responsive posture and translations --
+// Several lines below export profile defaults from `../structures/foundation/chrome/*`.
+// That chrome cluster -- with responsive stacking and translations, not exported here --
 // moved down to the structures tier along with `PageShellSurface`,
 // `HeaderSurface` and `SidebarSurface`, which are page chrome rather than page
 // recipes and therefore may not import from surfaces. What remains here is

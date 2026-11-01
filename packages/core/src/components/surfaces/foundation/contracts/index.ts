@@ -523,7 +523,7 @@ export interface DetailSurfaceBehaviorConfig<TView> {
 
 /** Visual hints for the detail page sidebar layout. */
 export interface DetailSurfaceVisualConfig {
-  /** Which side the sidebar renders on ('start' or 'end'). */
+  /** Which side the sidebar renders on ('left' or 'right'). */
   sidebarPosition?: DetailPanelSidebarPosition;
   /** Fixed sidebar width. Accepts CSS values or pixel numbers. */
   sidebarWidth?: number | string;
