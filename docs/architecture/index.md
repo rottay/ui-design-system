@@ -253,11 +253,14 @@ separate opt-in subpaths for the same reason.
 hooks, contracts and runtime API from `@rottay/design-system`. The root barrel carries an
 explicit API list — an owner exporting a symbol does not mean the package publishes it.
 
-Classified subpaths expose cross-cutting capability boundaries, each backed by an owner
-under `src/entrypoints/`: server-safe tenant resolution, CSS bundles, governed icon packs,
-brand and cloud marks, pictograms, the chart kernel, motion/effect/spatial contracts, the
-governance ESLint plugin, and opt-in font packs. The current list is enumerated in
-[api.md](../api.md) rather than restated here.
+Classified subpaths expose cross-cutting capability boundaries. An owner under
+`src/entrypoints/` backs server-safe tenant resolution, the governed icon facade and its
+bounded application preset, brand and cloud marks, pictograms, the chart kernel, motion and
+spatial contracts, and the governance ESLint plugin. CSS bundles and opt-in font packs are
+classified subpaths too, but they publish stylesheet artifacts: their `exports` targets are
+CSS files the package build emits under `dist/`, neither `src/entrypoints/` owners nor Vite
+library entries. The current list is the `exports` map of `packages/core/package.json`,
+described in [api.md](../api.md) rather than restated here.
 
 Three standing rules:
 
