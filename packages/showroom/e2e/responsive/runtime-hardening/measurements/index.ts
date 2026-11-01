@@ -2,6 +2,8 @@ import { mkdirSync, writeFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+import { readBuildIdentity } from '../provenance/index.mjs';
+
 // ---------------------------------------------------------------------------
 // CRA-15 real-browser evidence recorder (audit MOT-01).
 //
@@ -14,6 +16,8 @@ import { fileURLToPath } from 'node:url';
 //
 // Each focal test writes ONE distinct partial file (never a shared merge), so a
 // single-worker run accumulates a stable set with no read/modify/write race.
+// Every partial names the build it measured, read when it is recorded, and the
+// assembler refuses a partial whose build is not the one it is assembling.
 // The .run/ directory is intermediate: the sanctioned artifact is the assembled
 // live-browser-receipt.json, and the caller clears .run/ before every run.
 // ---------------------------------------------------------------------------
@@ -48,6 +52,10 @@ export function recordCra15Measurement(
   mkdirSync(RUN_DIRECTORY, { recursive: true });
   writeFileSync(
     join(RUN_DIRECTORY, `${name}.json`),
-    `${JSON.stringify(data, null, 2)}\n`,
+    `${JSON.stringify(
+      { ...data, buildBinding: readBuildIdentity(REPOSITORY_ROOT) },
+      null,
+      2,
+    )}\n`,
   );
 }

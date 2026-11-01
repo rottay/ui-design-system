@@ -3,9 +3,10 @@
 // ---------------------------------------------------------------------------
 // CRA-15 browser-evidence assembler (audit MOT-01).
 //
-// Runs AFTER the production-build Playwright probes finish. It folds the
-// per-test measurements recorded under test-artifacts/craft/cra-15/.run/ into
-// the schema packages/core/scripts/check/evidence/certification/runtime-hardening/index.mjs validates,
+// Runs AFTER the production-build Playwright probes finish. It requires every
+// per-test measurement recorded under test-artifacts/craft/cra-15/.run/ to name
+// the current build exactly (it validates .run/ and never clears it), folds them
+// into the schema packages/core/scripts/check/evidence/certification/runtime-hardening/index.mjs validates,
 // measures the Particle/Spatial gzip closures from the SAME built core dist
 // (identical Vite-inline methodology as scripts/check/automation/bundle/index.mjs), pins the
 // current source fingerprint via the gate itself, hashes the raw Playwright
@@ -17,7 +18,6 @@
 // instead of emitting a passing claim.
 // ---------------------------------------------------------------------------
 
-import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import { createRequire } from "node:module";
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
@@ -26,13 +26,19 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 import { gzipSync } from "node:zlib";
 
 import { auditCra15RuntimeHardening } from "../../../../../core/scripts/check/evidence/certification/runtime-hardening/index.mjs";
+import {
+  buildOrderError,
+  partialBindingError,
+  readBuildIdentity,
+  REPORT_RELATIVE,
+  treeProvenance,
+} from "../provenance/index.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = resolve(HERE, "../../../../../..");
 const CORE_ROOT = join(REPO_ROOT, "packages", "core");
 const CRA15_DIR = join(REPO_ROOT, "test-artifacts", "craft", "cra-15");
 const RUN_DIR = join(CRA15_DIR, ".run");
-const REPORT_RELATIVE = "test-artifacts/craft/cra-15/playwright-report.json";
 const REPORT_PATH = join(REPO_ROOT, REPORT_RELATIVE);
 
 // Same governed peer set scripts/check/automation/bundle/index.mjs externalizes, so the
@@ -69,64 +75,20 @@ function fail(message) {
   process.exit(1);
 }
 
-// Honest tree provenance: the probes ran against a build produced from the
-// working tree, which during the W3 wave was NOT a clean commit (the concurrent
-// motion-adoption lane held uncommitted core changes). None of the CRA-15
-// source-assertion files were among them, so the pinned source fingerprint is
-// unaffected; the record below states exactly what was built.
-function treeProvenance() {
-  const git = (args) => {
-    try {
-      return execFileSync("git", args, {
-        cwd: REPO_ROOT,
-        encoding: "utf8",
-      }).trim();
-    } catch {
-      return null;
-    }
-  };
-  const head = git(["rev-parse", "HEAD"]);
-  const porcelain = git(["status", "--porcelain"]);
-  const dirtyFiles = porcelain
-    ? porcelain.split("\n").filter((line) => line.trim().length > 0).length
-    : 0;
-  return {
-    headCommit: head,
-    workingTreeClean: dirtyFiles === 0,
-    uncommittedFiles: dirtyFiles,
-    showroomBuildId: readShowroomBuildId(),
-    note:
-      dirtyFiles === 0
-        ? "built from a clean working tree"
-        : "built from an in-flight W3 working tree (concurrent motion-adoption lane); no CRA-15 source-assertion file was dirty, so the source fingerprint is unaffected",
-  };
+function requireBound(name, partial, build) {
+  const mismatch = partialBindingError(name, partial, build);
+  if (mismatch)
+    fail(`${mismatch}; FULL_RECAPTURE: clear .run and rerun every probe`);
+  return partial;
 }
 
-// The Next.js production BUILD_ID of the showroom build the probes ran against.
-// A foreign actor rebuilds this shared tree; recording the id the run measured
-// lets the W8 landing detect a silent server swap under `next start`.
-function readShowroomBuildId() {
-  const buildIdPath = join(
-    REPO_ROOT,
-    "packages",
-    "showroom",
-    ".next",
-    "BUILD_ID"
-  );
-  try {
-    return readFileSync(buildIdPath, "utf8").trim();
-  } catch {
-    return null;
-  }
-}
-
-function readPartial(name) {
+function readPartial(name, build) {
   const file = join(RUN_DIR, `${name}.json`);
   if (!existsSync(file))
     fail(
       `missing measurement partial ${name}.json (did the ${name} probe run and pass?)`
     );
-  return JSON.parse(readFileSync(file, "utf8"));
+  return requireBound(name, JSON.parse(readFileSync(file, "utf8")), build);
 }
 
 function requireTrue(value, label) {
@@ -234,17 +196,33 @@ async function main() {
     );
   }
 
-  // 1. Recorded browser measurements (each partial written by a passing probe).
-  const desktopMeta = readPartial("desktop-meta");
-  const particleAlloc = readPartial("desktop-particle-allocation");
-  const particleFallback = readPartial("desktop-particle-fallback");
-  const particleRapid = readPartial("desktop-particle-rapid");
-  const spatialAlloc = readPartial("desktop-spatial-allocation");
-  const spatialFallback = readPartial("desktop-spatial-fallback");
-  const spatialUnsupported = readPartial("desktop-spatial-unsupported");
-  const mobileMeta = readPartial("mobile-meta");
-  const mobileParticle = readPartial("mobile-particle-fallback");
-  const mobileSpatial = readPartial("mobile-spatial-fallback");
+  // 1. Recorded browser measurements (each partial written by a passing probe
+  //    against this exact build).
+  const measuredBuild = readBuildIdentity(REPO_ROOT);
+  const desktopMeta = readPartial("desktop-meta", measuredBuild);
+  const particleAlloc = readPartial(
+    "desktop-particle-allocation",
+    measuredBuild
+  );
+  const particleFallback = readPartial(
+    "desktop-particle-fallback",
+    measuredBuild
+  );
+  const particleRapid = readPartial("desktop-particle-rapid", measuredBuild);
+  const spatialAlloc = readPartial("desktop-spatial-allocation", measuredBuild);
+  const spatialFallback = readPartial(
+    "desktop-spatial-fallback",
+    measuredBuild
+  );
+  const spatialUnsupported = readPartial(
+    "desktop-spatial-unsupported",
+    measuredBuild
+  );
+  const mobileMeta = readPartial("mobile-meta", measuredBuild);
+  const mobileParticle = readPartial("mobile-particle-fallback", measuredBuild);
+  const mobileSpatial = readPartial("mobile-spatial-fallback", measuredBuild);
+  const outdated = buildOrderError(REPO_ROOT);
+  if (outdated) fail(`${outdated}; rebuild the showroom and FULL_RECAPTURE`);
 
   if (desktopMeta.browserName !== "chromium")
     fail(
@@ -288,6 +266,11 @@ async function main() {
     "dist/spatial.js",
     (entry) => `export * from ${JSON.stringify(entry)};\n`
   );
+  requireBound(
+    "the build after the gzip closures",
+    { buildBinding: readBuildIdentity(REPO_ROOT) },
+    measuredBuild
+  );
 
   // 4. Raw Playwright report -> pass/fail counts + hash.
   if (!existsSync(REPORT_PATH))
@@ -309,6 +292,8 @@ async function main() {
     fail(
       `Playwright report recorded ${passed} passing focal tests; at least five are required`
     );
+
+  const tree = treeProvenance(REPO_ROOT, measuredBuild);
 
   const evidence = {
     schemaVersion: 1,
@@ -341,7 +326,7 @@ async function main() {
         "rapid mount/unmount cleanup"
       ),
       bundle: {
-        cleanBuild: true,
+        cleanBuild: tree.workingTreeClean,
         particleGzipBytes: requirePositiveInt(
           particleGzipBytes,
           "particle gzip bytes"
@@ -432,7 +417,7 @@ async function main() {
       longTaskMetric:
         "runtime-phase long tasks only: max synchronous rAF callback duration + PerformanceObserver longtask entries attributed to the runtime phase by the first-frame boundary; one-time page hydration is excluded and recorded under pageBootstrapContext",
       flaky,
-      tree: treeProvenance(),
+      tree,
     },
     // Whole-page observation kept for reconciliation (audit MOT-01 condition):
     // long tasks OUTSIDE the certified subject (the DS effects runtime) — one-time
