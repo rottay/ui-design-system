@@ -48,7 +48,8 @@ environment variable, or is only exercised by self-hosted CI:
 | `app-ds-boundary`, `app-ds-boundary-drill` | `APP_BITHIRE_ROOT` | Checks the design-system/app boundary against the private `rottay/app-bithire` source, checked out at a pinned SHA in CI |
 | `customization-worklist`, `customization-worklist-drill` | `APP_BITHIRE_ROOT` | Same boundary corpus, for the customization worklist census |
 | `supersession-window` (CI step, not a manifest gate) | `APP_BITHIRE_ROOT` | Reads the consumer half of the app-shell supersession window from the committed bytes of that checkout, whose `HEAD` must be the pinned SHA. The only one of these with **no sibling fallback** |
-| `claim-exactness` | `DOCS_ENGINEERING_ROOT` | Verifies documentation claims against the private `rottay/docs-engineering` repository |
+| `claim-exactness` | `DOCS_ENGINEERING_ROOT` | Verifies documentation claims against the private `rottay/docs-engineering` repository. CI checks it out at `.gat07/docs-engineering`; locally an unset variable falls back to a sibling `../docs-engineering` checkout |
+| `showroom-diagnostics`, the `monochrome-roster` and `compositions-roster` leaves only | `DOCS_ENGINEERING_ROOT` | Each leaf checks its showroom roster against the design-system documentation that names those families, read from the same `.gat07/docs-engineering` checkout in CI and from a sibling `../docs-engineering` checkout locally when the variable is unset |
 | Accessibility (`e2e/a11y`) | self-hosted CI only | Playwright + axe against a built Showroom; no npm script runs this locally without first building Showroom and installing browsers |
 | Visual regression / whitelabel / responsive (`test:gates`) | self-hosted CI only | Pixel-diff baselines are approved in CI; running locally without the reference baselines does not prove anything |
 | Pack / publish gates (`prepack` chain) | GitHub Packages credentials | Exercised at release time, not on every PR |
