@@ -9,11 +9,15 @@ Consumers import components from `@rottay/design-system`. There are no public
 `@rottay/design-system/engines/*` subpaths. Engine implementation paths are an
 internal detail and must not appear in application imports.
 
-The package exposes focused boundaries for server utilities, icon packs,
-marks, pictograms, charts, motion, effects, spatial capability, ESLint rules,
-commercial tooling and CSS. Their source boundaries live under
-`src/entrypoints/`; canonical implementation code stays under
-`foundation/`, `infrastructure/`, `graphics/`, `ui/` or `tooling/`.
+The package exposes focused boundaries for server utilities, resolved static
+markup, the semantic icon facade and its bounded preset, marks, pictograms,
+charts, motion, spatial capability, ESLint rules and the supplier-honesty CLI.
+Their source boundaries live under `src/entrypoints/`; canonical implementation
+code stays under `components/`, `contracts/`, `foundation/`, `graphics/`,
+`infrastructure/` or `kernel/`. Besides the root `src/index.ts`, three published
+shapes have no entrypoint owner: `./icons/roles/*` points at the generated role
+modules, CSS and font keys point at stylesheets the build emits, and the JSON
+contract keys point at versioned files under the package-level `contracts/` root.
 
 ## Component-level engine loading
 
@@ -46,17 +50,19 @@ src/
   index.ts
   entrypoints/
     charts/{access,renderers,spec}/
-    graphics/{effects,marks,motion,pictograms,spatial}/
-    icons/{bithire,corpus,foundation,identity,intelligence,operations}/
-    commercial/
     eslint/
-    server/
-  ui/<tier>/<group>/<owner>/engines/{classic,modern,rustic}/index.tsx
+    graphics/{marks/{brand,cloud},motion,pictograms,spatial}/
+    icons/presets/bithire/
+    server/static-markup/
+    suppliers/cli/
+  graphics/icons/semantic/generated/roles/
+  components/<tier>/<group>/**/<owner>/engines/{classic,modern,rustic}/index.tsx
 ```
 
-CSS is built separately into full, vertical and supplemental modern-engine
-exports. An app imports exactly one full or vertical bundle; `styles/modern`
-is supplemental and is not a standalone component stylesheet.
+CSS is built separately into the full, vertical and supplemental frozen-engine
+exports. An app imports exactly one full or vertical bundle;
+`./styles/frozen-engines` is supplemental, is loaded beside that bundle for the
+Classic and Rustic rules, and is not a standalone component stylesheet.
 
 ## Supplier boundaries
 

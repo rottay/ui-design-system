@@ -25,22 +25,39 @@ import { Button } from "@rottay/design-system/src/components/primitives/inputs/b
 
 ## 2. Subpath families
 
-Measured from the `package.json` export map (38 keys total):
+Measured from the `package.json` export map (33 keys total):
 
 ```bash
 node -e "console.log(Object.keys(require('./packages/core/package.json').exports).length)"
 ```
 
-| Family | Subpaths | Family | Subpaths |
+| Family | Keys | Family | Keys |
 |---|---|---|---|
-| `./icons`, `./icons/*` | 7 | `./styles.css`, `./styles/*` | 6 |
-| `./marks`, `./marks/*` | 3 | `./fonts/*` | 7 |
-| `./charts`, `./charts/*` | 4 | `./spatial` | 1 |
+| `./icons`, `./icons/presets/bithire`, `./icons/roles/*` | 3 | `./styles.css`, `./styles/{bithire,evnto,rottay,frozen-engines}` | 5 |
+| `./marks`, `./marks/{brand,cloud}` | 3 | `./fonts/<pack>.css` | 7 |
+| `./charts`, `./charts/{spec,access,renderers}` | 4 | `./server`, `./server/static-markup` | 2 |
 
-The remainder are single-entry subpaths: `.` (root), `./server`, `./eslint`,
-`./motion`, `./pictograms`,
-`./supplier-contract`, `./hooks-manifest`, `./supplier-honesty-cli`,
-`./dist/*.css`, `./tenant-theme-canary-fixtures`.
+The remainder are single-entry subpaths: `.` (root), `./eslint`, `./motion`,
+`./pictograms`, `./spatial`, `./supplier-contract`, `./hooks-manifest`,
+`./supplier-honesty-cli`, `./tenant-theme-canary-fixtures`.
+
+`./icons/roles/*` is the only wildcard key. Braces abbreviate explicit keys, and
+the seven font packs are `arabic-text`, `editorial-display`, `editorial-text`,
+`grotesk-display`, `humanist-text`, `geometric-display` and `plex-mono`.
+
+Most keys resolve to build output under `dist/`. The CSS keys publish named
+bundles: `./styles.css` carries every vertical, `./styles/{bithire,evnto,rottay}`
+carry one each, and `./styles/frozen-engines` is the supplemental Classic and
+Rustic bundle loaded beside one of them. There is no `./dist/*.css` key and no
+`./styles/modern` key: a stylesheet is reached through its named key.
+`./supplier-contract`, `./hooks-manifest` and `./tenant-theme-canary-fixtures`
+resolve instead to versioned JSON contracts under `packages/core/contracts/`,
+not to build output.
+
+A published key is not necessarily a sanctioned one: the
+[consumer contract](../packages/core/docs/consumer-contract/index.md) §1.2 owns
+each key's disposition, and `no-unsanctioned-ds-subpath` (§8) reports every
+import of a key that is not `guaranteed`.
 
 ## 3. Entry contract
 
@@ -110,21 +127,28 @@ Rustic remain frozen; this does not extend their behavior guarantees.
 
 `./icons` is the governed, supplier-independent `Icon` facade with the
 complete role inventory and generated metadata. The redundant `./icons/full`
-and `./icons/corpus` doors are retired. The
-`./icons/{foundation,identity,intelligence,operations}` entries are generated packs
-over the same governed corpus, and `./icons/presets/bithire` is the bounded
-application preset. `./marks` aggregates brand and cloud-provider marks;
+and `./icons/corpus` doors are retired, and so are the
+`./icons/{foundation,identity,intelligence,operations}` packs: their rosters
+remain as `*_ICON_NAMES` lists on `./icons`, and `Icon` renders every role.
+`./icons/presets/bithire` is the bounded application preset; `BitHireIconPreset`
+keeps synchronous SSR without loading the complete registry. `./icons/roles/*`
+publishes one generated module per semantic role, with the dot of the role name
+written as a hyphen: `./icons/roles/action-add` exports `ActionAddIcon`. Its
+consumer-contract disposition is `retire-by`, so new code renders `Icon`.
+`./marks` aggregates brand and cloud-provider marks;
 `./marks/brand` and `./marks/cloud` preserve class-specific resource isolation
 without duplicating implementations, including synchronous CommonJS/SSR use.
 
 The RET-01/D07 target major removes the 328 vendor-named glyph exports from
 `./icons`; it does not remove any of the 282 semantic roles, metadata, runtime
 asset controls, `BaseIcon`, `createIcon` or their existing structural types.
-The existing first-party `AlertIcon` wrapper also stays public from its leaf
-owner. The private barrel's 329 bindings split into 328 removals and that one
-preserved helper; no whole-catalog reexport remains.
-The exact removed-symbol inventory is in the
-[major migration changeset](../.changeset/ret-01-icons-doors.md).
+WO-RET-06 then retired the first-party `AlertIcon` wrapper, the last catalog
+binding on the door: render `<Icon name="status.warning" decorative />`, or pass
+`label` when the icon carries meaning alone. The private barrel's 329 bindings
+are therefore all gone from `./icons`; no whole-catalog reexport remains.
+The exact removed-symbol inventories are in the
+[major migration changeset](../.changeset/ret-01-icons-doors.md) and the
+[WO-RET-06 doors changeset](../.changeset/ret-06-w1-doors-and-transfers.md).
 This breaks existing app-platform named-glyph consumers. The door also has
 imports in 52 Showroom files; their named-glyph usages need adaptation after
 the DS-first major change and are not migrated here.
@@ -152,7 +176,8 @@ Never import a supplier package (`@phosphor-icons/react`, `lucide-react`,
 `@thesvg/react`, an Ant Design icon) directly in product code — the DS is the
 only place a supplier is allowed to change without a consumer-visible
 breaking change. The shipped `no-direct-lucide` ESLint rule (§8) enforces
-the supplier boundary; it does not restore removed public glyph exports.
+that boundary for runtime `lucide-react` imports; it does not restore removed
+public glyph exports.
 
 ## 7. Charts
 
@@ -166,16 +191,23 @@ renderer implementations. See the Showroom for a live page per chart type.
 
 ## 8. ESLint rules
 
-`./eslint` ships 6 rules:
+`./eslint` ships 7 rules, each named `@rottay/<rule>`, and two ready configs,
+`configs.recommended` and `configs.marketing`:
 
-| Rule | Enforces |
-|---|---|
-| `no-raw-html` | Disallow raw HTML elements; use DS primitives instead |
-| `no-hardcoded-colors` | Disallow hardcoded color values; use DS CSS variables instead |
-| `no-db-in-components` | Disallow database/ORM imports in UI component files |
-| `no-direct-lucide` | Disallow direct `lucide-react` imports; use DS icons instead |
-| `no-motion-literals` | Disallow raw `cubic-bezier()`, keyword easing and duration literals in modern-engine and `graphics/motion` styles; use `--ds-motion-*` tokens |
-| `no-size-type-outside-classic` | Restrict the deprecated `SizeType` import to the classic-engine antd bridge |
+| Rule | Enforces | `recommended` | `marketing` |
+|---|---|---|---|
+| `no-raw-html` | Disallow raw HTML elements; use DS primitives instead | error | off |
+| `no-hardcoded-colors` | Disallow hardcoded color values; use DS CSS variables instead | error | warn, Tailwind colors allowed |
+| `no-db-in-components` | Disallow database/ORM imports in UI component files | error | error |
+| `no-direct-lucide` | Disallow direct `lucide-react` imports; use DS icons instead | warn | warn |
+| `no-motion-literals` | Disallow `cubic-bezier()`, keyword easing and raw sub-second duration literals in modern-engine and `graphics/motion` style values; use `--ds-motion-*` tokens | error | not set |
+| `no-layout-property-animation` | Disallow animating a layout property; move `transform`, `opacity` or `clip-path`, and size through the layout kernel | off | not set |
+| `no-unsanctioned-ds-subpath` | Only import the subpaths the consumer contract guarantees | error | error |
+
+`no-layout-property-animation` is enabled by neither config; an app opts in once
+it has measured its own debt. `no-unsanctioned-ds-subpath` reads the consumer
+contract's disposition tables; its `allowSubpaths` option is the decrease-only
+per-app baseline and the explicit opt-in for a `lab` subpath.
 
 ## 9. Server entry
 
@@ -184,8 +216,17 @@ no React components, nothing marked `'use client'`. It exports tenant
 resolution (`resolveRequestTenant`, `resolveRequestTenantAsync`,
 `createEdgeConfigDomainLookup`), the known-tenant registry
 (`isKnownTenant`, `isBundledTenant`, `getKnownTenantConfig`,
-`getKnownTenantSlugs`), locale support (`toSupportedLocale`), and the
-font-pack manifest for SSR `<link rel="preload">` emission.
+`getKnownTenantSlugs`), locale support (`toSupportedLocale`), the
+font-pack manifest for SSR `<link rel="preload">` emission, the theme compile
+and mount door (`compileThemeIntent`, `mountTenantTheme`) and the engine-identity
+names; `packages/core/src/entrypoints/server/index.ts` is the complete list.
+
+`./server/static-markup` stays a separate subpath because it imports
+`react-dom/server` and `react-dom/static`. `renderResolvedStaticMarkup(node)`
+resolves the engines' `React.lazy` payloads and returns the same HTML as
+`renderToStaticMarkup`. It requires React >= 19 and does not resolve general
+data suspense. Its disposition is `lab`: an app adopts it through
+`allowSubpaths` (§8).
 
 ## 10. Deprecations
 
@@ -197,19 +238,20 @@ controlled component props; no replacement DS routing or preference authority
 is introduced. `useLayoutPreference` remains available and is exercised by the
 command-palette's callback and frecency persistence path.
 
-Deprecated symbols are marked inline with a JSDoc `@deprecated` tag; there is
-no separate deprecation registry, so `since` and `removal` are not tracked as
-structured fields today. One verified example from the public `TenantConfig`
-contract (`./contracts/foundation`):
+Deprecated symbols are marked inline with a JSDoc `@deprecated` tag, and
+`packages/core/contracts/package/deprecations/index.json` holds one ledger row
+per marker with its replacement, `since`, `removeIn` and receiver work order.
+`deprecations:check` fails a marker without a row and a row without a marker.
+The ledger is a repository file, not published. Two verified rows from the
+public `ButtonProps` contract, exported by the root entry:
 
-| Symbol | Replacement |
-|---|---|
-| `TenantConfig.tokenOverrides` (field) | `brandTheme.surfaces` / `brandTheme.chrome.controls` |
-| `TenantConfig.personality` (field) | `brandTheme.motion` / `brandTheme.chrome` |
+| Symbol | Replacement | Removal line |
+|---|---|---|
+| `ButtonProps['data-part']` | `className` | 4.0 |
+| `ButtonProps['data-state']` | `className` | 4.0 |
 
-34 files carry `@deprecated` tags today, most on internal (non-public) types.
-Find the full, current set — cross-reference each against §2's subpaths to
-tell public from internal:
+The ledger is the full, current set. Find its inline markers — cross-reference
+each against §2's subpaths to tell public from internal:
 
 ```bash
 grep -rl "@deprecated" packages/core/src --include="*.ts" --include="*.tsx" | grep -v "/tests/\|\.test\."

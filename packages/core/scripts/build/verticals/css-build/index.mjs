@@ -23,8 +23,8 @@
  * dist/ copies only (package.json `files` lists dist/ artifacts;
  * artifacts/generated/ is not in the allowlist). dist and artifacts/generated/css
  * copies are written from the same in-memory bundle, so each shipped dist file
- * is byte-identical to its committed mirror. dist/modern-engine.css is the
- * shipping target of the ./styles/modern export and therefore receives the
+ * is byte-identical to its committed mirror. dist/modern-engine.css has no exports
+ * key (the only engine door is ./styles/frozen-engines) yet `files` packs it, so it receives the
  * SAME guarded bundle as artifacts/generated/css/engines/modern/index.css (engine + reduced-motion guard).
  * --check regenerates the bundles in memory and diffs them against the
  * committed files (plus dist/modern-engine.css), byte for byte, without
@@ -504,9 +504,8 @@ const stylesBundle = [
 if (check) {
   compareToDisk("artifacts/generated/css/all-verticals/index.css", stylesBundle);
   compareToDisk("artifacts/generated/css/engines/modern/index.css", modernBundle);
-  // dist/modern-engine.css ships as the ./styles/modern export target, so the
-  // reduced-motion guard must be present in the dist copy, byte-equal to the
-  // committed mirror.
+  // dist/modern-engine.css has no exports key (the only engine door is ./styles/frozen-engines)
+  // yet `files` packs it, so its reduced-motion guard must match the committed mirror byte for byte.
   compareToDisk("dist/modern-engine.css", modernBundle);
   compareToDisk(FROZEN_ENGINE_BUNDLE.mirror, frozenBundle);
 } else {

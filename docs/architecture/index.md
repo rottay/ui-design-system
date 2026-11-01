@@ -268,8 +268,11 @@ Three standing rules:
   `./structures/*` and `./surfaces/*` are not the way; capability boundaries are.
 - **There is no `./commercial` subpath.** "Commercial" is a marketing adjective, not an
   architectural role. A capability behind such a name is reclassified by what it does.
-- **Every declared `exports` target must exist as a build artifact.** The boundary is
-  honest or the build fails; it is never pointed at files the build does not produce.
+- **Every declared `exports` target must exist in the package.** Bundles, JavaScript and
+  their declarations are build artifacts under `dist/`; `./supplier-contract`,
+  `./hooks-manifest` and `./tenant-theme-canary-fixtures` resolve instead to versioned JSON
+  contracts under `packages/core/contracts/`, which the build does not produce. The boundary
+  is honest or the build fails; it is never pointed at a file the package does not carry.
 
 Deep imports into `src/` or `dist/` internals are not an API and carry no stability
 guarantee.
