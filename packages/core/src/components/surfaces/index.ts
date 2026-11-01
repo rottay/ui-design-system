@@ -5,8 +5,8 @@
  * Surfaces are organized into three dependency-ordered layers:
  *
  * 1. **Foundation** (`foundation/`) — stable surface contracts.
- * 2. **Runtime** (`runtime/`) — builders, helpers, state, responsive and
- *    profile-default behavior that consumes those contracts.
+ * 2. **Runtime** (`runtime/`) — builders, collection-workspace, helpers and
+ *    postures behavior that consumes those contracts.
  * 3. **Presentation** (`presentation/`) — complete page surfaces organized
  *    into domain-aligned subgroups.
  *
@@ -34,7 +34,7 @@
 // -- Foundation contracts --
 export * from './foundation/contracts';
 
-// -- Runtime builders, helpers, hooks, states, and profile defaults --
+// -- Runtime builders, helpers, collection workspace and postures, plus chrome profile defaults --
 //
 // Several lines below export from `../structures/foundation/chrome/*`. That
 // chrome cluster -- profile defaults, responsive posture and translations --

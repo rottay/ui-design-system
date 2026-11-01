@@ -7,7 +7,7 @@
  *   - `states/` -- the five lifecycle states, one per value of the
  *     `SurfaceState` union that can render (`loading`, `empty`, `error`,
  *     `stale`/`refreshing`, `offline`);
- *   - `use-surface-state/` -- the state machine that derives which of the five
+ *   - `state-machine/` -- the state machine that derives which of the five
  *     applies and renders it;
  *   - `error-boundary/` -- the React boundary that catches a crash inside a
  *     surface and turns it into a contained, retryable failure.

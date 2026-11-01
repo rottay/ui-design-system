@@ -7,7 +7,7 @@
  *
  * The generic half of that access model -- the nine functions that resolve a
  * capability decision from `SurfaceAccessInput` alone -- now lives one tier down,
- * in `ui/structures/foundation/chrome/runtime/access`, because `HeaderSurface`
+ * in `components/structures/foundation/chrome/runtime/access`, because `HeaderSurface`
  * is page chrome and the structures tier may not import from surfaces. What
  * stayed here is everything that resolves access against surface-only
  * vocabulary: `SurfaceColumn`, `SurfaceFieldDef`, `DetailSurfaceTab`, per-row
@@ -17,11 +17,11 @@
  * `normalizeSurfaceError` -- left on the same argument and for the same
  * reason: it reads an `unknown` value and knows no surface vocabulary, and
  * `SurfaceErrorState` is page chrome that now lives in
- * `ui/structures/feedback/surface-lifecycle`. Both are re-exported below from
- * `ui/structures/foundation/chrome/runtime/errors`.
+ * `components/structures/feedback/surface-lifecycle`. Both are re-exported below from
+ * `components/structures/foundation/chrome/runtime/errors`.
  *
  * The nine are imported for local use and re-exported by name. This barrel is
- * their only public path (`ui/surfaces/index.ts` re-exports it), so the package
+ * their only public path (`components/surfaces/index.ts` re-exports it), so the package
  * keeps exporting the same API it exported before the move; and every function
  * below builds on them, which makes this the surfaces tier consuming the tier
  * beneath it rather than a compatibility shim for a retired path.
