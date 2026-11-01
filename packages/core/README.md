@@ -111,7 +111,7 @@ Component skins, interaction states and keyframes live in the stylesheet.
 | `@rottay/design-system`                 | Components, providers, hooks                     |
 | `@rottay/design-system/server`          | Server-side utilities                            |
 | `@rottay/design-system/icons`           | Governed 282-role semantic facade, metadata, controls and structural helpers |
-| `@rottay/design-system/icons/{foundation,identity,intelligence,operations}` | Generated packs over the governed corpus |
+| `@rottay/design-system/icons/roles/*`   | One generated module per semantic role; `retire-by` in the [consumer contract](./docs/consumer-contract/index.md), so new code renders `Icon` |
 | `@rottay/design-system/icons/presets/bithire` | Bounded 104-role application preset |
 | `@rottay/design-system/marks`           | Governed brand and cloud-provider marks          |
 | `@rottay/design-system/charts`          | Focused chart components                         |
@@ -130,7 +130,7 @@ not semantic roles or private DS component owners. App-platform has existing
 named-glyph consumers, and 52 Showroom files import this door; named-glyph
 usages need adaptation after the DS-first API change. This is not a
 zero-consumer retirement. Use `Icon` with a semantic `name` and either
-`label` or `decorative={true}`, or a focused role/preset entry. `IconProps` accepts the
+`label` or `decorative={true}`, or a focused preset entry. `IconProps` accepts the
 documented visual/anatomy attributes, not arbitrary SVG props; custom SVGs
 retain `BaseIcon`/`SvgIconProps` and `createIcon`/`DSIconProps`.
 The first-party `AlertIcon` wrapper, kept through RET-01, retired with WO-RET-06 W-1
