@@ -2,10 +2,6 @@
  * @rottay/no-unsanctioned-ds-subpath
  *
  * The apps may only import the subpaths the consumer contract guarantees.
- * Everything else -- internal contracts and runtimes, per-component subpaths,
- * product icon packs, published test fixtures, per-vertical stylesheets,
- * internal tooling manifests -- is either scheduled for retirement or was
- * never published, and coupling to it blocks WO-RET-01 / WO-CAN-03.
  *
  * The rule is fail-closed: a specifier that addresses @rottay/design-system
  * and is not `guaranteed` in the contract table is reported, including
@@ -70,7 +66,7 @@ export function createNoUnsanctionedDsSubpath(
               type: 'array',
               items: { type: 'string' },
               description:
-                'Per-app baseline of unsanctioned subpaths, e.g. "./icons/presets/bithire". Decrease-only: entries are removed as the app migrates, never added. Also the explicit opt-in for a lab door, e.g. "./spatial".',
+                'Per-app baseline of unsanctioned subpaths, e.g. "./icons/roles/data-sync". Decrease-only: entries are removed as the app migrates, never added. Also the explicit opt-in for a lab door, e.g. "./spatial".',
             },
             exempt: {
               type: 'array',

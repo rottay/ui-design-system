@@ -1,4 +1,4 @@
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 
 import { describe, expect, it } from 'vitest';
@@ -510,7 +510,7 @@ describe('no-unsanctioned-ds-subpath', () => {
   });
 
   it('fails on a published icon door still scheduled for retirement', () => {
-    expect(importFrom('@rottay/design-system/icons/roles/action')).toEqual([
+    expect(importFrom('@rottay/design-system/icons/roles/data-sync')).toEqual([
       'retireBy',
     ]);
   });
@@ -559,7 +559,7 @@ describe('no-unsanctioned-ds-subpath', () => {
   });
 
   it('resolves wildcard rows and prefers an exact row', () => {
-    expect(classifySubpath('./icons/roles/action')?.subpath).toBe(
+    expect(classifySubpath('./icons/roles/data-sync')?.subpath).toBe(
       './icons/roles/*',
     );
     expect(classifySubpath('./dist/bithire.css')).toBeNull();
@@ -668,10 +668,11 @@ describe('no-unsanctioned-ds-subpath', () => {
   });
 
   it('honours the decrease-only per-app baseline and file exemptions', () => {
+    const baselined = '@rottay/design-system/icons/roles/data-sync';
+
+    expect(importFrom(baselined)).toEqual(['retireBy']);
     expect(
-      importFrom('@rottay/design-system/icons/presets/bithire', [
-        { allowSubpaths: ['./icons/presets/bithire'] },
-      ]),
+      importFrom(baselined, [{ allowSubpaths: ['./icons/roles/data-sync'] }]),
     ).toEqual([]);
 
     expect(
@@ -685,5 +686,44 @@ describe('no-unsanctioned-ds-subpath', () => {
       '/app/src/components/landing/hero/index.tsx',
     );
     expect(Object.keys(exempted.created)).toEqual([]);
+  });
+
+  it('illustrates allowSubpaths with a real retire-by door and a lab door', () => {
+    const description: string =
+      noUnsanctionedDsSubpath.meta.schema?.[0].properties.allowSubpaths
+        .description;
+    const examples = [...description.matchAll(/e\.g\. "([^"]+)"/g)].map(
+      (match) => match[1],
+    );
+
+    expect(examples).toHaveLength(2);
+    const [baselineExample, labExample] = examples;
+
+    expect(baselineExample).not.toContain('*');
+    expect(classifySubpath(baselineExample)?.disposition).toBe('retire-by');
+    expect(classifySubpath(labExample)?.disposition).toBe('lab');
+
+    // The wildcard row also classifies roles that were never generated.
+    expect(
+      existsSync(
+        resolve(
+          PACKAGE_ROOT,
+          'src/graphics/icons/semantic/generated/roles',
+          `${baselineExample.slice('./icons/roles/'.length)}.ts`,
+        ),
+      ),
+    ).toBe(true);
+
+    for (const [subpath, messageId] of [
+      [baselineExample, 'retireBy'],
+      [labExample, 'lab'],
+    ]) {
+      const specifier = `@rottay/design-system${subpath.slice(1)}`;
+      expect(importFrom(specifier), specifier).toEqual([messageId]);
+      expect(
+        importFrom(specifier, [{ allowSubpaths: [subpath] }]),
+        specifier,
+      ).toEqual([]);
+    }
   });
 });
