@@ -320,7 +320,7 @@ function auditSealedReceipt({ obligations, sealedBytes }) {
   if (records.length !== 1) {
     errors.push(
       records.length === 0
-        ? "browser evidence source fingerprint is stale and no closed record accounts for the sealed receipt"
+        ? `no closed record accounts for the sealed receipt at ${SEALED_RECEIPT_PATH}`
         : `${records.length} closed records claim the sealed receipt; exactly one may`
     );
     return { errors, record: null };

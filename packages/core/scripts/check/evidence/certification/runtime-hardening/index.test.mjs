@@ -24,6 +24,7 @@ const REPORT_SOURCE = '{"suites":[],"stats":{"expected":5}}\n';
 const SEALED_RECEIPT_PATH = "test-artifacts/craft/cra-15/browser-evidence.json";
 const SEALED_RECORD_ID =
   "cra-15/browser-receipt-superseded-by-canonical-path-refactor";
+const UNRECORDED_SEALED_RECEIPT = `no closed record accounts for the sealed receipt at ${SEALED_RECEIPT_PATH}`;
 
 function supersessionRecord() {
   return JSON.parse(
@@ -138,9 +139,9 @@ test("canonical CRA15 source produces deterministic structural evidence without 
     supersessionObligationsOverride: { obligations: [] },
   });
   assert.equal(unrecorded.ok, false);
-  assert.match(
-    unrecorded.errors.join("\n"),
-    /browser evidence source fingerprint is stale/u
+  assert.ok(
+    unrecorded.errors.includes(UNRECORDED_SEALED_RECEIPT),
+    unrecorded.errors.join("\n")
   );
   assert.equal(first.artifact.governance.sharedContinuousRuntimeBudget, 1);
   assert.equal(first.artifact.governance.certifiedEffects, 1);
@@ -460,14 +461,18 @@ test("the superseded receipt keeps its historical 1097-byte spec measurement as 
   assert.equal(held.artifact.checks.realBrowserPerformanceAndBundle.summary, null);
   assert.equal(held.disposition.completionEligible, false);
 
-  // Without its closed record the stale coordinate is an error, and the sealed
-  // number is never read as a live measurement either way.
+  // Without its closed record the sealed receipt is an error, the live leg stays
+  // pending, and the sealed number is never read as a live measurement either way.
   const unrecorded = auditCra15RuntimeHardening({
     repositoryRoot: REPOSITORY_ROOT,
     liveReceiptSourceOverride: null,
     supersessionObligationsOverride: { obligations: [] },
   });
-  assert.match(unrecorded.errors.join("\n"), /source fingerprint is stale/u);
+  assert.deepEqual(unrecorded.errors, [UNRECORDED_SEALED_RECEIPT]);
+  assert.match(
+    unrecorded.pending.join("\n"),
+    new RegExp(`no live receipt at ${unrecorded.liveReceiptPath}`, "u")
+  );
   assert.doesNotMatch(unrecorded.errors.join("\n"), /a live capture must not measure it/u);
 });
 
@@ -557,11 +562,12 @@ test("a fresh on-disk live receipt is audited in full, so its 1097-byte spec mea
     spatialSpecGzipBytes: 1_097,
   });
   const onDisk = (receipt) => `${JSON.stringify(receipt, null, 2)}\n`;
-  const run = (receipt) =>
+  const run = (receipt, supersessionObligationsOverride) =>
     auditCra15RuntimeHardening({
       repositoryRoot: REPOSITORY_ROOT,
       sourceOverrides,
       liveReceiptSourceOverride: onDisk(receipt),
+      supersessionObligationsOverride,
     });
 
   const refused = run(freshWithSpec);
@@ -587,6 +593,11 @@ test("a fresh on-disk live receipt is audited in full, so its 1097-byte spec mea
     admitted.artifact.checks.realBrowserPerformanceAndBundle.summary.retiredBundleSubjects,
     [{ subject: "./spatial/spec", disposition: "retired-not-measured", recordedGzipBytes: null }]
   );
+
+  // A fresh receipt compares equal, so only the missing record is reported.
+  assert.deepEqual(run(fresh, { obligations: [] }).errors, [
+    UNRECORDED_SEALED_RECEIPT,
+  ]);
 
   assert.throws(
     () =>
@@ -642,6 +653,12 @@ test("a stale live receipt fails, whatever any record says", () => {
       "fail"
     );
   }
+
+  // A real mismatch is reported on its own row, apart from the missing record.
+  assert.deepEqual(run({ obligations: [] }).errors, [
+    UNRECORDED_SEALED_RECEIPT,
+    "browser evidence source fingerprint is stale",
+  ]);
 });
 
 test("the sealed receipt cannot pass the live source, and absence is never a pass", () => {
