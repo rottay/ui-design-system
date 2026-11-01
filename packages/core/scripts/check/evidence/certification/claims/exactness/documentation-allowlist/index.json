@@ -32,7 +32,7 @@
         }
       ]
     },
-    "docs-engineering/engineering/design-system/README.md": {
+    "docs-engineering/development/design-system/README.md": {
       "claims": [
         "component-extensions",
         "surface-profile-overrides"
@@ -56,7 +56,7 @@
         }
       ]
     },
-    "docs-engineering/engineering/design-system/foundations/contracts/README.md": {
+    "docs-engineering/development/design-system/foundations/contracts/README.md": {
       "claims": [
         "component-extensions"
       ],
@@ -71,7 +71,7 @@
         }
       ]
     },
-    "docs-engineering/engineering/design-system/foundations/hooks/README.md": {
+    "docs-engineering/development/design-system/foundations/hooks/README.md": {
       "claims": [
         "surface-profile-overrides"
       ],
@@ -86,7 +86,7 @@
         }
       ]
     },
-    "docs-engineering/engineering/design-system/components/surfaces/README.md": {
+    "docs-engineering/development/design-system/components/surfaces/README.md": {
       "claims": [
         "surface-profile-overrides"
       ],
@@ -101,7 +101,7 @@
         }
       ]
     },
-    "docs-engineering/engineering/design-system/components/surfaces/foundation/README.md": {
+    "docs-engineering/development/design-system/components/surfaces/foundation/README.md": {
       "claims": [
         "surface-profile-overrides"
       ],
@@ -116,7 +116,7 @@
         }
       ]
     },
-    "docs-engineering/engineering/design-system/components/surfaces/pages/README.md": {
+    "docs-engineering/development/design-system/components/surfaces/pages/README.md": {
       "claims": [
         "surface-profile-overrides"
       ],

@@ -1193,8 +1193,8 @@ test('an evidence path resolves back through the roots this run uses, not throug
     join(findRepoRoot(HERE), 'packages/core/package.json'),
   );
   assert.equal(
-    workspaceAbsolute('docs-engineering/engineering/design-system/README.md'),
-    join(DOCS_ROOT, 'engineering/design-system/README.md'),
+    workspaceAbsolute('docs-engineering/development/design-system/README.md'),
+    join(DOCS_ROOT, 'development/design-system/README.md'),
   );
 });
 
@@ -1429,11 +1429,11 @@ test('G4b sealed reference docs cover the drifted showroom + engine-modern claim
   const sealed = Object.values(SEALED_REFERENCE_DOCS);
   assert.equal(sealed.length, 2);
   assert.ok(
-    sealed.some((path) => path.endsWith('/engineering/design-system/showroom/README.md')),
+    sealed.some((path) => path.endsWith('/development/design-system/showroom/README.md')),
     'showroom README must be sealed',
   );
   assert.ok(
-    sealed.some((path) => path.endsWith('/engineering/design-system/runtime/engines/modern/README.md')),
+    sealed.some((path) => path.endsWith('/development/design-system/runtime/engines/modern/README.md')),
     'engine-modern README must be sealed',
   );
   // Both MUST resolve under DOCS_ROOT, or validateDocumentationSeal's DOCS_ROOT
@@ -2426,7 +2426,7 @@ test('GAT07 engine documentation requirements are roster-derived and discriminat
     { slug: 'evnto', name: 'Evnto', engine: 'modern' },
   ];
   const requirements = verticalDocumentationRequirements(roster, 'modern');
-  const doc = readFileSync(join(DOCS_ROOT, 'engineering/design-system/runtime/engines/README.md'), 'utf8');
+  const doc = readFileSync(join(DOCS_ROOT, 'development/design-system/runtime/engines/README.md'), 'utf8');
   const occurrences = (haystack, needle) => haystack.split(needle).length - 1;
   // Each required line must be present EXACTLY once: a marker that matches more
   // than one row is not a fence, it is a coincidence.

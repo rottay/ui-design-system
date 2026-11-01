@@ -60,7 +60,7 @@ const BASELINE_PATH = join(CORE_ROOT, 'scripts/check/engine/tokens/audit/baselin
 const AUDIT_PATH = join(CORE_ROOT, 'scripts/check/engine/tokens/audit/index.mjs');
 const DATA_PART_DOC = join(
   DOCS_ROOT,
-  'engineering/design-system/runtime/skins/data-part-contracts/README.md',
+  'development/design-system/runtime/skins/data-part-contracts/README.md',
 );
 // TWO OWNERS, ON PURPOSE.
 //
@@ -112,18 +112,18 @@ const CANONICAL_DOC_MARKERS = Object.freeze({
 const CLAIM_DOCS = [
   { path: join(CORE_ROOT, 'docs/reference/contracts/index.md'), claims: ['component-extensions'] },
   { path: join(UI_ROOT, 'CLAUDE.md'), claims: ['surface-profile-overrides'] },
-  { path: join(DOCS_ROOT, 'engineering/design-system/README.md'), claims: ['component-extensions', 'surface-profile-overrides'] },
-  { path: join(DOCS_ROOT, 'engineering/design-system/foundations/contracts/README.md'), claims: ['component-extensions'] },
-  { path: join(DOCS_ROOT, 'engineering/design-system/foundations/hooks/README.md'), claims: ['surface-profile-overrides'] },
-  { path: join(DOCS_ROOT, 'engineering/design-system/components/surfaces/README.md'), claims: ['surface-profile-overrides'] },
-  { path: join(DOCS_ROOT, 'engineering/design-system/components/surfaces/foundation/README.md'), claims: ['surface-profile-overrides'] },
-  { path: join(DOCS_ROOT, 'engineering/design-system/components/surfaces/pages/README.md'), claims: ['surface-profile-overrides'] },
+  { path: join(DOCS_ROOT, 'development/design-system/README.md'), claims: ['component-extensions', 'surface-profile-overrides'] },
+  { path: join(DOCS_ROOT, 'development/design-system/foundations/contracts/README.md'), claims: ['component-extensions'] },
+  { path: join(DOCS_ROOT, 'development/design-system/foundations/hooks/README.md'), claims: ['surface-profile-overrides'] },
+  { path: join(DOCS_ROOT, 'development/design-system/components/surfaces/README.md'), claims: ['surface-profile-overrides'] },
+  { path: join(DOCS_ROOT, 'development/design-system/components/surfaces/foundation/README.md'), claims: ['surface-profile-overrides'] },
+  { path: join(DOCS_ROOT, 'development/design-system/components/surfaces/pages/README.md'), claims: ['surface-profile-overrides'] },
 ];
 
 const VERTICAL_DOCS = {
-  verticals: join(DOCS_ROOT, 'engineering/design-system/runtime/verticals/README.md'),
-  tenancy: join(DOCS_ROOT, 'engineering/design-system/runtime/tenancy/README.md'),
-  engines: join(DOCS_ROOT, 'engineering/design-system/runtime/engines/README.md'),
+  verticals: join(DOCS_ROOT, 'development/design-system/runtime/verticals/README.md'),
+  tenancy: join(DOCS_ROOT, 'development/design-system/runtime/tenancy/README.md'),
+  engines: join(DOCS_ROOT, 'development/design-system/runtime/engines/README.md'),
 };
 
 // Reference/spec documents whose volatile prose claims (the showroom stats
@@ -136,8 +136,8 @@ const VERTICAL_DOCS = {
 // under DOCS_ROOT, or validateDocumentationSeal's DOCS_ROOT filter silently
 // skips them and the coverage is a no-op (asserted by the seal contract test).
 export const SEALED_REFERENCE_DOCS = Object.freeze({
-  showroom: join(DOCS_ROOT, 'engineering/design-system/showroom/README.md'),
-  engineModern: join(DOCS_ROOT, 'engineering/design-system/runtime/engines/modern/README.md'),
+  showroom: join(DOCS_ROOT, 'development/design-system/showroom/README.md'),
+  engineModern: join(DOCS_ROOT, 'development/design-system/runtime/engines/modern/README.md'),
 });
 
 const CLAIM_FLOOR_KEYS = new Set([
