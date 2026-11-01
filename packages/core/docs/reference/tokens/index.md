@@ -89,8 +89,10 @@ or vertical bundle and rely on the CSS cascade.
 The selectors and CSS variables are unchanged across bundles — they only
 differ in which tenant overrides are pre-baked.
 
-`@rottay/design-system/styles/modern` is an engine-only supplemental export. It is not a
-standalone vertical bundle and does not include the base component skins or Toast keyframes.
+`@rottay/design-system/styles/frozen-engines` is the engine-only supplemental export for the
+frozen Classic and Rustic rules. It is not a standalone vertical bundle and does not include the
+base component skins or Toast keyframes, so it loads beside one of the bundles above. Every bundle
+above already carries the Modern engine, which has no export of its own.
 
 ### Read tokens from React
 

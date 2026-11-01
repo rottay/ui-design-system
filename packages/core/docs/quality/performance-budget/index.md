@@ -27,8 +27,6 @@ Enforced in CI via `scripts/check/automation/bundle/index.mjs`. Any violation fa
 | Semantic motion entry (`dist/motion.js` / `.cjs`) | < 1.3 KB raw each (1,139/1,147 B measured; React and Motion external) |
 | Pure motion policy fixture | < 2.1 KB gzipped (1,822 B measured + >10%; no React/Motion retained) |
 | Motion provider fixture | < 2.3 KB gzipped (2,077 B measured + >10%; React/Motion external) |
-| EffectRegistry entry (`dist/effects.js` / `.cjs`) | < 800 B raw each (652/676 B measured + >10%) |
-| EffectRegistry all-export fixture | < 5.5 KB gzipped (4,829 B measured + >10%; ESM/CJS/types supplier-neutral) |
 | Spatial host entry (`dist/spatial.js` / `.cjs`) | < 400/400 B raw (296/356 B measured + >10%) |
 | Spatial host all-export fixture | < 7.8 KB gzipped (7,064 B measured + >10%; includes the supplier-neutral shared continuous-runtime governor, React is the only external) |
 | Named Bar renderer | < 13.9 KB gzipped (12,596 B measured + >10%; accessible interaction/insight runtime, D3/React external) |
@@ -87,8 +85,6 @@ chosen to approximate the gzipped budgets above (typical 3-4x ratio).
 | `dist/chart-renderers.cjs` | 1.2 KB (1,066 B measured +10%, rounded up to 100 B) |
 | `dist/motion.js` | 1,300 B (1,139 B measured + >10%) |
 | `dist/motion.cjs` | 1,300 B (1,147 B measured + >10%) |
-| `dist/effects.js` | 800 B (652 B measured + >10%) |
-| `dist/effects.cjs` | 800 B (676 B measured + >10%) |
 | `dist/spatial.js` | 400 B (296 B measured + >10%) |
 | `dist/spatial.cjs` | 400 B (356 B measured + >10%) |
 | `dist/tokens.js` | 80 KB |
@@ -116,10 +112,11 @@ chosen to approximate the gzipped budgets above (typical 3-4x ratio).
 3. The semantic motion gate bundles the pure policy and `MotionProvider` separately through the
    public facade. Pure resolution must retain neither React nor Motion; the provider must keep both
    peers external. `node scripts/check/automation/bundle/index.mjs --motion` runs only this focused gate.
-4. The EffectRegistry gate bundles all nine runtime exports from `./effects`, rejects suppliers,
-   dynamic imports, emitted assets and visual/client modules, then independently walks the CJS
-   `require()` closure and `.d.ts` graph. `node scripts/check/automation/bundle/index.mjs --effects` runs only
-   this focused gate.
+4. RET-01-E retired `./effects`, so that door has no entry, fixture or ceiling here and the build
+   emits no `dist/effects.*`. The analyzer still carries the retired leg: its two raw
+   `dist/effects.*` keys report `SKIP (not found)`, and its EffectRegistry leg fails, alone under
+   `--effects` and inside every normal analysis, because `contracts/runtime/suppliers/index.json`
+   no longer declares `./effects`. That failure measures no bytes.
 5. The VIZ-03A chart-spec gate bundles every runtime export from `./charts/spec`, rejects React,
    D3, other suppliers, browser/client runtime, dynamic imports and emitted assets, then walks the
    CJS `require()` closure and `.d.ts` graph. `node scripts/check/automation/bundle/index.mjs --chart-spec` runs
@@ -198,10 +195,6 @@ gate before changing them; never widen a ceiling only to silence CI.
 The MOT-01 raw ESM/CJS facade and isolated policy/provider fixtures were measured from the same
 canonical-tree 2.19.28 release-candidate build on 2026-07-17. The isolation gate is part of every
 normal analysis.
-
-The EFX-01A raw ESM/CJS facade and all-export fixture were measured from the same cohesive
-2.19.17 producer build on 2026-07-16. Its gate proves ESM, CJS and declaration closure purity;
-the public subpath contains governance metadata/resolution only and no visual effect runtime.
 
 The VIZ-03A/C/D chart-spec, access, experience and renderer measurements come from the same
 cohesive producer build on 2026-07-16. The gates must remain supplier-, browser-, client- and
