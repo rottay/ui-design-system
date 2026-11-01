@@ -9,7 +9,7 @@ const SHOWROOM_ROOT = path.resolve(HERE, '../..');
 const REPO = path.resolve(SHOWROOM_ROOT, '../..');
 const PROBE = path.join(SHOWROOM_ROOT, 'src/app/probe/ds-reference/sections/monochrome');
 const UI = path.join(REPO, 'packages/core/src/components');
-const LAW = path.join(REPO, '../docs-engineering/engineering/design-system/commercial-surfaces/README.md');
+const LAW = path.join(REPO, '../docs-engineering/development/design-system/commercial-surfaces/README.md');
 
 /** The roster is governed: the normative law's section 8 and the probe must name
  *  the same set, or a batch photographs the wrong one.

@@ -9,7 +9,7 @@ const SHOWROOM_ROOT = path.resolve(HERE, '../..');
 const REPO = path.resolve(SHOWROOM_ROOT, '../..');
 const PROBE = path.join(SHOWROOM_ROOT, 'src/app/probe/ds-reference/sections/compositions');
 const UI = path.join(REPO, 'packages/core/src/components');
-const DOC = path.join(REPO, '../docs-engineering/engineering/design-system/components/surfaces/layout/README.md');
+const DOC = path.join(REPO, '../docs-engineering/development/design-system/components/surfaces/layout/README.md');
 
 /** The roster is governed: docs headings, the owners, and the probe must agree
  *  on the same four families, or a capture batch photographs the wrong set.
