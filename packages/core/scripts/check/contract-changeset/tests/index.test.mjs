@@ -169,6 +169,8 @@ test('only a parser decides that a producer edit is inert', () => {
   assert.equal(inert(null, null), false);
   assert.equal(inert('const = ;\n', 'const = ;\n'), false, 'unparseable at both ends');
   assert.equal(inert(code, 'const = ;\n'), false, 'unparseable at one end');
+  assert.equal(inert('x = 1;\n', '"use strict";\nx = 1;\n', 'packages/core/scripts/build/x/index.cjs'), false);
+  assert.equal(inert('export {};\n', 'export {};\n', 'packages/core/scripts/build/x/index.d.ts'), false);
   assert.equal(
     inert('{"a":1}\n', '{"a":1}\n', 'packages/core/scripts/build/verticals/bundle-build/contrast-baseline/index.json'),
     false,

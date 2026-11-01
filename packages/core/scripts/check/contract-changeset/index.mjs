@@ -166,7 +166,7 @@ export function classifyPath(path) {
  * the bundle banners are CSS comments inside strings, and those ship.
  */
 export function executableForm(path, text) {
-  if (text === null || !/\.[cm]?[jt]s$/u.test(path)) return null;
+  if (text === null || !/(?<!\.d)\.m?[jt]s$/u.test(path)) return null;
   const { outputText, diagnostics } = ts.transpileModule(text, {
     fileName: path,
     reportDiagnostics: true,
