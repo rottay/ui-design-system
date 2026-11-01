@@ -57,7 +57,7 @@ not to build output.
 A published key is not necessarily a sanctioned one: the
 [consumer contract](../packages/core/docs/consumer-contract/index.md) §1.2 owns
 each key's disposition, and `no-unsanctioned-ds-subpath` (§8) reports every
-import of a key that is not `guaranteed`.
+module import of a key that is not `guaranteed`.
 
 ## 3. Entry contract
 
@@ -205,9 +205,9 @@ renderer implementations. See the Showroom for a live page per chart type.
 | `no-unsanctioned-ds-subpath` | Only import the subpaths the consumer contract guarantees | error | error |
 
 `no-layout-property-animation` is enabled by neither config; an app opts in once
-it has measured its own debt. `no-unsanctioned-ds-subpath` reads the consumer
-contract's disposition tables; its `allowSubpaths` option is the decrease-only
-per-app baseline and the explicit opt-in for a `lab` subpath.
+it has measured its own debt. `no-unsanctioned-ds-subpath` enforces a mirror of
+the consumer contract's disposition tables; its `allowSubpaths` option is the
+decrease-only per-app baseline and the explicit opt-in for a `lab` subpath.
 
 ## 9. Server entry
 
