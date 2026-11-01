@@ -7,7 +7,10 @@ import { fileURLToPath } from "node:url";
 
 import { auditEffectProvenance } from "../../../../../../../scripts/check/effects/index.mjs";
 import { checkCanvasSinkCensus } from "../canvas-sink-census/index.mjs";
-import { packageRoot as findPackageRoot, repoRoot as findRepoRoot } from '../../../../libraries/repo-root/index.mjs';
+import {
+  packageRoot as findPackageRoot,
+  repoRoot as findRepoRoot,
+} from "../../../../libraries/repo-root/index.mjs";
 
 const SCRIPT_DIRECTORY = dirname(fileURLToPath(import.meta.url));
 const DEFAULT_PACKAGE_ROOT = findPackageRoot(SCRIPT_DIRECTORY);
@@ -36,9 +39,22 @@ const COMPLETION_BROWSER_LIMITS = Object.freeze({
   maxSpatialDimension: 2_560,
   maxSpatialPixels: 4_194_304,
   maxSpatialHostBundleGzipBytes: 7_800,
-  maxSpatialSpecBundleGzipBytes: 1_300,
   maxSuspendedRafCallbacks: 0,
 });
+
+// A retired subject is no longer published, so no live capture may measure it; only the
+// sealed, superseded receipt keeps its historical number, bounded by the ceiling it was captured under.
+const RETIRED_BUNDLE_SUBJECTS = Object.freeze([
+  Object.freeze({
+    subject: "./spatial/spec",
+    evidenceField: "spatialSpecGzipBytes",
+    liveHost: "./spatial",
+    retiredBy: "d2edce40d22b1715523e46f127da77371318a65f",
+    retirementLot: "RET-01-E",
+    disposition: "retired-not-measured",
+    historicalCeilingGzipBytes: 1_300,
+  }),
+]);
 
 const REQUIRED_FALLBACK_POLICIES = Object.freeze([
   "reduced-motion",
@@ -353,6 +369,67 @@ export function resolveSupersededReceipt({
   };
 }
 
+export function auditRetiredSubjectExports(exports) {
+  const errors = [];
+  if (!isRecord(exports)) return ["package exports are unreadable"];
+  for (const retired of RETIRED_BUNDLE_SUBJECTS) {
+    if (Object.hasOwn(exports, retired.subject))
+      errors.push(
+        `${retired.subject} is published again; its retired disposition is false`
+      );
+    if (!Object.hasOwn(exports, retired.liveHost))
+      errors.push(
+        `${retired.liveHost} is no longer published; the live host it was retired beside is gone`
+      );
+  }
+  return errors;
+}
+
+export function auditRetiredBundleSubjects({ bundle, historical }) {
+  const errors = [];
+  const subjects = [];
+  for (const retired of RETIRED_BUNDLE_SUBJECTS) {
+    const present =
+      isRecord(bundle) && Object.hasOwn(bundle, retired.evidenceField);
+    const value = present ? bundle[retired.evidenceField] : undefined;
+    if (historical) {
+      if (
+        !Number.isInteger(value) ||
+        value <= 0 ||
+        value > retired.historicalCeilingGzipBytes
+      ) {
+        errors.push(
+          `the superseded receipt's historical ${retired.subject} measurement is missing or outside the ceiling it was captured under`
+        );
+        continue;
+      }
+      subjects.push(
+        Object.freeze({
+          subject: retired.subject,
+          disposition: "historical-receipt-only",
+          recordedGzipBytes: value,
+        })
+      );
+    } else if (present) {
+      errors.push(
+        `${retired.subject} was retired by ${retired.retiredBy.slice(0, 9)} (${
+          retired.retirementLot
+        }); ` +
+          `a live capture must not measure it (${retired.evidenceField} present)`
+      );
+    } else {
+      subjects.push(
+        Object.freeze({
+          subject: retired.subject,
+          disposition: retired.disposition,
+          recordedGzipBytes: null,
+        })
+      );
+    }
+  }
+  return { errors, subjects: Object.freeze(subjects) };
+}
+
 function auditBrowserEvidence({
   evidence,
   packageIdentity,
@@ -362,6 +439,8 @@ function auditBrowserEvidence({
 }) {
   const errors = [];
   const pending = [];
+  let retiredSubjects = Object.freeze([]);
+  let historical = false;
   if (evidence === null) {
     pending.push(
       "completion evidence is missing; extend/run the current production-build Particle and " +
@@ -388,6 +467,7 @@ function auditBrowserEvidence({
     const verdict = supersession(evidence.sourceFingerprint);
     errors.push(...verdict.errors);
     pending.push(...verdict.pending);
+    historical = verdict.errors.length === 0 && verdict.pending.length > 0;
   } else if (evidence.sourceFingerprint !== sourceFingerprint) {
     errors.push("browser evidence source fingerprint is stale");
   }
@@ -500,13 +580,9 @@ function auditBrowserEvidence({
         COMPLETION_BROWSER_LIMITS.maxSpatialHostBundleGzipBytes
     )
       errors.push("Spatial host bundle exceeds its gzip ceiling");
-    if (
-      !Number.isInteger(bundle.spatialSpecGzipBytes) ||
-      bundle.spatialSpecGzipBytes <= 0 ||
-      bundle.spatialSpecGzipBytes >
-        COMPLETION_BROWSER_LIMITS.maxSpatialSpecBundleGzipBytes
-    )
-      errors.push("Spatial spec bundle exceeds its gzip ceiling");
+    const retired = auditRetiredBundleSubjects({ bundle, historical });
+    errors.push(...retired.errors);
+    retiredSubjects = retired.subjects;
   }
 
   const particle = assertions.particle;
@@ -591,6 +667,7 @@ function auditBrowserEvidence({
       browser: runner?.browserVersion ?? null,
       maxLongTaskMs: assertions.maxLongTaskMs ?? null,
       maxSuspendedRafCallbacks: assertions.maxSuspendedRafCallbacks ?? null,
+      retiredBundleSubjects: retiredSubjects,
     }),
   };
 }
@@ -611,6 +688,7 @@ export function auditCra15RuntimeHardening({
   sourceOverrides,
   browserEvidenceOverride,
   supersessionObligationsOverride,
+  sealedReceiptSourceOverride,
 } = {}) {
   const errors = [];
   const pending = [];
@@ -665,14 +743,22 @@ export function auditCra15RuntimeHardening({
   }
 
   const packageJson = JSON.parse(
-    readFileSync(resolve(packageRoot, "package.json"), "utf8")
+    readSource(relative(repositoryRoot, resolve(packageRoot, "package.json")))
   );
   const packageIdentity = `${packageJson.name}@${packageJson.version}`;
+  errors.push(...auditRetiredSubjectExports(packageJson.exports));
   const sourceFingerprint = sha256(fingerprintParts.sort().join("\0\0"));
   const roadmap = auditRoadmapAuthority(repositoryRoot);
   errors.push(...roadmap.errors);
   pending.push(...roadmap.pending);
 
+  if (
+    browserEvidenceOverride !== undefined &&
+    sealedReceiptSourceOverride !== undefined
+  )
+    throw new TypeError(
+      "supply either a caller fixture or the on-disk receipt source, not both"
+    );
   let browserEvidence = browserEvidenceOverride ?? null;
   const browserEvidencePath =
     repositoryRoot === DEFAULT_REPOSITORY_ROOT
@@ -681,23 +767,22 @@ export function auditCra15RuntimeHardening({
           repositoryRoot,
           "test-artifacts/craft/cra-15/browser-evidence.json"
         );
-  if (
-    browserEvidenceOverride === undefined &&
-    existsSync(browserEvidencePath)
-  ) {
-    try {
-      browserEvidence = JSON.parse(readFileSync(browserEvidencePath, "utf8"));
-    } catch (error) {
-      errors.push(`browser evidence is not valid JSON (${String(error)})`);
-    }
-  }
   // The supersession record governs ONE object: the sealed receipt this gate
   // read from disk. A caller-supplied fixture is a different object and never
   // reaches it, so a drill can still assert the plain stale-fingerprint law.
   const sealedReceiptBytes =
-    browserEvidenceOverride === undefined && existsSync(browserEvidencePath)
+    sealedReceiptSourceOverride !== undefined
+      ? Buffer.from(sealedReceiptSourceOverride)
+      : browserEvidenceOverride === undefined && existsSync(browserEvidencePath)
       ? readFileSync(browserEvidencePath)
       : null;
+  if (sealedReceiptBytes !== null) {
+    try {
+      browserEvidence = JSON.parse(sealedReceiptBytes.toString("utf8"));
+    } catch (error) {
+      errors.push(`browser evidence is not valid JSON (${String(error)})`);
+    }
+  }
   const supersession =
     sealedReceiptBytes === null
       ? null
@@ -735,7 +820,7 @@ export function auditCra15RuntimeHardening({
     pending,
   });
   const artifact = Object.freeze({
-    schemaVersion: 2,
+    schemaVersion: 3,
     workOrder: "WO-CRA-15",
     sourceId: "DS-IMP-106",
     scope: "ParticleField plus governed Canvas and WebGL lifecycle hardening",
@@ -807,10 +892,22 @@ export function auditCra15RuntimeHardening({
       }),
       particleBundleGzipBytes: 16_384,
       spatialHostBundleGzipBytes: 7_800,
-      spatialSpecBundleGzipBytes: 1_300,
       longTaskMs: 50,
       suspendedRafCallbacks: 0,
     }),
+    retiredSubjects: Object.freeze(
+      RETIRED_BUNDLE_SUBJECTS.map((retired) =>
+        Object.freeze({
+          subject: retired.subject,
+          evidenceField: retired.evidenceField,
+          liveHost: retired.liveHost,
+          retiredBy: retired.retiredBy,
+          retirementLot: retired.retirementLot,
+          disposition: retired.disposition,
+          historicalCeilingGzipBytes: retired.historicalCeilingGzipBytes,
+        })
+      )
+    ),
     requiredBrowserEvidence: Object.freeze([
       "particle: provider color isolation, sole lease, bounded DPR/count/pixels, viewport/background zero RAF, context recovery and meaningful fallback",
       "spatial: sole context, viewport/background zero RAF, bounded backing store, context retry and meaningful reduced/coarse/save-data/unsupported fallback",
