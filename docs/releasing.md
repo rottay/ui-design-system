@@ -49,8 +49,11 @@ pnpm changeset:publish    # publish to the restricted registry
 ```
 
 Write the changeset for someone upgrading, not for the reviewer: name the symbol or
-subpath affected and what a consumer must do differently, if anything. Documentation-only
-and tooling-only changes do not need one.
+subpath affected and what a consumer must do differently, if anything. Documentation needs
+a changeset unless it is outside `packages/core/` or in `packages/core/docs/` outside
+`consumer-contract/`. Tooling needs one unless it is outside `packages/core/` or in
+`packages/core/scripts/` outside the build producers. A build producer writes `dist/`, so
+it needs one unless a parser proves the edit inert.
 
 ## Release flow
 
