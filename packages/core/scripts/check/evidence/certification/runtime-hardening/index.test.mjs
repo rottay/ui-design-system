@@ -104,14 +104,14 @@ test("canonical CRA15 source produces deterministic structural evidence without 
   assert.equal(
     first.pending.filter(
       (item) =>
-        !/Phase 2C remains locked/u.test(item) &&
+        !/Phase 6 remains locked/u.test(item) &&
         item !== "WO-RET-01 is todo, not done" &&
         !/browser-receipt-superseded-by-canonical-path-refactor/u.test(item)
     ).length,
     0,
     first.pending.join("\n")
   );
-  assert.match(first.pending.join("\n"), /Phase 2C remains locked/u);
+  assert.match(first.pending.join("\n"), /Phase 6 remains locked/u);
   // WO-RET-01 joined CRA-15's dependsOn in 1c56b0399 (the adopted 2026-09-05
   // programme); until it is done it is a named pending item, never a pass.
   assert.ok(first.pending.includes("WO-RET-01 is todo, not done"), first.pending.join("\n"));
@@ -337,8 +337,7 @@ test("browser, long-task, RAF, bundle and context claims fail closed at their re
     "pass"
   );
   assert.deepEqual(valid.pending, [
-    "WO-RET-01 is todo, not done",
-    "Phase 2C remains locked without structured owner GO",
+    "Phase 6 remains locked without structured owner GO",
   ]);
 
   for (const [label, mutate, pattern] of [

@@ -216,7 +216,7 @@ function isFiniteNumber(value) {
   return typeof value === "number" && Number.isFinite(value);
 }
 
-function auditRoadmapAuthority(repositoryRoot) {
+export function auditRoadmapAuthority(repositoryRoot) {
   const errors = [];
   const pending = [];
   let registry;
@@ -247,7 +247,7 @@ function auditRoadmapAuthority(repositoryRoot) {
   if (!workOrder) {
     errors.push("roadmap registry lost WO-CRA-15");
   } else {
-    if (workOrder.phase !== "2C") errors.push("WO-CRA-15 phase must remain 2C");
+    if (workOrder.phase !== "6") errors.push("WO-CRA-15 phase must be 6");
     if (JSON.stringify(workOrder.dependsOn) !== JSON.stringify(dependencies)) {
       errors.push("WO-CRA-15 dependency authority drifted");
     }
@@ -264,11 +264,11 @@ function auditRoadmapAuthority(repositoryRoot) {
   );
 
   const phase =
-    registry.traceability?.["ds-improvements"]?.phaseControls?.["2C"];
+    registry.traceability?.["ds-improvements"]?.phaseControls?.["6"];
   if (!isRecord(phase) || !isRecord(phase.ownerGo)) {
-    errors.push("roadmap registry lost the structured Phase 2C control");
+    errors.push("roadmap registry lost the structured Phase 6 control");
   } else if (phase.claimState !== "open" || phase.ownerGo.decision !== "go") {
-    pending.push("Phase 2C remains locked without structured owner GO");
+    pending.push("Phase 6 remains locked without structured owner GO");
   }
 
   return {

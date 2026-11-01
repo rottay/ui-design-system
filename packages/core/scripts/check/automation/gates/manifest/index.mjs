@@ -1439,7 +1439,7 @@ export const CI_GATES = Object.freeze([
   // externals stay ['react','react/jsx-runtime']).
   { id: 'kernel-bundle-drill', run: ['node', '--test', 'scripts/check/motion-budget/audits/kernel-bundle/index.test.mjs'], blocking: true, phase: 'post-build', drillFor: ['kernel-bundle'], prerequisites: ['fresh-dist'], },
   { id: 'kernel-bundle', run: ['node', 'scripts/check/motion-budget/audits/kernel-bundle/index.mjs'], blocking: true, phase: 'post-build', drillId: 'kernel-bundle-drill', prerequisites: ['fresh-dist'], ratchet: 'scripts/check/motion-budget/budget/index.json', },
-  { id: 'runtime-hardening-drill', run: ['node', '--test', 'scripts/check/evidence/certification/runtime-hardening/index.test.mjs'], blocking: true, phase: 'post-build', drillFor: ['runtime-hardening-structural'], prerequisites: ['fresh-dist'], },
+  { id: 'runtime-hardening-drill', run: ['node', '--test', 'scripts/check/evidence/certification/runtime-hardening/index.test.mjs', 'scripts/check/evidence/certification/runtime-hardening/tests/index.test.mjs'], blocking: true, phase: 'post-build', drillFor: ['runtime-hardening-structural'], prerequisites: ['fresh-dist'], },
   { id: 'runtime-hardening-structural', run: ['pnpm', 'run', 'runtime-hardening:structural'], blocking: true, phase: 'post-build', drillId: 'runtime-hardening-drill', prerequisites: ['fresh-dist'], },
 
   // F-107: the showroom's node-only diagnostics were a HAND-WRITTEN list of
