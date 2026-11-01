@@ -3,7 +3,7 @@
  *
  * The preset is generated from BitHire's productive Icon inventory. Consumers
  * may alias BitHireIconPreset to `Icon` while retaining synchronous SSR without
- * loading the complete 263-role compatibility registry.
+ * loading the complete 282-role compatibility registry.
  */
 export {
   BITHIRE_PRESET_ICON_COMPONENTS,
