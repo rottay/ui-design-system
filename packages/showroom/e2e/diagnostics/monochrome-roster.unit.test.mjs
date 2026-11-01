@@ -19,7 +19,7 @@ const LAW = path.join(REPO, '../docs-engineering/development/design-system/comme
  *  `@rottay/design-system/commercial` subpath are gone. "Commercial" is a
  *  marketing adjective, never an architectural role, so the ten were
  *  reclassified by what they DO -- three display primitives, two layout
- *  primitives, three patterns, one structure -- and now ship from the ordinary
+ *  primitives, four patterns, one structure -- and now ship from the ordinary
  *  tier barrels. ProductWindow left the DS entirely: it is the sanctioned color
  *  exception, and a marketing-surface concern is showroom-local by the
  *  ownership contract. It is photographed with the kit because the probe covers
