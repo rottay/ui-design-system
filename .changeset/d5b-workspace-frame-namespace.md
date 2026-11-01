@@ -22,11 +22,21 @@ The compiler writes no frame name.
 `TENANT_THEME_COMPILER_VERSION` moves from `tenant-theme-compiler@4` to
 `tenant-theme-compiler@5`. The version is inside the artifact digest, so every
 artifact digest, ETag and `{ tenantId, rowVersion, compilerVersion }` key changes
-for every tenant. `variables`, mode deltas and the CSS body stay byte-identical for
-the same document. An artifact written by `tenant-theme-compiler@4` is refused
+for every tenant. An artifact written by `tenant-theme-compiler@4` is refused
 before use at every admission door, with an instruction to recompile the tenant's
 stored document and republish the artifact. Stored documents are not edited. The
 host owns the recompile.
+
+Against the last commit on `tenant-theme-compiler@4`, the same document keeps
+`variables`, mode deltas and the CSS body byte-identical, with one exception. A
+document that authors `chrome.table.cellPadding` also emits
+`--ds-density-cell-padding` with the authored value, beside the
+`--ds-table-cell-padding` it already emitted. That adds one entry to `variables`
+and one line to the CSS body. No stored document can state chrome per mode, so no
+stored document's mode deltas move. The version string and this one write are the
+only code changes that reach the output. This compares two compiles of one
+document, not a recompile with a stored artifact, which can differ by more. The
+guide says why.
 
 Consumer impact: app-bithire reads `--ds-workspace-shell-bg` on
 `.ds-workspace-frame--list` / `--form` (`src/styles/surfaces.css:23-28`,

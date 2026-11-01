@@ -115,8 +115,10 @@ is inside its digest, so:
 - Every artifact digest, every digest-derived ETag and every
   `{ tenantId, rowVersion, compilerVersion }` cache key changes, for every
   tenant, whether or not its document states `chrome.shell`.
-- `variables`, mode deltas and the CSS body stay byte-identical for the same
-  document. Only the version, the digest and the banner line differ.
+- Against the last commit on `tenant-theme-compiler@4`, `variables`, mode deltas
+  and the CSS body stay byte-identical for the same document, with one exception:
+  a document that authors `chrome.table.cellPadding`. For every other document,
+  only the version, the digest and the banner line differ.
 - An artifact written by `tenant-theme-compiler@4` is refused before use at
   every admission door: `verifyTenantThemeArtifactV1`,
   `emitTenantThemeArtifactForSsr`, `resolveVisualAuthority`, `mountTenantTheme`
@@ -132,6 +134,32 @@ no reason for its operator to move a row version. A host that persists artifacts
 must recompile and republish each one through its sanctioned publish path before
 serving it. The stored document itself is not edited. The host owns this
 rollout, and the DS reads and writes no tenant data.
+
+### The one byte exception: `chrome.table.cellPadding`
+
+A document that authors this field (`advanced.chrome.table.cellPadding` in v1,
+`overrides.chrome.table.cellPadding` in v2 and v3) also emits
+`--ds-density-cell-padding` with the authored value, beside the
+`--ds-table-cell-padding` it already emitted. That is one more entry in
+`variables` and one more line in the CSS body, so the artifact differs by more
+than the version, the digest and the banner line. Its mode deltas do not move,
+because no stored document can state chrome per mode. A studio draft can: a mode
+overlay that authors the field gains the name in that mode's block.
+
+A standalone table renders as before. In Modern, a tenant or preview scope nested
+inside a density container now keeps the authored value, where the container's
+preset used to win. This reading comes from the skin's cascade, not from a browser.
+
+Every other document stays byte-identical because the version string and this one
+write are the only code changes between the two commits that reach the output.
+
+This compares two compiles of one document. It does not compare a recompile with
+an artifact already stored, which can differ by more. Output also moved under
+`tenant-theme-compiler@4` with no version move: for example, the dark-ground
+elevation correction moved the elevation rows of documents that state
+`surfaces.elevation` as `flat` or `elevated`. Release 2.19.36 carries
+`tenant-theme-compiler@3`. A host recompiles either way, and a stored artifact is
+not a byte baseline for that recompile.
 
 ### `@rottay/tenancy` is a third owner of this identity
 
@@ -238,6 +266,11 @@ Recompile every persisted artifact as described above.
   are unchanged under both.
 - Presenting an artifact stored before the release is refused with the message
   above, and recompiling its stored document clears the refusal.
+- A document that authors `chrome.table.cellPadding` recompiles with both
+  `--ds-table-cell-padding` and `--ds-density-cell-padding` at the authored value.
+  Negative control: the same document without that field emits neither name, and
+  its `variables`, mode deltas and CSS body match the last commit on
+  `tenant-theme-compiler@4`.
 - In app-platform, with a pair that matches on all three values installed, the
   five theme operations above pass `assertTenantThemePackageParity`. Negative
   controls: with the DS on `tenant-theme-compiler@5` and Tenancy on any other
@@ -251,6 +284,7 @@ Revert the app edit, and the test edit if that alternative was chosen, together
 with the release adoption. app-platform reverts the paired `@rottay/tenancy` with
 it. The stored documents were never edited. The compile is replayable byte for
 byte, so recompiling them with the previous release restores the previous
-artifacts. If the host keeps the prior artifacts (preimages) by digest, it can
+artifacts, and a document that authors `chrome.table.cellPadding` loses the added
+name with them. If the host keeps the prior artifacts (preimages) by digest, it can
 remount them instead, once it runs the previous release again: the current
 compiler refuses them.
