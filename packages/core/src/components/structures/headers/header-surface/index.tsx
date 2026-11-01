@@ -63,7 +63,7 @@ export function HeaderSurface({
     showActionsStart || renderedActions.length > 0 ? (
       <Stack spacing="sm">
         {showActionsStart && config.presentation.actionsStart}
-        <SurfaceActionBar actions={renderedActions} />
+        <SurfaceActionBar actions={renderedActions} access={config.access} />
       </Stack>
     ) : undefined;
 
