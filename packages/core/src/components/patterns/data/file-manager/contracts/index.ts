@@ -1,8 +1,13 @@
 /**
  * @fileoverview Type definitions for the FileManager pattern component.
  * Defines {@link FileItem} and {@link FolderItem} data shapes, the
- * {@link FileSystemItem} discriminated union, and {@link FileManagerProps}
- * controlling grid/list views, selection, upload, navigation, and rename.
+ * {@link FileSystemItem} discriminated union, the
+ * {@link FileManagerPathSegment} breadcrumb segment, and
+ * {@link PatternFileManagerProps} controlling grid/list views, selection,
+ * upload, navigation, and rename. The package exports
+ * {@link PatternFileManagerProps} under the public name `FileManagerProps`;
+ * the {@link FileManagerProps} declared here is the string-path contract the
+ * frozen Classic and Rustic implementations are compiled against.
  */
 
 import type { ReactNode } from 'react';
@@ -84,7 +89,52 @@ export interface FolderItem {
 export type FileSystemItem = FileItem | FolderItem;
 
 /**
- * Props for the FileManager pattern component.
+ * One folder in the breadcrumb trail: the stable id an ancestor crumb
+ * navigates to and the label it shows.
+ *
+ * `id` is exactly what `onNavigate` receives when the crumb is activated. The
+ * pattern never derives it from `name` and never looks it up in `folders`:
+ * ancestors are not direct children of the current folder, so a lookup could
+ * not find them, and two folders may share a name.
+ *
+ * An empty `id` is invalid. The whole FileManager is refused by name before
+ * any crumb renders, so `onNavigate` can never receive `''`, a name or a
+ * guessed id, and an empty id is never read as Root. Root is not a segment;
+ * it keeps its own contract, `onNavigate(null)`.
+ *
+ * Only the Modern implementation renders object segments. The frozen Classic
+ * and Rustic engines and custom component packs refuse a path that contains
+ * one, in development and production; see {@link PatternFileManagerProps.currentPath}.
+ *
+ * @example
+ * ```tsx
+ * <PatternFileManager
+ *   files={files}
+ *   folders={folders}
+ *   currentPath={[
+ *     { id: 'fld_9f2', name: 'Documents' },
+ *     { id: 'fld_a71', name: 'Reports' },
+ *   ]}
+ *   onNavigate={(folderId) => openFolder(folderId)} // 'fld_9f2' from the first crumb, null from Root
+ * />
+ * ```
+ */
+export interface FileManagerPathSegment {
+  /** Stable, non-empty folder id handed to `onNavigate` by this segment's crumb. */
+  readonly id: string;
+
+  /**
+   * Visible crumb label and, on an ancestor, the accessible name of its button.
+   * Not an identifier: two segments may share a name. Supplying a non-empty,
+   * visible name is the host's obligation; the pattern does not refuse or
+   * replace it, so `''` leaves an ancestor button without an accessible name.
+   */
+  readonly name: string;
+}
+
+/**
+ * Props for the FileManager pattern component, exported by the package as
+ * `FileManagerProps`.
  *
  * Renders a file browser with grid/list view toggling, breadcrumb navigation,
  * multi-select, upload, delete, and rename capabilities. Files and folders
@@ -92,10 +142,13 @@ export type FileSystemItem = FileItem | FolderItem;
  *
  * @example
  * ```tsx
- * <FileManager
+ * <PatternFileManager
  *   files={files}
  *   folders={folders}
- *   currentPath={['Documents', 'Reports']}
+ *   currentPath={[
+ *     { id: 'fld_9f2', name: 'Documents' },
+ *     { id: 'fld_a71', name: 'Reports' },
+ *   ]}
  *   viewMode="grid"
  *   selectedItems={selected}
  *   onUpload={(files) => uploadFiles(files)}
@@ -105,7 +158,7 @@ export type FileSystemItem = FileItem | FolderItem;
  * />
  * ```
  */
-export interface FileManagerProps extends PatternBaseProps {
+export interface PatternFileManagerProps extends PatternBaseProps {
   /** List of file items to display in the current folder. */
   files: FileItem[];
 
@@ -113,10 +166,31 @@ export interface FileManagerProps extends PatternBaseProps {
   folders: FolderItem[];
 
   /**
-   * Breadcrumb path segments for the current folder location.
-   * Each element is a folder name, ordered root-first.
+   * Breadcrumb trail from Root to the current folder, ordered root-first.
+   * Root itself is not an element; the last element is the current folder.
+   *
+   * - A {@link FileManagerPathSegment} shows `name` and, as an ancestor,
+   *   hands its supplied `id` to `onNavigate`. No lookup, no projection.
+   * - **Deprecated: a string element.** It keeps its previous behaviour for
+   *   one minor release: the string is both the label and the value an
+   *   ancestor crumb hands to `onNavigate`. Known limitation: when the string
+   *   is a folder name, `onNavigate` receives that name, not a folder id, and
+   *   the pattern cannot resolve it, because ancestors are absent from
+   *   `folders` and names may repeat. Migrate to segments. Removal requires a
+   *   future major release and a release-owner decision.
+   *
+   * Strings and segments may be mixed; each element keeps its own behaviour.
+   * Only the Modern engine renders segments. A path containing any non-string
+   * element is refused by name, in development and production, on the frozen
+   * Classic and Rustic engines (inside the component's error boundary) and on
+   * the custom engine (before the component pack is resolved, so the nearest
+   * ancestor error boundary receives it), because no component pack can prove
+   * that it honors segments. A segment whose `id` is `''`, or an element that
+   * is neither a string nor a segment with string `id` and `name`, is refused
+   * by name on Modern too. Hosts recover by passing valid segments or a
+   * string-only path, or by rendering on the Modern engine.
    */
-  currentPath?: string[];
+  currentPath?: ReadonlyArray<string | FileManagerPathSegment>;
 
   /**
    * Display layout for items.
@@ -138,8 +212,11 @@ export interface FileManagerProps extends PatternBaseProps {
   onRename?: (id: string, newName: string) => void;
 
   /**
-   * Callback fired when navigating into a folder.
-   * Pass `null` to navigate to the root level.
+   * Callback fired when navigating to a folder.
+   *
+   * Receives the `id` of a folder row or card, the supplied `id` of an
+   * ancestor {@link FileManagerPathSegment} crumb, a deprecated string
+   * ancestor crumb verbatim, or `null` when Root is activated.
    */
   onNavigate?: (folderId: string | null) => void;
 
@@ -157,4 +234,21 @@ export interface FileManagerProps extends PatternBaseProps {
    * Receives the file item and should return an icon or thumbnail node.
    */
   renderFileIcon?: (item: FileItem) => ReactNode;
+}
+
+/**
+ * String-path engine contract the frozen Classic and Rustic implementations
+ * are compiled against. Not the public props: the package exports
+ * {@link PatternFileManagerProps} as `FileManagerProps`.
+ *
+ * A frozen engine reaches this contract only through the string-path loader
+ * adapter in `runtime`, which refuses any non-string element by name
+ * instead of narrowing it away.
+ */
+export interface FileManagerProps extends Omit<PatternFileManagerProps, 'currentPath'> {
+  /**
+   * Breadcrumb path segments for the current folder location.
+   * Each element is a folder name, ordered root-first.
+   */
+  currentPath?: string[];
 }

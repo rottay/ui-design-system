@@ -4327,5 +4327,8 @@
   "runtimeSvgPaint.structures/foundation/content-boundary/policy/index.ts": 0,
   "runtimeSvgPaint.structures/foundation/content-boundary/region/index.tsx": 0,
   "embeddedCssPaint.structures/foundation/content-boundary/policy/index.ts": 0,
-  "embeddedCssPaint.structures/foundation/content-boundary/region/index.tsx": 0
+  "embeddedCssPaint.structures/foundation/content-boundary/region/index.tsx": 0,
+  "fleet.inlinePaint.patterns/data/file-manager/runtime/index.ts": 0,
+  "runtimeSvgPaint.patterns/data/file-manager/runtime/index.ts": 0,
+  "embeddedCssPaint.patterns/data/file-manager/runtime/index.ts": 0
 }

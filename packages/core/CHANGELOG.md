@@ -2,6 +2,41 @@
 
 ## [Unreleased]
 
+### Minor Changes
+
+- Add `FileManagerPathSegment` (`{ id, name }`) and let
+  `FileManagerProps.currentPath` accept segments as well as strings, mixed in
+  one root-first trail. An ancestor segment crumb on the Modern engine hands its
+  supplied `id` to `onNavigate`, never its name and never an id looked up in
+  `folders` (ancestors are not direct children, so a lookup could not find
+  them). Crumbs stay keyed by position, so repeated names or ids keep every
+  ancestor interactive and one crumb current. Root keeps its separate
+  `onNavigate(null)` contract.
+- Refuse, in development and production, every path the selected
+  implementation cannot honor, by name under `PatternFileManager`: a segment
+  path on the frozen Classic or Rustic engine (inside the component's error
+  boundary), a segment path on the custom engine (before the component pack
+  is resolved; no pack can prove segment support), and on Modern a segment
+  whose `id` is `''` or an element that is neither a string nor a segment.
+  An empty id is never read as Root and never replaced by the name. Hosts
+  recover by passing valid segments or a string-only path, or by rendering on
+  Modern. String-only paths keep every route they had, custom packs included.
+- Compatibility: code that reads `FileManagerProps['currentPath']` as
+  `string[]`, or one of its elements as `string`, no longer compiles and must
+  handle segments; code that passes `string[]` is unaffected. The exact
+  release version remains a release-owner decision.
+
+### Deprecated
+
+- String elements of `FileManagerProps.currentPath`. They keep their previous
+  behaviour for one minor release: the string is both the crumb label and the
+  value an ancestor crumb hands to `onNavigate`. Known limitation: when the
+  string is a folder name, `onNavigate` receives that name, not a folder id,
+  and the pattern cannot resolve it. This flow is not certified. Migrate to
+  `FileManagerPathSegment`; removal requires a future major release and a
+  release-owner decision. `FileBrowserSurface` still forwards
+  `behavior.currentPath` as `string[]` and inherits this limitation.
+
 ### Patch Changes
 
 - Let the Modern Link hover ink follow tenant state emphasis. A new `link`

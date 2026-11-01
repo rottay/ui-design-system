@@ -21,10 +21,16 @@
  * column headers, view toggle titles, rename prompt, empty floor) resolves
  * through the optional `components` i18n channel with an English floor.
  *
+ * Modern is the only engine that renders `FileManagerPathSegment` crumbs: an
+ * ancestor segment hands its supplied `id` to `onNavigate`, a deprecated string
+ * ancestor hands the string. An invalid segment (empty `id`, malformed shape)
+ * refuses the whole manager by name before any crumb renders.
+ *
  * @example
  * <ModernFileManager
  *   files={[{ id: '1', name: 'photo.jpg', type: 'file', mimeType: 'image/jpeg', size: 512000 }]}
  *   folders={[{ id: 'f1', name: 'Photos', type: 'folder' }]}
+ *   currentPath={[{ id: 'root-media', name: 'Media' }, { id: 'f-2026', name: '2026' }]}
  *   viewMode="grid"
  *   onUpload={(files) => uploadFiles(files)}
  *   onNavigate={(folderId) => setCurrentFolder(folderId)}
@@ -32,7 +38,8 @@
  */
 
 import React, { useCallback, useEffect, useId, useRef, useState } from 'react';
-import type { FileManagerProps, FileItem, FileSystemItem } from '../../contracts';
+import type { PatternFileManagerProps, FileItem, FileSystemItem } from '../../contracts';
+import { pathSegmentLabel, pathSegmentTarget, refuseInvalidPath } from '../../runtime';
 import { useOptionalTranslation, useReadingDirectionIsRtl } from '@/infrastructure/runtime/i18n';
 import { partAttributes, useInteractionState } from '@/foundation/behavior';
 import { formatDate as formatDateIntl, formatFileSize } from '@/foundation/i18n/runtime/formatting';
@@ -153,10 +160,11 @@ function fileKindOf(item: FileSystemItem): 'folder' | 'image' | 'pdf' | 'text' |
  * pinned `data-testid="file-input"`); the Upload BUTTON is a composed Button
  * primitive that opens it.
  *
- * @param props - {@link FileManagerProps} -- files, folders, callbacks, and display options.
+ * @param props - {@link PatternFileManagerProps} -- files, folders, callbacks, and display options.
  * @returns The FileManager UI as a token-painted card surface.
+ * @throws Error naming the element when `currentPath` holds a segment with an empty `id` or a malformed element.
  */
-export default function ModernFileManager(props: FileManagerProps) {
+export default function ModernFileManager(props: PatternFileManagerProps) {
   // Optional channel with an English floor: the manager renders standalone
   // (no I18nProvider) without crashing, and never echoes a raw key.
   const i18n = useOptionalTranslation('components');
@@ -289,6 +297,10 @@ export default function ModernFileManager(props: FileManagerProps) {
     setActiveCardIndex(next);
   }, [handleSelect, onNavigate]);
 
+  // Refused before any crumb exists, so onNavigate never receives '' or a guessed id.
+  const pathRefusal = refuseInvalidPath(currentPath);
+  if (pathRefusal) throw new Error(`PatternFileManager: ${pathRefusal}`);
+
   // Loading state renders the composed Spinner primitive (ring, cadence and
   // paint are spinner.css-owned); the skin owns the centering frame.
   if (loading) {
@@ -330,10 +342,10 @@ export default function ModernFileManager(props: FileManagerProps) {
                 },
                 ...currentPath.map((segment, i) => ({
                   key: `path-${i}`,
-                  label: segment,
+                  label: pathSegmentLabel(segment),
                   onClick:
                     onNavigate && i < currentPath.length - 1
-                      ? () => onNavigate(segment)
+                      ? () => onNavigate(pathSegmentTarget(segment))
                       : undefined,
                 })),
               ]}
