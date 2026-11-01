@@ -43,6 +43,20 @@ const COMPOSED_TOKENS = new Map([
   ['surface-accent-bar', ['ds-accent-bar']],
 ]);
 
+/**
+ * A fixture stamped by an owner outside `src/components`, corroborated against that file alone and as a whole token:
+ * `--_ds-glass-card-*` spells the class as a substring, so the corpus's `includes` could not see the stamp go missing.
+ */
+const EXTERNAL_STAMP_OWNERS = new Map([
+  ['glass-card', 'src/graphics/motion/react/presentation/effects/glass-card/index.tsx'],
+]);
+
+function stampedByExternalOwner(family, token) {
+  const owner = EXTERNAL_STAMP_OWNERS.get(family);
+  if (owner === undefined) return false;
+  return readFileSync(path.join(CORE_ROOT, owner), 'utf8').match(/[\w-]+/gu).includes(token);
+}
+
 function authoredSources(dir, found = []) {
   for (const entry of readdirSync(dir, { withFileTypes: true })) {
     const target = path.join(dir, entry.name);
@@ -79,7 +93,9 @@ test('every mounted fixture is stamped by the authored components, or is a pinne
     const tokens = [...element.classes, ...Object.values(element.attributes).filter((value) => value !== '')];
     assert.ok(tokens.length > 0, `${family}: a fixture with no class and no attribute matches every div`);
     const pinned = COMPOSED_TOKENS.get(family) ?? [];
-    const missing = tokens.filter((token) => !CORPUS.includes(token) && !pinned.includes(token));
+    const missing = tokens.filter(
+      (token) => !CORPUS.includes(token) && !pinned.includes(token) && !stampedByExternalOwner(family, token),
+    );
     if (missing.length > 0) uncorroborated.push(`${family}: ${missing.join(', ')}`);
   }
   assert.deepEqual(
@@ -102,5 +118,16 @@ test('the pinned composed names may only shrink', () => {
         `${family}: ${token} is now spelled literally in the corpus; remove it from COMPOSED_TOKENS`,
       );
     }
+  }
+});
+
+test('an external stamp owner stays named only while its mounted fixture needs it', () => {
+  for (const family of EXTERNAL_STAMP_OWNERS.keys()) {
+    const element = FIXTURES.get(family);
+    assert.ok(element, `${family} names an external owner and is no longer a mounted fixture; remove it`);
+    assert.ok(
+      element.classes.some((token) => !CORPUS.includes(token)),
+      `${family}: the corpus now corroborates this fixture; remove it from EXTERNAL_STAMP_OWNERS`,
+    );
   }
 });
