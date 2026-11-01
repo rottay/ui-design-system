@@ -1,5 +1,20 @@
 # Claude Code Rules - Design System
 
+<!-- CORE-ADOPT-01 -->
+## Mandatory Core adoption
+
+Before changing consumption of `@rottay/core`, read and apply [CORE-ADOPT-01](../docs-engineering/architecture/foundations/module-contract/core-consumption/README.md). Adapt to its current published contracts; do not copy Core types or mechanisms, recreate retired APIs, or add legacy compatibility to hide a build/test failure. Fix consumer configuration/usage or the owning public API and adopt its published fix. Record the per-actor reading receipt required there before implementation; reviewers verify compliance in the diff. Pass the absolute rule path and revision explicitly to delegated agents. This rule does not change local roles or authorize unrelated work.
+<!-- /CORE-ADOPT-01 -->
+
+
+## Permanent documentation maintenance
+
+Read the [shared agent contract](../docs-engineering/development/agent-instructions/README.md) and [change matrix](../docs-engineering/development/agent-instructions/change-matrix.md); resolve documentation authority with [the source-of-truth rules](../docs-engineering/development/documentation/authority/README.md). Apply the relevant documentation updates and evidence requirements in the same delivery. Local scope, staffing, roadmaps, verification and Git rules remain in force.
+
+For applicable module normalization, [ROADMAP](../platform/normalization/ROADMAP.md), [TRACKING](../platform/normalization/TRACKING.md) and the owning dossier govern sequence and acceptance. App, UI, tooling and standalone-template work retains its own approved program.
+
+The local DS roadmap, ownership, staffing, sealed programme gates and generated-claim rules remain authoritative for DS implementation. This section governs documentation synchronization and cross-product contract references; it does not reopen a programme, change roles or authorize implementation/publication.
+
 ## Current owner succession — 2026-10-04
 
 Kimi is the sole active DT, coordinator, auditor and integrator of the
@@ -120,18 +135,18 @@ Apps, verticals, and modules must never query tables owned by another module/sch
 
 ## AI Documentation
 
-- **Capability Map (read first)**: `/docs-engineering/engineering/design-system/capability-map/README.md` — what a tenant can white-label, what an app can consume, with the app-bithire reference adoption per row. Read it BEFORE building new UI, adding a tenant knob, or hand-rolling anything the DS already ships.
-- **Component reference**: `/docs-engineering/engineering/design-system/` (hub `/docs-engineering/README.md`); its `architecture/README.md` and `catalog/decision-matrix/README.md` are the ownership contract. **Architecture (target law)**: [`docs/architecture/index.md`](docs/architecture/index.md) — doctrine, the full target tree, and the delta against the current tree. Read it before moving, renaming or deleting anything.
+- **Capability Map (read first)**: `/docs-engineering/development/design-system/capability-map/README.md` — what a tenant can white-label, what an app can consume, with the app-bithire reference adoption per row. Read it BEFORE building new UI, adding a tenant knob, or hand-rolling anything the DS already ships.
+- **Component reference**: `/docs-engineering/development/design-system/` (hub `/docs-engineering/README.md`); its `architecture/README.md` and `catalog/decision-matrix/README.md` are the ownership contract. **Architecture (target law)**: [`docs/architecture/index.md`](docs/architecture/index.md) — doctrine, the full target tree, and the delta against the current tree. Read it before moving, renaming or deleting anything.
 - **Before proposing that anything is redundant**, read [`docs/history/inventories/repository-map/2026-08/index.md`](docs/history/inventories/repository-map/2026-08/index.md) (what every folder does, where something is written twice), [`docs/history/programs/architecture-refactor/2026-08/retention/index.md`](docs/history/programs/architecture-refactor/2026-08/retention/index.md) (which duplicate is canonical; eight owners a liveness-only reading wrongly marked orphan) and [`docs/history/audits/architecture-refactor/2026-08/coordination/index.md`](docs/history/audits/architecture-refactor/2026-08/coordination/index.md) (overturned four removals — `Sheet`, `Popover`, `Statistic`, `Tree` all have in-DS production consumers).
 
-**Documentation Update Rule (CRITICAL).** Changing the catalog means updating its doc in the SAME session, under `docs-engineering/engineering/design-system/`: `components/primitives/{category}/README.md`, `components/patterns/{group}/README.md`, `components/structures/{group}/README.md` or `components/surfaces/pages/README.md` for a tier member; `foundations/{hooks,motion,tokens,contracts}/README.md` for a hook, motion primitive/effect, token structure or contract type; `runtime/engines/README.md` for engine behavior and `runtime/tenancy/README.md` for the tenant/branding model. Update the hub `README.md` inventory counts when component totals change.
+**Documentation Update Rule (CRITICAL).** Changing the catalog means updating its doc in the SAME session, under `docs-engineering/development/design-system/`: `components/primitives/{category}/README.md`, `components/patterns/{group}/README.md`, `components/structures/{group}/README.md` or `components/surfaces/pages/README.md` for a tier member; `foundations/{hooks,motion,tokens,contracts}/README.md` for a hook, motion primitive/effect, token structure or contract type; `runtime/engines/README.md` for engine behavior and `runtime/tenancy/README.md` for the tenant/branding model. Update the hub `README.md` inventory counts when component totals change.
 
 ## Project Context
 
 - Four canonical engine realms: `classic` (Ant Design 5.21 wrapper), `modern`, `rustic` (vanilla CSS) and `custom` (runtime-registered white-label packs, not a fourth physical implementation). The legacy names `titan` / `hermes` / `apollo` are gone — do not reintroduce them.
 - **Modern is the only productive engine** (owner decision 2026-09-05): Classic and Rustic stay in the package, frozen and fail-closed; no work order adds content, tokens, tests or accessibility work to them. Modern is not a DaisyUI skin — `daisy.classConsumers` measures 0 in `engine-token-audit` and the ratchet is decrease-only. Read the counter, not this sentence.
 - Engine-backed components may have `engines/{classic,modern,rustic}/index.tsx` siblings selected at runtime via `createEngineComponent()`; do not create fake forwarding engines when one is absent.
-- `packages/showroom/` is the standalone Next.js commercial showcase (port 7001, `workspace:*` DS dependency, deploys to showroom.rottay.com). Its marketing landing page is the only Tailwind + lucide-react exception; every other page uses DS components and `@rottay/design-system/icons`, and `src/data/registry/` must stay in sync with `packages/core/`. Reference: `docs-engineering/engineering/design-system/showroom/README.md`.
+- `packages/showroom/` is the standalone Next.js commercial showcase (port 7001, `workspace:*` DS dependency, deploys to showroom.rottay.com). Its marketing landing page is the only Tailwind + lucide-react exception; every other page uses DS components and `@rottay/design-system/icons`, and `src/data/registry/` must stay in sync with `packages/core/`. Reference: `docs-engineering/development/design-system/showroom/README.md`.
 
 ## Core source-tree hierarchy (NON-NEGOTIABLE)
 
@@ -211,7 +226,7 @@ This package is the **single source of truth** for reusable, domain-agnostic UI 
 - The DS owns: primitives, patterns, generic surfaces, page shells, detail shells, detail-form shells, collection workspace shells, layout shells, reusable widget chrome, runtime tenant contracts, product-profile contracts, engine extension points, motion vocabulary, and reusable lane layouts (ranked-row, signal-lane, feed-lane, action-lane).
 - The DS does **not** own: tenant/company/user/role/candidate/interview/event semantics, control-plane narrative, recruiting copy, dashboard storytelling, or any product-specific AI/operator narration.
 - Before adding a new component, ask: *"Could another app use this without knowing what a tenant, candidate, role, company, interview, or event is?"* If no, it does not belong here — it belongs in the consuming app.
-- See `docs-engineering/engineering/design-system/architecture/README.md` and `docs-engineering/engineering/design-system/catalog/decision-matrix/README.md` for the full ownership contract.
+- See `docs-engineering/development/design-system/architecture/README.md` and `docs-engineering/development/design-system/catalog/decision-matrix/README.md` for the full ownership contract.
 
 ## Component taxonomy (4 physical tiers, 5 manifest layers)
 
