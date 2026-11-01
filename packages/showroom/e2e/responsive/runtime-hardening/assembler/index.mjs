@@ -9,7 +9,8 @@
 // measures the Particle/Spatial gzip closures from the SAME built core dist
 // (identical Vite-inline methodology as scripts/check/automation/bundle/index.mjs), pins the
 // current source fingerprint via the gate itself, hashes the raw Playwright
-// report, and writes test-artifacts/craft/cra-15/browser-evidence.json.
+// report, and writes the live receipt at the path the gate reads. The sealed
+// historical receipt beside it is never written here.
 //
 // It fabricates nothing: every value is derived from a recorded measurement or
 // a real build, and a missing/false measurement aborts with a clear error
@@ -33,7 +34,6 @@ const CRA15_DIR = join(REPO_ROOT, "test-artifacts", "craft", "cra-15");
 const RUN_DIR = join(CRA15_DIR, ".run");
 const REPORT_RELATIVE = "test-artifacts/craft/cra-15/playwright-report.json";
 const REPORT_PATH = join(REPO_ROOT, REPORT_RELATIVE);
-const EVIDENCE_PATH = join(CRA15_DIR, "browser-evidence.json");
 
 // Same governed peer set scripts/check/automation/bundle/index.mjs externalizes, so the
 // measured gzip closures match the package's own budget gate.
@@ -450,11 +450,14 @@ async function main() {
     },
   };
 
-  writeFileSync(EVIDENCE_PATH, `${JSON.stringify(evidence, null, 2)}\n`);
+  writeFileSync(
+    join(REPO_ROOT, audit.liveReceiptPath),
+    `${JSON.stringify(evidence, null, 2)}\n`
+  );
   process.stdout.write(
     `${JSON.stringify(
       {
-        wrote: "test-artifacts/craft/cra-15/browser-evidence.json",
+        wrote: audit.liveReceiptPath,
         passed,
         failed,
         browserVersion: desktopMeta.browserVersion,

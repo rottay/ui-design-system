@@ -9,7 +9,6 @@ import {
   auditRetiredBundleSubjects,
   auditRetiredSubjectExports,
   resolveCra15GateDisposition,
-  resolveSupersededReceipt,
 } from "./index.mjs";
 import { repoRoot as findRepoRoot } from "../../../../libraries/repo-root/index.mjs";
 
@@ -23,6 +22,21 @@ function override(relativePath, mutate) {
 const REPORT_PATH = "test-artifacts/craft/cra-15/playwright-report.json";
 const REPORT_SOURCE = '{"suites":[],"stats":{"expected":5}}\n';
 const SEALED_RECEIPT_PATH = "test-artifacts/craft/cra-15/browser-evidence.json";
+const SEALED_RECORD_ID =
+  "cra-15/browser-receipt-superseded-by-canonical-path-refactor";
+
+function supersessionRecord() {
+  return JSON.parse(
+    readFileSync(
+      resolve(import.meta.dirname, "obligations/index.json"),
+      "utf8"
+    )
+  );
+}
+
+function sha256(value) {
+  return createHash("sha256").update(value).digest("hex");
+}
 
 function liveBrowserEvidence(structural) {
   return {
@@ -160,107 +174,21 @@ test("canonical CRA15 source produces deterministic structural evidence without 
   );
 });
 
-test("a supersession record authorises exactly one coordinate, in both directions", () => {
-  const receiptSha256 = "a".repeat(64);
-  const recorded = "b".repeat(64);
-  const live = "c".repeat(64);
-  const drift = {
-    rosterSize: 3,
-    pathMovedContentIdentical: ["x -> y"],
-    pathMovedAndContentChanged: [],
-    contentChangedInPlace: ["z"],
-    unchanged: 1,
-  };
-  const entry = {
-    id: "fixture/superseded",
-    receiptSha256,
-    recordedFingerprint: recorded,
-    liveFingerprint: live,
-    ownerLot: "C1",
-    resolution: "RECAPTURE_INTO_A_LIVE_OWNER",
-    rosterDriftSinceReceipt: drift,
-  };
-  const run = (obligations, overrides = {}) =>
-    resolveSupersededReceipt({
-      obligations,
-      receiptSha256,
-      recorded,
-      live,
-      rosterSize: 3,
-      ...overrides,
-    });
-
-  // The exact triple is the only thing that holds the receipt open.
-  const covered = run({ obligations: [entry] });
-  assert.deepEqual(covered.errors, []);
-  assert.equal(covered.pending.length, 1);
-  assert.match(covered.pending[0], /fixture\/superseded/u);
-
-  // Each pin, moved on its own, takes the authorisation away.
-  for (const [label, mutated] of [
-    ["receipt bytes", { ...entry, receiptSha256: "d".repeat(64) }],
-    ["recorded coordinate", { ...entry, recordedFingerprint: "e".repeat(64) }],
-    ["live coordinate", { ...entry, liveFingerprint: "f".repeat(64) }],
-  ]) {
-    const result = run({ obligations: [mutated] });
-    assert.match(
-      result.errors.join("\n"),
-      /browser evidence source fingerprint is stale/u,
-      `${label} must stop authorising`
-    );
-    assert.deepEqual(result.pending, []);
-  }
-
-  // A record that no longer applies is a stale note, and a stale note
-  // authorises nothing -- exactness in the other direction.
-  const applied = resolveSupersededReceipt({
-    obligations: { obligations: [entry] },
-    receiptSha256,
-    recorded: live,
-    live,
-    rosterSize: 3,
-  });
-  assert.match(applied.errors.join("\n"), /stale and authorises nothing/u);
-
-  // With no record at all and a covering receipt, there is nothing to say.
-  assert.deepEqual(
-    resolveSupersededReceipt({
-      obligations: { obligations: [] },
-      receiptSha256,
-      recorded: live,
-      live,
-      rosterSize: 3,
-    }),
-    { errors: [], pending: [] }
-  );
-
-  // Two records for the same coordinate is ambiguity, not redundancy.
-  const twice = run({ obligations: [entry, { ...entry, id: "fixture/twin" }] });
-  assert.match(twice.errors.join("\n"), /exactly one may/u);
-
-  // The drift enumeration must close against the real roster size, so the
-  // record cannot describe a tree it did not measure.
-  const short = run({
-    obligations: [
-      { ...entry, rosterDriftSinceReceipt: { ...drift, unchanged: 0 } },
-    ],
-  });
-  assert.match(short.errors.join("\n"), /must close exactly/u);
-});
-
 test("the sealed CRA-15 receipt is pinned by its own bytes, and is not rewritten", () => {
   const receipt = resolve(
     REPOSITORY_ROOT,
     "test-artifacts/craft/cra-15/browser-evidence.json"
   );
-  const record = JSON.parse(
-    readFileSync(
-      resolve(import.meta.dirname, "obligations/index.json"),
-      "utf8"
-    )
-  ).obligations.find(
-    (entry) =>
-      entry.id === "cra-15/browser-receipt-superseded-by-canonical-path-refactor"
+  const { obligations, closed } = supersessionRecord();
+  const record = closed.find((entry) => entry.id === SEALED_RECORD_ID);
+  assert.ok(record, "the sealed receipt's history left the closed record");
+  assert.deepEqual(obligations, [], "no supersession may stay open");
+  assert.equal(record.receiptPath, SEALED_RECEIPT_PATH);
+  assert.equal(record.closure.state, "closed-authorises-nothing");
+  assert.equal(
+    record.closure.liveOwnerPath,
+    auditCra15RuntimeHardening({ repositoryRoot: REPOSITORY_ROOT })
+      .liveReceiptPath
   );
   const bytes = readFileSync(receipt);
   assert.equal(
@@ -512,51 +440,39 @@ test("the retired ./spatial/spec subject is never measured live and never passes
 });
 
 test("the superseded receipt keeps its historical 1097-byte spec measurement as receipt-only evidence", () => {
-  const structural = auditCra15RuntimeHardening({
-    repositoryRoot: REPOSITORY_ROOT,
-  });
   const bytes = readFileSync(resolve(REPOSITORY_ROOT, SEALED_RECEIPT_PATH));
   const receipt = JSON.parse(bytes.toString("utf8"));
   assert.equal(receipt.assertions.bundle.spatialSpecGzipBytes, 1_097);
-  const exactRecord = {
-    obligations: [
-      {
-        id: "fixture/sealed-receipt-held-open",
-        receiptSha256: createHash("sha256").update(bytes).digest("hex"),
-        recordedFingerprint: receipt.sourceFingerprint,
-        liveFingerprint: structural.artifact.sourceFingerprint,
-        ownerLot: "C1",
-        resolution: "RECAPTURE_INTO_A_LIVE_OWNER",
-        rosterDriftSinceReceipt: {
-          pathMovedContentIdentical: [],
-          pathMovedAndContentChanged: [],
-          contentChangedInPlace: [],
-          unchanged: 14,
-          rosterSize: 14,
-        },
-      },
-    ],
-  };
-  const held = auditCra15RuntimeHardening({
-    repositoryRoot: REPOSITORY_ROOT,
-    supersessionObligationsOverride: exactRecord,
-  });
-  assert.doesNotMatch(held.errors.join("\n"), /spatial\/spec|source fingerprint is stale/u);
-  assert.match(held.pending.join("\n"), /fixture\/sealed-receipt-held-open/u);
-  assert.equal(held.artifact.checks.realBrowserPerformanceAndBundle.status === "pass", false);
   assert.deepEqual(
-    held.artifact.checks.realBrowserPerformanceAndBundle.summary.retiredBundleSubjects,
+    auditRetiredBundleSubjects({
+      bundle: receipt.assertions.bundle,
+      historical: true,
+    }).subjects,
     [{ subject: "./spatial/spec", disposition: "historical-receipt-only", recordedGzipBytes: 1_097 }]
   );
 
-  // Without the exact record the receipt is not historical evidence, so its spec
-  // number is a live measurement of a retired subject and is refused.
+  // With no live receipt the gate is pending and names who owes the recapture.
+  const held = auditCra15RuntimeHardening({
+    repositoryRoot: REPOSITORY_ROOT,
+    liveReceiptSourceOverride: null,
+  });
+  assert.doesNotMatch(held.errors.join("\n"), /spatial\/spec|source fingerprint is stale/u);
+  const owed = held.pending.join("\n");
+  assert.match(owed, new RegExp(`no live receipt at ${held.liveReceiptPath}`, "u"));
+  assert.match(owed, new RegExp(`${SEALED_RECORD_ID} left RECAPTURE_INTO_A_LIVE_OWNER to C1`, "u"));
+  assert.equal(held.artifact.checks.realBrowserPerformanceAndBundle.status, "pending");
+  assert.equal(held.artifact.checks.realBrowserPerformanceAndBundle.summary, null);
+  assert.equal(held.disposition.completionEligible, false);
+
+  // Without its closed record the stale coordinate is an error, and the sealed
+  // number is never read as a live measurement either way.
   const unrecorded = auditCra15RuntimeHardening({
     repositoryRoot: REPOSITORY_ROOT,
+    liveReceiptSourceOverride: null,
     supersessionObligationsOverride: { obligations: [] },
   });
   assert.match(unrecorded.errors.join("\n"), /source fingerprint is stale/u);
-  assert.match(unrecorded.errors.join("\n"), /\.\/spatial\/spec was retired/u);
+  assert.doesNotMatch(unrecorded.errors.join("\n"), /a live capture must not measure it/u);
 });
 
 test("the retired-subject helpers fail closed in both directions", () => {
@@ -634,38 +550,22 @@ test("the gate itself refuses a republished ./spatial/spec and a lost ./spatial 
   assert.match(both.errors.join("\n"), /\.\/spatial is no longer published/u);
 });
 
-test("a fresh on-disk receipt with no open record is live, so its 1097-byte spec measurement is refused", () => {
+test("a fresh on-disk live receipt is audited in full, so its 1097-byte spec measurement is refused", () => {
   const structural = auditCra15RuntimeHardening({
     repositoryRoot: REPOSITORY_ROOT,
   });
-  const live = structural.artifact.sourceFingerprint;
   const sourceOverrides = new Map([[REPORT_PATH, REPORT_SOURCE]]);
-  const noRecord = { obligations: [] };
   const fresh = liveBrowserEvidence(structural);
   const freshWithSpec = withBundle(fresh, {
     ...fresh.assertions.bundle,
     spatialSpecGzipBytes: 1_097,
   });
   const onDisk = (receipt) => `${JSON.stringify(receipt, null, 2)}\n`;
-
-  // The supersession verdict for this coordinate is exactly {errors:[], pending:[]}.
-  assert.deepEqual(
-    resolveSupersededReceipt({
-      obligations: noRecord,
-      receiptSha256: createHash("sha256").update(onDisk(freshWithSpec)).digest("hex"),
-      recorded: live,
-      live,
-      rosterSize: 14,
-    }),
-    { errors: [], pending: [] }
-  );
-
   const run = (receipt) =>
     auditCra15RuntimeHardening({
       repositoryRoot: REPOSITORY_ROOT,
       sourceOverrides,
-      supersessionObligationsOverride: noRecord,
-      sealedReceiptSourceOverride: onDisk(receipt),
+      liveReceiptSourceOverride: onDisk(receipt),
     });
 
   const refused = run(freshWithSpec);
@@ -684,10 +584,9 @@ test("a fresh on-disk receipt with no open record is live, so its 1097-byte spec
   );
 
   const admitted = run(fresh);
-  assert.doesNotMatch(
-    admitted.errors.join("\n"),
-    /spatial\/spec|source fingerprint is stale|supersession record|Spatial host bundle|Particle bundle/u
-  );
+  assert.deepEqual(admitted.errors, []);
+  assert.equal(admitted.artifact.checks.realBrowserPerformanceAndBundle.status, "pass");
+  assert.doesNotMatch(admitted.pending.join("\n"), /completion evidence is missing/u);
   assert.deepEqual(
     admitted.artifact.checks.realBrowserPerformanceAndBundle.summary.retiredBundleSubjects,
     [{ subject: "./spatial/spec", disposition: "retired-not-measured", recordedGzipBytes: null }]
@@ -698,8 +597,114 @@ test("a fresh on-disk receipt with no open record is live, so its 1097-byte spec
       auditCra15RuntimeHardening({
         repositoryRoot: REPOSITORY_ROOT,
         browserEvidenceOverride: fresh,
-        sealedReceiptSourceOverride: onDisk(fresh),
+        liveReceiptSourceOverride: onDisk(fresh),
       }),
     /either a caller fixture or the on-disk receipt source, not both/u
   );
+});
+
+test("a stale live receipt fails, whatever any record says", () => {
+  const structural = auditCra15RuntimeHardening({
+    repositoryRoot: REPOSITORY_ROOT,
+  });
+  const sourceOverrides = new Map([[REPORT_PATH, REPORT_SOURCE]]);
+  const stale = {
+    ...liveBrowserEvidence(structural),
+    sourceFingerprint: "0".repeat(64),
+  };
+  const source = JSON.stringify(stale);
+  const { closed } = supersessionRecord();
+  const holdOpen = {
+    ...closed[0],
+    id: "fixture/held-open",
+    receiptPath: structural.liveReceiptPath,
+    receiptSha256: sha256(source),
+    recordedFingerprint: stale.sourceFingerprint,
+    liveFingerprint: structural.artifact.sourceFingerprint,
+  };
+  const run = (supersessionObligationsOverride) =>
+    auditCra15RuntimeHardening({
+      repositoryRoot: REPOSITORY_ROOT,
+      sourceOverrides,
+      liveReceiptSourceOverride: source,
+      supersessionObligationsOverride,
+    });
+
+  for (const record of [
+    undefined,
+    { obligations: [holdOpen], closed },
+    { obligations: [], closed: [...closed, holdOpen] },
+  ]) {
+    const result = run(record);
+    assert.equal(result.ok, false);
+    assert.match(
+      result.errors.join("\n"),
+      /browser evidence source fingerprint is stale/u
+    );
+    assert.equal(
+      result.artifact.checks.realBrowserPerformanceAndBundle.status,
+      "fail"
+    );
+  }
+});
+
+test("the sealed receipt cannot pass the live source, and absence is never a pass", () => {
+  const structural = auditCra15RuntimeHardening({
+    repositoryRoot: REPOSITORY_ROOT,
+  });
+  const fresh = liveBrowserEvidence(structural);
+  const sourceOverrides = new Map([[REPORT_PATH, REPORT_SOURCE]]);
+  const [record] = supersessionRecord().closed;
+
+  // A same-path successor: valid, current evidence written over the sealed path.
+  const successor = JSON.stringify(fresh);
+  for (const closed of [
+    [record],
+    [
+      {
+        ...record,
+        receiptSha256: sha256(successor),
+        recordedFingerprint: fresh.sourceFingerprint,
+      },
+    ],
+  ]) {
+    const result = auditCra15RuntimeHardening({
+      repositoryRoot: REPOSITORY_ROOT,
+      sourceOverrides,
+      liveReceiptSourceOverride: null,
+      sealedReceiptSourceOverride: successor,
+      supersessionObligationsOverride: { obligations: [], closed },
+    });
+    assert.notEqual(
+      result.artifact.checks.realBrowserPerformanceAndBundle.status,
+      "pass"
+    );
+    assert.equal(result.disposition.completionEligible, false);
+    assert.match(result.pending.join("\n"), /completion evidence is missing/u);
+  }
+
+  // An absent, null or malformed live receipt reaches no passing state.
+  for (const [label, source, status] of [
+    ["absent", null, "pending"],
+    ["null", "null", "pending"],
+    ["array", "[]", "fail"],
+    ["empty object", "{}", "fail"],
+  ]) {
+    const result = auditCra15RuntimeHardening({
+      repositoryRoot: REPOSITORY_ROOT,
+      liveReceiptSourceOverride: source,
+    });
+    assert.equal(
+      result.artifact.checks.realBrowserPerformanceAndBundle.status,
+      status,
+      label
+    );
+    assert.equal(result.disposition.completionEligible, false, label);
+  }
+  const unparsable = auditCra15RuntimeHardening({
+    repositoryRoot: REPOSITORY_ROOT,
+    liveReceiptSourceOverride: "not json",
+  });
+  assert.equal(unparsable.ok, false);
+  assert.match(unparsable.errors.join("\n"), /browser evidence is not valid JSON/u);
 });

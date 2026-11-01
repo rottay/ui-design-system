@@ -19,10 +19,9 @@ const DEFAULT_ARTIFACT_PATH = resolve(
   DEFAULT_REPOSITORY_ROOT,
   "test-artifacts/craft/cra-15/certification.json"
 );
-const DEFAULT_BROWSER_EVIDENCE_PATH = resolve(
-  DEFAULT_REPOSITORY_ROOT,
-  "test-artifacts/craft/cra-15/browser-evidence.json"
-);
+const LIVE_RECEIPT_PATH =
+  "test-artifacts/craft/cra-15/live-browser-receipt.json";
+const SEALED_RECEIPT_PATH = "test-artifacts/craft/cra-15/browser-evidence.json";
 const SUPERSESSION_OBLIGATIONS_PATH = resolve(
   SCRIPT_DIRECTORY,
   "obligations/index.json"
@@ -294,79 +293,84 @@ function readSupersessionObligations(errors) {
   }
 }
 
+function receiptBytes(sourceOverride, path) {
+  if (sourceOverride !== undefined)
+    return sourceOverride === null ? null : Buffer.from(sourceOverride);
+  return existsSync(path) ? readFileSync(path) : null;
+}
+
 /**
- * The sealed receipt records WHICH source state a real browser measured. When
- * that coordinate stops matching the live one the receipt is superseded: it is
- * still true about its own tree and still historical evidence, and it is no
- * longer a claim about today. Separating those two is the whole job here.
- *
- * A supersession is admissible only against a written record that pins all
- * three coordinates -- the receipt's own bytes, what it recorded, and what the
- * tree computes -- so it authorises exactly one state and expires by moving.
- * Everything else, including a receipt that is stale with no record at all, is
- * an error exactly as before.
+ * The sealed receipt proves what a real browser measured then and certifies nothing now. One
+ * closed record pins its bytes and coordinate; no record may hold any receipt open.
  */
-export function resolveSupersededReceipt({
-  obligations,
-  receiptSha256,
-  recorded,
-  live,
-  rosterSize,
-}) {
+function auditSealedReceipt({ obligations, sealedBytes }) {
   const errors = [];
   const open = Array.isArray(obligations?.obligations)
     ? obligations.obligations
     : [];
-  const stale = recorded === live;
-  const matches = open.filter(
-    (entry) =>
-      entry?.receiptSha256 === receiptSha256 &&
-      entry?.recordedFingerprint === recorded &&
-      entry?.liveFingerprint === live
+  if (open.length > 0) {
+    errors.push(
+      "an open supersession record authorises nothing, so no receipt can be held open: " +
+        open.map((entry) => entry?.id ?? "<unnamed>").join(", ")
+    );
+  }
+  const records = (
+    Array.isArray(obligations?.closed) ? obligations.closed : []
+  ).filter((entry) => entry?.receiptPath === SEALED_RECEIPT_PATH);
+  if (records.length !== 1) {
+    errors.push(
+      records.length === 0
+        ? "browser evidence source fingerprint is stale and no closed record accounts for the sealed receipt"
+        : `${records.length} closed records claim the sealed receipt; exactly one may`
+    );
+    return { errors, record: null };
+  }
+
+  const [record] = records;
+  if (sealedBytes === null) {
+    errors.push(
+      "the sealed browser receipt is missing; it is historical evidence and must not be removed"
+    );
+    return { errors, record: null };
+  }
+  if (sha256(sealedBytes) !== record.receiptSha256) {
+    errors.push(
+      "the sealed browser receipt moved; it is historical evidence and must not be rewritten"
+    );
+    return { errors, record: null };
+  }
+  try {
+    const sealed = JSON.parse(sealedBytes.toString("utf8"));
+    if (sealed?.sourceFingerprint !== record.recordedFingerprint) {
+      errors.push(
+        "the sealed browser receipt no longer records its closed coordinate"
+      );
+    }
+    errors.push(
+      ...auditRetiredBundleSubjects({
+        bundle: sealed?.assertions?.bundle,
+        historical: true,
+      }).errors
+    );
+  } catch (error) {
+    errors.push(
+      `the sealed browser receipt is not valid JSON (${String(error)})`
+    );
+  }
+  return { errors, record };
+}
+
+function missingLiveReceipt(sealedRecord) {
+  const owed =
+    sealedRecord === null
+      ? ""
+      : `; the sealed browser receipt is superseded and certifies nothing live, and ` +
+        `${sealedRecord.id} left ${sealedRecord.resolution} to ${sealedRecord.ownerLot}`;
+  return (
+    `completion evidence is missing: no live receipt at ${LIVE_RECEIPT_PATH}; extend/run the ` +
+    "current production-build Particle and Spatial probes with recorded zero suspended RAF, " +
+    `long-task, rapid-cleanup and clean-bundle results${owed}`
   );
-
-  if (!stale && matches.length === 0) {
-    errors.push("browser evidence source fingerprint is stale");
-    return { errors, pending: [] };
-  }
-  if (stale && open.length > 0) {
-    errors.push(
-      "the sealed browser receipt covers the live source, so the open supersession " +
-        `record is stale and authorises nothing: ${open
-          .map((entry) => entry?.id ?? "<unnamed>")
-          .join(", ")}`
-    );
-    return { errors, pending: [] };
-  }
-  if (stale) return { errors, pending: [] };
-  if (matches.length > 1) {
-    errors.push(
-      `${matches.length} supersession records claim the same receipt coordinate; exactly one may`
-    );
-    return { errors, pending: [] };
-  }
-
-  const [entry] = matches;
-  const drift = entry.rosterDriftSinceReceipt;
-  const enumerated =
-    (drift?.pathMovedContentIdentical?.length ?? 0) +
-    (drift?.pathMovedAndContentChanged?.length ?? 0) +
-    (drift?.contentChangedInPlace?.length ?? 0) +
-    (drift?.unchanged ?? -1);
-  if (drift?.rosterSize !== rosterSize || enumerated !== rosterSize) {
-    errors.push(
-      `supersession record ${entry.id} accounts for ${enumerated} of ${rosterSize} roster sources; ` +
-        "the drift enumeration must close exactly"
-    );
-    return { errors, pending: [] };
-  }
-  return {
-    errors,
-    pending: [
-      `the sealed browser receipt is superseded and covers ${recorded}, not the live ${live}; ` +
-        `${entry.id} holds it open for ${entry.ownerLot} (${entry.resolution})`,
-    ],
-  };
 }
 
 export function auditRetiredSubjectExports(exports) {
@@ -432,20 +436,16 @@ export function auditRetiredBundleSubjects({ bundle, historical }) {
 
 function auditBrowserEvidence({
   evidence,
+  missingEvidence,
   packageIdentity,
   readSource,
   sourceFingerprint,
-  supersession,
 }) {
   const errors = [];
   const pending = [];
   let retiredSubjects = Object.freeze([]);
-  let historical = false;
   if (evidence === null) {
-    pending.push(
-      "completion evidence is missing; extend/run the current production-build Particle and " +
-        "Spatial probes with recorded zero suspended RAF, long-task, rapid-cleanup and clean-bundle results"
-    );
+    pending.push(missingEvidence);
     return { errors, pending, summary: null };
   }
   if (!isRecord(evidence)) {
@@ -463,12 +463,7 @@ function auditBrowserEvidence({
   if (evidence.package !== packageIdentity) {
     errors.push(`browser evidence package must be ${packageIdentity}`);
   }
-  if (supersession) {
-    const verdict = supersession(evidence.sourceFingerprint);
-    errors.push(...verdict.errors);
-    pending.push(...verdict.pending);
-    historical = verdict.errors.length === 0 && verdict.pending.length > 0;
-  } else if (evidence.sourceFingerprint !== sourceFingerprint) {
+  if (evidence.sourceFingerprint !== sourceFingerprint) {
     errors.push("browser evidence source fingerprint is stale");
   }
 
@@ -580,7 +575,7 @@ function auditBrowserEvidence({
         COMPLETION_BROWSER_LIMITS.maxSpatialHostBundleGzipBytes
     )
       errors.push("Spatial host bundle exceeds its gzip ceiling");
-    const retired = auditRetiredBundleSubjects({ bundle, historical });
+    const retired = auditRetiredBundleSubjects({ bundle, historical: false });
     errors.push(...retired.errors);
     retiredSubjects = retired.subjects;
   }
@@ -687,6 +682,7 @@ export function auditCra15RuntimeHardening({
   packageRoot = resolve(repositoryRoot, "packages/core"),
   sourceOverrides,
   browserEvidenceOverride,
+  liveReceiptSourceOverride,
   supersessionObligationsOverride,
   sealedReceiptSourceOverride,
 } = {}) {
@@ -754,56 +750,43 @@ export function auditCra15RuntimeHardening({
 
   if (
     browserEvidenceOverride !== undefined &&
-    sealedReceiptSourceOverride !== undefined
+    liveReceiptSourceOverride !== undefined
   )
     throw new TypeError(
       "supply either a caller fixture or the on-disk receipt source, not both"
     );
   let browserEvidence = browserEvidenceOverride ?? null;
-  const browserEvidencePath =
-    repositoryRoot === DEFAULT_REPOSITORY_ROOT
-      ? DEFAULT_BROWSER_EVIDENCE_PATH
-      : resolve(
-          repositoryRoot,
-          "test-artifacts/craft/cra-15/browser-evidence.json"
-        );
-  // The supersession record governs ONE object: the sealed receipt this gate
-  // read from disk. A caller-supplied fixture is a different object and never
-  // reaches it, so a drill can still assert the plain stale-fingerprint law.
-  const sealedReceiptBytes =
-    sealedReceiptSourceOverride !== undefined
-      ? Buffer.from(sealedReceiptSourceOverride)
-      : browserEvidenceOverride === undefined && existsSync(browserEvidencePath)
-      ? readFileSync(browserEvidencePath)
+  const liveReceiptBytes =
+    browserEvidenceOverride === undefined
+      ? receiptBytes(
+          liveReceiptSourceOverride,
+          resolve(repositoryRoot, LIVE_RECEIPT_PATH)
+        )
       : null;
-  if (sealedReceiptBytes !== null) {
+  if (liveReceiptBytes !== null) {
     try {
-      browserEvidence = JSON.parse(sealedReceiptBytes.toString("utf8"));
+      browserEvidence = JSON.parse(liveReceiptBytes.toString("utf8"));
     } catch (error) {
       errors.push(`browser evidence is not valid JSON (${String(error)})`);
     }
   }
-  const supersession =
-    sealedReceiptBytes === null
-      ? null
-      : (recorded) =>
-          resolveSupersededReceipt({
-            obligations:
-              supersessionObligationsOverride ??
-              readSupersessionObligations(errors),
-            receiptSha256: sha256(sealedReceiptBytes),
-            recorded,
-            live: sourceFingerprint,
-            rosterSize: REQUIRED_SOURCE_ASSERTIONS.length,
-          });
+  const sealed = auditSealedReceipt({
+    obligations:
+      supersessionObligationsOverride ?? readSupersessionObligations(errors),
+    sealedBytes: receiptBytes(
+      sealedReceiptSourceOverride,
+      resolve(repositoryRoot, SEALED_RECEIPT_PATH)
+    ),
+  });
   const browser = auditBrowserEvidence({
     evidence: browserEvidence,
+    missingEvidence: missingLiveReceipt(sealed.record),
     packageIdentity,
     readSource,
     sourceFingerprint,
-    supersession,
   });
-  errors.push(...browser.errors);
+  const browserErrors = [...sealed.errors, ...browser.errors];
+  errors.push(...browserErrors);
   pending.push(...browser.pending);
   if (
     roadmap.snapshot?.workOrderStatus === "done" &&
@@ -852,7 +835,7 @@ export function auditCra15RuntimeHardening({
       }),
       realBrowserPerformanceAndBundle: Object.freeze({
         status:
-          browser.errors.length > 0
+          browserErrors.length > 0
             ? "fail"
             : browser.pending.length > 0
             ? "pending"
@@ -927,6 +910,7 @@ export function auditCra15RuntimeHardening({
     pending: Object.freeze(pending),
     disposition,
     artifact,
+    liveReceiptPath: LIVE_RECEIPT_PATH,
   });
 }
 

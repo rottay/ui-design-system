@@ -1,7 +1,8 @@
 {
   "version": 1,
-  "_comment": "Bounded supersession record for the WO-CRA-15 sealed browser receipt. NOT a ceiling and NOT an exclusion: it authorises exactly ONE (receiptSha256, recordedFingerprint, liveFingerprint) triple. Editing the sealed receipt, editing any of the 14 roster sources, or changing the roster itself moves one of the three pins and the gate is red again. It is exact in the other direction too: while an obligation is open, a run in which the receipt DOES cover the live source is an error, because an obligation that no longer applies is a stale note, and a stale note authorises nothing. It expires by being resolved -- a fresh capture written to a live owner -- never by being tolerated. Obligations are consulted ONLY for the sealed receipt read from disk; a caller-supplied browserEvidenceOverride never reaches them.",
-  "obligations": [
+  "_comment": "Supersession record for the WO-CRA-15 sealed browser receipt. NOT a ceiling, NOT an exclusion and NOT a waiver. 'obligations' is the open list and stays empty: the gate fails on any entry there, because no record may hold a receipt open. 'closed' keeps the history verbatim and authorises nothing; the gate reads exactly one closed entry to pin the sealed receipt's bytes and recorded coordinate on every run, so rewriting or removing that receipt is an error. Live state is decided only by the receipt at closure.liveOwnerPath: absent it is pending, stale it fails, fresh it is audited in full. The recapture named by 'resolution' is still owed until that receipt exists.",
+  "obligations": [],
+  "closed": [
     {
       "id": "cra-15/browser-receipt-superseded-by-canonical-path-refactor",
       "receiptPath": "test-artifacts/craft/cra-15/browser-evidence.json",
@@ -75,6 +76,14 @@
       "expiry": {
         "kind": "live-fingerprint-change",
         "note": "Fires the moment the live fingerprint stops being 2b35328f -- that is, on any edit to any of the 14 REQUIRED_SOURCE_ASSERTIONS paths or to the roster itself -- and also the moment the sealed receipt's bytes stop hashing to 66d26c6d. Neither anchor is decorative: the gate recomputes both on every run with no guard, so this record cannot outlive the state it describes."
+      },
+      "closure": {
+        "state": "closed-authorises-nothing",
+        "closedBy": "the gate reads the live owner and never treats the sealed receipt as live evidence",
+        "liveOwnerPath": "test-artifacts/craft/cra-15/live-browser-receipt.json",
+        "liveFingerprintAtClosure": "f81f7cfdd6d1abf4f1007a3ca1a974fbf4d249b5d314e59cb3a3f248e31957fa",
+        "recapture": "owed, not done: closing this entry produced no capture. The gate keeps it pending until a fresh receipt exists at liveOwnerPath",
+        "note": "The expiry above had already fired: the live fingerprint had moved from 2b35328f to f81f7cfd, so this entry no longer matched and the gate was red on a stale coordinate. Closing it restates no number and rewrites nothing; every field above is the history as recorded while it was open."
       }
     }
   ]

@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { createHash } from "node:crypto";
 import {
   mkdirSync,
   mkdtempSync,
@@ -10,10 +11,18 @@ import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import test from "node:test";
 
-import { auditRoadmapAuthority } from "../index.mjs";
+import {
+  auditCra15RuntimeHardening,
+  auditRoadmapAuthority,
+} from "../index.mjs";
 import { repoRoot as findRepoRoot } from "../../../../../libraries/repo-root/index.mjs";
 
 const REPOSITORY_ROOT = findRepoRoot(import.meta.dirname);
+const SEALED_RECEIPT_PATH = "test-artifacts/craft/cra-15/browser-evidence.json";
+const SEALED_RECORD_ID =
+  "cra-15/browser-receipt-superseded-by-canonical-path-refactor";
+const ASSEMBLER_PATH =
+  "packages/showroom/e2e/responsive/runtime-hardening/assembler/index.mjs";
 
 test("the roadmap leg follows the approved phase 6 and its structured control", () => {
   const LOCKED = "Phase 6 remains locked without structured owner GO";
@@ -174,4 +183,127 @@ test("the roadmap leg follows the approved phase 6 and its structured control", 
     workOrderOf(registry).dependsOn = workOrderOf(registry).dependsOn.slice(1);
   });
   assert.deepEqual(drifted.errors, ["WO-CRA-15 dependency authority drifted"]);
+});
+
+test("one closed record pins the sealed receipt, and no record holds anything open", () => {
+  const bytes = readFileSync(resolve(REPOSITORY_ROOT, SEALED_RECEIPT_PATH));
+  const receipt = JSON.parse(bytes.toString("utf8"));
+  const [record] = JSON.parse(
+    readFileSync(
+      resolve(import.meta.dirname, "../obligations/index.json"),
+      "utf8"
+    )
+  ).closed;
+  const run = (options = {}) =>
+    auditCra15RuntimeHardening({
+      repositoryRoot: REPOSITORY_ROOT,
+      liveReceiptSourceOverride: null,
+      ...options,
+    });
+  const closedOnly = (entries) => ({
+    supersessionObligationsOverride: { obligations: [], closed: entries },
+  });
+
+  assert.deepEqual(run().errors, []);
+
+  // Each pin, moved on its own, is an error rather than a quiet pending state.
+  for (const [label, options, pattern] of [
+    [
+      "receipt rewritten",
+      { sealedReceiptSourceOverride: `${bytes.toString("utf8")} ` },
+      /sealed browser receipt moved/u,
+    ],
+    [
+      "receipt removed",
+      { sealedReceiptSourceOverride: null },
+      /sealed browser receipt is missing/u,
+    ],
+    [
+      "record repointed at other bytes",
+      closedOnly([{ ...record, receiptSha256: "d".repeat(64) }]),
+      /sealed browser receipt moved/u,
+    ],
+    [
+      "recorded coordinate moved",
+      closedOnly([{ ...record, recordedFingerprint: "e".repeat(64) }]),
+      /no longer records its closed coordinate/u,
+    ],
+    [
+      "record about another receipt",
+      closedOnly([{ ...record, receiptPath: "elsewhere.json" }]),
+      /no closed record accounts for the sealed receipt/u,
+    ],
+    [
+      "two records for one receipt",
+      closedOnly([record, { ...record, id: "fixture/twin" }]),
+      /exactly one may/u,
+    ],
+  ]) {
+    const result = run(options);
+    assert.equal(result.ok, false, label);
+    assert.match(result.errors.join("\n"), pattern, label);
+    assert.equal(
+      result.artifact.checks.realBrowserPerformanceAndBundle.status,
+      "fail",
+      label
+    );
+  }
+
+  // An open entry is refused even as an exact copy of the sealed coordinate.
+  const reopened = run({
+    supersessionObligationsOverride: {
+      obligations: [record],
+      closed: [record],
+    },
+  });
+  assert.equal(reopened.ok, false);
+  assert.match(
+    reopened.errors.join("\n"),
+    new RegExp(`authorises nothing.*${SEALED_RECORD_ID}`, "u")
+  );
+
+  // The historical number stays bounded by the ceiling it was captured under.
+  const overCeiling = JSON.stringify({
+    ...receipt,
+    assertions: {
+      ...receipt.assertions,
+      bundle: { ...receipt.assertions.bundle, spatialSpecGzipBytes: 1_301 },
+    },
+  });
+  const outside = run({
+    sealedReceiptSourceOverride: overCeiling,
+    ...closedOnly([
+      {
+        ...record,
+        receiptSha256: createHash("sha256").update(overCeiling).digest("hex"),
+      },
+    ]),
+  });
+  assert.match(
+    outside.errors.join("\n"),
+    /historical \.\/spatial\/spec measurement is missing or outside/u
+  );
+});
+
+test("the assembler writes the path the gate reads and never the sealed receipt", () => {
+  const { liveReceiptPath } = auditCra15RuntimeHardening({
+    repositoryRoot: REPOSITORY_ROOT,
+  });
+  assert.notEqual(liveReceiptPath, SEALED_RECEIPT_PATH);
+  assert.match(
+    liveReceiptPath,
+    /^test-artifacts\/craft\/cra-15\/[a-z-]+\.json$/u
+  );
+
+  const assembler = readFileSync(
+    resolve(REPOSITORY_ROOT, ASSEMBLER_PATH),
+    "utf8"
+  );
+  assert.deepEqual(
+    [...assembler.matchAll(/\bwriteFileSync\(\s*(.+?),?\n/gu)].map(
+      ([, target]) => target
+    ),
+    ["join(REPO_ROOT, audit.liveReceiptPath)"]
+  );
+  assert.doesNotMatch(assembler, /browser-evidence\.json|EVIDENCE_PATH/u);
 });

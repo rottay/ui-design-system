@@ -9,13 +9,13 @@ import { fileURLToPath } from 'node:url';
 // runtime budgets in a real browser; this module only RECORDS the numbers those
 // assertions measured so the post-run assembler
 // The runtime-hardening assembler can fold them into
-// test-artifacts/craft/cra-15/browser-evidence.json in the schema
+// test-artifacts/craft/cra-15/live-browser-receipt.json in the schema
 // packages/core/scripts/check/evidence/certification/runtime-hardening/index.mjs validates.
 //
 // Each focal test writes ONE distinct partial file (never a shared merge), so a
 // single-worker run accumulates a stable set with no read/modify/write race.
 // The .run/ directory is intermediate: the sanctioned artifact is the assembled
-// browser-evidence.json, and the caller clears .run/ before every run.
+// live-browser-receipt.json, and the caller clears .run/ before every run.
 // ---------------------------------------------------------------------------
 
 const HERE = dirname(fileURLToPath(import.meta.url));

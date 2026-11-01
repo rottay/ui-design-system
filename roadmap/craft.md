@@ -538,8 +538,10 @@ to its explicit owner-GO control.
 > published map by RET-01-E (`d2edce40d`, WO-RET-01); `./spatial` remains the current published host.
 > The CRA-15 gate records `./spatial/spec` as `retired-not-measured`: its former 1,300-byte gzip
 > ceiling is no active budget, a live capture that measures it fails, and its absence passes nothing.
-> The sealed receipt's 1,097-byte measurement stays historical, admitted only while a supersession
-> record holds that receipt open. The 2026-07-16 text below describes the entry as it then existed.
+> The sealed `test-artifacts/craft/cra-15/browser-evidence.json` keeps its 1,097-byte measurement as
+> byte-pinned history and certifies nothing live. Current evidence belongs to
+> `test-artifacts/craft/cra-15/live-browser-receipt.json`: absent it is pending, stale it fails, and
+> no record may hold a receipt open. The 2026-07-16 text below describes the entry as it then existed.
 
 The first bounded Spatial v1 source slice now exists as evidence beneath WO-CRA-15 without reopening
 any Platform route or completing DS-IMP-106/107/108. The focused `./spatial/spec` entry is server-safe
