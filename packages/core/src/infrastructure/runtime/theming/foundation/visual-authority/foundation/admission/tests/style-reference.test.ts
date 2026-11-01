@@ -78,7 +78,7 @@ describe('style-reference artifact admission', () => {
     if (label === 'R2-inherited-kind-extra-key') {
       expect(Object.keys(ref)).toEqual(['__proto__', 'id', 'version', 'extra']);
       expect(Object.prototype.hasOwnProperty.call(ref, 'kind')).toBe(false);
-      expect(artifact.digest).toBe('sha256-a5c96ea3db676035a64e0071ddbbc42bcbf1164c4c3233c6f3431a6562f2c52b');
+      expect(artifact.digest).toBe('sha256-832b195176dc13f90c5ce7cc35bc870c71cb3f63a2b14f90c305dcf814df4a12');
     }
     const result = await chain(artifact, STYLE_DOCUMENT);
     expect(result.verify).toEqual({ ok: false, error: 'provenance is not a serialized decision ledger' });

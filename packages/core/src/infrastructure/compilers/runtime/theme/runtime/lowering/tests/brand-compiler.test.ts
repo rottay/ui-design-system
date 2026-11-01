@@ -1,6 +1,8 @@
 import { describe, it, expect } from "vitest";
 import type { FlatTheme } from "@/foundation/contracts/composition/tenants/themes";
 import { flatThemeToChromeVariables } from "@/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/chrome";
+import { channelDeclared } from "@/infrastructure/compilers/runtime/theme/runtime/lowering/foundation/contract";
+import { chromeDeriver } from "@/infrastructure/compilers/runtime/theme/runtime/lowering/runtime/derivation/chrome";
 import {
   flatThemeToPersonality,
   flatThemeToTokenOverrides,
@@ -411,6 +413,70 @@ describe("flatThemeToChromeVariables", () => {
     expect(vars["--ds-signal-card-shadow-hover"]).toBe(
       "0 12px 28px rgba(0,0,0,0.12)"
     );
+  });
+
+  it("lowers a legacy table cellPadding to the flat channel and the ambient density channel only", () => {
+    const FLAT = "--ds-table-cell-padding";
+    const AMBIENT = "--ds-density-cell-padding";
+    const legacy = flatThemeToChromeVariables({
+      id: "legacy-cell-padding",
+      name: "Legacy Cell Padding",
+      chrome: { table: { cellPadding: "1rem 1.5rem" } },
+    });
+    expect(legacy[FLAT]).toBe("1rem 1.5rem");
+    expect(legacy[AMBIENT]).toBe("1rem 1.5rem");
+    for (const perMode of [
+      "--ds-table-padding-compact",
+      "--ds-table-padding-comfortable",
+      "--ds-table-padding-spacious",
+    ]) {
+      expect(Object.keys(legacy), perMode).not.toContain(perMode);
+    }
+
+    // Absent means absent: a written `undefined` would still emit the key.
+    for (const table of [
+      { cellPaddingCompact: "6px 10px" },
+      { cellPaddingComfortable: "7px 11px" },
+      { cellPaddingSpacious: "9px 13px" },
+      { headerBg: "#ffffff" },
+    ]) {
+      const names = Object.keys(
+        flatThemeToChromeVariables({ id: "no-flat-padding", name: "No Flat Padding", chrome: { table } })
+      );
+      expect(names, JSON.stringify(table)).not.toContain(FLAT);
+      expect(names, JSON.stringify(table)).not.toContain(AMBIENT);
+    }
+  });
+
+  it("declares the ambient density channel by exact name in the chrome family's output", () => {
+    const AMBIENT = "--ds-density-cell-padding";
+    expect(chromeDeriver.produces.filter((entry) => entry.startsWith("--ds-density"))).toEqual([AMBIENT]);
+    const lowered = flatThemeToChromeVariables({
+      id: "declared-cell-padding",
+      name: "Declared Cell Padding",
+      chrome: { table: { cellPadding: "1rem 1.5rem", cellPaddingCompact: "6px 10px" } },
+    });
+    expect(Object.keys(lowered)).toContain(AMBIENT);
+    for (const name of Object.keys(lowered)) {
+      expect(channelDeclared(name, chromeDeriver.produces), name).toBe(true);
+    }
+  });
+
+  it("states both padding names in the mode block that authors the padding", () => {
+    const { cssVariables, modeBlocks } = compileFlatThemeThroughDoor({
+      flatTheme: {
+        id: "dark-cell-padding",
+        name: "Dark Cell Padding",
+        chrome: { table: { cellPadding: "1rem 1.5rem" } },
+        modes: { dark: { chrome: { table: { cellPadding: "2rem 3rem" } } } },
+      },
+      tenantSlug: "dark-cell-padding",
+      vertical: "rottay",
+    });
+    expect(cssVariables["--ds-density-cell-padding"]).toBe(cssVariables["--ds-table-cell-padding"]);
+    const dark = modeBlocks?.find((block) => block.mode === "dark");
+    expect(dark?.cssVariables["--ds-table-cell-padding"]).toBe("2rem 3rem");
+    expect(dark?.cssVariables["--ds-density-cell-padding"]).toBe("2rem 3rem");
   });
 
   it("emits optical geometry for modern controls, tabs, and table density", () => {

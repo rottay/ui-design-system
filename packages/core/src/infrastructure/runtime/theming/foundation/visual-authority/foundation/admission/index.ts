@@ -267,7 +267,7 @@ export function verifyTenantThemeArtifactV1(
   if (artifact.compilerVersion !== TENANT_THEME_COMPILER_VERSION) {
     return {
       ok: false,
-      error: `compilerVersion is not ${TENANT_THEME_COMPILER_VERSION}`,
+      error: `compilerVersion is not ${TENANT_THEME_COMPILER_VERSION}: recompile this tenant's stored document with the current compiler and republish the artifact`,
     };
   }
   if (artifact.slug !== expected.slug) {

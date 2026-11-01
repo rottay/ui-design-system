@@ -154,6 +154,13 @@ const POST_ARTIFACT_RUNTIME_HALF_NULL_OVERRIDE_DIGEST =
 const POST_NEUTRAL_BASELINE_NULL_OVERRIDE_DIGEST =
   "sha256-a1e14b859d0bc9f340ca7e87a499ef1b2b980d010949a98cd01b3870af4c6588";
 
+/**
+ * `tenant-theme-compiler@5`: the version is inside the digest source, so the bump
+ * moves this digest while `variables` stay empty. Attributed in the fixture.
+ */
+const POST_COMPILER_V5_NULL_OVERRIDE_DIGEST =
+  "sha256-62eba819a0e4da6fea99c48db53078cf1550d7dbd4c47b6bd0415cfbcc8d9476";
+
 const NULL_OVERRIDE_DOCUMENT = {
   schemaVersion: 1,
   mode: "simple",
@@ -251,11 +258,11 @@ describe("first-party vertical envelope registry is total over the roster", () =
 describe("digest identity across the canonicalization extraction", () => {
   it("pins the digests against the compiler version they were captured on", () => {
     // The version is inside the digest source, so bumping it moves every
-    // artifact digest at once — which is why this file has never used a bump
-    // to sanction a move, and why `nullOverrideDigest` survives as a negative
-    // control. A pin below may only move with a written attribution in the
-    // fixture's `reanchored` field naming what changed and how it was
-    // measured; an unattributed move is a regression.
+    // artifact digest at once. `tenant-theme-compiler@5` is the one bump this
+    // file has sanctioned, and `nullOverrideDigest` carries it below as the
+    // negative control: its `variables` stay empty. A pin below may only move
+    // with a written attribution in the fixture's `reanchored` field naming
+    // what changed and how it was measured; an unattributed move is a regression.
     expect(TENANT_THEME_COMPILER_VERSION).toBe(PINNED.compilerVersion);
   });
 
@@ -634,12 +641,16 @@ describe("digest identity across the canonicalization extraction", () => {
     const PRE_NEUTRAL_BASELINE_NULL_OVERRIDE_PRE_T3_DIGEST =
       "sha256-326bb71ca61a764f55e80cb953303c00ad4d32eb04c3c1eebfd0c33dc3efa244";
     expect(before.digest).not.toBe(PRE_NEUTRAL_BASELINE_NULL_OVERRIDE_PRE_T3_DIGEST);
+    const PRE_COMPILER_V5_NULL_OVERRIDE_PRE_T3_DIGEST =
+      "sha256-b0a3dc7be058c8a6d219380f92f027b07d0e8e4460546e1a8e525a84240559fa";
+    expect(before.digest).not.toBe(PRE_COMPILER_V5_NULL_OVERRIDE_PRE_T3_DIGEST);
     expect(before.digest).toBe(
-      "sha256-b0a3dc7be058c8a6d219380f92f027b07d0e8e4460546e1a8e525a84240559fa"
+      "sha256-527644d348336e932d761dd2d8fefd210a121230501701702c2087b58ba0b4cd"
     );
     expect(after.digest).not.toBe(PINNED.nullOverrideDigest);
     expect(after.digest).not.toBe(POST_ARTIFACT_RUNTIME_HALF_NULL_OVERRIDE_DIGEST);
-    expect(after.digest).toBe(POST_NEUTRAL_BASELINE_NULL_OVERRIDE_DIGEST);
+    expect(after.digest).not.toBe(POST_NEUTRAL_BASELINE_NULL_OVERRIDE_DIGEST);
+    expect(after.digest).toBe(POST_COMPILER_V5_NULL_OVERRIDE_DIGEST);
 
     // Everything else in the digest source is byte-identical, so the move is
     // provenance, not paint. A tenant that renders through this artifact sees
@@ -674,7 +685,8 @@ describe("digest identity across the canonicalization extraction", () => {
     );
     expect(artifact.digest).not.toBe(PINNED.nullOverrideDigest);
     expect(artifact.digest).not.toBe(POST_ARTIFACT_RUNTIME_HALF_NULL_OVERRIDE_DIGEST);
-    expect(artifact.digest).toBe(POST_NEUTRAL_BASELINE_NULL_OVERRIDE_DIGEST);
+    expect(artifact.digest).not.toBe(POST_NEUTRAL_BASELINE_NULL_OVERRIDE_DIGEST);
+    expect(artifact.digest).toBe(POST_COMPILER_V5_NULL_OVERRIDE_DIGEST);
     expect(artifact.verticalEnvelopeDigest).toBe(
       PINNED.nullOverrideEnvelopeDigest
     );
@@ -937,8 +949,38 @@ describe("digest identity across the canonicalization extraction", () => {
     // the dark delta gains --ds-tag-primary-outlined-ink #579f9a, nothing else; base 65 unchanged. Persisted rows recompile.
     const POST_OUTLINED_PRIMARY_INK_DIGEST =
       "sha256-c51799d0fe908c8d5f2a57b5e6fd4a41a3f7dfab5a4c42d2fccfc6e212cda897";
-    expect(artifact.digest).toBe(POST_OUTLINED_PRIMARY_INK_DIGEST);
+    expect(artifact.digest).not.toBe(POST_OUTLINED_PRIMARY_INK_DIGEST);
+    // Twenty-first declared move (8a9df7fff, the mover CAUSE 11 names below): `elevated` now lowers a dark ladder, so the dark
+    // delta gains --ds-elevation-{1..6}, 38 -> 44, nothing else; base 65 unchanged. Pinned by value below. Persisted rows recompile.
+    const POST_DARK_GROUND_ELEVATION_DIGEST =
+      "sha256-592c94e6d78ae053c088243d9eee76b933ba224f629dfdc7501d3bad0774e6be";
+    expect(artifact.digest).not.toBe(POST_DARK_GROUND_ELEVATION_DIGEST);
+    // Twenty-second declared move (`tenant-theme-compiler@5`, inside the digest source): base 65 and the dark delta are
+    // byte-unchanged, the CSS moves only in its banner line and no table padding is authored here. Persisted rows recompile.
+    const POST_COMPILER_V5_DIGEST =
+      "sha256-55ae94c3c9403d829302437169346b5264eeced86ac9006bb8a6a40ed8a7d335";
+    expect(artifact.digest).toBe(POST_COMPILER_V5_DIGEST);
     const dark = artifact.modeDeltas?.find((delta) => delta.mode === "dark");
+    expect(
+      Object.fromEntries(
+        Object.entries(dark?.variables ?? {}).filter(([name]) =>
+          name.startsWith("--ds-elevation-")
+        )
+      )
+    ).toEqual({
+      "--ds-elevation-1":
+        "inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 2px 4px rgba(0, 0, 0, 0.44), 0 4px 8px rgba(0, 0, 0, 0.32)",
+      "--ds-elevation-2":
+        "inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 4px 8px rgba(0, 0, 0, 0.48), 0 8px 16px rgba(0, 0, 0, 0.36)",
+      "--ds-elevation-3":
+        "inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 8px 16px rgba(0, 0, 0, 0.52), 0 16px 32px rgba(0, 0, 0, 0.40)",
+      "--ds-elevation-4":
+        "inset 0 1px 0 rgba(255, 255, 255, 0.07), 0 16px 32px rgba(0, 0, 0, 0.56), 0 24px 48px rgba(0, 0, 0, 0.44)",
+      "--ds-elevation-5":
+        "inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 24px 48px rgba(0, 0, 0, 0.60), 0 36px 72px rgba(0, 0, 0, 0.48)",
+      "--ds-elevation-6":
+        "inset 0 1px 0 rgba(255, 255, 255, 0.09), 0 32px 64px rgba(0, 0, 0, 0.64), 0 48px 96px rgba(0, 0, 0, 0.52)",
+    });
     expect(dark?.variables["--ds-tag-primary-outlined-ink"]).toBe("#579f9a");
     expect(artifact.variables["--ds-tag-primary-outlined-ink"]).toBeUndefined();
     expect(dark?.variables["--ds-badge-selected-ink"]).toBe("#3f918b");
@@ -1227,7 +1269,23 @@ describe("digest identity across the canonicalization extraction", () => {
     // equals it and leaves the delta; nothing else moves.
     const POST_LIGHT_BASE_LADDER_W4_DIGEST =
       "sha256-bf1c92654400c4acdf7af859f486a50553f80a59aa07583df0171fde691b517e";
-    expect(artifact.digest).toBe(POST_LIGHT_BASE_LADDER_W4_DIGEST);
+    expect(artifact.digest).not.toBe(POST_LIGHT_BASE_LADDER_W4_DIGEST);
+    // CAUSE 11 (8a9df7fff, dark elevation ground fallback; bisected over fbe2c2aaf..9711ac018): `flat` now lowers a dark ladder,
+    // so the dark delta gains --ds-elevation-{3..6}, nothing else; base 31 unchanged. Persisted rows recompile.
+    const POST_DARK_GROUND_ELEVATION_W4_DIGEST =
+      "sha256-a60b61ea7e2e386aafb46df6830e583c146390ce84afd961ae2cf21a044fe5ec";
+    expect(artifact.digest).not.toBe(POST_DARK_GROUND_ELEVATION_W4_DIGEST);
+    // CAUSE 12, two moves measured apart on Table off/on by compiler @4/@5: the authored `table.cellPadding` also lowers to
+    // --ds-density-cell-padding, 31 -> 32, dark delta unchanged; `tenant-theme-compiler@5` moves only the digest. Persisted rows recompile.
+    const POST_TABLE_CELL_PADDING_AT_V4_W4_DIGEST =
+      "sha256-d12b0d6195890afea4924f16bdee4e5493202a9414074bcd8f823e23a0959a6b";
+    expect(artifact.digest).not.toBe(POST_TABLE_CELL_PADDING_AT_V4_W4_DIGEST);
+    const POST_COMPILER_V5_WITHOUT_TABLE_W4_DIGEST =
+      "sha256-4abe5f9f3b9196828947f10a637e1b1305a01838fc23eabb4d84b2186df7b576";
+    expect(artifact.digest).not.toBe(POST_COMPILER_V5_WITHOUT_TABLE_W4_DIGEST);
+    const POST_TABLE_CELL_PADDING_COMPILER_V5_W4_DIGEST =
+      "sha256-05b4bafa28fe86f62c61b8cf2a0d464369d2fa7a5280a3a5b7bf70cc789dd0d3";
+    expect(artifact.digest).toBe(POST_TABLE_CELL_PADDING_COMPILER_V5_W4_DIGEST);
     expect(
       artifact.provenance?.entries.map((entry) => entry.ref)
     ).toContainEqual({ kind: "decision", id: "typography.families" });
@@ -1269,6 +1327,12 @@ describe("digest identity across the canonicalization extraction", () => {
     const darkDelta = artifact.modeDeltas?.find((d) => d.mode === "dark");
     expect(darkDelta?.variables["--ds-sidebar-bg"]).toBeUndefined();
     expect(darkDelta?.variables["--ds-sidebar-text"]).toBeUndefined();
+    expect(Object.keys(darkDelta?.variables ?? {}).sort()).toEqual([
+      "--ds-elevation-3",
+      "--ds-elevation-4",
+      "--ds-elevation-5",
+      "--ds-elevation-6",
+    ]);
 
     // The radius dial law is the one visible-value change this delta carries,
     // so it is named here rather than left to the census: the tenant's `10px`
@@ -1285,7 +1349,41 @@ describe("digest identity across the canonicalization extraction", () => {
     // 25 -> 27 (toggle silhouette): the two toggle corners of CAUSE 8.
     // 27 -> 32 (CAUSE 9): the neutral + preset baseline subtracts differently.
     // 32 -> 31 (CAUSE 10): role 0 of the `flat` ladder equals the light base's.
-    expect(Object.keys(artifact.variables)).toHaveLength(31);
+    // 31 -> 32 (CAUSE 12): the ambient cell-padding channel, pinned by value here.
+    expect(artifact.variables["--ds-density-cell-padding"]).toBe("10px 12px");
+    expect(Object.keys(artifact.variables)).toHaveLength(32);
+  });
+
+  it("keeps the retired command-home channel out of the artifact while its field stays admitted", () => {
+    // 339181afb retired the emission and fbe2c2aaf the alias row. Neither moved a digest pin here: CSS is outside the digest
+    // source and no pinned document authors the field, so this fence is what reds if either returns.
+    const RETIRED_CHANNEL = "--ds-command-home-panel-bg-strong";
+    const authoring = structuredClone(ABSENT_NEW_FIELDS_DOCUMENT) as unknown as {
+      visualFoundation: { advanced: { chrome: Record<string, unknown> } };
+    };
+    authoring.visualFoundation.advanced.chrome.shell = {
+      commandHomePanelBgStrong: "#101014",
+    };
+    const compiled = [
+      ABSENT_NEW_FIELDS_DOCUMENT,
+      authoring as unknown as TenantThemeDocument,
+    ].map((document) =>
+      compileTenantThemeConfig(
+        hydrateTenantThemeConfig(document, { ...W4_PIN_IDENTITY }),
+        { verticalEnvelope: bithireEnvelopePair().envelope }
+      )
+    );
+
+    expect(JSON.stringify(compiled[1]?.normalizedAppearance)).toContain(
+      "commandHomePanelBgStrong"
+    );
+    for (const artifact of compiled) {
+      expect(artifact.variables[RETIRED_CHANNEL]).toBeUndefined();
+      expect(
+        (artifact.modeDeltas ?? []).flatMap((delta) => Object.keys(delta.variables))
+      ).not.toContain(RETIRED_CHANNEL);
+      expect(artifact.css).not.toContain(RETIRED_CHANNEL);
+    }
   });
 
   it("produces one digest for a document authored in any key order", () => {
@@ -1294,11 +1392,8 @@ describe("digest identity across the canonicalization extraction", () => {
     //
     // D6-2c-ii (2026-09-15): tenant-document compiles over neutral + preset,
     // and this block states its OWN document pair rather than borrowing
-    // `POPULATED_SIMPLE_DOCUMENT`. That fixture's `sidebarTone: "subtle"` is no
-    // longer admissible on bithire (see "refusals the neutral baseline
-    // introduces" in `tenant-theme-compiler.test.ts`), and it belongs to the
-    // digest fence above, which is a foreign red this lot does not touch.
-    // Key-order independence needs an admissible document, not that one.
+    // `POPULATED_SIMPLE_DOCUMENT`, which belongs to the digest fence above.
+    // Key-order independence is exercised on this separately declared document.
     const declared = {
       schemaVersion: 1,
       mode: "simple",

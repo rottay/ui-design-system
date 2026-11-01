@@ -17,10 +17,13 @@
  * | `comfortable` | 1           | `0.875rem 1rem`   | `1rem`       | `md`          |
  * | `compact`     | 0.85        | `0.5rem 0.75rem`  | `0.75rem`    | `sm`          |
  *
- * This is the shared, lowest-layer source consumed by the three density-aware
- * families — `PatternDataTable`, `CollectionWorkspaceSurface`, and the
- * dashboard metric-card structures — so route vs embedded vs beside-chat
- * density derives from one declarative preset table.
+ * This is the shared, lowest-layer source for the density-emitting families —
+ * `CollectionWorkspaceSurface` and the dashboard metric-card structures — so
+ * route vs embedded vs beside-chat density derives from one declarative preset
+ * table. `PatternDataTable` imports no preset: it reads the
+ * `--ds-density-cell-padding` of the nearest scope that declares it. A tenant
+ * scope declares that channel when its theme authors the legacy
+ * `chrome.table.cellPadding`; no CSS declares a default for it.
  */
 
 import type { CSSProperties } from 'react';
@@ -145,7 +148,9 @@ export function resolveEffectiveDensityScale(
  * Builds the CSS custom properties that carry a mode's resolved density preset
  * on a container element. Descendants (tables, cards, embedded collections)
  * read `--ds-density-cell-padding` / `--ds-density-local-factor` from the
- * cascade. The structural
+ * cascade, so inside the container its inline value replaces the one a tenant
+ * scope above it declares; a tenant scope nested inside is nearer again.
+ * The structural
  * `--ds-density-scale` and tenant appearance `--ds-density-mode-factor` remain
  * inherited inputs rather than being overwritten by a component posture.
  *

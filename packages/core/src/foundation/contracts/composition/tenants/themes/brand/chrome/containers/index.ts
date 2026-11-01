@@ -24,9 +24,25 @@ export interface BrandTableChrome {
   rowHoverShadow?: string;
   /** Keyboard-focus treatment for a row, independent of hover. */
   rowFocusShadow?: string;
-  /** Cells */
+  /**
+   * Flat cell padding (CSS `padding` shorthand) for a table in any density.
+   *
+   * Lowers to `--ds-table-cell-padding` and, at the tenant scope, to the ambient
+   * `--ds-density-cell-padding`. It reaches standalone Modern `PatternDataTable`s
+   * in `comfortable`, `spacious` and `compact` alike.
+   *
+   * The ambient channel inherits, so the nearest scope that declares it wins. A
+   * density container between the tenant scope and the table
+   * (`CollectionWorkspaceSurface`, the metric-card panel) replaces this value
+   * with its preset; a tenant or preview scope nested inside such a container
+   * is nearer again and keeps it. Without this field a standalone table rests
+   * at `0.75rem 1rem` (`comfortable`, `spacious`) or `0.5rem 0.75rem` (`compact`).
+   */
   cellPadding?: string;
-  /** Density-specific cell padding. These win over the legacy global value. */
+  /**
+   * Cell padding per density mode. On a Modern table each one outranks
+   * `cellPadding` and every `--ds-density-cell-padding` writer in that mode.
+   */
   cellPaddingCompact?: string;
   cellPaddingComfortable?: string;
   cellPaddingSpacious?: string;

@@ -39,6 +39,9 @@ Read the changeset before planning an upgrade.
 - The architecture authority moved from a root document to
   [`docs/architecture/index.md`](docs/architecture/index.md), following the repository's
   folder/index convention.
+- Workspace frames own their ground, border and elevation channel names, with the tenant
+  `chrome.shell.*` contract unchanged. `tenant-theme-compiler@5` requires recompilation of
+  `@4` artifacts; see the [workspace frame migration guide](packages/core/docs/consumer-contract/migration/workspace-frame-namespace/index.md).
 - `LICENSE` copyright line updated to `Copyright (c) 2025-2026 Rottay contributors`. The
   MIT terms are unchanged.
 

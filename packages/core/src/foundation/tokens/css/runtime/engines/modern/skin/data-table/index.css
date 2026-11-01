@@ -118,9 +118,11 @@
 }
 
 .ds-pattern-data-table.ds-engine-modern[data-part="root"][data-density="compact"] {
+  /* Stops at the ambient channel: the base theme always writes
+     --ds-table-cell-padding, which would hide the compact literal. */
   --ds-modern-table-cell-padding: var(
     --ds-table-padding-compact,
-    var(--ds-density-cell-padding, var(--ds-table-cell-padding, 0.5rem 0.75rem))
+    var(--ds-density-cell-padding, 0.5rem 0.75rem)
   );
   --ds-modern-table-leading-cell-padding: var(
     --ds-data-table-leading-cell-padding-compact,

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "generatedBy": "scripts/generate/tokens/customization/preservation/index.mjs --write",
-  "basedOnReportDigest": "ea4c82710ab7ceccf577908ae0bf772639c2ec65ccb8da51a65005c3eebee9c6",
+  "basedOnReportDigest": "1318fff79fa7297e3eec73961fd87c3c7a80a3336e627d0be115628fe52fcd9c",
   "laws": [
     "preserve 100% of useful premium visual capability; connect it to the canon",
     "a census dead-writer verdict is never a deletion license",
@@ -2153,10 +2153,10 @@
     ]
   },
   "deadWriters": {
-    "total": 269,
+    "total": 270,
     "byProvenance": {
       "E-reserved-frontier": 13,
-      "B-modern-current": 60,
+      "B-modern-current": 61,
       "A-protected-premium": 185,
       "D-compiler-generated": 11
     },
@@ -4042,6 +4042,13 @@
         "provenance": "A-protected-premium",
         "decision": "RECONNECT_OR_PROMOTE",
         "owner": "design-system/premium-customization",
+        "status": "dead-writer"
+      },
+      {
+        "name": "--ds-z-modal",
+        "provenance": "B-modern-current",
+        "decision": "PRIVATE_CHANNEL_OR_DERIVE_PER_NAME",
+        "owner": "design-system/D1-modern",
         "status": "dead-writer"
       }
     ]

@@ -1021,6 +1021,11 @@
 }
 
 :where(.ds-workspace-frame) {
+  /* Each name rests here and takes the tenant door when one is stated. `--list`
+     and `--form` restate the ground below, so this rule must stay above them. */
+  --ds-workspace-frame-bg: var(--ds-workspace-shell-bg, transparent);
+  --ds-workspace-frame-border: var(--ds-workspace-shell-border, var(--ds-color-border));
+  --ds-workspace-frame-shadow: var(--ds-workspace-shell-shadow, var(--ds-card-shadow));
   position: relative;
   isolation: isolate;
   width: 100%;
@@ -1034,7 +1039,7 @@
 }
 
 :where(.ds-workspace-frame--list) {
-  --ds-workspace-shell-bg: linear-gradient(
+  --ds-workspace-frame-bg: linear-gradient(
     180deg,
     var(--ds-surface-card-bg) 0%,
     var(--ds-surface-canvas, var(--ds-surface-panel-bg)) 50%,
@@ -1059,7 +1064,7 @@
 
 :where(.ds-workspace-frame--form) {
   overflow: visible;
-  --ds-workspace-shell-bg: linear-gradient(
+  --ds-workspace-frame-bg: linear-gradient(
     180deg,
     var(--ds-surface-card-bg) 0%,
     var(--ds-surface-canvas, var(--ds-surface-panel-bg)) 46%,
@@ -2843,9 +2848,9 @@
 
 
 :where(.ds-workspace-frame) {
-  border: 1px solid var(--ds-workspace-shell-border, var(--ds-color-border));
-  background: var(--ds-workspace-shell-bg);
-  box-shadow: var(--ds-workspace-shell-shadow, var(--ds-card-shadow));
+  border: 1px solid var(--ds-workspace-frame-border);
+  background: var(--ds-workspace-frame-bg);
+  box-shadow: var(--ds-workspace-frame-shadow);
 }
 
 :where(.ds-workspace-frame)::before {

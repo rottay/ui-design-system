@@ -59,6 +59,8 @@ export const chromeDeriver: FamilyDeriver = {
     "--ds-compact-*",
     "--ds-control-*",
     "--ds-date-picker-*",
+    // Exact, not a group: the density family owns the rest of this prefix.
+    "--ds-density-cell-padding",
     "--ds-descriptions-*",
     "--ds-detail-*",
     "--ds-divider-*",

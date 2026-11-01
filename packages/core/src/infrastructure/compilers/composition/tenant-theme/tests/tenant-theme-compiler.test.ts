@@ -550,7 +550,7 @@ describe("TenantThemeConfig v1 server contract", () => {
       true
     );
     expect(Object.isFrozen(TENANT_THEME_CONFIG_SCHEMA.limits)).toBe(true);
-    expect(TENANT_THEME_COMPILER_VERSION).toBe("tenant-theme-compiler@4");
+    expect(TENANT_THEME_COMPILER_VERSION).toBe("tenant-theme-compiler@5");
     expect(TENANT_THEME_CONFIG_SCHEMA.limits).toMatchObject({
       maxCompiledVariables: 512,
       maxCompiledVariableBytes: 90_112,

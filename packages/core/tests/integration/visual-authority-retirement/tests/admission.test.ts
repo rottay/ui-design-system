@@ -39,7 +39,7 @@ const FIXTURE: TenantThemeArtifact = {
   slug: 'manual',
   verticalKey: 'rottay',
   rowVersion: 1,
-  compilerVersion: 'tenant-theme-compiler@4',
+  compilerVersion: 'tenant-theme-compiler@5',
   coverage: ['visual-branding', 'token-overrides', 'appearance', 'brand-chrome'] as const,
   normalizedAppearance: {},
   variables: FIXTURE_VARIABLES,
@@ -60,8 +60,8 @@ const FIXTURE: TenantThemeArtifact = {
     },
     combinedSelector: '[data-ds-root][data-vertical="rottay"][data-tenant][data-tenant="manual"]',
   },
-  digest: 'sha256-0d97e85c7d2b63427c3d3f8317b0239b86f808e5d3d5f39c108b0f7977ea2c4c',
-  css: `/* TenantThemeArtifact v1 | tenant-theme-compiler@4 | sha256-0d97e85c7d2b63427c3d3f8317b0239b86f808e5d3d5f39c108b0f7977ea2c4c */\n[data-ds-root][data-vertical="rottay"][data-tenant][data-tenant="manual"] {\n  --ds-color-primary: #123456;\n${ALIAS_RESTATEMENT_LINES}}\n`,
+  digest: 'sha256-de0c79bc264b0d276d287ae2ba26f0fefdf745bb0c5bf652cb9e57732e758835',
+  css: `/* TenantThemeArtifact v1 | tenant-theme-compiler@5 | sha256-de0c79bc264b0d276d287ae2ba26f0fefdf745bb0c5bf652cb9e57732e758835 */\n[data-ds-root][data-vertical="rottay"][data-tenant][data-tenant="manual"] {\n  --ds-color-primary: #123456;\n${ALIAS_RESTATEMENT_LINES}}\n`,
 };
 
 const EMPTY_PAYLOAD: RuntimeVisualPayloadCensus = {

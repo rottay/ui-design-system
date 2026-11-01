@@ -12255,6 +12255,11 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
 }
 
 :where(.ds-workspace-frame) {
+  /* Each name rests here and takes the tenant door when one is stated. `--list`
+     and `--form` restate the ground below, so this rule must stay above them. */
+  --ds-workspace-frame-bg: var(--ds-workspace-shell-bg, transparent);
+  --ds-workspace-frame-border: var(--ds-workspace-shell-border, var(--ds-color-border));
+  --ds-workspace-frame-shadow: var(--ds-workspace-shell-shadow, var(--ds-card-shadow));
   position: relative;
   isolation: isolate;
   width: 100%;
@@ -12268,7 +12273,7 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
 }
 
 :where(.ds-workspace-frame--list) {
-  --ds-workspace-shell-bg: linear-gradient(
+  --ds-workspace-frame-bg: linear-gradient(
     180deg,
     var(--ds-surface-card-bg) 0%,
     var(--ds-surface-canvas, var(--ds-surface-panel-bg)) 50%,
@@ -12293,7 +12298,7 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
 
 :where(.ds-workspace-frame--form) {
   overflow: visible;
-  --ds-workspace-shell-bg: linear-gradient(
+  --ds-workspace-frame-bg: linear-gradient(
     180deg,
     var(--ds-surface-card-bg) 0%,
     var(--ds-surface-canvas, var(--ds-surface-panel-bg)) 46%,
@@ -14077,9 +14082,9 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
 
 
 :where(.ds-workspace-frame) {
-  border: 1px solid var(--ds-workspace-shell-border, var(--ds-color-border));
-  background: var(--ds-workspace-shell-bg);
-  box-shadow: var(--ds-workspace-shell-shadow, var(--ds-card-shadow));
+  border: 1px solid var(--ds-workspace-frame-border);
+  background: var(--ds-workspace-frame-bg);
+  box-shadow: var(--ds-workspace-frame-shadow);
 }
 
 :where(.ds-workspace-frame)::before {
@@ -26121,9 +26126,11 @@ input.ds-input-shell.ds-input-shell--modern[type='number'] {
 }
 
 .ds-pattern-data-table.ds-engine-modern[data-part="root"][data-density="compact"] {
+  /* Stops at the ambient channel: the base theme always writes
+     --ds-table-cell-padding, which would hide the compact literal. */
   --ds-modern-table-cell-padding: var(
     --ds-table-padding-compact,
-    var(--ds-density-cell-padding, var(--ds-table-cell-padding, 0.5rem 0.75rem))
+    var(--ds-density-cell-padding, 0.5rem 0.75rem)
   );
   --ds-modern-table-leading-cell-padding: var(
     --ds-data-table-leading-cell-padding-compact,

@@ -1018,7 +1018,7 @@
     },
     {
       "channels": 2526,
-      "channelsThroughAliases": 4125,
+      "channelsThroughAliases": 4128,
       "decision": "palette.contrast-posture",
       "derivers": [
         "action-dock",
@@ -1374,7 +1374,7 @@
     },
     {
       "channels": 2526,
-      "channelsThroughAliases": 4125,
+      "channelsThroughAliases": 4128,
       "decision": "palette.neutral-temperature",
       "derivers": [
         "action-dock",
@@ -1722,7 +1722,7 @@
     },
     {
       "channels": 2624,
-      "channelsThroughAliases": 4328,
+      "channelsThroughAliases": 4331,
       "decision": "palette.seeds",
       "derivers": [
         "action-dock",
@@ -2074,7 +2074,7 @@
     },
     {
       "channels": 2612,
-      "channelsThroughAliases": 4304,
+      "channelsThroughAliases": 4307,
       "decision": "palette.status-seeds",
       "derivers": [
         "action-dock",
@@ -2959,7 +2959,7 @@
     },
     {
       "channels": 503,
-      "channelsThroughAliases": 665,
+      "channelsThroughAliases": 666,
       "decision": "shape.control-height",
       "derivers": [
         "app-shell",
@@ -3162,7 +3162,7 @@
     },
     {
       "channels": 1296,
-      "channelsThroughAliases": 1943,
+      "channelsThroughAliases": 1944,
       "decision": "shape.radius-scale",
       "derivers": [
         "app-shell",
@@ -3518,7 +3518,7 @@
     },
     {
       "channels": 393,
-      "channelsThroughAliases": 1224,
+      "channelsThroughAliases": 1226,
       "decision": "states.emphasis",
       "derivers": [
         "app-shell",
@@ -3747,7 +3747,7 @@
     },
     {
       "channels": 678,
-      "channelsThroughAliases": 1490,
+      "channelsThroughAliases": 1492,
       "decision": "states.focus-style",
       "derivers": [
         "app-shell",
@@ -3984,7 +3984,7 @@
     },
     {
       "channels": 491,
-      "channelsThroughAliases": 898,
+      "channelsThroughAliases": 899,
       "decision": "surfaces.border-style",
       "derivers": [
         "app-shell",
@@ -4247,7 +4247,7 @@
     },
     {
       "channels": 1712,
-      "channelsThroughAliases": 2071,
+      "channelsThroughAliases": 2072,
       "decision": "surfaces.elevation-posture",
       "derivers": [
         "action-dock",

@@ -13,6 +13,15 @@ Cross-app guides, applying to every consumer at once:
 - [`legacy-class-retirement/index.md`](./legacy-class-retirement/index.md) — WO-FAM-11
   (owner ruling 8): the `rottay-app-shell*` / `rottay-action-dock*` rename to
   `ds-*`; what changed, who is affected, the exact rename table, verification.
+- [`workspace-frame-namespace/index.md`](./workspace-frame-namespace/index.md) — the
+  `.ds-workspace-frame` ground/border/elevation names, now owned and declared by the
+  frame itself; tenant `chrome.shell.*` unchanged and still compiled to the shell
+  names alone; app-bithire's two `--list`/`--form` `--ds-workspace-shell-bg` reads move
+  to `--ds-workspace-frame-bg` in its adoption lot, and its base frame read stays;
+  `tenant-theme-compiler@5` refuses every `@4` artifact until the host recompiles it,
+  and stored documents are not edited; app-platform adopts the release only with a
+  `@rottay/tenancy` release that matches the DS on `tenant-theme-compiler@5` and both
+  schema digests.
 - [`p88-caller-anatomy/index.md`](./p88-caller-anatomy/index.md) — the next
   major (owner 2026-10-15): the P-88 caller `data-part`/`data-state` break and
   the legacy sync-SSR break, shipped under the owner's express overlap

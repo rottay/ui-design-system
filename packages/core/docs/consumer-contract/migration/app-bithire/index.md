@@ -310,7 +310,36 @@ Visual spot-check after the bump: the mobile action tray and the navigation
 drawer + sidebar paint exactly as before; a renamed selector at equal
 specificity cannot move a pixel.
 
-### Step 8 — `oauth-transition` leaves the design system
+### Step 8 — Workspace frame namespace and `tenant-theme-compiler@5`
+
+`src/styles/surfaces.css:25` and `:37` read `--ds-workspace-shell-bg` on `--list` and
+`--form`, and `tests/architecture/_shared/shared-card-artifact-cascade.arch.test.ts:58`
+asserts `/var\(\s*--ds-workspace-shell-bg/` inside both of those rules. The app owner
+chooses one alternative for both reads; the DS does not choose:
+
+- Plain read: replace `--ds-workspace-shell-bg` with `--ds-workspace-frame-bg` at :25 and
+  :37, keeping each fallback chain, and retarget the assertion at :58 to
+  `/var\(\s*--ds-workspace-frame-bg/`. It must land with the release adoption, because on
+  the previous release the frame name is undeclared and the read falls to `--ds-card-bg`.
+- Chained read: change both reads to
+  `var(--ds-workspace-frame-bg, var(--ds-workspace-shell-bg, var(--ds-card-bg, var(--ds-surface-card))))`.
+  The assertion at :58 stays unchanged and green, and the read tolerates version skew.
+
+Under either one, leave :17 (base frame), :31 (the `--detail` overlay assignment, a
+sanctioned use of the public hook), the test's :55 and :59, and
+`src/features/home/surface/screens/chat/wiring/styles/index.css:22` unchanged:
+`--ds-workspace-frame-bg` always has a value on a frame, so moving :17 turns its
+`--ds-surface-canvas` fallback into `transparent`. The test title says the tenant shell
+background is authoritative in every family, which `--list`/`--form` paint neither before
+nor after this release; the owner decides whether the title stays. Acceptance: computed
+background of base/--list/--form/--detail frames identical before/after adoption on the
+bithire vertical with no tenant statement, and with a tenant stating chrome.shell.bg;
+`shared-card-artifact-cascade.arch.test.ts` green; the `rg` check for the chosen
+alternative in the guide's Verification section. The compiler bump needs no app edit:
+`artifact-resolution/index.ts:254` keys its cache on `TENANT_THEME_COMPILER_VERSION` and
+recompiles from the stored row on the first miss.
+
+### Step 9 — `oauth-transition` leaves the design system
 
 See §3. It is last because it is the only step that removes symbols from the
 GUARANTEED root surface, and the app is protected from it only by its version

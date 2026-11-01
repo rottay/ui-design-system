@@ -10,6 +10,11 @@ import { Writable } from 'node:stream';
 import { prerenderToNodeStream } from 'react-dom/static';
 import { describe, expect, it } from 'vitest';
 
+import {
+  compileTenantThemeConfig,
+  getTenantThemeVerticalEnvelope,
+  hydrateTenantThemeConfig,
+} from '@/infrastructure/compilers/composition/tenant-theme';
 import { DesignSystemProvider } from '@/infrastructure/runtime/bootstrap';
 import { apcaContrast } from '@/foundation/kernel/accessibility/branding-contrast';
 import { ratioFromLuminance, relativeLuminanceOf } from '@/foundation/kernel/color/contrast';
@@ -27,8 +32,11 @@ import {
   axeDebt,
   describeCausality,
   measureArms,
+  measureMountedArms,
+  mountFlatThemeArm,
   seriousFindings,
 } from '@tests/support/family-causality';
+import { DENSITY_PRESETS } from '@/foundation/tokens/ts/foundation/base/density';
 
 interface Row {
   id: string;
@@ -149,6 +157,18 @@ const markup = `<div id="grid">${grid}</div><div id="cards" style="inline-size:2
  */
 const compactGrid = await serverMarkup('desktop', 'en', 'compact');
 const densityPair = `<div id="comfortable">${grid}</div><div id="compact">${compactGrid}</div>`;
+
+/** The three standalone postures, compact under a container's inline preset, and compact under a
+ *  tenant scope nested inside that container, the one order where the tenant is nearer. */
+const NESTED_TENANT = { tenantId: 'tenant_table_padding', slug: 'table-padding-nested', verticalKey: 'bithire', rowVersion: 1 } as const;
+const spaciousGrid = await serverMarkup('desktop', 'en', 'spacious');
+const containerPreset = `--ds-density-cell-padding: ${DENSITY_PRESETS.compact.cellPadding}`;
+const paddingScene =
+  `<div id="comfortable">${grid}</div><div id="compact">${compactGrid}</div>` +
+  `<div id="spacious">${spaciousGrid}</div>` +
+  `<div id="workspace" style="${containerPreset}">${compactGrid}</div>` +
+  `<div id="nested" style="${containerPreset}"><div data-ds-root="" data-vertical="${NESTED_TENANT.verticalKey}" ` +
+  `data-tenant="${NESTED_TENANT.slug}">${compactGrid}</div></div>`;
 
 /**
  * The grouped posture, also a separate markup string. The three readers of the
@@ -468,7 +488,9 @@ describe('data-table causality surface', () => {
    * redeclares the ramp) is actually in force.
    */
   it('changes the density scale a cell computes when the posture is compact', async () => {
-    const CELL_IN = (host: string) => `#${host} [data-part='data-cell']`;
+    // Non-leading: this selectable fixture's leading cell has its own per-mode
+    // channel, which moves whether or not body-cell padding does.
+    const CELL_IN = (host: string) => `#${host} [data-part='data-cell'][data-leading='false']`;
     const readings = await measureArms({
       vertical: 'rottay',
       markup: densityPair,
@@ -504,6 +526,103 @@ describe('data-table causality surface', () => {
     // above moves it), so the prop reaches the cells and not the chrome gap.
     expect(r.compactGap).toBe(r.comfortableGap);
   }, 120_000);
+
+  /** DSA-FK-004: the nearest scope declaring `--ds-density-cell-padding` wins and per-mode padding outranks it.
+   *  Read on non-leading cells, because a leading cell has its own channel. */
+  it('resolves ambient cell padding by nearest scope and keeps per-mode padding first', async () => {
+    const LEGACY = '1rem 1.5rem';
+    const OVERLAY = '2rem 3rem';
+    const flatArm = (id: string, table: Record<string, string>) =>
+      mountFlatThemeArm('rottay', { id, name: id, chrome: { table } });
+    const BODY = (host: string) => `#${host} [data-part='data-cell'][data-leading='false']`;
+    const HEADER = (host: string) =>
+      `#${host} [data-part='header-cell'][data-leading='false']:not([data-cell-kind])`;
+    const HOSTS = ['comfortable', 'compact', 'spacious', 'workspace', 'nested'] as const;
+    const readings = await measureMountedArms({
+      markup: paddingScene,
+      targets: HOSTS.flatMap((host) => [
+        { id: `${host}BodyBlock`, selector: BODY(host), property: 'padding-top' },
+        { id: `${host}BodyInline`, selector: BODY(host), property: 'padding-left' },
+        { id: `${host}HeadBlock`, selector: HEADER(host), property: 'padding-top' },
+        { id: `${host}HeadInline`, selector: HEADER(host), property: 'padding-left' },
+      ]),
+      arms: {
+        ds: () => flatArm('table-padding-ds', {}),
+        legacy: () => flatArm('table-padding-legacy', { cellPadding: LEGACY }),
+        perMode: () =>
+          flatArm('table-padding-per-mode', {
+            cellPadding: LEGACY,
+            cellPaddingCompact: '6px 10px',
+            cellPaddingComfortable: '7px 11px',
+            cellPaddingSpacious: '9px 13px',
+          }),
+        // Rottay rests in dark, so its one overlay block is `light`.
+        modeOverlay: () =>
+          mountFlatThemeArm(
+            'rottay',
+            {
+              id: 'table-padding-mode-overlay',
+              name: 'table-padding-mode-overlay',
+              chrome: { table: { cellPadding: LEGACY } },
+              modes: { light: { chrome: { table: { cellPadding: OVERLAY } } } },
+            },
+            'light',
+          ),
+        nestedTenant: async () => {
+          const page = await flatArm('table-padding-nested-page', {});
+          const artifact = compileTenantThemeConfig(
+            hydrateTenantThemeConfig(
+              { schemaVersion: 1, mode: 'advanced', visualFoundation: { advanced: { chrome: { table: { cellPadding: LEGACY } } } } },
+              NESTED_TENANT,
+            ),
+            { verticalEnvelope: getTenantThemeVerticalEnvelope(NESTED_TENANT.verticalKey)! },
+          );
+          return { ...page, css: `${page.css}\n${artifact.css}` };
+        },
+      },
+    });
+    const px = (arm: string, id: string): number => {
+      const value = readings[arm]?.[id] ?? '';
+      expect(value, `${arm}.${id}`).toMatch(/^\d+(\.\d+)?px$/);
+      return Number.parseFloat(value);
+    };
+    for (const part of ['Body', 'Head'] as const) {
+      const at = (arm: string, host: string, axis: 'Block' | 'Inline') => px(arm, `${host}${part}${axis}`);
+      // DS defaults: compact is 0.5rem 0.75rem against comfortable's 0.75rem 1rem.
+      expect(at('ds', 'compact', 'Block') / at('ds', 'comfortable', 'Block'), part).toBeCloseTo(2 / 3, 3);
+      expect(at('ds', 'compact', 'Inline') / at('ds', 'comfortable', 'Inline'), part).toBeCloseTo(0.75, 3);
+      expect(at('ds', 'spacious', 'Block'), part).toBe(at('ds', 'comfortable', 'Block'));
+      expect(at('ds', 'spacious', 'Inline'), part).toBe(at('ds', 'comfortable', 'Inline'));
+      // Legacy only, standalone: one flat value in every posture, in the base block and in a mode overlay.
+      for (const arm of ['legacy', 'modeOverlay'] as const) {
+        for (const host of ['compact', 'spacious'] as const) {
+          for (const axis of ['Block', 'Inline'] as const) {
+            expect(at(arm, host, axis), `${arm} ${part} ${host} ${axis}`).toBe(at(arm, 'comfortable', axis));
+          }
+        }
+        expect(at(arm, 'compact', 'Block') / at(arm, 'compact', 'Inline'), `${arm} ${part}`).toBeCloseTo(1 / 1.5, 3);
+      }
+      expect(at('legacy', 'compact', 'Block'), part).not.toBe(at('ds', 'compact', 'Block'));
+      expect(at('modeOverlay', 'compact', 'Block') / at('legacy', 'compact', 'Block'), part).toBeCloseTo(2, 3);
+      for (const axis of ['Block', 'Inline'] as const) {
+        // An inline container is nearer than the tenant root, so the legacy value does not reach it.
+        expect(at('legacy', 'workspace', axis), `${part} workspace ${axis}`).toBe(at('ds', 'workspace', axis));
+        // Without a nested tenant the nested host is just the container: the negative control.
+        expect(at('ds', 'nested', axis), `${part} nested control ${axis}`).toBe(at('ds', 'workspace', axis));
+        // A tenant scope nested inside the container is nearer than it.
+        expect(at('nestedTenant', 'nested', axis), `${part} nested ${axis}`).toBe(at('legacy', 'compact', axis));
+        expect(at('nestedTenant', 'workspace', axis), `${part} nested sibling ${axis}`).toBe(at('ds', 'workspace', axis));
+      }
+      // Per-mode padding outranks the container, the nested tenant and the legacy value.
+      expect(readings.perMode![`compact${part}Block`], part).toBe('6px');
+      expect(readings.perMode![`compact${part}Inline`], part).toBe('10px');
+      expect(readings.perMode![`workspace${part}Block`], part).toBe('6px');
+      expect(readings.perMode![`comfortable${part}Block`], part).toBe('7px');
+      expect(readings.perMode![`comfortable${part}Inline`], part).toBe('11px');
+      expect(readings.perMode![`spacious${part}Block`], part).toBe('9px');
+      expect(readings.perMode![`spacious${part}Inline`], part).toBe('13px');
+    }
+  }, 180_000);
 
   /**
    * The two phone chrome figures are graded against the ground their own bar

@@ -134,15 +134,8 @@ describe("chrome/workspace-shell", () => {
     }
   });
 
-  it("leaves the four chrome names `feature-workspace-frame` reads at a second rest", () => {
+  it("produces none of the four tenant-door chrome names", () => {
     const derived = workspaceShellChromeDeriver.derive(context(), {});
-    const frame = readFileSync(
-      resolve(
-        process.cwd(),
-        "src/foundation/tokens/css/presentation/components/patterns/index.css"
-      ),
-      "utf8"
-    );
     for (const channel of [
       "--ds-workspace-shell-bg",
       "--ds-workspace-shell-border",
@@ -150,12 +143,45 @@ describe("chrome/workspace-shell", () => {
       "--ds-workspace-shell-overlay",
     ]) {
       expect(derived[channel]).toBeUndefined();
-      expect(frame).toContain(channel);
     }
-    // The frame's own rests are NOT this shell's: producing either would
-    // repaint whichever family it is not.
-    expect(frame).toContain("var(--ds-workspace-shell-border, var(--ds-color-border))");
-    expect(frame).toContain("var(--ds-workspace-shell-shadow, var(--ds-card-shadow))");
+  });
+
+  it("gives `.ds-workspace-frame` its own names at its own selector and rests", () => {
+    const patterns = readFileSync(
+      resolve(
+        process.cwd(),
+        "src/foundation/tokens/css/presentation/components/patterns/index.css"
+      ),
+      "utf8"
+    ).replace(/\/\*[\s\S]*?\*\//g, "");
+    // Conditional ownership: a stated door wins, and nothing rests at the root,
+    // because a root value would state the name for every tenant.
+    const producer = patterns.indexOf(":where(.ds-workspace-frame) {");
+    const list = patterns.indexOf(":where(.ds-workspace-frame--list) {");
+    const form = patterns.indexOf(":where(.ds-workspace-frame--form) {");
+    const owned = patterns.slice(producer, list);
+    expect(owned).toContain("--ds-workspace-frame-bg: var(--ds-workspace-shell-bg, transparent);");
+    expect(owned).toContain(
+      "--ds-workspace-frame-border: var(--ds-workspace-shell-border, var(--ds-color-border));"
+    );
+    expect(owned).toContain(
+      "--ds-workspace-frame-shadow: var(--ds-workspace-shell-shadow, var(--ds-card-shadow));"
+    );
+    expect(patterns.slice(0, producer)).not.toContain("--ds-workspace-frame-");
+    // Equal specificity, so the variants' ground wins by source order alone.
+    expect(producer).toBeLessThan(list);
+    expect(list).toBeLessThan(form);
+    expect(patterns.match(/--ds-workspace-frame-(?:bg|border|shadow):/g)).toHaveLength(5);
+    expect(patterns.match(/--ds-workspace-frame-bg: linear-gradient\(/g)).toHaveLength(2);
+    // The frame only reads the door; declaring it would mask the tenant's value.
+    expect(patterns).not.toMatch(/--ds-workspace-shell-(?:bg|border|shadow):/);
+    // One rest per name: the paint rule carries no second copy of it.
+    expect(patterns).toContain("border: 1px solid var(--ds-workspace-frame-border);");
+    expect(patterns).toContain("background: var(--ds-workspace-frame-bg);");
+    expect(patterns).toContain("box-shadow: var(--ds-workspace-frame-shadow);");
+    // The wash stays one shared name, resolved by the authored `:root` row.
+    expect(patterns).toContain("--ds-workspace-shell-overlay: var(--ds-material-canvas-texture, transparent);");
+    expect(patterns).toContain("background: var(--ds-workspace-shell-overlay);");
   });
 
   it("gives the canvas colours a rest the structure no longer carries", () => {

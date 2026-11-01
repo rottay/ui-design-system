@@ -17,16 +17,16 @@
  * survives with no producer at all.
  *
  * `--ds-workspace-shell-bg` / `-border` / `-overlay` / `-shadow` are NOT
- * produced, and the measurement is why. They are a SHARED namespace with a
- * second consumer: `:where(.ds-workspace-frame)` in
- * `presentation/components/patterns{,-paint}/index.css` paints its own ground,
- * frame, elevation and wash from the same four names, and its `--list` and
- * `--form` variants declare `--ds-workspace-shell-bg` on the element. The base
- * frame reads them at a DIFFERENT rest — an unresolved background, the plain
- * `--ds-color-border` rule and `--ds-card-shadow` — so a derived value would
- * silently repaint `feature-workspace-frame` with this shell's atmosphere. One
- * name, two rests. The legacy `chrome-variables` kernel already emits all four
- * conditionally when a tenant states them, and that path is unchanged.
+ * produced. They are the tenant door: their only writer is the `chrome-variables`
+ * kernel, which emits each when a tenant states
+ * `chrome.shell.{bg,border,overlay,shadow}`, so an unstated name has no value.
+ * This skin reads the door at its own rests, and `:where(.ds-workspace-frame)` in
+ * `presentation/components/patterns/index.css` forwards ground, border and
+ * elevation into its own `--ds-workspace-frame-*` names at its rests
+ * (`transparent`, `--ds-color-border`, `--ds-card-shadow`). A derived value here
+ * would state the door for every tenant and repaint the frame. `-overlay` is
+ * shared too: the frame's `::before` and the command home read it, and an
+ * authored `:root` declaration already resolves it.
  *
  * @module Compilers/Theme/Lowering/Runtime/derivation/chrome/workspace-shell
  * @category Compilers

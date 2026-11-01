@@ -3,22 +3,22 @@
   "generatedBy": "scripts/generate/tokens/customization/surface/index.mjs --write",
   "meta": {
     "scopeLaw": "DS-SCOPED PROJECTION (core+showroom: packages/core/src writes and reads, packages/showroom/src reads only). deadWriters is a projection for gates and catalogs, NEVER the instrument behind a deletion: on the same population an app-aware inverted index found 53 census-dead channels with LIVE app readers (F5 reconciliation, 2026-08-02 — the --ds-text-eyebrow failure at scale). Death verdicts require the app-inclusive index plus the raw-mention gate.",
-    "inputsDigest": "9e8ab647eaec376d73a1ba402637863aa48d94d9726d245880896014aafbfa53",
+    "inputsDigest": "c2fc19cf49a8db8f5dab8f3633d58fa986bb7f261250a3b997d38f5c9fd5ddef",
     "manifestSchemaVersion": 4,
     "corpus": {
       "authoredCssFiles": 498,
-      "productionTsFiles": 2237,
-      "testFiles": 2108,
+      "productionTsFiles": 2238,
+      "testFiles": 2114,
       "artifactFiles": 3,
-      "showroomReaderFiles": 427
+      "showroomReaderFiles": 429
     }
   },
   "counts": {
-    "universe": 8747,
-    "writers": 7532,
+    "universe": 8750,
+    "writers": 7535,
     "foundationTokens": 4194,
-    "componentTokens": 744,
-    "tenantChannels": 4509,
+    "componentTokens": 746,
+    "tenantChannels": 4510,
     "publicHooks": 107,
     "unadjudicatedReads": 1196,
     "deadWriters": 270,
@@ -46709,8 +46709,8 @@
       "tsMetadataMentions": 0
     },
     "--ds-density-cell-padding": {
-      "category": "component-channel",
-      "tier": "internal",
+      "category": "compiler-derived-channel",
+      "tier": "tenant-bounded",
       "status": "active",
       "writer": true,
       "reads": {
@@ -46721,8 +46721,8 @@
         "modern": true,
         "artifact": false
       },
-      "tsWriteSites": 1,
-      "tsMetadataMentions": 2
+      "tsWriteSites": 2,
+      "tsMetadataMentions": 3
     },
     "--ds-density-cell-padding-comfortable": {
       "category": "consumed-external-origin",
@@ -79833,7 +79833,7 @@
         "css": 4,
         "ts": 0,
         "showroom": 0,
-        "tests": false,
+        "tests": true,
         "modern": true,
         "artifact": false
       },
@@ -114742,10 +114742,10 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 8,
+        "css": 7,
         "ts": 8,
         "showroom": 0,
-        "tests": false,
+        "tests": true,
         "modern": true,
         "artifact": false
       },
@@ -115097,7 +115097,7 @@
         "css": 1,
         "ts": 0,
         "showroom": 0,
-        "tests": false,
+        "tests": true,
         "modern": true,
         "artifact": false
       },
@@ -139736,6 +139736,38 @@
       "tsWriteSites": 0,
       "tsMetadataMentions": 0
     },
+    "--ds-workspace-frame-bg": {
+      "category": "component-channel",
+      "tier": "internal",
+      "status": "active",
+      "writer": true,
+      "reads": {
+        "css": 1,
+        "ts": 0,
+        "showroom": 0,
+        "tests": true,
+        "modern": false,
+        "artifact": false
+      },
+      "tsWriteSites": 0,
+      "tsMetadataMentions": 0
+    },
+    "--ds-workspace-frame-border": {
+      "category": "component-channel",
+      "tier": "internal",
+      "status": "active",
+      "writer": true,
+      "reads": {
+        "css": 1,
+        "ts": 0,
+        "showroom": 0,
+        "tests": true,
+        "modern": false,
+        "artifact": false
+      },
+      "tsWriteSites": 0,
+      "tsMetadataMentions": 0
+    },
     "--ds-workspace-frame-padding": {
       "category": "unadjudicated-read",
       "tier": "application-unadjudicated",
@@ -139746,6 +139778,22 @@
         "ts": 0,
         "showroom": 0,
         "tests": false,
+        "modern": false,
+        "artifact": false
+      },
+      "tsWriteSites": 0,
+      "tsMetadataMentions": 0
+    },
+    "--ds-workspace-frame-shadow": {
+      "category": "component-channel",
+      "tier": "internal",
+      "status": "active",
+      "writer": true,
+      "reads": {
+        "css": 1,
+        "ts": 0,
+        "showroom": 0,
+        "tests": true,
         "modern": false,
         "artifact": false
       },

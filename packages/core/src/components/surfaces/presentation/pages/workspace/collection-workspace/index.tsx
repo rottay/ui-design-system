@@ -123,6 +123,11 @@ export interface CollectionWorkspaceProps<T extends object> extends CollectionWo
    * factor through `--ds-collection-workspace-density-local-factor`; when
    * absent, the selected mode's canonical factor remains the fallback.
    *
+   * The inline `--ds-density-cell-padding` is the nearest scope for the tables
+   * inside, so it replaces a tenant's legacy `chrome.table.cellPadding`. The
+   * tenant's `chrome.table.cellPadding<Mode>` still wins, and a tenant or
+   * preview scope nested inside this workspace is nearer than it.
+   *
    * A runtime `controls.density` switcher (`WorkspaceDensityConfig`), when
    * enabled and given a value, still overrides this baseline.
    * @default 'comfortable'

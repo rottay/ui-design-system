@@ -38,7 +38,12 @@ function setTableVars(
       vars["--ds-table-row-hover-shadow"] = t.rowHoverShadow;
     if (t.rowFocusShadow)
       vars["--ds-table-row-focus-shadow"] = t.rowFocusShadow;
-    if (t.cellPadding) vars["--ds-table-cell-padding"] = t.cellPadding;
+    if (t.cellPadding) {
+      vars["--ds-table-cell-padding"] = t.cellPadding;
+      // Not an alias: the base theme also writes the name above, so Modern
+      // compact reads this value from the ambient channel containers write.
+      vars["--ds-density-cell-padding"] = t.cellPadding;
+    }
     if (t.cellPaddingCompact)
       vars["--ds-table-padding-compact"] = t.cellPaddingCompact;
     if (t.cellPaddingComfortable)

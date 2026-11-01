@@ -551,18 +551,25 @@ export interface DataTablePatternProps<T> extends PatternBaseProps {
   /**
    * Row density mode controlling cell padding and font size.
    *
-   * The two canonical modes resolve token-backed presets from the shared
-   * density spec (design-language §3): `comfortable` → `0.875rem 1rem` cells,
-   * `compact` → `0.5rem 0.75rem` cells. `PatternDataTable` emits
-   * `--ds-density-cell-padding` per mode (with a literal fallback) so the
-   * engines and any app CSS resolve cell padding from the token cascade —
-   * route-grade listings render `comfortable`, embedded / beside-chat render
-   * `compact`.
+   * The table stamps `data-density` and writes no inline padding. The Modern
+   * skin resolves body, header, expand, group-header and skeleton cell padding
+   * in this order:
    *
-   * - `compact`: Dense cell padding (`0.5rem 0.75rem`), smaller text
-   * - `comfortable`: Balanced cell padding (`0.875rem 1rem`) — the default
-   * - `spacious`: Legacy extra-padding mode retained for back-compat (larger
-   *   touch targets); not part of the canonical two-mode density set
+   * 1. The tenant's `chrome.table.cellPadding<Mode>`.
+   * 2. `--ds-density-cell-padding` from the nearest scope that declares it: a
+   *    density container (`CollectionWorkspaceSurface`, the metric-card panel)
+   *    or the tenant scope, which receives a legacy `chrome.table.cellPadding`.
+   *    No CSS declares a default for this channel.
+   * 3. The default of the mode, listed below.
+   *
+   * Leading, selection and action cells keep their own per-mode channels.
+   *
+   * - `compact`: `0.5rem 0.75rem`, unscaled, with smaller text
+   * - `comfortable`: `0.75rem 1rem`, the base-theme value — the default. A
+   *   density container resolves the shared preset instead (`0.875rem 1rem`,
+   *   scaled), so the two postures differ.
+   * - `spacious`: legacy mode kept for back-compat; its padding equals
+   *   `comfortable`. Not part of the canonical two-mode density set.
    * @default 'comfortable'
    */
   density?: "compact" | "comfortable" | "spacious";

@@ -37,8 +37,12 @@ import {
   compileTenantThemeConfig,
   getTenantThemeVerticalEnvelope,
   hydrateTenantThemeConfig,
+  validateTenantThemeDocument,
 } from "..";
-import { TENANT_THEME_V1_COVERAGE } from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
+import {
+  TENANT_THEME_OVERRIDE_TOKENS,
+  TENANT_THEME_V1_COVERAGE,
+} from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
 import { RAMP_STEPS, deriveOklchRamp } from "@/foundation/kernel/color/oklch/ramp";
 import { FIRST_PARTY_BASELINES } from "@tests/support/theme-lowering";
 import {
@@ -869,6 +873,9 @@ describe("tenant theme artifact byte-identity against pre-W4 fixtures", () => {
       "--ds-button-sm-radius",
       "--ds-button-xl-radius",
       "--ds-button-xs-radius",
+      // DSA-FK-004: the authored legacy `table.cellPadding` also reaches the ambient
+      // density channel, which Modern compact reads after its per-mode name.
+      "--ds-density-cell-padding",
       // D6-2c-ii (2026-09-15): five channels joined this list and one left it,
       // all for the one reason -- what the retired theme BAKED and the delta
       // therefore inherited, the preset leaves unstated, so the tenant's own
@@ -887,6 +894,10 @@ describe("tenant theme artifact byte-identity against pre-W4 fixtures", () => {
       "--ds-radius-md-base",
       "--ds-shell-topbar-height",
     ]);
+    expect(artifact.variables["--ds-density-cell-padding"]).toBe("10px 12px");
+    expect(artifact.variables["--ds-table-cell-padding"]).toBe("10px 12px");
+    expect(artifact.css).toContain("--ds-density-cell-padding: 10px 12px;");
+    expect(artifact.css).toContain("--ds-table-cell-padding: 10px 12px;");
     expect(artifact.variables[DENSITY_MODE_FACTOR_TOKEN]).toBeUndefined();
     expect(
       FIRST_PARTY_BASELINES.bithire.surfaces?.density,
@@ -943,7 +954,7 @@ describe("tenant theme artifact byte-identity against pre-W4 fixtures", () => {
     // delta with it. The dark halves of the authored card, header and table
     // chrome went the same way -- they were the BASELINE's `modes.dark` values
     // re-stated over the tenant's base leaves, and the preset authors no dark
-    // chrome either -- so this document now produces NO mode delta at all.
+    // chrome either -- so no chrome row is left in this document's mode delta.
     // Every input to that conclusion is pinned, so a preset that starts
     // authoring a dark block reds here rather than silently repainting.
     const bithireDark = FIRST_PARTY_BASELINES.bithire.modes?.dark?.chrome;
@@ -951,7 +962,22 @@ describe("tenant theme artifact byte-identity against pre-W4 fixtures", () => {
     expect(bithireDark?.sidebar?.text, "the preset leaves the dark sidebar ink unauthored").toBeUndefined();
     expect(bithireDark?.cardComponent?.bg, "and the dark card bg with it").toBeUndefined();
     expect(bithireDark?.table?.headerBg, "and the dark table header bg with it").toBeUndefined();
-    expect(artifact.modeDeltas ?? []).toHaveLength(0);
+    // 8a9df7fff (dark elevation ground fallback): `flat` now lowers a dark ladder, so one delta returns, the same dark
+    // rows the digest fence names as CAUSE 11; roles 0..2 are `none` in both modes and the base block is unmoved.
+    expect(artifact.modeDeltas ?? []).toHaveLength(1);
+    expect(artifact.modeDeltas?.[0]).toEqual({
+      mode: "dark",
+      variables: {
+        "--ds-elevation-3":
+          "inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 1px 2px rgba(0, 0, 0, 0.40), 0 2px 6px rgba(0, 0, 0, 0.28)",
+        "--ds-elevation-4":
+          "inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 1px 3px rgba(0, 0, 0, 0.44), 0 3px 8px rgba(0, 0, 0, 0.32)",
+        "--ds-elevation-5":
+          "inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 2px 4px rgba(0, 0, 0, 0.48), 0 4px 10px rgba(0, 0, 0, 0.36)",
+        "--ds-elevation-6":
+          "inset 0 1px 0 rgba(255, 255, 255, 0.07), 0 2px 6px rgba(0, 0, 0, 0.52), 0 6px 14px rgba(0, 0, 0, 0.40)",
+      },
+    });
     // fb5c2b2ca (2026-09-29, the radius chain re-resolves at the tenant
     // scope): the block states `--ds-radius-md-base`, so the emitter restates
     // that one step's `:root` chain beside it -- one css line, never a
@@ -1003,6 +1029,8 @@ describe("tenant theme artifact byte-identity against pre-W4 fixtures", () => {
           "--ds-elevation-6",
           "--ds-radius-md-base",
           "--ds-shell-topbar-height",
+          // DSA-FK-004: pinned by name and value in the `additions` block above.
+          "--ds-density-cell-padding",
         ]
       )
     ).toBe(
@@ -1015,6 +1043,18 @@ describe("tenant theme artifact byte-identity against pre-W4 fixtures", () => {
         [...W4_RETIRED, ...W4_INERT_TONE_RETIRED].map((entry) => entry.token)
       )
     );
+  });
+
+  it("keeps the padding channels out of raw tokenOverrides", () => {
+    for (const name of ["--ds-density-cell-padding", "--ds-table-cell-padding"]) {
+      expect(TENANT_THEME_OVERRIDE_TOKENS, name).not.toContain(name);
+      const result = validateTenantThemeDocument({
+        schemaVersion: 1,
+        mode: "advanced",
+        visualFoundation: { advanced: { tokenOverrides: { [name]: "1rem" } } },
+      } as never);
+      expect(result.success, name).toBe(false);
+    }
   });
 
   it("emits variables in deterministic UTF-16 code-unit order", () => {

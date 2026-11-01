@@ -53,9 +53,15 @@ embeds that artifact and the client hydrates it. A cache or fetch failure must
 preserve the requested tenant identity and fail closed, never fall through to
 Rottay or another customer's styling.
 
+The compiler version is part of the artifact's identity and sits inside its
+digest, so a new version moves the digest and the cache key of each tenant. An
+artifact another version wrote is refused before use at the admission doors,
+with an instruction to recompile the tenant's stored document and republish the
+artifact. The host owns that recompile; the stored document is not edited.
+
 ## Customization Contract
 
-`TenantThemeDocument` schema v1 compiled by `tenant-theme-compiler@4` is the
+`TenantThemeDocument` schema v1 compiled by `tenant-theme-compiler@5` is the
 only write contract for tenant customization.
 
 - General fields expose bounded palette, typography, shape, density, motion,

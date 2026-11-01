@@ -153,9 +153,24 @@ export interface BrandShellChrome {
   gridSize?: string;
   gridLine?: string;
   gridOpacity?: number;
+  /**
+   * Workspace ground. Compiles to `--ds-workspace-shell-bg`, which WorkspaceShell
+   * reads and `.ds-workspace-frame` forwards into its own `--ds-workspace-frame-bg`.
+   * Each consumer keeps its own rest when this is absent, and the frame's
+   * `--list`/`--form` variants keep their own ground even when it is stated.
+   */
   bg?: string;
+  /**
+   * Workspace border colour. Compiles to `--ds-workspace-shell-border`, which
+   * WorkspaceShell reads and the frame forwards into `--ds-workspace-frame-border`.
+   */
   border?: string;
+  /** Workspace wash. Compiles to the one shared `--ds-workspace-shell-overlay`. */
   overlay?: string;
+  /**
+   * Workspace elevation. Compiles to `--ds-workspace-shell-shadow`, which
+   * WorkspaceShell reads and the frame forwards into `--ds-workspace-frame-shadow`.
+   */
   shadow?: string;
   activeBg?: string;
   activeGradient?: string;

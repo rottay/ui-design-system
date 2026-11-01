@@ -52,8 +52,8 @@
     "valueConstraint": "an assignment to a promoted hook must chain through DS/tenant tokens; a raw colour literal would pin brand paint an application user cannot re-theme"
   },
   "counts": {
-    "tenantChannel": 4509,
-    "compilerConcreteEmissions": 5047,
+    "tenantChannel": 4510,
+    "compilerConcreteEmissions": 5048,
     "compilerEmissionPatterns": 13,
     "themeContractFiles": 86,
     "ambiguousThemeContractTypes": 0,
@@ -61,9 +61,9 @@
     "interpolatedFamilies": 71,
     "interpolatedNames": 553,
     "foundationTokens": 4194,
-    "componentTokens": 744,
+    "componentTokens": 746,
     "componentSuppliers": 368,
-    "reads": 7698,
+    "reads": 7701,
     "hooks": 107,
     "unadjudicatedReads": 1196,
     "promoted": 107,
@@ -3299,7 +3299,9 @@
     "--ds-workbench-header-item-gap",
     "--ds-workbench-header-padding",
     "--ds-workbench-header-section-gap",
-    "--ds-workspace-shell-bg",
+    "--ds-workspace-frame-bg",
+    "--ds-workspace-frame-border",
+    "--ds-workspace-frame-shadow",
     "--ds-workspace-shell-overlay"
   ],
   "foundationTokens": [
@@ -9153,6 +9155,7 @@
     "--ds-datepicker-separator-color",
     "--ds-datepicker-shadow-focus",
     "--ds-datepicker-warning-border",
+    "--ds-density-cell-padding",
     "--ds-density-scale",
     "--ds-descriptions-bg",
     "--ds-descriptions-border",
