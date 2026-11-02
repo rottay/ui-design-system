@@ -1692,6 +1692,123 @@ test('a computed delete on an unwritten object-rest binding cannot reach a Proxy
   }
 });
 
+test('a computed read keyed by a fresh module-local Symbol() is data access on a non-function receiver', () => {
+  const portalPath = resolve(coreRoot, 'src/components/primitives/runtime/overlay/portal-scope/index.tsx');
+  const portalSource = readFileSync(portalPath, 'utf8');
+  assert.match(portalSource, /^const VARIABLE_CACHE = Symbol\('portal-scope\.variables'\);$/m);
+  assert.match(portalSource, /const current = snapshotRef\.current as CachedSnapshot;/);
+  assert.match(portalSource, /current\[VARIABLE_CACHE\] === cache\) return;/);
+  // Only the unrelated variables-comparison residual is overlaid, so the analysis reaches the key read.
+  const variablesDeclaration = '  variables: DsPortalVariableStyle;\n}';
+  assert.equal(portalSource.split(variablesDeclaration).length, 2);
+  const keyReached = portalSource.replace(
+    variablesDeclaration,
+    '  variables: Partial<Record<`--ds-${string}`, string>>;\n}',
+  );
+  assert.deepEqual(
+    analyzeRuntimeModuleEdges(keyReached, portalPath).edges.map(({ specifier }) => specifier).sort(),
+    ['../foundation/portal-theme', 'react'],
+  );
+  for (const [from, to] of [
+    ["Symbol('portal-scope.variables')", "Symbol.for('portal-scope.variables')"],
+    ['const current = snapshotRef.current as CachedSnapshot;',
+      'const current = (() => snapshotRef.current) as unknown as CachedSnapshot;'],
+    ['Object.defineProperty(snapshot, VARIABLE_CACHE, { value: cache });',
+      'Object.defineProperty(snapshot, VARIABLE_CACHE, { value: () => cache });'],
+  ]) {
+    assert.equal(keyReached.split(from).length, 2, from);
+    assert.throws(
+      () => analyzeRuntimeModuleEdges(keyReached.replace(from, to), portalPath),
+      /constructor property capability\) at .*portal-scope\/index\.tsx:321:46/,
+      to,
+    );
+  }
+
+  const imp = "import { opaque, dynamicName, register, fn } from 'unresolved-supplier';";
+  const key = "const KEY = Symbol('slot');";
+  const payload = `("return import('d3')")()`;
+  const data = 'interface Cache { readonly n: number }';
+  const accepted = [
+    [`${imp} ${key} export const read = opaque[KEY];`],
+    [`${imp} const KEY = Symbol(); export const read = opaque[KEY];`],
+    [`${imp} ${key} export const read = opaque?.[KEY];`],
+    [`${imp} export function read() { const KEY = Symbol('local'); return opaque[KEY]; }`],
+    [`${imp} ${key} type Slot = { [KEY]?: number }; export const read = (opaque as Slot)[KEY];`],
+    [`${imp} ${data} ${key} export function tag(target: object, cache: Cache) { Object.defineProperty(target, KEY, { value: cache, enumerable: false, writable: true, configurable: false }); } export function read(source: any) { return source[KEY]; }`],
+    [`${imp} ${key} export const read = (opaque as unknown as { [KEY]?: number })[KEY];`],
+    [`${imp} ${key} export const read = opaque[KEY];`, 'fresh-symbol-key.mjs'],
+  ];
+  for (const [source, file = 'fresh-symbol-key.ts'] of accepted) {
+    assert.deepEqual(parseModuleSpecifiers(source, file), ['unresolved-supplier'], source);
+  }
+
+  const refused = [
+    `${imp} const KEY = Symbol.for('slot'); opaque[KEY]${payload};`,
+    `${imp} const KEY = Symbol.iterator; opaque[KEY]${payload};`,
+    `${imp} const Symbol = (d: string) => d as unknown as symbol; const KEY = Symbol('constructor'); opaque[KEY]${payload};`,
+    `import { opaque, Symbol } from 'unresolved-supplier'; const KEY = Symbol('constructor'); opaque[KEY]${payload};`,
+    `${imp} globalThis.Symbol = ((d: string) => d) as any; ${key} opaque[KEY]${payload};`,
+    `${imp} const S = Symbol; ${key} opaque[KEY]${payload};`,
+    `${imp} const KEY = (Symbol)('slot'); opaque[KEY]${payload};`,
+    `${imp} const KEY = Symbol('slot') as any; opaque[KEY]${payload};`,
+    `${imp} ${key} opaque[KEY as any]${payload};`,
+    `${imp} ${key} (KEY as any) = 'constructor'; opaque[KEY]${payload};`,
+    `${imp} ${key} [KEY] = ['constructor' as any]; opaque[KEY]${payload};`,
+    `${imp} let KEY = Symbol('slot'); opaque[KEY]${payload};`,
+    `${imp} let KEY: any = Symbol('slot'); KEY = 'constructor'; opaque[KEY]${payload};`,
+    `${imp} var KEY = Symbol('slot'); opaque[KEY]${payload};`,
+    `${imp} declare const KEY: unique symbol; opaque[KEY]${payload};`,
+    `${imp} declare const KEY = Symbol('slot'); opaque[KEY]${payload};`,
+    `${imp} export const KEY = Symbol('slot'); opaque[KEY]${payload};`,
+    `${imp} ${key} export { KEY }; opaque[KEY]${payload};`,
+    `${imp} ${key} export default KEY; opaque[KEY]${payload};`,
+    `${imp} namespace N { export const KEY = Symbol('slot'); export const read = opaque[KEY]; } void N;`,
+    `${imp} ${key} export const keys = { KEY }; opaque[KEY]${payload};`,
+    `${imp} ${key} const alias = KEY; opaque[alias]${payload};`,
+    `${imp} ${key} const alias = KEY; void alias; opaque[KEY]${payload};`,
+    `${imp} ${key} register(KEY); opaque[KEY]${payload};`,
+    `${imp} ${key} register(opaque, KEY, { value: 1 }); opaque[KEY]${payload};`,
+    `${imp} ${key} opaque[KEY] = fn; opaque[KEY]${payload};`,
+    `${imp} ${key} export function put(target: any) { target[KEY] = fn; }`,
+    `${imp} ${key} opaque[KEY] += ''; opaque[KEY]${payload};`,
+    `${imp} ${key} delete opaque[KEY];`,
+    `${imp} ${key} opaque[KEY]++;`,
+    `${imp} ${key} [opaque[KEY]] = [fn]; opaque[KEY]${payload};`,
+    `${imp} ${key} for (opaque[KEY] of [fn]) opaque[KEY]${payload};`,
+    `${imp} ${key} export const holder = { [KEY]: fn }; opaque[KEY]${payload};`,
+    `${imp} ${key} export class C { [KEY]() {} } opaque[KEY]${payload};`,
+    `${imp} ${key} Object.defineProperty(opaque, KEY, { value: () => fn }); opaque[KEY]${payload};`,
+    `${imp} ${key} Object.defineProperty(opaque, KEY, { value: fn }); opaque[KEY]${payload};`,
+    `${imp} ${data} ${key} export function tag(t: object, c: Cache) { Object.defineProperty(t, KEY, { get: () => c }); } opaque[KEY]${payload};`,
+    `${imp} ${data} ${key} export function tag(t: object, value: Cache) { Object.defineProperty(t, KEY, { value }); } opaque[KEY]${payload};`,
+    `${imp} ${key} Object.defineProperty(opaque, KEY, { ...opaque }); opaque[KEY]${payload};`,
+    `${imp} ${data} ${key} export function tag(t: object, c: Cache) { const d = { value: c }; Object.defineProperty(t, KEY, d); } opaque[KEY]${payload};`,
+    `${imp} ${data} ${key} export function tag(t: object, c: Cache) { Object.defineProperty(t, KEY, { __proto__: opaque, value: c }); } opaque[KEY]${payload};`,
+    `${imp} ${data} ${key} const Object = { defineProperty: register }; export function tag(t: object, c: Cache) { Object.defineProperty(t, KEY, { value: c }); } opaque[KEY]${payload};`,
+    `${imp} ${data} ${key} export function tag(t: object, c: Cache) { Object.defineProperties(t, { [KEY]: { value: c } }); } opaque[KEY]${payload};`,
+    `${key} function local() {} export const read = local[KEY];`,
+    `${key} const local = () => {}; export const read = local[KEY];`,
+    `${key} class Local {} export const read = Local[KEY];`,
+    `${key} const local = () => {}; const alias = local; export const read = alias[KEY];`,
+    `${key} export const read = (function () {})[KEY];`,
+    `${imp} ${key} opaque[KEY].constructor${payload};`,
+    `${imp} ${key} opaque[KEY][dynamicName]${payload};`,
+    `${imp} ${key} (opaque[KEY] as any)[dynamicName]${payload};`,
+    `declare const opaque: any; const KEY = Symbol('slot'); opaque[KEY]${payload};`,
+  ];
+  for (const source of refused) {
+    assert.throws(
+      () => parseModuleSpecifiers(source, 'fresh-symbol-key.ts'),
+      /unresolved runtime module edge \(constructor property capability\)/,
+      source,
+    );
+  }
+  assert.throws(
+    () => parseModuleSpecifiers("void Symbol('x'); void globalThis[Symbol.for('rottay.slot')];", 'fresh-symbol-key.mjs'),
+    /unresolved runtime module edge \(global loader container transport\)/,
+  );
+});
+
 test('packaged app scanner fails closed when suppliers or the DS hide behind runtime code', () => {
   const fixtureRoot = mkdtempSync(resolve(tmpdir(), 'rottay-ds-app-runtime-edge-'));
   try {

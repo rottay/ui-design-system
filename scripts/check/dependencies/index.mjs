@@ -1512,24 +1512,43 @@ export function analyzeRuntimeModuleEdges(
     return containerSubject && callArguments.some(namesContainerSymbolProperty);
   }
 
-  let symbolIntrinsicIntegrity = null;
+  // A direct call of the bare unshadowed name only mints a fresh symbol: it neither
+  // writes the intrinsic nor touches the registry, so it is admitted for fresh keys only.
+  function directSymbolCallee(reference) {
+    const call = reference.parent;
+    return Boolean(
+      ts.isIdentifier(reference) && unshadowed(reference, 'Symbol') && call &&
+      ts.isCallExpression(call) && call.expression === reference,
+    );
+  }
 
-  function symbolIntrinsicIntact() {
-    if (symbolIntrinsicIntegrity !== null) return symbolIntrinsicIntegrity;
-    symbolIntrinsicIntegrity = true;
+  const symbolIntrinsicWitness = { fresh: null, registered: null };
+
+  function symbolIntrinsicScan(mode, admitDirectCalls) {
+    if (symbolIntrinsicWitness[mode] !== null) return symbolIntrinsicWitness[mode];
+    symbolIntrinsicWitness[mode] = true;
     function inspect(node) {
-      if (!symbolIntrinsicIntegrity) return;
+      if (!symbolIntrinsicWitness[mode]) return;
       if (runtimeNode(node)) {
-        if (symbolIntrinsicRoot(node) && !symbolIntrinsicAdmittedUse(node)) {
-          symbolIntrinsicIntegrity = false;
-        }
-        if (containerSymbolPropertyOperation(node)) symbolIntrinsicIntegrity = false;
-        if (containerReachedMutation(node)) symbolIntrinsicIntegrity = false;
+        if (
+          symbolIntrinsicRoot(node) && !symbolIntrinsicAdmittedUse(node) &&
+          !(admitDirectCalls && directSymbolCallee(node))
+        ) symbolIntrinsicWitness[mode] = false;
+        if (containerSymbolPropertyOperation(node)) symbolIntrinsicWitness[mode] = false;
+        if (containerReachedMutation(node)) symbolIntrinsicWitness[mode] = false;
       }
       ts.forEachChild(node, inspect);
     }
     inspect(sourceFile);
-    return symbolIntrinsicIntegrity;
+    return symbolIntrinsicWitness[mode];
+  }
+
+  function symbolIntrinsicIntact() {
+    return symbolIntrinsicScan('registered', false);
+  }
+
+  function freshSymbolIntrinsicIntact() {
+    return symbolIntrinsicScan('fresh', true);
   }
 
   function registeredSymbolKeyShape(expression, resolvingSymbols = new Set()) {
@@ -2231,6 +2250,79 @@ export function analyzeRuntimeModuleEdges(
       flowSymbolRuntimeWrites(symbol).length === 0;
   }
 
+  const freshSymbolDescriptorFlags = new Set(['configurable', 'enumerable', 'writable']);
+
+  function freshSymbolDescriptorStoresData(descriptor) {
+    if (!descriptor || !ts.isObjectLiteralExpression(descriptor)) return false;
+    return descriptor.properties.every((property) => {
+      if (!ts.isPropertyAssignment(property) || !ts.isIdentifier(property.name)) return false;
+      if (freshSymbolDescriptorFlags.has(property.name.text)) return true;
+      return property.name.text === 'value' && !callableExpression(property.initializer);
+    });
+  }
+
+  // Every runtime reference of a fresh key: a read `receiver[KEY]`, or the key of a direct
+  // `Object.defineProperty` whose literal data descriptor stores a proven non-callable value.
+  function freshSymbolKeyReference(identifier, writes) {
+    const parent = identifier.parent;
+    if (ts.isVariableDeclaration(parent) && parent.name === identifier) return true;
+    if (!runtimeNode(identifier)) return true;
+    if (ts.isElementAccessExpression(parent) && parent.argumentExpression === identifier) {
+      return !writes.has(parent);
+    }
+    return Boolean(
+      ts.isCallExpression(parent) && parent.arguments.length === 3 &&
+      parent.arguments[1] === identifier &&
+      !parent.arguments.some((argument) => ts.isSpreadElement(argument)) &&
+      directBuiltinMethodCall(parent, 'Object', 'defineProperty') &&
+      freshSymbolDescriptorStoresData(parent.arguments[2]),
+    );
+  }
+
+  const freshSymbolKeys = new Map();
+
+  // `const KEY = Symbol(d)` mints a key unequal to `constructor` and to every well-known or
+  // registered symbol, so to no Function or Object prototype key; it holds only stored values.
+  function freshSymbolKey(expression) {
+    if (!expression || !ts.isIdentifier(expression) || !ts.isExternalModule(sourceFile)) return false;
+    const symbol = symbolAt(expression);
+    if (!symbol) return false;
+    if (freshSymbolKeys.has(symbol)) return freshSymbolKeys.get(symbol);
+    freshSymbolKeys.set(symbol, false);
+    const declaration = symbol.valueDeclaration;
+    if (
+      !declaration || !ts.isVariableDeclaration(declaration) || !ts.isIdentifier(declaration.name) ||
+      !runtimeKeyDeclaration(declaration) ||
+      ts.getCombinedModifierFlags(declaration) & ts.ModifierFlags.Export ||
+      (declaration.parent.flags & ts.NodeFlags.BlockScoped) !== ts.NodeFlags.Const ||
+      !declaration.initializer || !ts.isCallExpression(declaration.initializer) ||
+      !directSymbolCallee(declaration.initializer.expression) || !freshSymbolIntrinsicIntact()
+    ) return false;
+    const writes = new Set();
+    let enumerated = true;
+    const visit = (node) => {
+      for (const target of mutationTargets(node)) writes.add(target);
+      ts.forEachChild(node, visit);
+    };
+    visit(sourceFile);
+    const inspect = (node) => {
+      if (!enumerated) return;
+      if (ts.isIdentifier(node) && node.text === declaration.name.text && symbolAt(node) === symbol) {
+        enumerated = freshSymbolKeyReference(node, writes);
+      }
+      ts.forEachChild(node, inspect);
+    };
+    inspect(sourceFile);
+    freshSymbolKeys.set(symbol, enumerated);
+    return enumerated;
+  }
+
+  // The fresh key settles the key half of the rule; the receiver half is the one
+  // `declaredSafeComputedRead` applies to a proven key: never a definite function.
+  function freshSymbolComputedRead(node) {
+    return freshSymbolKey(node.argumentExpression) && !definitelyCallableExpression(node.expression);
+  }
+
   function unsupportedConstructorAccess(node, includeOpaqueComputed = true) {
     if (!runtimeNode(node)) return false;
     if (
@@ -2240,6 +2332,7 @@ export function analyzeRuntimeModuleEdges(
     if (
       ts.isElementAccessExpression(node) && propertyText(node) === null &&
       !declaredSafeComputedRead(node) && !freshObjectRestDelete(node) &&
+      !freshSymbolComputedRead(node) &&
       (includeOpaqueComputed
         ? callableExpression(node.expression)
         : definitelyCallableExpression(node.expression))
