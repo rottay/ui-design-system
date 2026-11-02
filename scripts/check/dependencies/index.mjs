@@ -1459,30 +1459,34 @@ export function analyzeRuntimeModuleEdges(
     );
   }
 
-  function readableContainerMember(member) {
+  // Under CommonJS emit an exported slot may hold 'Symbol' itself, so only the slot-blind
+  // witness that admits that slot's own unread use may treat its key as another member.
+  function readableContainerMember(member, slotBlind) {
+    const exportSlot = ts.isElementAccessExpression(member) &&
+      exportSlotStaticKey(member.argumentExpression);
     if (
       ts.isElementAccessExpression(member) &&
-      registeredSymbolKeyShape(member.argumentExpression)
+      registeredSymbolKeyShape(member.argumentExpression) && (slotBlind || !exportSlot)
     ) return true;
     const property = propertyText(member);
     return Boolean(
-      property !== null && property !== 'Symbol' &&
+      property !== null && property !== 'Symbol' && (slotBlind || !exportSlot) &&
       symbolIntrinsicContainer(member.expression),
     );
   }
 
-  function containerReach(member) {
+  function containerReach(member, slotBlind) {
     return Boolean(
       member && (ts.isPropertyAccessExpression(member) || ts.isElementAccessExpression(member)) &&
-      !symbolIntrinsicRoot(member.expression) && !readableContainerMember(member) &&
+      !symbolIntrinsicRoot(member.expression) && !readableContainerMember(member, slotBlind) &&
       containerReceiverChain(member.expression),
     );
   }
 
-  function containerReachedMutation(node) {
+  function containerReachedMutation(node, slotBlind) {
     const written = mutationTargets(node);
     if (ts.isCallExpression(node) || ts.isNewExpression(node)) written.push(node.expression);
-    return written.some((target) => containerReach(unwrapRuntimeExpression(target)));
+    return written.some((target) => containerReach(unwrapRuntimeExpression(target), slotBlind));
   }
 
   function symbolPropertyName(name) {
@@ -1522,9 +1526,9 @@ export function analyzeRuntimeModuleEdges(
     );
   }
 
-  const symbolIntrinsicWitness = { fresh: null, registered: null };
+  const symbolIntrinsicWitness = { fresh: null, registered: null, exportSlot: null };
 
-  function symbolIntrinsicScan(mode, admitDirectCalls) {
+  function symbolIntrinsicScan(mode, admitDirectCalls, slotBlind = false) {
     if (symbolIntrinsicWitness[mode] !== null) return symbolIntrinsicWitness[mode];
     symbolIntrinsicWitness[mode] = true;
     function inspect(node) {
@@ -1535,7 +1539,7 @@ export function analyzeRuntimeModuleEdges(
           !(admitDirectCalls && directSymbolCallee(node))
         ) symbolIntrinsicWitness[mode] = false;
         if (containerSymbolPropertyOperation(node)) symbolIntrinsicWitness[mode] = false;
-        if (containerReachedMutation(node)) symbolIntrinsicWitness[mode] = false;
+        if (containerReachedMutation(node, slotBlind)) symbolIntrinsicWitness[mode] = false;
       }
       ts.forEachChild(node, inspect);
     }
@@ -1582,10 +1586,10 @@ export function analyzeRuntimeModuleEdges(
   }
 
   function registeredSymbolContainerProperty(access) {
-    return Boolean(
-      ts.isElementAccessExpression(access) &&
-      staticRegisteredSymbolKey(access.argumentExpression),
-    );
+    if (!ts.isElementAccessExpression(access)) return false;
+    const key = access.argumentExpression;
+    if (!exportSlotStaticKey(key)) return staticRegisteredSymbolKey(key);
+    return registeredSymbolKeyShape(key) && symbolIntrinsicScan('exportSlot', false, true);
   }
 
   function runtimeIdentifier(identifier) {

@@ -2236,6 +2236,159 @@ test('an exported registered-Symbol key is refused as a global-container value r
   }
 });
 
+test('an exported static-key container write withdraws every registered-key witness: CommonJS emit can replace Symbol through a string or registered-Symbol slot', () => {
+  const typescript = createRequire(resolve(coreRoot, 'package.json'))('typescript');
+  const evaluate = (source, module) => {
+    const output = typescript.transpileModule(source, {
+      fileName: 's.ts',
+      compilerOptions: { module: typescript.ModuleKind[module], target: typescript.ScriptTarget.ES2020 },
+    }).outputText;
+    const commonJs = !/^export /m.test(output);
+    const sandbox = { exports: {}, realm: null, view: {} };
+    runInNewContext(commonJs
+      ? `${output}\nrealm = Function;`
+      : `${output.replace(/^export (?=(const|function) )/gm, '').replace(/^export \{[^}]*\};?$/gm, '')}\nrealm = Function; view.poison = typeof poison === 'function' ? poison : undefined; view.drop = typeof drop === 'function' ? drop : undefined; view.use = use;`, sandbox);
+    return { commonJs, exported: commonJs ? sandbox.exports : sandbox.view, sandbox };
+  };
+  const reads = {
+    literal: 'export function use() { return globalThis[Symbol.for(\'node:fs\')]; }',
+    lazy: 'export function use() { const key = Symbol.for(\'node:fs\'); return globalThis[key]; }',
+  };
+  const witness = {};
+  for (const [form, write, slot] of [
+    ['string/direct', "export const k = 'label'; export function poison(v) { globalThis[k] = v; }", 'k'],
+    ['string/concat', "export const k = 'la' + 'bel'; export function poison(v) { globalThis[k] = v; }", 'k'],
+    ['string/alias', "export const k = 'label'; export function poison(v) { const j = k; globalThis[j] = v; }", 'k'],
+    ['string/clause', "const k = 'label'; export { k }; export function poison(v) { globalThis[k] = v; }", 'k'],
+    ['string/local', "const k = 'label'; export function poison(v) { globalThis[k] = v; }", 'k'],
+    ['registered/direct', "export const s = Symbol.for('label'); export function poison(v) { globalThis[s] = v; }", 's'],
+    ['registered/alias', "export const s = Symbol.for('label'); const g = globalThis; export function poison(v) { g[s] = v; }", 's'],
+    ['registered/transitive', "export const base = Symbol.for('label'); export function poison(v) { const s = base; globalThis[s] = v; }", 'base'],
+    ['registered/clause', "const s = Symbol.for('label'); export { s }; export function poison(v) { globalThis[s] = v; }", 's'],
+    ['registered/local', "const s = Symbol.for('label'); export function poison(v) { globalThis[s] = v; }", 's'],
+  ]) {
+    for (const [read, use] of Object.entries(reads)) {
+      for (const module of ['CommonJS', 'ESNext']) {
+        const { commonJs, exported, sandbox } = evaluate(`${write} ${use}`, module);
+        if (commonJs) exported[slot] = 'Symbol';
+        exported.poison(runInNewContext("({ for: () => 'Function' })"));
+        witness[`${form}/${read}/${module}`] = exported.use() === sandbox.realm;
+      }
+    }
+  }
+  const reached = (form) => ['literal', 'lazy'].flatMap((read) => [
+    [`${form}/${read}/CommonJS`, true], [`${form}/${read}/ESNext`, false],
+  ]);
+  const unreached = (form) => ['literal', 'lazy'].flatMap((read) => [
+    [`${form}/${read}/CommonJS`, false], [`${form}/${read}/ESNext`, false],
+  ]);
+  assert.deepEqual(witness, Object.fromEntries([
+    ...reached('string/direct'), ...reached('string/concat'), ...reached('string/alias'),
+    ...unreached('string/clause'), ...unreached('string/local'),
+    ...reached('registered/direct'), ...reached('registered/alias'), ...reached('registered/transitive'),
+    ...unreached('registered/clause'), ...unreached('registered/local'),
+  ]));
+  const removed = {};
+  for (const [form, slot] of [['string', 'k'], ['registered', 's']]) {
+    const key = form === 'string' ? "'label'" : "Symbol.for('label')";
+    for (const module of ['CommonJS', 'ESNext']) {
+      const { commonJs, exported, sandbox } = evaluate(
+        `export const ${slot} = ${key}; export function drop() { return delete globalThis[${slot}]; } ${reads.literal}`,
+        module,
+      );
+      if (commonJs) exported[slot] = 'Symbol';
+      exported.drop();
+      removed[`${form}/${module}`] = runInNewContext('typeof Symbol', sandbox) === 'undefined';
+    }
+  }
+  assert.deepEqual(removed, {
+    'string/CommonJS': true, 'string/ESNext': false, 'registered/CommonJS': true, 'registered/ESNext': false,
+  });
+
+  const registeredKey = "export const s = Symbol.for('label');";
+  const stringKey = "export const k = 'label';";
+  const poison = (body) => `export function poison(v: unknown) { ${body} }`;
+  const drop = (key) => `export function drop() { return delete (globalThis as any)[${key}]; }`;
+  const literal = "export function use() { return (globalThis as any)[Symbol.for('node:fs')]; }";
+  const lazy = "export function use() { const key = Symbol.for('node:fs'); return (globalThis as any)[key]; }";
+  const refused = [
+    [`${stringKey} ${poison('(globalThis as any)[k] = v;')} ${literal}`, 'ts'],
+    [`${stringKey} ${poison('(globalThis as any)[k] = v;')} ${lazy}`, 'ts'],
+    [`${stringKey} ${drop('k')} ${literal}`, 'ts'],
+    [`${stringKey} ${drop('k')} ${lazy}`, 'ts'],
+    [`${stringKey} ${drop('k')} ${literal}`, 'cts'],
+    [`export const k = 'la' + 'bel'; ${poison('(globalThis as any)[k] = v;')} ${literal}`, 'ts'],
+    [`${stringKey} ${poison('const j = k; (globalThis as any)[j] = v;')} ${literal}`, 'ts'],
+    [`${stringKey} ${poison('(globalThis as any)[`${k}`] = v;')} ${literal}`, 'ts'],
+    [`${stringKey} ${poison('const w = window as any; w[k] = v;')} ${literal}`, 'tsx'],
+    [`${stringKey} (globalThis as any)[k] = {}; ${literal}`, 'ts'],
+    [`export namespace N { ${stringKey} ${poison('(globalThis as any)[k] = v;')} ${literal} }`, 'mts'],
+    ["export const k = 'label'; export function poison(v) { globalThis[k] = v; } export function use() { return globalThis[Symbol.for('node:fs')]; }", 'js'],
+    [`${registeredKey} ${poison('(globalThis as any)[s] = v;')} ${literal}`, 'ts'],
+    [`${registeredKey} ${poison('(globalThis as any)[s] = v;')} ${lazy}`, 'ts'],
+    [`${registeredKey} const key = Symbol.for('node:fs'); ${poison('(globalThis as any)[s] = v;')} export function use() { return (globalThis as any)[key]; }`, 'ts'],
+    [`${registeredKey} ${poison('((globalThis as any)[s]) = v;')} ${literal}`, 'ts'],
+    [`${registeredKey} const g = globalThis; ${poison('g[s] = v;')} ${literal}`, 'ts'],
+    [`${registeredKey} ${poison('const w = window as any; w[s] = v;')} ${literal}`, 'tsx'],
+    [`${registeredKey} ${poison('(globalThis.globalThis as any)[s] = v;')} ${literal}`, 'ts'],
+    [`${registeredKey} ${poison('let x; x = (globalThis as any)[s] = v; return x;')} ${literal}`, 'ts'],
+    [`export const base = Symbol.for('label'); ${poison('const s = base; (globalThis as any)[s] = v;')} ${literal}`, 'ts'],
+    [`const base = Symbol.for('label'); export const s = base; ${poison('(globalThis as any)[s] = v;')} ${literal}`, 'ts'],
+    [`export const a = 1, s = Symbol.for('label'); ${poison('(globalThis as any)[s] = v;')} ${literal}`, 'ts'],
+    [`export namespace N { ${registeredKey} ${poison('(globalThis as any)[s] = v;')} ${literal} }`, 'mts'],
+    ["export const s = Symbol.for('label'); export function poison(v) { globalThis[s] = v; } export function use() { return globalThis[Symbol.for('node:fs')]; }", 'js'],
+    [`${registeredKey} ${drop('s')} ${literal}`, 'cts'],
+    [`${registeredKey} ${drop('s')} ${lazy}`, 'ts'],
+    [`${registeredKey} (globalThis as any)[s] = {}; ${literal}`, 'ts'],
+    [`${registeredKey} const fresh = Symbol(); ${poison('(globalThis as any)[s] = v;')}`, 'ts'],
+    ["export const s = other(); export function use() { return typeof (globalThis as any)[s]; }", 'ts'],
+    ["export const s = Symbol.for(label); export function use() { return (globalThis as any)[s] === undefined; }", 'ts'],
+  ];
+  for (const [source, extension] of refused) {
+    assert.throws(
+      () => parseModuleSpecifiers(source, `static-key-write.${extension}`),
+      /unresolved runtime module edge \(global loader container transport\)/,
+      source,
+    );
+  }
+  assert.throws(
+    () => parseModuleSpecifiers(
+      `${stringKey} ${poison('(globalThis as any)[k] = v;')} const fresh = Symbol(); export function use(fn: Function) { return (fn as any)[fresh]; }`,
+      'static-key-write.ts',
+    ),
+    /unresolved runtime module edge \(constructor property capability\)/,
+  );
+  const accepted = [
+    [`${stringKey} ${poison('(globalThis as any)[k] = v;')}`, 'ts'],
+    [`${stringKey} export function use() { const w = window as any; w[k] = 1; delete w[k]; }`, 'tsx'],
+    [`${stringKey} ${poison('(globalThis as any)[k] = v;')} export function use() { return typeof (globalThis as any)[k]; }`, 'ts'],
+    ["export const k = 'label'; export function poison(v) { globalThis[k] = v; } export function use() { return globalThis[Symbol.for('node:fs')]; }", 'mjs'],
+    ["export const k = 'label'; export function poison(v) { globalThis[k] = v; } export function use() { const key = Symbol.for('node:fs'); return globalThis[key]; }", 'mjs'],
+    ["export const k = 'label'; export function drop() { return delete globalThis[k]; } export function use() { return globalThis[Symbol.for('node:fs')]; }", 'mjs'],
+    [`${stringKey} ${poison('(globalThis as any)[k] = v;')} ${literal}`, 'mts'],
+    [`const k = 'label'; export { k }; ${poison('(globalThis as any)[k] = v;')} ${literal}`, 'ts'],
+    [`const k = 'label'; ${poison('(globalThis as any)[k] = v;')} ${literal}`, 'ts'],
+    [`const k = 'label'; ${poison('(globalThis as any)[k] = v;')} ${lazy}`, 'ts'],
+    [`export namespace N { const k = 'label'; ${poison('(globalThis as any)[k] = v;')} ${literal} }`, 'ts'],
+    [`${stringKey} const box: Record<string, unknown> = {}; ${poison('box[k] = v; delete box[k];')} ${literal}`, 'ts'],
+    [`${poison('(globalThis as any).label = v;')} ${literal}`, 'ts'],
+    [`${stringKey} ${registeredKey} ${poison('(globalThis as any)[k] = v;')} export function use() { return typeof (globalThis as any)[s]; }`, 'ts'],
+    [`${registeredKey} ${poison('(globalThis as any)[s] = v;')}`, 'ts'],
+    [`${registeredKey} export function use() { const w = window as any; w[s] = 1; delete w[s]; }`, 'tsx'],
+    [`${registeredKey} ${poison('(globalThis as any)[s] = v;')} export function use() { return typeof (globalThis as any)[s]; }`, 'ts'],
+    ["export const s = Symbol.for('label'); export function poison(v) { globalThis[s] = v; } export function use() { return globalThis[Symbol.for('node:fs')]; }", 'mjs'],
+    [`${registeredKey} ${poison('(globalThis as any)[s] = v;')} ${literal}`, 'mts'],
+    [`const s = Symbol.for('label'); export { s }; ${poison('(globalThis as any)[s] = v;')} ${literal}`, 'ts'],
+    [`const s = Symbol.for('label'); ${poison('(globalThis as any)[s] = v;')} ${literal}`, 'ts'],
+    [`export namespace N { const s = Symbol.for('label'); ${poison('(globalThis as any)[s] = v;')} ${literal} }`, 'ts'],
+    [`${registeredKey} const box: Record<symbol, unknown> = {}; ${poison('box[s] = v; delete box[s];')} ${literal}`, 'ts'],
+    [`${registeredKey} export function probe() { return typeof (globalThis as any)[s]; } ${literal}`, 'ts'],
+  ];
+  for (const [source, extension] of accepted) {
+    assert.deepEqual(parseModuleSpecifiers(source, `static-key-write.${extension}`), [], source);
+  }
+});
+
 test('a computed read keyed by a fresh module-local Symbol() is data access on a non-function receiver', () => {
   const portalPath = resolve(coreRoot, 'src/components/primitives/runtime/overlay/portal-scope/index.tsx');
   const portalSource = readFileSync(portalPath, 'utf8');
