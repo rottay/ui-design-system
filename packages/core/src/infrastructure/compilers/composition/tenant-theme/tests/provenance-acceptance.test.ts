@@ -820,7 +820,13 @@ describe("case C — no contested tenant authorship changes nothing", () => {
       // -scrim-filter and -dialog-radius.
       // Scrim ladder (W26-Q4 Phase 1): rottay 2957 -> 2960, +3, --ds-overlay-light,
       // -medium and -heavy are produced in every block, not only when authored.
-      rottay: 2960,
+      // Pin repair (measured 2026-11-02 at c70c2fa80): rottay 2960 -> 2962, +2.
+      //   +1 71e75556f --ds-page-shell-eyebrow-size, the page-shell eyebrow on the label role.
+      //   +1 27cbfe8e8 --ds-link-hover-mix, the link hover share from state emphasis.
+      // Reverting exactly those two producers at c70c2fa80 measures 2960 with no other
+      // key or base value moving, so the HEAD side removes 0. The 6bea312d6 side is
+      // read from its committed facade artifacts (neither key declared), not replayed.
+      rottay: 2962,
       // Status tint derivation adds seven keys; three unused emissions were
       // subsequently retired from the compiler.
       // WO-DER-02 (measured): 1233 -> 1248. bithire had already authored 65 of
@@ -902,7 +908,11 @@ describe("case C — no contested tenant authorship changes nothing", () => {
       // Shortcuts-overlay on Modal (2026-10-04): bithire 3100 -> 3093, the same
       // seven keys as rottay.
       // Scrim ladder (W26-Q4 Phase 1): bithire 3093 -> 3096, the same three keys.
-      bithire: 3096,
+      // Pin repair (measured 2026-11-02 at c70c2fa80): bithire 3096 -> 3098, +2, the
+      // same two keys as rottay. Reverting exactly those two producers at c70c2fa80
+      // measures 3096 with no other key or base value moving, so the HEAD side
+      // removes 0; the 6bea312d6 side is read as for rottay, not replayed.
+      bithire: 3098,
       // COH-1 (2026-08-30): 468 -> 475. Same shape as bithire: evnto never
       // authored any of the seven alpha channels in either mode, so
       // `deriveStatusTintFloor` adds +7 new explicit keys to the base block.
@@ -976,7 +986,11 @@ describe("case C — no contested tenant authorship changes nothing", () => {
       // Shortcuts-overlay on Modal (2026-10-04): evnto 2964 -> 2957, the same
       // seven keys as rottay.
       // Scrim ladder (W26-Q4 Phase 1): evnto 2957 -> 2960, the same three keys.
-      evnto: 2960,
+      // Pin repair (measured 2026-11-02 at c70c2fa80): evnto 2960 -> 2962, +2, the
+      // same two keys as rottay. Reverting exactly those two producers at c70c2fa80
+      // measures 2960 with no other key or base value moving, so the HEAD side
+      // removes 0; the 6bea312d6 side is read as for rottay, not replayed.
+      evnto: 2962,
     };
     for (const vertical of VERTICALS) {
       expect(
@@ -1105,21 +1119,15 @@ describe("static and DB share one lowering", () => {
     }
   });
 
-  it("case G3 (E-1): the tenant's posture floor outranks an authored ladder", () => {
-    // THE DEFECT THIS FIX CLOSES, as a fence. rottay is the only vertical that
-    // authors values for all six `surfaces.elevations` levels, and the compiler
-    // lowers an authored ladder AFTER the governed posture preset by law ("the
-    // preset is the floor a tenant selects, an authored ladder is the ceiling").
-    // Before E-1 the DB leg resolved the tenant's patch into the theme and then
-    // compiled without a tenant floor, so the selection lowered at the
-    // VERTICAL's position and the ladder erased it: `surfaces.elevation` moved
-    // ZERO variables on both non-identity stops while the static arm moved
-    // three. The values below are the static arm's, reproduced through the DB
-    // door.
+  it("case G3 (E-1): the tenant's posture selection arrives through the DB door on the vertical's ground", () => {
+    // No first-party vertical, style or DB document authors
+    // `surfaces.elevations`, so the derived ladder states the floor's values and
+    // removing the floor is invisible here: this case fences the selection's
+    // arrival and the floor's ground through the DB door; G3-L fences rank.
     // WO-DER-04: a posture now states the WHOLE seven-role ladder. It used to
     // state levels 1..3 only, so a flat
     // product still got a deep modal shadow from roles 4..6.
-    const PRESET = {
+    const DARK_GROUND_PRESET = {
       flat: {
         // D6-2c-ii (2026-09-15): tenant-document compiles over neutral +
         // preset, and role 0 joined the delta. It used to be absent because
@@ -1129,17 +1137,39 @@ describe("static and DB share one lowering", () => {
         // d207e58d7 (2026-09-28, the ground-aware elevation ladder): rottay's
         // dark-ground baseline states the recovered ladder again, role 0 `none`
         // included, so role 0 leaves the delta on BOTH stops (asserted below);
-        // roles 1..6 are byte-unchanged.
+        // roles 1..6 take the posture's dark-ground ladder (8a9df7fff).
         "--ds-elevation-1": "none",
         "--ds-elevation-2": "none",
-        "--ds-elevation-3": "0 1px 2px rgba(0,0,0,0.05)",
-        "--ds-elevation-4": "0 1px 3px rgba(0,0,0,0.06)",
-        "--ds-elevation-5": "0 2px 4px rgba(0,0,0,0.07)",
-        "--ds-elevation-6": "0 2px 6px rgba(0,0,0,0.08)",
+        "--ds-elevation-3":
+          "inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 1px 2px rgba(0, 0, 0, 0.40), 0 2px 6px rgba(0, 0, 0, 0.28)",
+        "--ds-elevation-4":
+          "inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 1px 3px rgba(0, 0, 0, 0.44), 0 3px 8px rgba(0, 0, 0, 0.32)",
+        "--ds-elevation-5":
+          "inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 2px 4px rgba(0, 0, 0, 0.48), 0 4px 10px rgba(0, 0, 0, 0.36)",
+        "--ds-elevation-6":
+          "inset 0 1px 0 rgba(255, 255, 255, 0.07), 0 2px 6px rgba(0, 0, 0, 0.52), 0 6px 14px rgba(0, 0, 0, 0.40)",
       },
       elevated: {
         // Same move as `flat` above: role 0 joins the delta over the preset,
         // and leaves it again with d207e58d7.
+        "--ds-elevation-1":
+          "inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 2px 4px rgba(0, 0, 0, 0.44), 0 4px 8px rgba(0, 0, 0, 0.32)",
+        "--ds-elevation-2":
+          "inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 4px 8px rgba(0, 0, 0, 0.48), 0 8px 16px rgba(0, 0, 0, 0.36)",
+        "--ds-elevation-3":
+          "inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 8px 16px rgba(0, 0, 0, 0.52), 0 16px 32px rgba(0, 0, 0, 0.40)",
+        "--ds-elevation-4":
+          "inset 0 1px 0 rgba(255, 255, 255, 0.07), 0 16px 32px rgba(0, 0, 0, 0.56), 0 24px 48px rgba(0, 0, 0, 0.44)",
+        "--ds-elevation-5":
+          "inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 24px 48px rgba(0, 0, 0, 0.60), 0 36px 72px rgba(0, 0, 0, 0.48)",
+        "--ds-elevation-6":
+          "inset 0 1px 0 rgba(255, 255, 255, 0.09), 0 32px 64px rgba(0, 0, 0, 0.64), 0 48px 96px rgba(0, 0, 0, 0.52)",
+      },
+    } as const;
+    // bithire's base is light ground, so the same posture lowers its light
+    // ladder there.
+    const PRESET = {
+      elevated: {
         "--ds-elevation-1": "0 2px 4px rgba(0,0,0,0.08)",
         "--ds-elevation-2": "0 4px 8px rgba(0,0,0,0.1)",
         "--ds-elevation-3": "0 8px 16px rgba(0,0,0,0.12)",
@@ -1155,7 +1185,7 @@ describe("static and DB share one lowering", () => {
     });
     for (const stop of ["flat", "elevated"] as const) {
       const artifact = compileFor("rottay", elevationDoc(stop));
-      for (const [channel, value] of Object.entries(PRESET[stop])) {
+      for (const [channel, value] of Object.entries(DARK_GROUND_PRESET[stop])) {
         expect(artifact.variables[channel], `rottay/${stop} ${channel}`).toBe(
           value
         );
@@ -1181,7 +1211,8 @@ describe("static and DB share one lowering", () => {
     // delta. bithire is where E-1's sweep surfaced it: before the fix its dark
     // overlay kept `--ds-letter-spacing-heading: -0.01em` against a tenant's
     // `typePairing`; now the selection reaches dark too and the delta is gone.
-    // Fenced here so the adjudication is executable rather than remembered.
+    // This pins the outcome only: it still holds with the DB door's floors
+    // emptied, so the per-block floor itself is not fenced here.
     const paired = compileFor("bithire", {
       schemaVersion: 1,
       mode: "simple",
@@ -1195,14 +1226,91 @@ describe("static and DB share one lowering", () => {
       "the tenant's pairing governs dark too, so the overlay stops diverging"
     ).toEqual([]);
 
-    // And the floor reaches ONLY what it should: the two verticals without an
-    // authored ladder are untouched by the change.
+    // On bithire's light ground the same selection lowers the light ladder.
     // The mode-delta ruling has bithire's light base state the foundation
     // ladder, whose role 0 is `none`, so its delta withdraws role 0 as
     // rottay's dark-ground baseline already did.
     expect(
       compileFor("bithire", elevationDoc("elevated")).variables
     ).toEqual(PRESET.elevated);
+  });
+
+  it("case G3-L (E-1, lowering only): a tenant elevation floor outranks a vertical-position authored ladder", () => {
+    // No first-party vertical, style or DB document authors
+    // `surfaces.elevations`, so one is stated on rottay's baseline to fence
+    // the rank lattice in the lowering only; case G3 covers the DB door.
+    const LADDER = {
+      level1: "0 1px 1px rgba(0, 0, 0, 0.21)",
+      level2: "0 2px 3px rgba(0, 0, 0, 0.22)",
+      level3: "0 3px 6px rgba(0, 0, 0, 0.23)",
+      level4: "0 5px 10px rgba(0, 0, 0, 0.24)",
+      level5: "0 8px 16px rgba(0, 0, 0, 0.25)",
+    } as const;
+    const ROLES = [
+      "--ds-elevation-0",
+      "--ds-elevation-1",
+      "--ds-elevation-2",
+      "--ds-elevation-3",
+      "--ds-elevation-4",
+      "--ds-elevation-5",
+      "--ds-elevation-6",
+    ] as const;
+    const rottay = FIRST_PARTY_BASELINES.rottay;
+    const withLadder = {
+      ...rottay,
+      surfaces: {
+        ...rottay.surfaces,
+        elevations: { ...rottay.surfaces.elevations, ...LADDER },
+      },
+    };
+    for (const stop of ["flat", "elevated"] as const) {
+      const patch = { surfaces: { elevation: stop } };
+      const floors = tenantPostureFloors(patch);
+      const tenantOver = (base: typeof rottay) =>
+        lowerTheme(mergeThemePatches(base, patch), {
+          tenantSlug: IDENTITY.slug,
+          tenantAuthoredPaths: collectPatchAuthoredPaths(patch),
+          tenantAuthoredLeaves: collectPatchAuthoredLeaves(patch),
+          tenantPatch: floors,
+        }).cssVariables;
+      // The same resolved Theme with the floor removed, as in case G2.
+      const asStatic = lowerTheme(mergeThemePatches(withLadder, patch), {
+        tenantSlug: IDENTITY.slug,
+      }).cssVariables;
+      const asTenant = tenantOver(withLadder);
+      const floorOnly = tenantOver(rottay);
+
+      expect(floors.surfaces, `${stop} floor`).toEqual({ elevation: stop });
+      expect(
+        Object.keys(floors.surfaces ?? {}),
+        `${stop} floor carries no ladder`
+      ).not.toContain("elevations");
+
+      for (const [level, value] of Object.entries(LADDER)) {
+        const role = `--ds-elevation-${level.slice(5)}`;
+        expect(asStatic[role], `${stop} static ${role}`).toBe(value);
+      }
+
+      for (const role of ROLES) {
+        expect(floorOnly[role], `${stop} floor-only ${role}`).toBeDefined();
+        expect(asTenant[role], `${stop} tenant ${role}`).toBe(floorOnly[role]);
+      }
+
+      expect(
+        ROLES.filter((role) => asStatic[role] !== asTenant[role]),
+        `${stop} roles the floor moves`
+      ).toEqual([
+        "--ds-elevation-1",
+        "--ds-elevation-2",
+        "--ds-elevation-3",
+        "--ds-elevation-4",
+        "--ds-elevation-5",
+      ]);
+    }
+    expect(
+      FIRST_PARTY_BASELINES.rottay.surfaces.elevations?.level1,
+      "the shared baseline is never written"
+    ).toBeUndefined();
   });
 
   it("case G2: one lowering, and provenance moves only what it arbitrates", () => {
