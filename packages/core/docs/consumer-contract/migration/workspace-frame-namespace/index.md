@@ -157,7 +157,9 @@ This compares two compiles of one document. It does not compare a recompile with
 an artifact already stored, which can differ by more. Output also moved under
 `tenant-theme-compiler@4` with no version move: for example, the dark-ground
 elevation correction moved the elevation rows of documents that state
-`surfaces.elevation` as `flat` or `elevated`. Release 2.19.36 carries
+`surfaces.elevation` as `flat` or `elevated`. Release 2.19.37, which the apps
+install, carries `tenant-theme-compiler@4`, and its output differs from that
+last commit by more than elevation. Release 2.19.36 carries
 `tenant-theme-compiler@3`. A host recompiles either way, and a stored artifact is
 not a byte baseline for that recompile.
 
