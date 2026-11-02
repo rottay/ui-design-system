@@ -2421,6 +2421,29 @@ export function analyzeRuntimeModuleEdges(
     edges.push({ clause, kind, node, specifier });
   }
 
+  // A container member keyed through an exported slot names whatever that slot holds at run
+  // time; only a plain write, a delete or a typeof/void/!/equality operand leaves it unread.
+  function exportSlotContainerValueRead(access) {
+    if (!ts.isElementAccessExpression(access) || !exportSlotStaticKey(access.argumentExpression)) return false;
+    let outer = access;
+    while (
+      (ts.isParenthesizedExpression(outer.parent) || ts.isAsExpression(outer.parent) ||
+       ts.isTypeAssertionExpression(outer.parent) || ts.isNonNullExpression(outer.parent) ||
+       ts.isSatisfiesExpression(outer.parent)) && outer.parent.expression === outer
+    ) outer = outer.parent;
+    const use = outer.parent;
+    if (ts.isBinaryExpression(use)) {
+      const operator = use.operatorToken.kind;
+      if (operator === ts.SyntaxKind.EqualsToken) return use.left !== outer;
+      return ![
+        ts.SyntaxKind.EqualsEqualsToken, ts.SyntaxKind.EqualsEqualsEqualsToken,
+        ts.SyntaxKind.ExclamationEqualsToken, ts.SyntaxKind.ExclamationEqualsEqualsToken,
+      ].includes(operator);
+    }
+    if (ts.isDeleteExpression(use) || ts.isTypeOfExpression(use) || ts.isVoidExpression(use)) return false;
+    return !(ts.isPrefixUnaryExpression(use) && use.operator === ts.SyntaxKind.ExclamationToken);
+  }
+
   function safeGlobalContainerUse(identifier, active = new Set()) {
     let value = identifier;
     while (true) {
@@ -2446,6 +2469,7 @@ export function analyzeRuntimeModuleEdges(
         (ts.isPropertyAccessExpression(next) || ts.isElementAccessExpression(next)) &&
         next.expression === value && globalContainerRootProperties.has(propertyText(next))
       ) {
+        if (exportSlotContainerValueRead(next)) return false;
         value = next;
         continue;
       }
@@ -2499,6 +2523,7 @@ export function analyzeRuntimeModuleEdges(
     ) {
       const property = propertyText(parent);
       if (property === null) return registeredSymbolContainerProperty(parent);
+      if (exportSlotContainerValueRead(parent)) return false;
       return !loaderNames.has(property) && property !== 'Reflect';
     }
     if (
