@@ -1620,8 +1620,9 @@ export const PREREQUISITES = Object.freeze({
   },
   'docs-engineering-corpus': {
     describe:
-      'the sealed docs-engineering checkout the claim-exactness proof reads '
-      + '(DOCS_ENGINEERING_ROOT, or a sibling repository) at the revision in '
+      'the docs-engineering checkout that claim-exactness and showroom-diagnostics read '
+      + '(DOCS_ENGINEERING_ROOT, or a sibling repository); claim-exactness enforces the '
+      + 'documentationRevision sealed in '
       + 'scripts/check/evidence/certification/claims/exactness/documentation-seal/index.json',
     satisfied: () => existsSync(
       process.env.DOCS_ENGINEERING_ROOT ?? join(MANIFEST_PACKAGE_ROOT, '../../../docs-engineering'),
