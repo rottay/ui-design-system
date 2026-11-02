@@ -1,9 +1,23 @@
 # Design System Roadmap — Modern Engine Premium Uplift
 
-> **Current owner order (2026-10-28):** approved V1 scope; Kimi Developer is sole DT,
-> Sol Admin writers/reviewers operate in parallel. Start at
-> [Owner-approved V1 scope and parallel delivery](#owner-approved-v1-scope-and-parallel-delivery--2026-10-27).
+> **Current owner order (2026-11-02):** Codex is sole technical DT, coordinator and serial
+> integrator; Claude Admin Opus writers and distinct Claude Admin reviewers operate in parallel.
+> Read [Owner succession — 2026-11-02](#owner-succession--2026-11-02-codex-technical-dt), then
+> start at [Owner-approved V1 scope and parallel delivery](#owner-approved-v1-scope-and-parallel-delivery--2026-10-27).
 > Earlier records remain historical where the named supersession applies.
+
+## Owner succession — 2026-11-02: Codex technical DT
+
+**Status: owner-appointed technical succession only. Scope, phases, acceptance and release authority are unchanged.**
+
+- **Seat.** On 2026-11-02 at 15:34 UTC the human owner explicitly appointed Codex (`davila@rottay.com`, `gpt-6.1-sol`, high reasoning) as sole technical DT, coordinator and serial integrator, succeeding Kimi Developer after its monthly quota was exhausted. Barrier at checkpoint `c9c335c216457cb1e64e006d64c090e478e24b6a` on main: Kimi's native goal was paused by a non-retryable quota error, its process exited natively, no old-owner actor remained live, and the controller released only the DT authority. There is exactly one DT and one integrator.
+- **Exact supersession.** This replaces only the clauses naming Kimi Developer as DT/integrator and the Sol Admin writer/reviewer staffing in the 2026-10-27 and 2026-10-28 sections below, and the 2026-09-19 Codex exclusion for the DT seat. Every other clause of those sections, including dynamic parallelism and the delivery checklist, stays binding.
+- **Source and review.** Codex never authors product source and never supplies independent acceptance for any candidate or for what it produces while integrating. Source writers and distinct independent peer reviewers are real Claude Admin sessions (`admin@rottay.com`, `claude-opus-5-5`, high effort). Verify account, model and effort by receipt on every dispatch; never relabel or silently fall back. The DT integrates a candidate only after a distinct peer accepts it.
+- **Continuity.** The Codex native session and goal carry new runtime identifiers (recorded in `SUCCESSOR-OWN.json`); they continue the existing objective and lineage `d331693a-9c7d-4040-8865-e9226d2588b6`. No new objective, programme, roadmap, registry, controller or framework. All WOs, the full W0 and V1 path, original receipts, candidates, FAILs, sealed WIP, freezes, Q01–Q12, DS gates and the sealed Modern Rescue programme are preserved. Delivered candidates are consumed, not re-authored.
+- **Parallelism.** At each delivery event, refill every genuinely ready disjoint packet under the existing admission, reservations and locks (one integrator, one heavy chain). No cap of one, no fixed agent count and no periodic model polling.
+- **Release.** This succession grants no new push or publication authority; release permission remains separate. SCM, push and package publication follow only the existing owner-authorized gate sequence once the real W0/V1 gates pass. Documentation, tarballs, branches or registry state never imply certification.
+
+Record: `/Users/daniel/Developer/Rottay/.local/normalization/platform-parallel/supervision/audit-20261102T1534Z-ds-codex-dt/design-system/HANDOFF.json` (sha256 `a9f5b1d2d111e20cc6de09cc2bc583ec57de569e16d5240933704dfcdfc81373`).
 
 ## Owner-approved V1 scope and parallel delivery — 2026-10-27
 

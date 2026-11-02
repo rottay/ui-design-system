@@ -15,7 +15,33 @@ For applicable module normalization, [ROADMAP](../platform/normalization/ROADMAP
 
 The local DS roadmap, ownership, staffing, sealed programme gates and generated-claim rules remain authoritative for DS implementation. This section governs documentation synchronization and cross-product contract references; it does not reopen a programme, change roles or authorize implementation/publication.
 
-## Current owner succession — 2026-10-04
+## Current owner succession — 2026-11-02: Codex technical DT
+
+On 2026-11-02 at 15:34 UTC the owner explicitly appointed Codex
+(`gpt-6.1-sol`, high reasoning, account `davila@rottay.com`) as the sole
+technical DT, coordinator and serial integrator of the current Design System
+roadmap on main at `/Users/daniel/Developer/Rottay/ui-design-system`,
+succeeding Kimi Developer after its monthly quota was exhausted. The barrier
+was met at checkpoint `c9c335c216457cb1e64e006d64c090e478e24b6a`: Kimi's goal
+was paused by a non-retryable quota error, its process exited natively with no
+live owned actors, and the controller released only the DT authority. This
+supersedes the 2026-09-19 Codex exclusion for the DT seat only. Codex never
+writes product source and never supplies independent acceptance for any
+candidate or for what it produces while integrating; it integrates serially
+only after a distinct peer accepts the exact candidate. Source writers and
+independent reviewers are distinct real Claude Admin sessions
+(`admin@rottay.com`, model `claude-opus-5-5`, high effort), with account and
+model verified by receipt on every dispatch. The existing objective and goal
+lineage `d331693a-9c7d-4040-8865-e9226d2588b6`, the full W0 and V1 roadmap,
+registry, DAG, acceptance criteria, freezes, Q01–Q12, DS gates and the sealed
+Modern Rescue programme below are unchanged. This succession grants no new
+push or publication authority: the
+hard fences below stand, and SCM, push or package publication happen only
+through the existing owner-authorized release sequence after the real W0/V1
+gates pass. The successions of 2026-10-08, 2026-10-20 and 2026-10-28 and the
+operative detail are recorded in `roadmap/README.md`.
+
+## Prior owner succession — 2026-10-04 (superseded)
 
 The owner explicitly appointed Kimi as the sole active DT, coordinator,
 auditor and integrator of the current Design System roadmap on main at

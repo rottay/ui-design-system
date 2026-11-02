@@ -15,7 +15,32 @@ For applicable module normalization, [ROADMAP](../platform/normalization/ROADMAP
 
 The local DS roadmap, ownership, staffing, sealed programme gates and generated-claim rules remain authoritative for DS implementation. This section governs documentation synchronization and cross-product contract references; it does not reopen a programme, change roles or authorize implementation/publication.
 
-## Current owner succession — 2026-10-04
+## Current owner succession — 2026-11-02: Codex technical DT
+
+Codex (`gpt-6.1-sol`, high reasoning, account `davila@rottay.com`) is the sole
+technical DT, coordinator and serial integrator of the current roadmap on main
+in `/Users/daniel/Developer/Rottay/ui-design-system`, by the owner's explicit
+instruction of 2026-11-02 at 15:34 UTC, succeeding Kimi Developer after its
+monthly quota was exhausted. Handoff checkpoint `c9c335c21`; Kimi's goal was
+paused by a non-retryable quota error and its process exited natively with no
+live owned actors before the controller released the DT authority. This
+supersedes the 2026-09-19 Codex exclusion for the DT seat only; otherwise that
+restriction stands and no agent invokes Codex for writing, review or approval.
+Codex never writes product source and never supplies independent acceptance
+for any candidate or for what it produces while integrating; it integrates
+serially only after a distinct peer accepts the exact candidate.
+Claude Opus writes source on the owner-authorized account `admin@rottay.com`
+(the `claude-admin` profile), model `claude-opus-5-5`, high effort; independent
+review uses a distinct Claude Admin session with a real receipt. Verify the
+effective account and model per dispatch. Goal lineage
+`d331693a-9c7d-4040-8865-e9226d2588b6`, the full W0 and V1 roadmap, registry,
+DAG, acceptance criteria, freezes, Q01–Q12 and DS gates are unchanged. Apps
+stay read-only; this succession grants no new push or package publication
+authority; release permission stays separate and follows the existing
+owner-authorized sequence only after the real W0/V1 gates pass. Read the
+succession in `roadmap/README.md`.
+
+## Prior owner succession — 2026-10-04 (superseded)
 
 Kimi is the sole active DT, coordinator, auditor and integrator of the
 current roadmap on main in `/Users/daniel/Developer/Rottay/ui-design-system`,
