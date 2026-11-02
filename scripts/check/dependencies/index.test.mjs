@@ -2512,6 +2512,8 @@ test('a computed read keyed by a fresh module-local Symbol() is data access on a
     analyzeRuntimeModuleEdges(keyReached, portalPath).edges.map(({ specifier }) => specifier).sort(),
     ['../foundation/portal-theme', 'react'],
   );
+  assert.equal(keyReached.split('current[VARIABLE_CACHE]').length, 2);
+  const cacheSite = keyReached.split('current[VARIABLE_CACHE]')[0].split('\n');
   for (const [from, to] of [
     ["Symbol('portal-scope.variables')", "Symbol.for('portal-scope.variables')"],
     ['const current = snapshotRef.current as CachedSnapshot;',
@@ -2522,7 +2524,7 @@ test('a computed read keyed by a fresh module-local Symbol() is data access on a
     assert.equal(keyReached.split(from).length, 2, from);
     assert.throws(
       () => analyzeRuntimeModuleEdges(keyReached.replace(from, to), portalPath),
-      /constructor property capability\) at .*portal-scope\/index\.tsx:321:46/,
+      new RegExp(`constructor property capability\\) at .*portal-scope/index\\.tsx:${cacheSite.length}:${cacheSite.at(-1).length + 1}`),
       to,
     );
   }
