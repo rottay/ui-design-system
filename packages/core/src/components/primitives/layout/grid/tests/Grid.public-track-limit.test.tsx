@@ -197,7 +197,7 @@ describe('public Grid.Item adaptive placement', () => {
   });
 
   const templates = [{ templateColumns: '1fr 1fr' }, { style: { gridTemplateColumns: '1fr 1fr' } },
-    { style: { gridTemplate: 'auto / 1fr 1fr' } }, { style: { grid: 'auto / 1fr 1fr' } }, { columns: 4, autoFit: false }];
+    { style: { gridTemplate: 'auto / 1fr 1fr' } }, { style: { grid: 'auto / 1fr 1fr' } }, { columns: 4 as const, autoFit: false }];
   it.each(templates)('preserves root override %j and disconnects the limiter', async props => {
     const ref = createRef<HTMLElement>();
     const { container, rerender } = await mounted(<Grid ref={ref} engine="modern" autoFit><Grid.Item span={3} data-testid="item" /></Grid>);

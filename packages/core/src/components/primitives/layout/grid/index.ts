@@ -110,8 +110,9 @@
  * @package @rottay/design-system
  */
 
-import { createElement, forwardRef, type ComponentPropsWithoutRef, type ComponentRef } from "react";
+import { createElement, forwardRef, type ComponentRef } from "react";
 import { createEngineComponent } from "../../../../infrastructure/runtime/engines/presentation/component-factory";
+import type { EngineName } from "../../../../foundation/contracts/kernel/engine-identity";
 import type { GridProps } from "./contracts";
 import { GridItem } from "./compound";
 import { GridTrackLimit } from "./runtime/item-placement";
@@ -188,7 +189,7 @@ const GridEngine = createEngineComponent<GridProps>("Grid", {
 
 const GridRoot = forwardRef<
   ComponentRef<typeof GridEngine>,
-  ComponentPropsWithoutRef<typeof GridEngine>
+  GridProps & { engine?: EngineName }
 >((props, ref) => createElement(
   GridTrackLimit.Provider,
   { value: undefined },
