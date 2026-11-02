@@ -12,7 +12,7 @@
   "live": {
     "evidence": "ui-design-system/packages/core/artifacts/quality/certification/claims/exactness-live/evidence/index.json",
     "digest": "ui-design-system/packages/core/artifacts/quality/certification/claims/exactness-live/digest/index.txt",
-    "semanticHash": "578b510233e31356efb4bf7a73edc8bec2a0f31e45f39cf4e301c500789f54f6"
+    "semanticHash": "294d5233f27ba7bacda62684a435b53e20055b21641e1fea4a8014cd80beaf55"
   },
   "divergentInputs": [
     {
@@ -12516,8 +12516,8 @@
         "sha256": "ec9062c37744e6848e07f4d7b6e43177765b0491e0ee3e6dd377cdf3899060ec"
       },
       "live": {
-        "bytes": 6815,
-        "sha256": "6c4ecb497fb16e4be4ef269a189654637eba53d7b0ed76be06572e11ac47acc1"
+        "bytes": 6867,
+        "sha256": "5f7220f23f49da634c18e775e0cff33e8fdcd43e5d7522d70a5b4d97a70cbaef"
       }
     },
     {
@@ -12602,11 +12602,19 @@
       }
     },
     {
+      "path": "ui-design-system/packages/core/src/components/primitives/layout/grid/tests/Grid.public-props.test.tsx",
+      "archive": null,
+      "live": {
+        "bytes": 1432,
+        "sha256": "f725dbc043bd23dbd386a8a95afe6a55e3864dc5290bc0493fe4d80030d95754"
+      }
+    },
+    {
       "path": "ui-design-system/packages/core/src/components/primitives/layout/grid/tests/Grid.public-track-limit.test.tsx",
       "archive": null,
       "live": {
-        "bytes": 15786,
-        "sha256": "94413371a1d1d4981218a9cfd118e113a38abd8a46f183505f1fcc8dd1f6a5b3"
+        "bytes": 15795,
+        "sha256": "878b05660c2a8f10cee855adcd2bb9c03711f2d91cd59843f9f8df62062df322"
       }
     },
     {
