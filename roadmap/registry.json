@@ -1,6 +1,6 @@
 {
  "$schema": "roadmap work-order state registry (single source of WO status; specs live in roadmap lane markdown files)",
- "updated": "2026-10-27",
+ "updated": "2026-11-02",
  "rules": {
   "done_requires": "status in-progress + all dependsOn done + non-empty --evidence + mustLandWith partner in-progress/done; support milestones never complete source IDs",
   "claim_requires": "all dependsOn done, except the validated CON-08 DS-step1 claimDependsOn subset; DS-improvements phase claimState open with ownerGo; consumer steps blocked by ARC-21; full done unchanged",
@@ -9478,7 +9478,7 @@
    "lane": "consumer-contract",
    "order": 8,
    "size": "L",
-   "status": "todo",
+   "status": "in-progress",
    "dependsOn": [
     "WO-CAT-04",
     "WO-EMI-02",
@@ -9496,7 +9496,9 @@
     "WO-CON-06"
    ],
    "claimDecisionRef": "roadmap/README.md#owner-approved-v1-scope-and-parallel-delivery--2026-10-27",
-   "claimScope": "ds-step1"
+   "claimScope": "ds-step1",
+   "claimedBy": "codex-dt / Source Claude ADMIN Opus HIGH",
+   "claimedAt": "2026-11-02"
   },
   {
    "id": "WO-CON-09",
