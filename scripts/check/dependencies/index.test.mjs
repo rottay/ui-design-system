@@ -2102,6 +2102,140 @@ test('an exported static-string key is refused as a global-container value read:
   }
 });
 
+test('an exported registered-Symbol key is refused as a global-container value read: CommonJS emit reads it from a writable exports slot', async () => {
+  const typescript = createRequire(resolve(coreRoot, 'package.json'))('typescript');
+  const load = async (source, fileName, module, tag) => {
+    const output = typescript.transpileModule(source, {
+      fileName,
+      compilerOptions: { allowJs: true, module: typescript.ModuleKind[module], target: typescript.ScriptTarget.ES2020 },
+    }).outputText;
+    const commonJs = !/^export /m.test(output);
+    if (!commonJs) {
+      return { commonJs, exported: await import(`data:text/javascript,${encodeURIComponent(`${output}\n// ${tag}`)}`), realm: Function };
+    }
+    const sandbox = { exports: {}, realm: null };
+    runInNewContext(`${output}\nrealm = Function;`, sandbox);
+    return { commonJs, exported: sandbox.exports, realm: sandbox.realm };
+  };
+  const key = "Symbol.for('label')";
+  const forms = {
+    declaration: [`export const s = ${key}; export function use() { return globalThis[s]; }`, 's.ts'],
+    alias: [`export const s = ${key}; const g = globalThis; export function use() { return g[s]; }`, 's.ts'],
+    transitive: [`export const base = ${key}; export function use() { const s = base; return globalThis[s]; }`, 's.ts', 'base'],
+    reexported: [`const base = ${key}; export const s = base; export function use() { return globalThis[s]; }`, 's.ts'],
+    nativeEsm: [`export const s = ${key}; export function use() { return globalThis[s]; }`, 's.mjs'],
+    clause: [`const s = ${key}; export { s }; export function use() { return globalThis[s]; }`, 's.ts'],
+  };
+  const witness = {};
+  for (const [form, [source, fileName, slot = 's']] of Object.entries(forms)) {
+    for (const module of ['CommonJS', 'ESNext']) {
+      const { commonJs, exported, realm } = await load(source, fileName, module, `${form}/${module}`);
+      assert.notEqual(exported.use(), realm, `${form}/${module}`);
+      const replaced = Reflect.set(exported, slot, 'Function');
+      witness[`${form}/${module}`] = [commonJs, replaced, exported.use() === realm];
+    }
+  }
+  assert.deepEqual(witness, {
+    'declaration/CommonJS': [true, true, true],
+    'declaration/ESNext': [false, false, false],
+    'alias/CommonJS': [true, true, true],
+    'alias/ESNext': [false, false, false],
+    'transitive/CommonJS': [true, true, true],
+    'transitive/ESNext': [false, false, false],
+    'reexported/CommonJS': [true, true, true],
+    'reexported/ESNext': [false, false, false],
+    'nativeEsm/CommonJS': [false, false, false],
+    'nativeEsm/ESNext': [false, false, false],
+    'clause/CommonJS': [true, true, false],
+    'clause/ESNext': [false, false, false],
+  });
+
+  const uses = {
+    read: ['globalThis[s]', true],
+    call: [`globalThis[s]('return 7')()`, true],
+    orAssign: ['(globalThis[s] ||= 0)', true],
+    write: ['(globalThis[s] = 1)', false],
+    delete: ['delete globalThis[s]', false],
+    typeof: ['typeof globalThis[s]', false],
+    equality: ['globalThis[s] === undefined', false],
+    not: ['!globalThis[s]', false],
+    void: ['void globalThis[s]', false],
+  };
+  const reached = {};
+  const capability = {};
+  for (const [use, [expression, readsValue]] of Object.entries(uses)) {
+    const source = `export const s = ${key}; export function use() { return ${expression}; }`;
+    const { exported, realm } = await load(source, 's.ts', 'CommonJS', use);
+    Reflect.set(exported, 's', 'Function');
+    const value = exported.use();
+    reached[use] = value === realm || value === 7;
+    capability[use] = readsValue;
+    const checked = `export const s = ${key}; export function use() { return ${expression.replaceAll('globalThis', '(globalThis as any)')}; }`;
+    if (readsValue) {
+      assert.throws(
+        () => parseModuleSpecifiers(checked, 'registered-symbol-export.ts'),
+        /unresolved runtime module edge \(global loader container transport\)/,
+        checked,
+      );
+    } else {
+      assert.deepEqual(parseModuleSpecifiers(checked, 'registered-symbol-export.ts'), [], checked);
+    }
+  }
+  assert.deepEqual(reached, capability);
+
+  const exportedKey = `export const s = ${key};`;
+  const accepted = [
+    [`${exportedKey} export function use() { return globalThis[s]; }`, 'mjs'],
+    [`${exportedKey} export function use() { return globalThis[s]; }`, 'mts'],
+    [`const s = ${key}; export { s }; export function use() { return globalThis[s]; }`, 'ts'],
+    [`const s = ${key}; export function use() { return (globalThis as any)[s]; }`, 'ts'],
+    [`export function use() { return (globalThis as any)[${key}]; }`, 'ts'],
+    [`export namespace N { const s = ${key}; export function use() { return globalThis[s]; } }`, 'ts'],
+    [`${exportedKey} export function use(v: unknown) { ((globalThis as any)[s]) = v; }`, 'ts'],
+    [`${exportedKey} export function use() { return undefined != (globalThis as any)[s]; }`, 'ts'],
+    [`${exportedKey} export function use() { const w = window as any; w[s] = 1; delete w[s]; }`, 'tsx'],
+    [`export const k = 'label'; export function use() { return globalThis['self'][${key}]; }`, 'ts'],
+  ];
+  for (const [source, extension] of accepted) {
+    assert.deepEqual(parseModuleSpecifiers(source, `registered-symbol-export.${extension}`), [], source);
+  }
+  const refused = [
+    [`${exportedKey} export function use() { return globalThis[s]; }`, 'tsx'],
+    [`${exportedKey} export function use() { return globalThis[s]; }`, 'js'],
+    [`${exportedKey} export function use() { return globalThis[s]; }`, 'cts'],
+    [`export const a = 1, s = ${key}; export function use() { return globalThis[s]; }`, 'ts'],
+    [`export const base = ${key}; export function use() { const s = base; return globalThis[s]; }`, 'ts'],
+    [`const base = ${key}; export const s = base; export function use() { return globalThis[s]; }`, 'ts'],
+    [`${exportedKey} export function use() { return window[s]; }`, 'ts'],
+    [`${exportedKey} const g = globalThis; export function use() { return g[s]; }`, 'ts'],
+    [`${exportedKey} export function use() { const w = window as any; return w[s]; }`, 'tsx'],
+    [`${exportedKey} export function use() { return globalThis.self[s]; }`, 'ts'],
+    [`${exportedKey} export function use() { return globalThis?.[s]; }`, 'ts'],
+    [`${exportedKey} export function use() { return (globalThis[s] as any); }`, 'ts'],
+    [`${exportedKey} export function use(v: unknown) { return ((globalThis as any)[s] ??= v); }`, 'ts'],
+    [`${exportedKey} export function use() { return [globalThis[s]]; }`, 'ts'],
+    [`${exportedKey} export function use() { return globalThis[s].call; }`, 'ts'],
+    [`${exportedKey} export function use() { return globalThis[s]('return 7')(); }`, 'ts'],
+    [`export namespace N { export const s = ${key}; export function use() { return globalThis[s]; } }`, 'ts'],
+    [`export namespace N { export const s = ${key}; export function use() { return globalThis[s]; } }`, 'mts'],
+  ];
+  for (const [source, extension] of refused) {
+    assert.throws(
+      () => parseModuleSpecifiers(source, `registered-symbol-export.${extension}`),
+      /unresolved runtime module edge \(global loader container transport\)/,
+      source,
+    );
+  }
+  for (const source of [
+    `export const s = Symbol('label'); export function use() { return globalThis[s]; }`,
+    `export const s = Symbol.for(label); export function use() { return globalThis[s]; }`,
+    `let s = ${key}; export function use() { return globalThis[s]; }`,
+    `${exportedKey} Symbol.for = () => 'Function'; export function use() { return globalThis[s]; }`,
+  ]) {
+    assert.throws(() => parseModuleSpecifiers(source, 'registered-symbol-export.mjs'), /unresolved runtime module edge/, source);
+  }
+});
+
 test('a computed read keyed by a fresh module-local Symbol() is data access on a non-function receiver', () => {
   const portalPath = resolve(coreRoot, 'src/components/primitives/runtime/overlay/portal-scope/index.tsx');
   const portalSource = readFileSync(portalPath, 'utf8');

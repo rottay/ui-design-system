@@ -2522,7 +2522,7 @@ export function analyzeRuntimeModuleEdges(
       parent.expression === value
     ) {
       const property = propertyText(parent);
-      if (property === null) return registeredSymbolContainerProperty(parent);
+      if (property === null) return registeredSymbolContainerProperty(parent) && !exportSlotContainerValueRead(parent);
       if (exportSlotContainerValueRead(parent)) return false;
       return !loaderNames.has(property) && property !== 'Reflect';
     }
