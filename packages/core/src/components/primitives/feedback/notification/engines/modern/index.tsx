@@ -138,10 +138,12 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({
     },
   };
 
-  const stacks = notifications.reduce<Partial<Record<NotificationPlacement, InternalNotification[]>>>((acc, entry) => {
-    (acc[entry.placement] ??= []).push(entry);
-    return acc;
-  }, {});
+  const stacks = new Map<NotificationPlacement, InternalNotification[]>();
+  for (const entry of notifications) {
+    const stack = stacks.get(entry.placement);
+    if (stack) stack.push(entry);
+    else stacks.set(entry.placement, [entry]);
+  }
 
   return (
     <NotificationContext.Provider value={api}>
@@ -149,7 +151,7 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({
       <span ref={setAnchorEl} data-part="anchor" />
       {notifications.length === 0 ? null : (
         <FieldOverlayPanel overlay={overlay}>
-          {(Object.entries(stacks) as Array<[NotificationPlacement, InternalNotification[]]>).map(([edge, items]) => (
+          {Array.from(stacks, ([edge, items]) => (
             <NotifierStack
               key={edge}
               role="notification"

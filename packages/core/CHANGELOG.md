@@ -54,6 +54,14 @@
   still moves no focus. No public API, type, default, keyboard, lifecycle or
   dependency change. Source and focal simulated-DOM checks cover the change;
   browser and public-package acceptance remain pending.
+- Group Modern `NotificationProvider` per-placement stacks in a render-local
+  `Map` instead of an object accumulator. For each of the six
+  `NotificationPlacement` values, stack membership, stack order (first
+  appearance), item order inside a stack, stack offsets, keyed updates that
+  move an entry to another placement, `maxCount` trimming and `destroy`
+  behave as before. No public API, type, default, markup, token or
+  accessibility change. Source and focal simulated-DOM checks cover the
+  change; browser and public-package acceptance remain pending.
 - Forward `config.access` from `HeaderSurface` to `SurfaceActionBar`, so
   `{ mode: 'all' }` keeps its declared contract on Header actions, as
   `SidebarSurface` already does: an action hidden only by its `visible`
