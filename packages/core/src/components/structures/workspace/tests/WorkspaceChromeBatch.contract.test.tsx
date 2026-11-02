@@ -1603,7 +1603,7 @@ describe("workspace chrome skins — R2 structural contract", () => {
       `${EXPORT_TOAST_CLASS},\n${EXPORT_TOAST_PART}`,
     ]) {
       const css = `${selector} { animation: ${animation}; }
-.ds-unrelated-toast { animation: foreign-fade 9s; }
+.ds-unrelated-toast { animation: foreign-fade var(--ds-motion-reveal); }
 @media (prefers-reduced-motion: reduce) { ${selector} { animation: none; } }`;
       expect(exportToastAnimation(css)).toBe(animation);
     }
