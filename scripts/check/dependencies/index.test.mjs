@@ -1433,6 +1433,155 @@ test('runtime edge policy rejects constructor properties and process capability 
   `));
 });
 
+test('a computed read keyed by a declared finite literal set is data access, not a constructor capability', () => {
+  const profilesPath = resolve(
+    coreRoot,
+    'src/infrastructure/runtime/foundation/recipes/profiles/index.ts',
+  );
+  const profilesSource = readFileSync(profilesPath, 'utf8');
+  assert.match(
+    profilesSource,
+    /\(profile\?\.families\[family\] \?\? EMPTY_DEFAULTS\) as RecipeProfileFamilyDefaults<Family>/,
+  );
+  assert.ok(
+    analyzeRuntimeModuleEdges(profilesSource, profilesPath).edges
+      .some(({ specifier }) => specifier === 'react'),
+  );
+
+  const familyDefaults = `
+    import { useContext } from 'react';
+    interface DefaultsByFamily {
+      readonly button: { readonly size?: 'sm' | 'lg' };
+      readonly card: { readonly variant?: 'outlined' | 'elevated' };
+    }
+    type Family = keyof DefaultsByFamily;
+    const EMPTY_DEFAULTS = Object.freeze({});
+    export function useDefaults<F extends Family>(family: F): Readonly<DefaultsByFamily[F]> {
+      const profile = useContext(ProfileContext);
+      return (profile?.families[family] ?? EMPTY_DEFAULTS) as Readonly<DefaultsByFamily[F]>;
+    }
+  `;
+  assert.deepEqual(parseModuleSpecifiers(familyDefaults, 'recipe-profile-defaults.ts'), ['react']);
+  assert.deepEqual(parseModuleSpecifiers(`
+    import { opaque } from 'unresolved-supplier';
+    export function readSlot(slot: 'title' | 'body' | 0) { return opaque.slots[slot]; }
+    const fixed: 'title' | 'body' = 'title';
+    export const first = opaque.slots[fixed];
+    const derived = fixed;
+    export const second = opaque.slots[derived];
+  `, 'finite-literal-keys.ts'), ['unresolved-supplier']);
+  assert.deepEqual(parseModuleSpecifiers(
+    `import { opaque } from 'unresolved-supplier'; function pick(key: 'label' = 'label') { return opaque[key]; } pick()("return import('d3')")();`,
+    'finite-literal-keys.ts',
+  ), ['unresolved-supplier']);
+
+  const hostile = [
+    `import { opaque } from 'unresolved-supplier'; function pick(key = 'label') { return opaque[key]; } pick('constructor')("return import('d3')")();`,
+    `import { opaque } from 'unresolved-supplier'; const pick = (key = 'label') => opaque[key]; pick('constructor')("return import('d3')")();`,
+    `import { opaque } from 'unresolved-supplier'; export function pick(key = 'label') { return opaque[key]; }`,
+    `import { opaque } from 'unresolved-supplier'; class C { m(key = 'label') { return opaque[key]; } } new C().m('constructor')("return import('d3')")();`,
+    `import { opaque } from 'unresolved-supplier'; let key = 'label'; [[...key]] = [['constructor']]; opaque[key]("return import('d3')")();`,
+    `import { opaque } from 'unresolved-supplier'; function pick(key: 'label') { [...key] = ['constructor']; return opaque[key]; } pick('label')("return import('d3')")();`,
+    `import { opaque } from 'unresolved-supplier'; function pick(key: 'label' | 'constructor') { return opaque[key]; } pick('constructor')("return import('d3')")();`,
+    `import { opaque } from 'unresolved-supplier'; const key = ('con' + 'structor') as 'label'; opaque[key]("return import('d3')")();`,
+    `import { opaque } from 'unresolved-supplier'; const key = <'label'>('con' + 'structor'); opaque[key]("return import('d3')")();`,
+    `import { opaque } from 'unresolved-supplier'; const hidden: string = 'constructor'; const key = hidden as 'label'; opaque[key]("return import('d3')")();`,
+    `import { opaque } from 'unresolved-supplier'; let key: 'label' = 'label'; key = ('con' + 'structor') as 'label'; opaque[key]("return import('d3')")();`,
+    `import { opaque } from 'unresolved-supplier'; function pick(key: 'label') { key = ('con' + 'structor') as 'label'; return opaque[key]; } pick('label')("return import('d3')")();`,
+    `import { opaque } from 'unresolved-supplier'; function pick(key: 'label' = ('con' + 'structor') as 'label') { return opaque[key]; } pick()("return import('d3')")();`,
+    `import { opaque, dynamicName } from 'unresolved-supplier'; const key = dynamicName as 'label'; opaque[key]("return import('d3')")();`,
+    `import { opaque, dynamicName } from 'unresolved-supplier'; const key = <'label'>dynamicName; opaque[key]("return import('d3')")();`,
+    `import { opaque, dynamicName } from 'unresolved-supplier'; const cast = dynamicName as 'label'; const key = cast; opaque[key]("return import('d3')")();`,
+    `import { opaque, dynamicName } from 'unresolved-supplier'; let key: 'label' = 'label'; key = dynamicName as 'label'; opaque[key]("return import('d3')")();`,
+    `import { opaque, dynamicName } from 'unresolved-supplier'; function pick(key: 'label') { key = dynamicName as 'label'; return opaque[key]; } pick('label')("return import('d3')")();`,
+    `import { opaque, dynamicName } from 'unresolved-supplier'; function pick(key: 'label' = dynamicName as 'label') { return opaque[key]; } pick()("return import('d3')")();`,
+    `import { opaque, dynamicName } from 'unresolved-supplier'; const key: 'label' = dynamicName as 'label'; opaque[key]("return import('d3')")();`,
+    `function pick(key: 'label') { return (() => {})[key]; } pick('constructor' as 'label')("return import('d3')")();`,
+    `function pick(key: 'label') { const callable = () => {}; return callable[key]; } pick('constructor' as 'label')("return import('d3')")();`,
+    `class Local {} function pick(key: 'label') { return Local[key]; } pick('constructor' as 'label')("return import('d3')")();`,
+    `import { opaque } from 'unresolved-supplier'; function pick<K extends string>(key: K) { return opaque[key]; } pick('constructor')("return import('d3')")();`,
+    `import { opaque } from 'unresolved-supplier'; function pick<T, K extends keyof T>(key: K) { return opaque[key]; } pick('constructor')("return import('d3')")();`,
+    `import { opaque } from 'unresolved-supplier'; function pick(key: \`con\${string}\`) { return opaque[key]; } pick('constructor')("return import('d3')")();`,
+    `import { opaque } from 'unresolved-supplier'; function pick(...keys: 'label'[]) { return opaque[keys[0]]; } pick('constructor' as 'label')("return import('d3')")();`,
+    `import { opaque } from 'unresolved-supplier'; for (const key of ['constructor'] as 'label'[]) opaque[key]("return import('d3')")();`,
+    `import { opaque } from 'unresolved-supplier'; function pick({ key }: { key: 'label' }) { return opaque[key]; } pick({ key: 'constructor' as 'label' })("return import('d3')")();`,
+    `export {}; function pick(key: 'label') { return (() => {})[key]; } pick('constructor' as 'label')("return import('d3')")();`,
+    `export {}; function pick(key: 'label') { const callable = () => {}; return callable[key]; } pick('constructor' as 'label')("return import('d3')")();`,
+    `export {}; class Local {} function pick(key: 'label') { return Local[key]; } pick('constructor' as 'label')("return import('d3')")();`,
+    `import { opaque, dynamicName } from 'unresolved-supplier'; function pick(a: 'label', b: 'constructor') { return opaque[a][b]; } pick('label', 'constructor')("return import('d3')")();`,
+    `import { opaque, dynamicName } from 'unresolved-supplier'; function pick(a: 'label', b: string) { return opaque[a][b]; } pick('label', 'constructor')("return import('d3')")();`,
+    `import { opaque, dynamicName } from 'unresolved-supplier'; function pick(a: 'label') { return opaque[a][dynamicName]; } pick('label')("return import('d3')")();`,
+    `import { opaque, dynamicName } from 'unresolved-supplier'; function pick(a: 'label', b: string) { const inner = opaque[a]; return inner[b]; } pick('label', 'constructor')("return import('d3')")();`,
+    `import { opaque, dynamicName } from 'unresolved-supplier'; function pick(a: '__proto__', b: 'constructor') { return opaque[a][b]; } pick('__proto__', 'constructor')("return import('d3')")();`,
+    `import { opaque, dynamicName } from 'unresolved-supplier'; declare const key: 'label'; opaque[key]("return import('d3')")();`,
+    `declare const opaque: any; function pick(key: 'label') { arguments[0] = 'constructor'; return opaque[key]; } pick('label')("return import('d3')")();`,
+    `import { opaque } from 'unresolved-supplier'; namespace N { export let key = 'label'; export function f() { return opaque[key]; } } N.key = 'constructor'; N.f()("return import('d3')")();`,
+    `import { opaque } from 'unresolved-supplier'; namespace N { export let key = 'label'; export function f() { return opaque[key]; } } N['key'] = 'constructor'; N.f()("return import('d3')")();`,
+    `import { opaque } from 'unresolved-supplier';\n// @ts-expect-error the initializer contradicts the annotation\nlet key: 'label' = 'constructor';\nopaque[key]("return import('d3')")();`,
+    `import { opaque } from 'unresolved-supplier';\n// @ts-expect-error the default contradicts the annotation\nfunction pick(key: 'label' = 'constructor') { return opaque[key]; }\npick()("return import('d3')")();`,
+    `import { opaque } from 'unresolved-supplier'; function pick(key: 'label' | 'constructor' = 'label') { return opaque[key]; } pick('constructor')("return import('d3')")();`,
+  ];
+  for (const source of hostile) {
+    assert.throws(
+      () => parseModuleSpecifiers(source, 'declared-key-capability.ts'),
+      /unresolved runtime module edge \(constructor property capability\)/,
+      source,
+    );
+  }
+  assert.throws(
+    () => parseModuleSpecifiers(
+      "import { opaque } from 'unresolved-supplier';\n" +
+      "/** @param {'label'} key */\n" +
+      'export function pick(key) { return opaque[key]; }\n',
+      'declared-key-capability.mjs',
+    ),
+    /unresolved runtime module edge \(constructor property capability\)/,
+  );
+  for (const source of [
+    `import { opaque } from 'unresolved-supplier'; let key = 'label'; [...key] = ['constructor']; opaque[key]("return import('d3')")();`,
+    `import { opaque } from 'unresolved-supplier'; let key = 'label'; [...[key]] = ['constructor']; opaque[key]("return import('d3')")();`,
+    `import { opaque } from 'unresolved-supplier'; function pick(key = 'label') { return opaque[key]; } pick('constructor')("return import('d3')")();`,
+  ]) {
+    assert.throws(
+      () => parseModuleSpecifiers(source, 'declared-key-capability.mjs'),
+      /unresolved runtime module edge \(constructor property capability\)/,
+      source,
+    );
+  }
+  const foreignRoot = mkdtempSync(resolve(tmpdir(), 'rottay-ds-foreign-key-'));
+  try {
+    writeFileSync(
+      resolve(foreignRoot, 'globals.ts'),
+      "let foreignKey: 'label' = 'label';\nforeignKey = ('con' + 'structor') as 'label';\n",
+    );
+    const foreignReader = resolve(foreignRoot, 'main.ts');
+    const foreignSource = '/// <reference path="./globals.ts" />\n' +
+      "import { opaque } from 'unresolved-supplier';\n" +
+      'opaque[foreignKey]("return import(\'d3\')")();\n';
+    writeFileSync(foreignReader, foreignSource);
+    assert.throws(
+      () => parseModuleSpecifiers(foreignSource, foreignReader),
+      /unresolved runtime module edge \(constructor property capability\)/,
+    );
+  } finally {
+    rmSync(foreignRoot, { recursive: true, force: true });
+  }
+
+  // Declared residual trust: the proof is local to this file, so a parameter annotation is
+  // believed for every caller, including call-site casts, any arguments and exported callers.
+  const trustedAnnotation = [
+    `import { opaque, dynamicName } from 'unresolved-supplier'; function pick(key: 'label') { return opaque[key]; } pick(dynamicName)("return import('d3')")();`,
+    `import { opaque, dynamicName } from 'unresolved-supplier'; function pick(key: 'label') { return opaque[key]; } pick('constructor' as 'label')("return import('d3')")();`,
+    `import { opaque, dynamicName } from 'unresolved-supplier'; function pick<K extends 'label'>(key: K) { return opaque[key]; } pick<any>('constructor')("return import('d3')")();`,
+    `import { opaque, dynamicName } from 'unresolved-supplier'; export function pick(key: 'label') { return opaque[key]; }`,
+    `export {}; declare const opaque: any; function pick(key: 'label') { arguments[0] = 'constructor'; return opaque[key]; } pick('label')("return import('d3')")();`,
+  ];
+  for (const source of trustedAnnotation) {
+    const expected = source.includes('unresolved-supplier') ? ['unresolved-supplier'] : [];
+    assert.deepEqual(parseModuleSpecifiers(source, 'declared-key-capability.ts'), expected, source);
+  }
+});
+
 test('packaged app scanner fails closed when suppliers or the DS hide behind runtime code', () => {
   const fixtureRoot = mkdtempSync(resolve(tmpdir(), 'rottay-ds-app-runtime-edge-'));
   try {
@@ -1872,20 +2021,126 @@ test('chart-spec runtime contract is exact and supplier-free', () => {
   });
 });
 
+const CHART_EXPERIENCE_EXPORTS = Object.freeze([
+  'CHART_METRIC_TREND_RENDERER_ID',
+  'CHART_RANKED_ROWS_RENDERER_ID',
+  'ChartFrame',
+  'ChartImperativePlot',
+  'ChartInsightSummary',
+  'ChartMetricTrendView',
+  'ChartRankedRowsView',
+  'buildChartTrendPoints',
+  'projectChartSummaryRows',
+  'resolveChartProjection',
+]);
+const CHART_INTERNAL_LAYERS = Object.freeze(['ChartInsightLayer', 'InsightLayer']);
+
+function sourceRuntimeExportNames(path) {
+  const ts = createRequire(resolve(coreRoot, 'package.json'))('typescript');
+  const sourceFile = ts.createSourceFile(path, readFileSync(path, 'utf8'), ts.ScriptTarget.Latest, true);
+  const names = [];
+  for (const statement of sourceFile.statements) {
+    const exported = ts.canHaveModifiers(statement) &&
+      (ts.getModifiers(statement) ?? []).some((modifier) => modifier.kind === ts.SyntaxKind.ExportKeyword);
+    if (ts.isExportDeclaration(statement)) {
+      if (statement.isTypeOnly) continue;
+      if (!statement.exportClause || !ts.isNamedExports(statement.exportClause)) {
+        throw new Error(`${path}: a star re-export hides the runtime names`);
+      }
+      for (const element of statement.exportClause.elements) {
+        if (!element.isTypeOnly) names.push(element.name.text);
+      }
+    } else if (ts.isExportAssignment(statement)) {
+      throw new Error(`${path}: a default export has no stable runtime name`);
+    } else if (exported && (ts.isFunctionDeclaration(statement) || ts.isClassDeclaration(statement))) {
+      names.push(statement.name.text);
+    } else if (exported && ts.isVariableStatement(statement)) {
+      for (const declaration of statement.declarationList.declarations) names.push(declaration.name.getText(sourceFile));
+    }
+  }
+  return names.sort();
+}
+
+function chartExperienceDrift(definition, sourceNames) {
+  const errors = [];
+  const exports = definition?.exports ?? [];
+  if (JSON.stringify(exports) !== JSON.stringify(CHART_EXPERIENCE_EXPORTS)) {
+    errors.push(`./charts exports drifted: ${JSON.stringify(exports)}`);
+  }
+  if (JSON.stringify(definition?.supplierFreeExports ?? []) !== JSON.stringify(exports)) {
+    errors.push('./charts is no longer wholly supplier-free');
+  }
+  if (Object.keys(definition?.symbols ?? {}).length > 0) errors.push('./charts declares supplier symbols');
+  if (JSON.stringify(sourceNames) !== JSON.stringify(exports)) {
+    errors.push(`./charts contract differs from its source entry: ${JSON.stringify(sourceNames)}`);
+  }
+  for (const layer of CHART_INTERNAL_LAYERS) {
+    if (
+      exports.includes(layer) || (definition?.supplierFreeExports ?? []).includes(layer) ||
+      Object.hasOwn(definition?.symbols ?? {}, layer) || sourceNames.includes(layer)
+    ) errors.push(`./charts exposes the internal layer ${layer}`);
+  }
+  return errors;
+}
+
 test('chart experience contract exposes the bounded summary without internal layers', () => {
-  const chartExports = [
-    'ChartFrame',
-    'ChartInsightSummary',
-    'resolveChartProjection',
-  ];
+  const manifest = JSON.parse(readFileSync(resolve(coreRoot, 'package.json'), 'utf8'));
+  const sourceRoot = resolve(coreRoot, 'src');
+  const entry = collectSourceEntrypoints(manifest, sourceRoot).get('./charts');
+  assert.equal(relative(sourceRoot, entry).replaceAll('\\', '/'), 'entrypoints/charts/index.ts');
+  assert.deepEqual(manifest.exports['./charts'], {
+    types: './dist/charts.d.ts',
+    import: './dist/charts.js',
+    require: './dist/charts.cjs',
+  });
+  const sourceNames = sourceRuntimeExportNames(entry);
   const definition = loadSupplierContract().entrypoints['./charts'];
   assert.deepEqual(definition, {
-    exports: chartExports,
+    exports: [...CHART_EXPERIENCE_EXPORTS],
     symbols: {},
-    supplierFreeExports: chartExports,
+    supplierFreeExports: [...CHART_EXPERIENCE_EXPORTS],
   });
-  assert.equal(definition.exports.includes('ChartInsightLayer'), false);
-  assert.equal(definition.exports.includes('InsightLayer'), false);
+  assert.deepEqual(sourceNames, [...CHART_EXPERIENCE_EXPORTS]);
+  assert.deepEqual(chartExperienceDrift(definition, sourceNames), []);
+  for (const layer of CHART_INTERNAL_LAYERS) {
+    assert.equal(definition.exports.includes(layer), false, layer);
+    assert.equal(sourceNames.includes(layer), false, layer);
+  }
+
+  const internalLayer = resolve(
+    sourceRoot,
+    'components/patterns/visualization/charts/runtime/chart-engine/mechanics/insight/layer/index.tsx',
+  );
+  assert.ok(sourceRuntimeExportNames(internalLayer).includes('ChartInsightLayer'));
+
+  for (const layer of CHART_INTERNAL_LAYERS) {
+    const leaked = [...CHART_EXPERIENCE_EXPORTS, layer].sort();
+    assert.ok(
+      chartExperienceDrift({ exports: leaked, symbols: {}, supplierFreeExports: leaked }, leaked)
+        .includes(`./charts exposes the internal layer ${layer}`),
+      layer,
+    );
+    assert.ok(
+      chartExperienceDrift(definition, [...sourceNames, layer].sort())
+        .includes(`./charts exposes the internal layer ${layer}`),
+      layer,
+    );
+    assert.ok(
+      chartExperienceDrift({ ...definition, symbols: { [layer]: ['d3'] } }, sourceNames)
+        .includes(`./charts exposes the internal layer ${layer}`),
+      layer,
+    );
+  }
+  const dropped = CHART_EXPERIENCE_EXPORTS.filter((name) => name !== 'ChartImperativePlot');
+  assert.notDeepEqual(
+    chartExperienceDrift({ exports: dropped, symbols: {}, supplierFreeExports: dropped }, dropped),
+    [],
+  );
+  assert.notDeepEqual(chartExperienceDrift(definition, dropped), []);
+  assert.notDeepEqual(
+    chartExperienceDrift({ ...definition, supplierFreeExports: dropped }, sourceNames),
+    [],
+  );
 });
 
 test('chart-access runtime contract is exact and supplier-free', () => {

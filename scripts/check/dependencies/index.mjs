@@ -1855,6 +1855,7 @@ export function analyzeRuntimeModuleEdges(
     const assignmentTargetContainsTarget = (node) => {
       const target = unwrapRuntimeExpression(node);
       if (ts.isIdentifier(target)) return symbolAt(target) === targetSymbol;
+      if (ts.isSpreadElement(target)) return assignmentTargetContainsTarget(target.expression);
       if (ts.isArrayLiteralExpression(target)) {
         return target.elements.some((element) => assignmentTargetContainsTarget(element));
       }
@@ -2043,8 +2044,10 @@ export function analyzeRuntimeModuleEdges(
       ? symbolAt(value)
       : (ts.isPropertyAccessExpression(value)
         ? checker.getSymbolAtLocation(value.name)
-        : (ts.isElementAccessExpression(value)
-          ? checker.getSymbolAtLocation(value.argumentExpression) ?? checker.getSymbolAtLocation(value)
+        // Only a literal key resolves to the receiver's property; any other key's symbol is the key itself.
+        : (ts.isElementAccessExpression(value) &&
+          (ts.isStringLiteralLike(value.argumentExpression) || ts.isNumericLiteral(value.argumentExpression))
+          ? checker.getSymbolAtLocation(value.argumentExpression)
           : null));
     if (!symbol || resolvingSymbols.has(symbol)) return false;
     resolvingSymbols.add(symbol);
@@ -2132,6 +2135,85 @@ export function analyzeRuntimeModuleEdges(
     return null;
   }
 
+  function finiteLiteralTypeNames(type) {
+    let current = type;
+    if (current && current.flags & ts.TypeFlags.TypeParameter) {
+      const constraint = checker.getBaseConstraintOfType(current);
+      current = constraint && constraint !== current ? constraint : null;
+    }
+    if (!current) return null;
+    const parts = current.flags & ts.TypeFlags.Union ? current.types : [current];
+    const names = [];
+    for (const part of parts) {
+      if (part.flags & ts.TypeFlags.StringLiteral) names.push(part.value);
+      else if (part.flags & ts.TypeFlags.NumberLiteral) names.push(String(part.value));
+      else return null;
+    }
+    return names.length > 0 ? names : null;
+  }
+
+  // An exported namespace variable is also written as `N.key`, which no identifier scan sees.
+  function runtimeKeyDeclaration(declaration) {
+    const modifiers = ts.getCombinedModifierFlags(declaration);
+    const statement = ts.isVariableDeclaration(declaration) ? declaration.parent?.parent : null;
+    return declaration.getSourceFile() === sourceFile &&
+      !(declaration.flags & ts.NodeFlags.Ambient) &&
+      !(modifiers & ts.ModifierFlags.Ambient) &&
+      !(statement && ts.isVariableStatement(statement) && ts.isModuleBlock(statement.parent) &&
+        modifiers & ts.ModifierFlags.Export);
+  }
+
+  // Names a key binding declares, unwritten in this strict module. A cast in its own initializer
+  // proves nothing; a parameter needs an annotation, trusted as declared, not checked against callers.
+  function declaredFiniteKeyNames(expression, resolvingSymbols = new Set()) {
+    if (!expression || typeof checker.getTypeFromTypeNode !== 'function') return null;
+    if (!ts.isExternalModule(sourceFile)) return null;
+    let key = expression;
+    while (ts.isParenthesizedExpression(key)) key = key.expression;
+    if (ts.isStringLiteralLike(key)) return [key.text];
+    if (ts.isNumericLiteral(key)) return [String(Number(key.text))];
+    if (!ts.isIdentifier(key)) return null;
+    const symbol = symbolAt(key);
+    const declarations = symbol?.declarations ?? [];
+    if (!symbol || declarations.length === 0 || resolvingSymbols.has(symbol)) return null;
+    if (flowSymbolRuntimeWrites(symbol).length > 0) return null;
+    resolvingSymbols.add(symbol);
+    const names = new Set();
+    let proven = true;
+    for (const declaration of declarations) {
+      const binding = (
+        (ts.isParameter(declaration) && !declaration.dotDotDotToken) ||
+        ts.isVariableDeclaration(declaration)
+      ) && ts.isIdentifier(declaration.name) && runtimeKeyDeclaration(declaration);
+      if (!binding || (!declaration.type && (ts.isParameter(declaration) || !declaration.initializer))) {
+        proven = false;
+        break;
+      }
+      const declared = declaration.type
+        ? finiteLiteralTypeNames(checker.getTypeFromTypeNode(declaration.type))
+        : null;
+      const initialized = declaration.initializer
+        ? declaredFiniteKeyNames(declaration.initializer, resolvingSymbols)
+        : null;
+      if ((declaration.type && !declared) || (declaration.initializer && !initialized)) {
+        proven = false;
+        break;
+      }
+      for (const name of [...(declared ?? []), ...(initialized ?? [])]) names.add(name);
+    }
+    resolvingSymbols.delete(symbol);
+    return proven ? [...names] : null;
+  }
+
+  // A computed read whose declared key set excludes `constructor` names only
+  // what the equivalent static reads would, unless the receiver is a function.
+  function declaredSafeComputedRead(node) {
+    const names = declaredFiniteKeyNames(node.argumentExpression);
+    return Boolean(
+      names && !names.includes('constructor') && !definitelyCallableExpression(node.expression),
+    );
+  }
+
   function unsupportedConstructorAccess(node, includeOpaqueComputed = true) {
     if (!runtimeNode(node)) return false;
     if (
@@ -2140,6 +2222,7 @@ export function analyzeRuntimeModuleEdges(
     ) return true;
     if (
       ts.isElementAccessExpression(node) && propertyText(node) === null &&
+      !declaredSafeComputedRead(node) &&
       (includeOpaqueComputed
         ? callableExpression(node.expression)
         : definitelyCallableExpression(node.expression))
