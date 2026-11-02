@@ -1,5 +1,20 @@
 # Agent Constitution — Modern Rescue (WO-CRA-23)
 
+<!-- CORE-ADOPT-01 -->
+## Mandatory Core adoption
+
+Before changing consumption of `@rottay/core`, read and apply [CORE-ADOPT-01](../docs-engineering/architecture/foundations/module-contract/core-consumption/README.md). Adapt to its current published contracts; do not copy Core types or mechanisms, recreate retired APIs, or add legacy compatibility to hide a build/test failure. Fix consumer configuration/usage or the owning public API and adopt its published fix. Record the per-actor reading receipt required there before implementation; reviewers verify compliance in the diff. Pass the absolute rule path and revision explicitly to delegated agents. This rule does not change local roles or authorize unrelated work.
+<!-- /CORE-ADOPT-01 -->
+
+
+## Permanent documentation maintenance
+
+Read the [shared agent contract](../docs-engineering/development/agent-instructions/README.md) and [change matrix](../docs-engineering/development/agent-instructions/change-matrix.md); resolve documentation authority with [the source-of-truth rules](../docs-engineering/development/documentation/authority/README.md). Apply the relevant documentation updates and evidence requirements in the same delivery. Local scope, staffing, roadmaps, verification and Git rules remain in force.
+
+For applicable module normalization, [ROADMAP](../platform/normalization/ROADMAP.md), [TRACKING](../platform/normalization/TRACKING.md) and the owning dossier govern sequence and acceptance. App, UI, tooling and standalone-template work retains its own approved program.
+
+The local DS roadmap, ownership, staffing, sealed programme gates and generated-claim rules remain authoritative for DS implementation. This section governs documentation synchronization and cross-product contract references; it does not reopen a programme, change roles or authorize implementation/publication.
+
 ## Current owner succession — 2026-10-04
 
 The owner explicitly appointed Kimi as the sole active DT, coordinator,
