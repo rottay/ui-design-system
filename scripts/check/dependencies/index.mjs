@@ -2325,6 +2325,32 @@ export function analyzeRuntimeModuleEdges(
     return freshSymbolKey(node.argumentExpression) && !definitelyCallableExpression(node.expression);
   }
 
+  // A static key read through an exported binding is a writable `exports.<name>` slot under
+  // CommonJS emit (`.mjs`/`.mts` always emit ESM) and a writable `N.<name>` in a namespace.
+  function exportSlotStaticKey(expression, resolvingSymbols = new Set()) {
+    if (!expression) return false;
+    const current = unwrapRuntimeExpression(expression);
+    if (ts.isIdentifier(current)) {
+      const symbol = symbolAt(current);
+      const declarations = symbol?.declarations ?? [];
+      const declaration = declarations.length === 1 ? declarations[0] : null;
+      if (!declaration || !ts.isVariableDeclaration(declaration) || resolvingSymbols.has(symbol)) return false;
+      if (ts.getCombinedModifierFlags(declaration) & ts.ModifierFlags.Export) {
+        return ts.isModuleBlock(declaration.parent.parent.parent) || !/\.m[jt]s$/i.test(sourceFile.fileName);
+      }
+      resolvingSymbols.add(symbol);
+      const exported = exportSlotStaticKey(declaration.initializer, resolvingSymbols);
+      resolvingSymbols.delete(symbol);
+      return exported;
+    }
+    if (ts.isBinaryExpression(current) && current.operatorToken.kind === ts.SyntaxKind.PlusToken) {
+      return exportSlotStaticKey(current.left, resolvingSymbols) ||
+        exportSlotStaticKey(current.right, resolvingSymbols);
+    }
+    return ts.isTemplateExpression(current) &&
+      current.templateSpans.some((span) => exportSlotStaticKey(span.expression, resolvingSymbols));
+  }
+
   function unsupportedConstructorAccess(node, includeOpaqueComputed = true) {
     if (!runtimeNode(node)) return false;
     if (
@@ -2332,7 +2358,8 @@ export function analyzeRuntimeModuleEdges(
       propertyText(node) === 'constructor'
     ) return true;
     if (
-      ts.isElementAccessExpression(node) && propertyText(node) === null &&
+      ts.isElementAccessExpression(node) &&
+      (propertyText(node) === null || exportSlotStaticKey(node.argumentExpression)) &&
       !declaredSafeComputedRead(node) && !freshObjectRestDelete(node) &&
       !freshSymbolComputedRead(node) &&
       (includeOpaqueComputed
@@ -2345,7 +2372,8 @@ export function analyzeRuntimeModuleEdges(
     ) return true;
     if (
       ts.isBindingElement(node) && ts.isObjectBindingPattern(node.parent) &&
-      node.propertyName && ts.isComputedPropertyName(node.propertyName) && bindingPropertyText(node) === null &&
+      node.propertyName && ts.isComputedPropertyName(node.propertyName) &&
+      (bindingPropertyText(node) === null || exportSlotStaticKey(node.propertyName.expression)) &&
       (includeOpaqueComputed
         ? callableExpression(bindingSourceExpression(node))
         : definitelyCallableExpression(bindingSourceExpression(node)))

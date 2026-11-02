@@ -1806,6 +1806,88 @@ test('an exported finite-key declaration is refused: CommonJS emit reads the key
   }
 });
 
+test('an exported static-string key is refused as a computed key: CommonJS emit reads it from a writable exports slot', async () => {
+  const typescript = createRequire(resolve(coreRoot, 'package.json'))('typescript');
+  const read = 'export function read(o: any) { return o[k]; }';
+  const forms = {
+    declaration: [`export const k = 'label'; ${read}`, 'k.ts'],
+    multiDeclarator: [`export const a = 'x', k = 'label'; ${read}`, 'k.ts'],
+    transitive: [`export const base = 'label'; export function read(o: any) { const k = base; return o[k]; }`, 'k.ts', 'base'],
+    binding: [`export const k = 'label'; export function read(o: any) { const { [k]: v } = o; return v; }`, 'k.ts'],
+    nativeEsm: [`export const k = 'label'; export function read(o) { return o[k]; }`, 'k.mjs'],
+    clause: [`const k = 'label'; export { k }; ${read}`, 'k.ts'],
+  };
+  const witness = {};
+  for (const [form, [source, fileName, slot = 'k']] of Object.entries(forms)) {
+    for (const module of ['CommonJS', 'ESNext']) {
+      const output = typescript.transpileModule(source, {
+        fileName,
+        compilerOptions: { allowJs: true, module: typescript.ModuleKind[module], target: typescript.ScriptTarget.ES2020 },
+      }).outputText;
+      const commonJs = !/^export /m.test(output);
+      const exported = commonJs
+        ? {}
+        : await import(`data:text/javascript,${encodeURIComponent(`${output}\n// ${form}/${module}`)}`);
+      if (commonJs) runInNewContext(output, { exports: exported });
+      assert.equal(exported.read({ label: form }), form, `${form}/${module}`);
+      const replaced = Reflect.set(exported, slot, 'constructor');
+      witness[`${form}/${module}`] = [commonJs, replaced, exported.read(() => {}) === Function];
+    }
+  }
+  assert.deepEqual(witness, {
+    'declaration/CommonJS': [true, true, true],
+    'declaration/ESNext': [false, false, false],
+    'multiDeclarator/CommonJS': [true, true, true],
+    'multiDeclarator/ESNext': [false, false, false],
+    'transitive/CommonJS': [true, true, true],
+    'transitive/ESNext': [false, false, false],
+    'binding/CommonJS': [true, true, true],
+    'binding/ESNext': [false, false, false],
+    'nativeEsm/CommonJS': [false, false, false],
+    'nativeEsm/ESNext': [false, false, false],
+    'clause/CommonJS': [true, true, false],
+    'clause/ESNext': [false, false, false],
+  });
+
+  const accepted = [
+    [forms.nativeEsm[0], 'mjs'],
+    [`export const k = 'label'; ${read}`, 'mts'],
+    [`export const k = 'label'; export function read(o) { const { [k]: v } = o; return v; }`, 'mjs'],
+    [forms.clause[0], 'ts'],
+    [`const k = 'lab' + 'el'; export { k }; ${read}`, 'ts'],
+    [`const k = 'label'; export { k }; export function read(o: any) { const { [k]: v } = o; return v; }`, 'ts'],
+    [`const k = 'label'; export { k as default }; ${read}`, 'ts'],
+    [`const k = 'label'; export default k; ${read}`, 'ts'],
+    [`const base = 'lab'; const k = base + 'el'; ${read}`, 'tsx'],
+    [`export namespace N { const k = 'label'; export function read(o: any) { return o[k]; } }`, 'ts'],
+    [`export const k = 'label'; export function read(o: { label: string }) { return o[k]; }`, 'ts'],
+  ];
+  for (const [source, extension] of accepted) {
+    assert.deepEqual(parseModuleSpecifiers(source, `static-const-export.${extension}`), [], source);
+  }
+  const refused = [
+    [forms.declaration[0], 'ts'],
+    [forms.declaration[0], 'tsx'],
+    [`export const k = 'label'; export function read(o) { return o[k]; }`, 'js'],
+    [forms.multiDeclarator[0], 'ts'],
+    [`export const k: 'label' = 'label'; ${read}`, 'ts'],
+    [forms.transitive[0], 'ts'],
+    [`export const base = 'label'; const k = base; ${read}`, 'ts'],
+    [`export const base = 'lab'; export function read(o: any) { return o[base + 'el']; }`, 'ts'],
+    [`export const base = 'lab'; export function read(o: any) { return o[\`\${base}el\`]; }`, 'ts'],
+    [forms.binding[0], 'ts'],
+    [`export namespace N { export const k = 'label'; export function read(o: any) { return o[k]; } }`, 'mts'],
+    [`import { opaque } from 'unresolved-supplier'; export const k = 'label'; opaque[k]("return import('d3')")();`, 'ts'],
+  ];
+  for (const [source, extension] of refused) {
+    assert.throws(
+      () => parseModuleSpecifiers(source, `static-const-export.${extension}`),
+      /unresolved runtime module edge \(constructor property capability\)/,
+      source,
+    );
+  }
+});
+
 test('a computed read keyed by a fresh module-local Symbol() is data access on a non-function receiver', () => {
   const portalPath = resolve(coreRoot, 'src/components/primitives/runtime/overlay/portal-scope/index.tsx');
   const portalSource = readFileSync(portalPath, 'utf8');
