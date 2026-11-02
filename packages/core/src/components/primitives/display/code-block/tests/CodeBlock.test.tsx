@@ -3,7 +3,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
 
 import { CodeBlock, registerHighlighter } from '../index';
-import type { HighlighterAdapter } from '../index';
+import type { HighlighterAdapter, HighlightTokenLine } from '../index';
 
 afterEach(() => {
   // Unmount before clearing the registry: `registerHighlighter(null)` emits to
@@ -82,6 +82,62 @@ describe('CodeBlock -- highlighter adapter', () => {
   it('falls back to the plain renderer when no adapter is registered', () => {
     const { container } = render(<CodeBlock code={'plain text'} {...LABELS} />);
     expect(container.textContent).toContain('plain text');
+    expect(container.querySelector('[data-part="token"]')).toBeNull();
+  });
+});
+
+describe('CodeBlock -- per-line adapter tokens', () => {
+  const ZWSP = String.fromCharCode(0x200b);
+  const lineContents = (container: HTMLElement): HTMLElement[] =>
+    Array.from(container.querySelectorAll<HTMLElement>('[data-part="line-content"]'));
+
+  it('places each async adapter token line on its own source line, in order', async () => {
+    registerHighlighter({
+      id: 'per-line',
+      highlight: async () => [
+        { tokens: [{ content: 'alpha' }] },
+        { tokens: [{ content: 'beta' }, { content: '!' }] },
+        { tokens: [{ content: 'gamma' }] },
+      ],
+    });
+    const { container } = render(<CodeBlock code={'a\nb\nc'} {...LABELS} />);
+    await screen.findByText('gamma');
+    const rows = lineContents(container);
+    expect(rows.map((row) => row.textContent)).toEqual(['alpha', 'beta!', 'gamma']);
+    expect(rows.map((row) => row.querySelectorAll('[data-part="token"]').length)).toEqual([1, 2, 1]);
+  });
+
+  it('renders the verbatim source line wherever the adapter returns no token line', async () => {
+    registerHighlighter({ id: 'short', highlight: () => [{ tokens: [{ content: 'first' }] }] });
+    const { container } = render(<CodeBlock code={'one\n\nthree'} {...LABELS} />);
+    await screen.findByText('first');
+    const rows = lineContents(container);
+    expect(rows.map((row) => row.textContent)).toEqual(['first', ZWSP, 'three']);
+    expect(rows.slice(1).map((row) => row.querySelector('[data-part="token"]'))).toEqual([null, null]);
+  });
+
+  it('keeps each plain row verbatim, an empty row as a zero-width space, and trims one trailing newline', () => {
+    const { container } = render(<CodeBlock code={'a\n\nb\n'} showLineNumbers {...LABELS} />);
+    expect(lineContents(container).map((row) => row.textContent)).toEqual(['a', ZWSP, 'b']);
+    expect(container.querySelectorAll('[data-part="line-number"]')).toHaveLength(3);
+  });
+
+  it('renders plainly when an out-of-contract adapter result leaves no token lines', async () => {
+    const highlight = vi.fn(() => (() => undefined) as unknown as HighlightTokenLine[]);
+    registerHighlighter({ id: 'updater-undefined', highlight });
+    const { container } = render(<CodeBlock code={'x\ny'} {...LABELS} />);
+    await waitFor(() => expect(highlight).toHaveBeenCalled());
+    expect(lineContents(container).map((row) => row.textContent)).toEqual(['x', 'y']);
+    expect(container.querySelector('[data-part="token"]')).toBeNull();
+  });
+
+  it('never indexes a callable token-line value', async () => {
+    const callable = Object.assign(() => undefined, { 0: { tokens: [{ content: 'leaked' }] } });
+    const highlight = vi.fn(() => (() => callable) as unknown as HighlightTokenLine[]);
+    registerHighlighter({ id: 'updater-callable', highlight });
+    const { container } = render(<CodeBlock code={'kept'} {...LABELS} />);
+    await waitFor(() => expect(highlight).toHaveBeenCalled());
+    expect(lineContents(container).map((row) => row.textContent)).toEqual(['kept']);
     expect(container.querySelector('[data-part="token"]')).toBeNull();
   });
 });

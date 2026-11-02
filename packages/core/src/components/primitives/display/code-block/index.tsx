@@ -175,8 +175,8 @@ export function CodeBlock({
   // reachability (axe scrollable-region-focusable, K4-B remediation R4).
   const scrollable = !wrap || maxHeight !== undefined;
 
-  const renderLineContent = (lineIndex: number): React.ReactNode => {
-    const tokenLine = lines?.[lineIndex];
+  const renderLineContent = (lineIndex: number, rawLine: string): React.ReactNode => {
+    const tokenLine = lines != null && typeof lines !== 'function' ? lines[lineIndex] : undefined;
     if (tokenLine) {
       return tokenLine.tokens.map((token, tokenIndex) => (
         <span
@@ -194,7 +194,7 @@ export function CodeBlock({
     }
     // Plain path: render the line verbatim. Empty lines keep height via a
     // zero-width space so the flex row does not collapse.
-    return rawLines[lineIndex].length === 0 ? ZERO_WIDTH_SPACE : rawLines[lineIndex];
+    return rawLine.length === 0 ? ZERO_WIDTH_SPACE : rawLine;
   };
 
   return (
@@ -314,7 +314,7 @@ export function CodeBlock({
           }}
         >
           <code ref={codeRef} data-part="code" style={{ display: 'block', fontFamily: MONO_FONT }}>
-            {rawLines.map((_, lineIndex) => {
+            {rawLines.map((rawLine, lineIndex) => {
               const lineNumber = lineIndex + 1;
               const highlighted = highlightSet.has(lineNumber);
               return (
@@ -382,7 +382,7 @@ export function CodeBlock({
                       unicodeBidi: 'plaintext',
                     }}
                   >
-                    {renderLineContent(lineIndex)}
+                    {renderLineContent(lineIndex, rawLine)}
                   </span>
                 </span>
               );

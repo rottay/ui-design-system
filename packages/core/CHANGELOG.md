@@ -62,6 +62,16 @@
   behave as before. No public API, type, default, markup, token or
   accessibility change. Source and focal simulated-DOM checks cover the
   change; browser and public-package acceptance remain pending.
+- Read CodeBlock highlighter token lines only from a non-callable value, and
+  take each plain line from the row being rendered instead of indexing the
+  source lines again. Rendering is unchanged for every adapter that honors
+  `HighlighterAdapter`: token lines in order, the verbatim source line where
+  the adapter returns none, zero-width-space rows for empty lines, and the
+  SSR and async upgrade paths. A callable token-line value outside that
+  contract now falls back to the plain source lines. No public API, type,
+  default, markup, token, accessibility or dependency change. Source and
+  focal simulated-DOM checks cover the change; browser and public-package
+  acceptance remain pending.
 - Forward `config.access` from `HeaderSurface` to `SurfaceActionBar`, so
   `{ mode: 'all' }` keeps its declared contract on Header actions, as
   `SidebarSurface` already does: an action hidden only by its `visible`
