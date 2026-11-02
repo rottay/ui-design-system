@@ -2319,6 +2319,60 @@ test('runtime closure resolves @ui/* through the tsconfig components mapping and
   }
 });
 
+test('runtime closure resolves @types/* through the tsconfig contracts mapping and fails closed otherwise', () => {
+  const ts = createRequire(resolve(coreRoot, 'package.json'))('typescript');
+  for (const config of ['tsconfig.json', 'tsconfig.tests.json']) {
+    const { config: parsed, error } = ts.readConfigFile(resolve(coreRoot, config), ts.sys.readFile);
+    assert.equal(error, undefined, config);
+    assert.deepEqual(parsed.compilerOptions.paths['@types/*'], ['./src/foundation/contracts/*'], config);
+    assert.equal(Object.hasOwn(parsed.compilerOptions.paths, '@types'), false, config);
+  }
+
+  const fixtureRoot = mkdtempSync(resolve(tmpdir(), 'rottay-ds-types-alias-'));
+  const write = (path, marker) => {
+    mkdirSync(dirname(resolve(fixtureRoot, path)), { recursive: true });
+    writeFileSync(resolve(fixtureRoot, path), `import '${marker}';\nexport const T = 1;\n`);
+  };
+  const trace = (source) => {
+    writeFileSync(resolve(fixtureRoot, 'index.ts'), source);
+    const graph = traceSourceEntry(resolve(fixtureRoot, 'index.ts'), fixtureRoot);
+    return {
+      externals: [...graph.externalImports.keys()].sort(),
+      visited: [...graph.visited].map((file) => relative(fixtureRoot, file).replaceAll('\\', '/')).sort(),
+    };
+  };
+  try {
+    write('foundation/contracts/index.ts', 'fixture-types-bare-root');
+    write('foundation/contracts/theme/index.ts', 'fixture-types-contract');
+    write('foundation/contracts/x/theme/index.ts', 'fixture-types-prefix-capture');
+    write('types/theme/index.ts', 'fixture-types-legacy-root');
+
+    assert.deepEqual(
+      trace("export { T } from '@types/theme';\n"),
+      {
+        externals: ['fixture-types-contract'],
+        visited: ['foundation/contracts/theme/index.ts', 'index.ts'],
+      },
+      '@types/theme',
+    );
+    for (const [specifier, packageRoot] of [
+      ['@types', '@types'],
+      ['@types/', '@types/'],
+      ['@types/not-real', '@types/not-real'],
+      ['@typesx/theme', '@typesx/theme'],
+      ['@types-x/theme', '@types-x/theme'],
+    ]) {
+      assert.deepEqual(
+        trace(`export { T } from '${specifier}';\n`),
+        { externals: [packageRoot], visited: ['index.ts'] },
+        specifier,
+      );
+    }
+  } finally {
+    rmSync(fixtureRoot, { recursive: true, force: true });
+  }
+});
+
 test('runtime closure keeps every path alias inside its mapped root while relative edges may leave it', () => {
   const fixtureRoot = mkdtempSync(resolve(tmpdir(), 'rottay-ds-alias-containment-'));
   const sourceRoot = resolve(fixtureRoot, 'src');

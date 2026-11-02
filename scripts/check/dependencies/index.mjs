@@ -2589,9 +2589,10 @@ function resolveSourceModule(fromFile, specifier, root = sourceRoot) {
     // Mirrors tsconfig `paths` "@ui/*" -> "./src/components/*"; there is no bare `@ui` mapping.
     aliasRoot = resolve(root, 'components');
     base = resolve(aliasRoot, specifier.slice('@ui/'.length));
-  } else if (specifier === '@types' || specifier.startsWith('@types/')) {
+  } else if (specifier.startsWith('@types/') && specifier.length > '@types/'.length) {
+    // Mirrors tsconfig `paths` "@types/*" -> "./src/foundation/contracts/*"; there is no bare `@types` mapping.
     aliasRoot = resolve(root, 'foundation', 'contracts');
-    base = resolve(aliasRoot, specifier.slice('@types'.length + 1));
+    base = resolve(aliasRoot, specifier.slice('@types/'.length));
   } else {
     return null;
   }
