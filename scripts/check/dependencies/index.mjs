@@ -2233,8 +2233,8 @@ export function analyzeRuntimeModuleEdges(
     );
   }
 
-  // Object rest always binds a fresh ordinary object, even from a Proxy source, so deleting
-  // from it runs no trap; any write to the binding could substitute another receiver.
+  // Object rest always binds a fresh ordinary object, even from a Proxy source, so deleting from it
+  // runs no trap; a write, or CommonJS emit reading an export through `exports.<name>`, swaps it.
   function freshObjectRestDelete(node) {
     let operand = node;
     while (ts.isParenthesizedExpression(operand.parent)) operand = operand.parent;
@@ -2247,6 +2247,7 @@ export function analyzeRuntimeModuleEdges(
     return ts.isBindingElement(declaration) && Boolean(declaration.dotDotDotToken) &&
       ts.isObjectBindingPattern(declaration.parent) && ts.isIdentifier(declaration.name) &&
       runtimeKeyDeclaration(ts.walkUpBindingElementsAndPatterns(declaration)) &&
+      !(ts.getCombinedModifierFlags(declaration) & ts.ModifierFlags.Export) &&
       flowSymbolRuntimeWrites(symbol).length === 0;
   }
 

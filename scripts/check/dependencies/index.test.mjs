@@ -1692,6 +1692,63 @@ test('a computed delete on an unwritten object-rest binding cannot reach a Proxy
   }
 });
 
+test('an exported object-rest declaration is refused: CommonJS emit deletes through a writable exports slot', async () => {
+  const typescript = createRequire(resolve(coreRoot, 'package.json'))('typescript');
+  const drop = 'export function drop(k: string) { return delete rest[k]; }';
+  const forms = {
+    declaration: `export const { ...rest } = ({ a: 1 } as any); ${drop}`,
+    clause: `const { ...rest } = ({ a: 1 } as any); export { rest }; ${drop}`,
+    local: `const { ...rest } = ({ a: 1 } as any); ${drop}`,
+  };
+  const witness = {};
+  for (const [form, source] of Object.entries(forms)) {
+    for (const module of ['CommonJS', 'ESNext']) {
+      const output = typescript.transpileModule(source, {
+        compilerOptions: { module: typescript.ModuleKind[module], target: typescript.ScriptTarget.ES2020 },
+      }).outputText;
+      const trapped = [];
+      const proxy = new Proxy({}, { deleteProperty(_, key) { trapped.push(String(key)); return true; } });
+      const exported = module === 'CommonJS' ? {} : await import(`data:text/javascript,${encodeURIComponent(output)}`);
+      if (module === 'CommonJS') runInNewContext(output, { exports: exported });
+      const replaced = Reflect.set(exported, 'rest', proxy);
+      assert.equal(exported.drop('a'), true, `${form}/${module}`);
+      witness[`${form}/${module}`] = [/delete exports\.rest\[k\]/.test(output), replaced, trapped];
+    }
+  }
+  assert.deepEqual(witness, {
+    'declaration/CommonJS': [true, true, ['a']],
+    'declaration/ESNext': [false, false, []],
+    'clause/CommonJS': [false, true, []],
+    'clause/ESNext': [false, false, []],
+    'local/CommonJS': [false, true, []],
+    'local/ESNext': [false, false, []],
+  });
+
+  const accepted = [
+    forms.clause,
+    forms.local,
+    `const { ...rest } = ({ a: 1 } as any); export { rest as default }; ${drop}`,
+    `export function run(props: any, k: string) { const { ...rest } = props; delete rest[k]; return rest; }`,
+    `export function run({ ...rest }: any, k: string) { delete rest[k]; return rest; }`,
+  ];
+  for (const source of accepted) {
+    assert.deepEqual(parseModuleSpecifiers(source, 'object-rest-export.ts'), [], source);
+  }
+  const refused = [
+    forms.declaration,
+    `export let { ...rest } = ({ a: 1 } as any); ${drop}`,
+    `export var { ...rest } = ({ a: 1 } as any); ${drop}`,
+    `export const { inner: { ...rest } } = ({ inner: { a: 1 } } as any); ${drop}`,
+  ];
+  for (const source of refused) {
+    assert.throws(
+      () => parseModuleSpecifiers(source, 'object-rest-export.ts'),
+      /unresolved runtime module edge \(constructor property capability\)/,
+      source,
+    );
+  }
+});
+
 test('a computed read keyed by a fresh module-local Symbol() is data access on a non-function receiver', () => {
   const portalPath = resolve(coreRoot, 'src/components/primitives/runtime/overlay/portal-scope/index.tsx');
   const portalSource = readFileSync(portalPath, 'utf8');
