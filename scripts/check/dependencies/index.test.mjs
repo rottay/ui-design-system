@@ -2288,6 +2288,7 @@ test('runtime closure resolves @ui/* through the tsconfig components mapping and
     write('components/patterns/index.ts', "import 'fixture-pattern-supplier';\nexport const P = 1;\n");
     write('components/primitives/inputs/button/index.tsx', "import 'fixture-primitive-supplier';\nexport const B = 1;\n");
     write('components/index.ts', "import 'fixture-bare-root';\nexport const R = 1;\n");
+    write('components/x/patterns/index.ts', "import 'fixture-ui-prefix-capture';\nexport const P = 0;\n");
     for (const decoy of ['ui/patterns/index.ts', 'ui/primitives/inputs/button/index.tsx', 'ui/index.ts']) {
       write(decoy, "import 'fixture-legacy-ui-root';\nexport const P = 0, B = 0, R = 0;\n");
     }
@@ -2308,6 +2309,10 @@ test('runtime closure resolves @ui/* through the tsconfig components mapping and
     assert.deepEqual(
       trace("export { P } from '@uix/patterns';\n"),
       { externals: ['@uix/patterns'], visited: ['index.ts'] },
+    );
+    assert.deepEqual(
+      trace("export { P } from '@ui-x/patterns';\n"),
+      { externals: ['@ui-x/patterns'], visited: ['index.ts'] },
     );
   } finally {
     rmSync(fixtureRoot, { recursive: true, force: true });
