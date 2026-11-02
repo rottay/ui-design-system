@@ -1520,6 +1520,8 @@ test('a computed read keyed by a declared finite literal set is data access, not
     `import { opaque } from 'unresolved-supplier';\n// @ts-expect-error the initializer contradicts the annotation\nlet key: 'label' = 'constructor';\nopaque[key]("return import('d3')")();`,
     `import { opaque } from 'unresolved-supplier';\n// @ts-expect-error the default contradicts the annotation\nfunction pick(key: 'label' = 'constructor') { return opaque[key]; }\npick()("return import('d3')")();`,
     `import { opaque } from 'unresolved-supplier'; function pick(key: 'label' | 'constructor' = 'label') { return opaque[key]; } pick('constructor')("return import('d3')")();`,
+    `import { opaque } from 'unresolved-supplier'; function pick(key: string = 'label') { return opaque[key]; } pick('constructor')("return import('d3')")();`,
+    `import { opaque } from 'unresolved-supplier'; namespace N { export var key = 'label'; export function f() { return opaque[key]; } } N.key = 'constructor'; N.f()("return import('d3')")();`,
   ];
   for (const source of hostile) {
     assert.throws(
