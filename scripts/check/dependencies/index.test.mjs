@@ -4,6 +4,8 @@ import { createRequire } from 'node:module';
 import { tmpdir } from 'node:os';
 import { basename, dirname, relative, resolve } from 'node:path';
 import test from 'node:test';
+import { types as utilTypes } from 'node:util';
+import { runInNewContext } from 'node:vm';
 
 import {
   analyzeRuntimeModuleEdges,
@@ -1589,6 +1591,104 @@ test('a computed read keyed by a declared finite literal set is data access, not
   for (const source of trustedAnnotation) {
     const expected = source.includes('unresolved-supplier') ? ['unresolved-supplier'] : [];
     assert.deepEqual(parseModuleSpecifiers(source, 'declared-key-capability.ts'), expected, source);
+  }
+});
+
+test('a computed delete on an unwritten object-rest binding cannot reach a Proxy trap', () => {
+  const restDeleteProbe = `
+    const trapped = [];
+    const source = new Proxy({ engine: 'modern', label: 'ordinary' }, {
+      deleteProperty(target, key) { trapped.push(String(key)); return Reflect.deleteProperty(target, key); },
+    });
+    const { engine: _, ...rest } = source;
+    const key = 'label';
+    const restDeleted = delete rest[key];
+    const restAfterDelete = Object.keys(rest).length;
+    delete source[key];
+    ({ trapped, rest, restDeleted, restAfterDelete, plain: Object.getPrototypeOf(rest) === Object.prototype });
+  `;
+  const native = runInNewContext(restDeleteProbe);
+  assert.equal(utilTypes.isProxy(native.rest), false);
+  assert.equal(native.plain, true);
+  assert.deepEqual([native.restDeleted, native.restAfterDelete], [true, 0]);
+  assert.deepEqual(Array.from(native.trapped), ['label'], 'only the direct Proxy delete reaches its trap');
+  const typescript = createRequire(resolve(coreRoot, 'package.json'))('typescript');
+  const downlevel = typescript.transpileModule(restDeleteProbe, {
+    compilerOptions: { target: typescript.ScriptTarget.ES2015 },
+  }).outputText;
+  assert.match(downlevel, /__rest\(source, \["engine"\]\)/);
+  const lowered = runInNewContext(downlevel);
+  assert.deepEqual([Array.from(lowered.trapped), lowered.plain, utilTypes.isProxy(lowered.rest)], [['label'], true, false]);
+
+  const factoryPath = resolve(
+    coreRoot,
+    'src/infrastructure/runtime/engines/presentation/component-factory/index.tsx',
+  );
+  const factorySource = readFileSync(factoryPath, 'utf8');
+  assert.match(
+    factorySource,
+    /const \{ engine: _, \.\.\.componentProps \} = props;\n.*\n\s+for \(const name of modernOnlyProps\) delete \(componentProps as Record<PropertyKey, unknown>\)\[name\];/,
+  );
+  assert.deepEqual(
+    analyzeRuntimeModuleEdges(factorySource, factoryPath).edges.map(({ specifier }) => specifier),
+    analyzeRuntimeModuleEdges(factorySource, factoryPath, undefined, {
+      enforceComputedCapabilities: false,
+    }).edges.map(({ specifier }) => specifier),
+  );
+  assert.ok(
+    analyzeRuntimeModuleEdges(factorySource, factoryPath).edges
+      .some(({ specifier }) => specifier === 'react'),
+  );
+
+  const scope = 'export function run<P extends object>(props: P, k: string, j: string) {';
+  const restAccepted = [
+    `export function run(props: any, keys: readonly PropertyKey[]) { const { engine: _, ...rest } = props; for (const name of keys) delete (rest as Record<PropertyKey, unknown>)[name]; return rest; }`,
+    `${scope} const { ...rest } = props; delete rest[k]; delete ((rest as any)[j]); return rest; }`,
+    `${scope} const { ...rest } = props; delete (rest satisfies object)[k]; delete (rest!)[k]; delete (<any>rest)[k]; return rest; }`,
+    `${scope} let { ...rest } = props; delete rest[k]; return rest; }`,
+    `export function run<P extends object>({ ...rest }: P, k: string) { delete rest[k]; return rest; }`,
+    `${scope} const { inner: { ...rest } } = props as P & { inner: P }; delete rest[k]; return rest; }`,
+    `export function run(k: string) { const source: any = new Proxy({}, { deleteProperty: () => true }); const { ...rest } = source; delete rest[k]; return rest; }`,
+  ];
+  for (const source of restAccepted) {
+    assert.deepEqual(parseModuleSpecifiers(source, 'object-rest-delete.ts'), [], source);
+  }
+
+  const trap = 'const proxy: any = new Proxy({}, { deleteProperty: () => true });';
+  const restRefused = [
+    `export function run(target: any, k: string) { delete target[k]; }`,
+    `export function run(k: string) { ${trap} delete proxy[k]; delete (proxy as Record<PropertyKey, unknown>)[k]; }`,
+    `export function run(k: string) { const callable: any = () => {}; delete callable[k]; }`,
+    `${scope} ${trap} let { ...rest } = props; rest = proxy; delete rest[k]; }`,
+    `${scope} ${trap} let { ...rest } = props; [rest] = [proxy]; delete rest[k]; }`,
+    `${scope} ${trap} let { ...rest } = props; ({ rest } = { rest: proxy }); delete rest[k]; }`,
+    `${scope} ${trap} let { ...rest } = props; for (rest of [proxy]) delete rest[k]; }`,
+    `${scope} ${trap} let { ...rest } = props; const swap = () => { rest = proxy; }; swap(); delete rest[k]; }`,
+    `${scope} ${trap} let { ...rest } = props; delete rest[k]; rest = proxy; }`,
+    `${scope} ${trap} var { ...rest } = props; var rest: any = proxy; delete rest[k]; }`,
+    `${scope} ${trap} const { ...rest } = props; { const rest = proxy; delete rest[k]; } }`,
+    `${scope} const { ...rest } = props; const alias = rest; delete alias[k]; }`,
+    `${scope} const { inner } = props as any; delete inner[k]; }`,
+    `${scope} ${trap} const { ...rest } = props; delete (k ? rest : proxy)[k]; }`,
+    `${scope} const { ...rest } = props; delete (0, rest)[k]; }`,
+    `${scope} const { ...rest } = props; const get = () => rest; delete get()[k]; }`,
+    `${scope} const { ...rest } = props; delete (rest as any)[k][j]; }`,
+    `${scope} const { ...rest } = props; delete (rest as any)['constructor']; }`,
+    `${scope} const { ...rest } = props; return (rest as any)[k]; }`,
+    `${scope} const { ...rest } = props; (rest as any)[k] = j; }`,
+    `${scope} const { ...rest } = props; (rest as any)[k]++; }`,
+    `${scope} const { ...rest } = props; Object.getOwnPropertyDescriptor(rest, k)?.value(j); }`,
+    `function run(props: any, k: string) { const { ...rest } = props; delete rest[k]; }`,
+    `${trap} export namespace N { export const { ...rest } = ({} as any); export function drop(k: string) { delete rest[k]; } } (N as any).rest = proxy;`,
+    `declare const { ...rest }: any; export function run(k: string) { delete rest[k]; }`,
+    `export function run(list: any, k: string) { const [...rest] = list; delete (rest as any)[k]; }`,
+  ];
+  for (const source of restRefused) {
+    assert.throws(
+      () => parseModuleSpecifiers(source, 'object-rest-delete.ts'),
+      /unresolved runtime module edge \(constructor property capability\)/,
+      source,
+    );
   }
 });
 

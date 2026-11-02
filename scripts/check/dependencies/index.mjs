@@ -2214,6 +2214,23 @@ export function analyzeRuntimeModuleEdges(
     );
   }
 
+  // Object rest always binds a fresh ordinary object, even from a Proxy source, so deleting
+  // from it runs no trap; any write to the binding could substitute another receiver.
+  function freshObjectRestDelete(node) {
+    let operand = node;
+    while (ts.isParenthesizedExpression(operand.parent)) operand = operand.parent;
+    if (!ts.isDeleteExpression(operand.parent) || !ts.isExternalModule(sourceFile)) return false;
+    const receiver = unwrapRuntimeExpression(node.expression);
+    const symbol = ts.isIdentifier(receiver) ? symbolAt(receiver) : null;
+    const declarations = symbol?.declarations ?? [];
+    if (declarations.length !== 1) return false;
+    const [declaration] = declarations;
+    return ts.isBindingElement(declaration) && Boolean(declaration.dotDotDotToken) &&
+      ts.isObjectBindingPattern(declaration.parent) && ts.isIdentifier(declaration.name) &&
+      runtimeKeyDeclaration(ts.walkUpBindingElementsAndPatterns(declaration)) &&
+      flowSymbolRuntimeWrites(symbol).length === 0;
+  }
+
   function unsupportedConstructorAccess(node, includeOpaqueComputed = true) {
     if (!runtimeNode(node)) return false;
     if (
@@ -2222,7 +2239,7 @@ export function analyzeRuntimeModuleEdges(
     ) return true;
     if (
       ts.isElementAccessExpression(node) && propertyText(node) === null &&
-      !declaredSafeComputedRead(node) &&
+      !declaredSafeComputedRead(node) && !freshObjectRestDelete(node) &&
       (includeOpaqueComputed
         ? callableExpression(node.expression)
         : definitelyCallableExpression(node.expression))
