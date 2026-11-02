@@ -2583,8 +2583,9 @@ function resolveSourceModule(fromFile, specifier, root = sourceRoot) {
     base = resolve(dirname(fromFile), specifier);
   } else if (specifier.startsWith('@/')) {
     base = resolve(root, specifier.slice(2));
-  } else if (specifier === '@ui' || specifier.startsWith('@ui/')) {
-    base = resolve(root, 'ui', specifier.slice('@ui'.length + 1));
+  } else if (specifier.startsWith('@ui/') && specifier.length > '@ui/'.length) {
+    // Mirrors tsconfig `paths` "@ui/*" -> "./src/components/*"; there is no bare `@ui` mapping.
+    base = resolve(root, 'components', specifier.slice('@ui/'.length));
   } else if (specifier === '@types' || specifier.startsWith('@types/')) {
     base = resolve(root, 'foundation', 'contracts', specifier.slice('@types'.length + 1));
   } else {

@@ -2262,6 +2262,58 @@ test('runtime closure follows unfortunately named files reached by an exported e
   }
 });
 
+test('runtime closure resolves @ui/* through the tsconfig components mapping and fails closed otherwise', () => {
+  const ts = createRequire(resolve(coreRoot, 'package.json'))('typescript');
+  for (const config of ['tsconfig.json', 'tsconfig.tests.json']) {
+    const { config: parsed, error } = ts.readConfigFile(resolve(coreRoot, config), ts.sys.readFile);
+    assert.equal(error, undefined, config);
+    assert.deepEqual(parsed.compilerOptions.paths['@ui/*'], ['./src/components/*'], config);
+    assert.equal(Object.hasOwn(parsed.compilerOptions.paths, '@ui'), false, config);
+  }
+
+  const fixtureRoot = mkdtempSync(resolve(tmpdir(), 'rottay-ds-ui-alias-'));
+  const write = (path, source) => {
+    mkdirSync(dirname(resolve(fixtureRoot, path)), { recursive: true });
+    writeFileSync(resolve(fixtureRoot, path), source);
+  };
+  const trace = (source) => {
+    write('index.ts', source);
+    const graph = traceSourceEntry(resolve(fixtureRoot, 'index.ts'), fixtureRoot);
+    return {
+      externals: [...graph.externalImports.keys()].sort(),
+      visited: [...graph.visited].map((file) => relative(fixtureRoot, file).replaceAll('\\', '/')).sort(),
+    };
+  };
+  try {
+    write('components/patterns/index.ts', "import 'fixture-pattern-supplier';\nexport const P = 1;\n");
+    write('components/primitives/inputs/button/index.tsx', "import 'fixture-primitive-supplier';\nexport const B = 1;\n");
+    write('components/index.ts', "import 'fixture-bare-root';\nexport const R = 1;\n");
+    for (const decoy of ['ui/patterns/index.ts', 'ui/primitives/inputs/button/index.tsx', 'ui/index.ts']) {
+      write(decoy, "import 'fixture-legacy-ui-root';\nexport const P = 0, B = 0, R = 0;\n");
+    }
+
+    assert.deepEqual(
+      trace("export { P } from '@ui/patterns';\nexport { B } from '@ui/primitives/inputs/button';\n"),
+      {
+        externals: ['fixture-pattern-supplier', 'fixture-primitive-supplier'],
+        visited: ['components/patterns/index.ts', 'components/primitives/inputs/button/index.tsx', 'index.ts'],
+      },
+    );
+    assert.deepEqual(trace("export { R } from '@ui';\n"), { externals: ['@ui'], visited: ['index.ts'] });
+    assert.deepEqual(trace("export { R } from '@ui/';\n"), { externals: ['@ui/'], visited: ['index.ts'] });
+    assert.deepEqual(
+      trace("export { P } from '@ui/patterns/not-real';\n"),
+      { externals: ['@ui/patterns'], visited: ['index.ts'] },
+    );
+    assert.deepEqual(
+      trace("export { P } from '@uix/patterns';\n"),
+      { externals: ['@uix/patterns'], visited: ['index.ts'] },
+    );
+  } finally {
+    rmSync(fixtureRoot, { recursive: true, force: true });
+  }
+});
+
 test('runtime export inventory includes the public CLI import and every CJS condition', () => {
   const manifest = JSON.parse(readFileSync(resolve(coreRoot, 'package.json'), 'utf8'));
   const conditions = collectRuntimeExportConditions(manifest);
