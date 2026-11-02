@@ -1888,6 +1888,93 @@ test('an exported static-string key is refused as a computed key: CommonJS emit 
   }
 });
 
+test('an exported static-string key is refused as a Reflect/descriptor key: CommonJS emit reads it from a writable exports slot', async () => {
+  const typescript = createRequire(resolve(coreRoot, 'package.json'))('typescript');
+  const calls = {
+    reflectGet: 'Reflect.get',
+    objectDescriptor: 'Object.getOwnPropertyDescriptor',
+    reflectDescriptor: 'Reflect.getOwnPropertyDescriptor',
+  };
+  const reads = Object.fromEntries(Object.entries(calls).map(([name, call]) => [name, {
+    declaration: [`export const k = 'label'; export function read(o: any) { return ${call}(o, k); }`, 'k.ts'],
+    transitive: [`export const base = 'label'; export function read(o: any) { const k = base; return ${call}(o, k); }`, 'k.ts', 'base'],
+    nativeEsm: [`export const k = 'label'; export function read(o) { return ${call}(o, k); }`, 'k.mjs'],
+    clause: [`const k = 'label'; export { k }; export function read(o: any) { return ${call}(o, k); }`, 'k.ts'],
+  }]));
+  const reachesFunction = (result) => result === Function || result?.value === Function;
+  const witness = {};
+  for (const [call, forms] of Object.entries(reads)) {
+    for (const [form, [source, fileName, slot = 'k']] of Object.entries(forms)) {
+      for (const module of ['CommonJS', 'ESNext']) {
+        const output = typescript.transpileModule(source, {
+          fileName,
+          compilerOptions: { allowJs: true, module: typescript.ModuleKind[module], target: typescript.ScriptTarget.ES2020 },
+        }).outputText;
+        const commonJs = !/^export /m.test(output);
+        const exported = commonJs
+          ? {}
+          : await import(`data:text/javascript,${encodeURIComponent(`${output}\n// ${call}/${form}/${module}`)}`);
+        if (commonJs) runInNewContext(output, { exports: exported });
+        const before = exported.read({ label: form });
+        assert.equal(before?.value ?? before, form, `${call}/${form}/${module}`);
+        const replaced = Reflect.set(exported, slot, 'constructor');
+        witness[`${call}/${form}/${module}`] = [commonJs, replaced, reachesFunction(exported.read(Function.prototype))];
+      }
+    }
+  }
+  const expectedWitness = {};
+  for (const call of Object.keys(calls)) {
+    Object.assign(expectedWitness, {
+      [`${call}/declaration/CommonJS`]: [true, true, true],
+      [`${call}/declaration/ESNext`]: [false, false, false],
+      [`${call}/transitive/CommonJS`]: [true, true, true],
+      [`${call}/transitive/ESNext`]: [false, false, false],
+      [`${call}/nativeEsm/CommonJS`]: [false, false, false],
+      [`${call}/nativeEsm/ESNext`]: [false, false, false],
+      [`${call}/clause/CommonJS`]: [true, true, false],
+      [`${call}/clause/ESNext`]: [false, false, false],
+    });
+  }
+  assert.deepEqual(witness, expectedWitness);
+
+  for (const call of Object.values(calls)) {
+    const accepted = [
+      [`export const k = 'label'; export function read(o) { return ${call}(o, k); }`, 'mjs'],
+      [`export const k = 'label'; export function read(o: any) { return ${call}(o, k); }`, 'mts'],
+      [`const k = 'label'; export { k }; export function read(o: any) { return ${call}(o, k); }`, 'ts'],
+      [`const k = 'label'; export default k; export function read(o: any) { return ${call}(o, k); }`, 'ts'],
+      [`const base = 'lab'; const k = base + 'el'; export function read(o: any) { return ${call}(o, k); }`, 'tsx'],
+      [`export namespace N { const k = 'label'; export function read(o: any) { return ${call}(o, k); } }`, 'ts'],
+      [`export const k = 'label'; export function read(o: { label: string }) { return ${call}(o, k); }`, 'ts'],
+      [`export const k = 'label'; export function read(o: any) { return ${call}(o, 'label'); }`, 'ts'],
+    ];
+    for (const [source, extension] of accepted) {
+      assert.deepEqual(parseModuleSpecifiers(source, `descriptor-export.${extension}`), [], source);
+    }
+    const refused = [
+      [`export const k = 'label'; export function read(o: any) { return ${call}(o, k); }`, 'ts'],
+      [`export const k = 'label'; export function read(o: any) { return ${call}(o, k); }`, 'tsx'],
+      [`export const k = 'label'; export function read(o) { return ${call}(o, k); }`, 'js'],
+      [`export const a = 'x', k = 'label'; export function read(o: any) { return ${call}(o, k); }`, 'ts'],
+      [`export const base = 'label'; export function read(o: any) { const k = base; return ${call}(o, k); }`, 'ts'],
+      [`export const base = 'label'; const k = base; export function read(o: any) { return ${call}(o, k); }`, 'ts'],
+      [`export const base = 'lab'; export function read(o: any) { return ${call}(o, base + 'el'); }`, 'ts'],
+      [`export const base = 'el'; export function read(o: any) { return ${call}(o, 'lab' + base); }`, 'ts'],
+      [`export const base = 'el'; export function read(o: any) { return ${call}(o, \`lab\${base}\`); }`, 'ts'],
+      [`export const k = 'label'; export function read(o: any) { return ${call}(o, k as any); }`, 'ts'],
+      [`export namespace N { export const k = 'label'; export function read(o: any) { return ${call}(o, k); } }`, 'mts'],
+      [`import { opaque } from 'unresolved-supplier'; export const k = 'label'; ${call}(opaque, k);`, 'ts'],
+    ];
+    for (const [source, extension] of refused) {
+      assert.throws(
+        () => parseModuleSpecifiers(source, `descriptor-export.${extension}`),
+        /unresolved runtime module edge \(constructor property capability\)/,
+        source,
+      );
+    }
+  }
+});
+
 test('a computed read keyed by a fresh module-local Symbol() is data access on a non-function receiver', () => {
   const portalPath = resolve(coreRoot, 'src/components/primitives/runtime/overlay/portal-scope/index.tsx');
   const portalSource = readFileSync(portalPath, 'utf8');

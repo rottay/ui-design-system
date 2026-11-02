@@ -2387,7 +2387,7 @@ export function analyzeRuntimeModuleEdges(
     if (!descriptorAccess) return false;
     const property = staticPropertyText(node.arguments[1]);
     return property === 'constructor' || (
-      property === null && (includeOpaqueComputed
+      (property === null || exportSlotStaticKey(node.arguments[1])) && (includeOpaqueComputed
         ? callableExpression(node.arguments[0])
         : definitelyCallableExpression(node.arguments[0]))
     );
