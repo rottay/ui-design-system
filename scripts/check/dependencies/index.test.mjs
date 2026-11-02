@@ -1474,6 +1474,14 @@ test('a computed read keyed by a declared finite literal set is data access, not
     `import { opaque } from 'unresolved-supplier'; function pick(key: 'label' = 'label') { return opaque[key]; } pick()("return import('d3')")();`,
     'finite-literal-keys.ts',
   ), ['unresolved-supplier']);
+  assert.deepEqual(parseModuleSpecifiers(
+    `import { opaque } from 'unresolved-supplier'; namespace N { let key = 'label'; export function f() { return opaque[key]; } }`,
+    'finite-literal-keys.ts',
+  ), ['unresolved-supplier']);
+  assert.deepEqual(parseModuleSpecifiers(
+    `import { opaque } from 'unresolved-supplier'; export let key = 'label'; export function f() { return opaque[key]; }`,
+    'finite-literal-keys.ts',
+  ), ['unresolved-supplier']);
 
   const hostile = [
     `import { opaque } from 'unresolved-supplier'; function pick(key = 'label') { return opaque[key]; } pick('constructor')("return import('d3')")();`,
