@@ -153,7 +153,7 @@ export const Rate = React.forwardRef<HTMLDivElement, RateProps>(
     // with the selection. `focusedStar` only drives the skin's focus ring.
     const [focusedStar, setFocusedStar] = useState<number | null>(null);
     const containerRef = useRef<HTMLDivElement>(null);
-    const starRefs = useRef<Array<HTMLSpanElement | null>>([]);
+    const starRefs = useRef<Map<number, HTMLSpanElement | null>>(new Map());
     // Stable group name for the hidden form carrier (native form
     // participation). The old die-rolled name changed identity every render
     // and used the deprecated `substr`; `useId` is stable and SSR-safe.
@@ -171,7 +171,7 @@ export const Rate = React.forwardRef<HTMLDivElement, RateProps>(
     const rovingIndex = Math.min(count, Math.max(1, Math.round(currentValue || 0)));
 
     const focusStar = useCallback((starIndex: number) => {
-      starRefs.current[starIndex - 1]?.focus();
+      starRefs.current.get(starIndex - 1)?.focus();
     }, []);
 
     // -------------------------------------------------------------------------
@@ -338,7 +338,7 @@ export const Rate = React.forwardRef<HTMLDivElement, RateProps>(
         <span
           key={index}
           ref={(node) => {
-            starRefs.current[index] = node;
+            starRefs.current.set(index, node);
           }}
           data-part="star"
           data-state={isFilled && !isHalfFilled ? 'full' : isHalfFilled ? 'half' : 'empty'}

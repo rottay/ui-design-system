@@ -46,6 +46,14 @@
   already open menu are unchanged. No public API, type, default or dependency
   change. Source and focal checks cover the correction; browser and
   public-package acceptance remain pending.
+- Store Modern Rate star element refs in a `Map` keyed by the numeric star
+  index instead of a sparse array. Focus behavior is unchanged: autoFocus, a
+  click (including a half-star hit) and the arrow, Home and End keys focus the
+  same live star, including stars remounted after `count` shrinks and grows
+  back. A target with no rendered star, such as End on a fractional `count`,
+  still moves no focus. No public API, type, default, keyboard, lifecycle or
+  dependency change. Source and focal simulated-DOM checks cover the change;
+  browser and public-package acceptance remain pending.
 - Forward `config.access` from `HeaderSurface` to `SurfaceActionBar`, so
   `{ mode: 'all' }` keeps its declared contract on Header actions, as
   `SidebarSurface` already does: an action hidden only by its `visible`
