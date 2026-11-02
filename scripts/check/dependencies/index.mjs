@@ -2636,6 +2636,83 @@ export function analyzeRuntimeModuleEdges(
     return true;
   }
 
+  function intrinsicWrapperOf(node) {
+    let value = node;
+    while (
+      (ts.isParenthesizedExpression(value.parent) || ts.isAsExpression(value.parent) ||
+       ts.isTypeAssertionExpression(value.parent) || ts.isNonNullExpression(value.parent) ||
+       ts.isSatisfiesExpression(value.parent)) && value.parent.expression === value
+    ) value = value.parent;
+    return value;
+  }
+
+  // A use that can neither write the intrinsic nor hand it on: a member read that is not a
+  // mutation target (called only as `for`/`keyFor`), a direct call, or a typeof/void/!/
+  // equality/instanceof/in operand.
+  function intrinsicReadOnlyUse(root, mutated) {
+    const value = intrinsicWrapperOf(root);
+    const parent = value.parent;
+    if (
+      (ts.isPropertyAccessExpression(parent) || ts.isElementAccessExpression(parent)) &&
+      parent.expression === value
+    ) {
+      if (mutated(parent)) return false;
+      const member = intrinsicWrapperOf(parent);
+      const use = member.parent;
+      if (ts.isTaggedTemplateExpression(use) && use.tag === member) return false;
+      if ((ts.isCallExpression(use) || ts.isNewExpression(use)) && use.expression === member) {
+        return ['for', 'keyFor'].includes(propertyText(parent));
+      }
+      return true;
+    }
+    if (ts.isCallExpression(parent) && parent.expression === value) return true;
+    if (ts.isTypeOfExpression(parent) || ts.isVoidExpression(parent)) return true;
+    if (ts.isPrefixUnaryExpression(parent) && parent.operator === ts.SyntaxKind.ExclamationToken) return true;
+    if (!ts.isBinaryExpression(parent)) return false;
+    const operator = parent.operatorToken.kind;
+    if ([
+      ts.SyntaxKind.EqualsEqualsToken, ts.SyntaxKind.EqualsEqualsEqualsToken,
+      ts.SyntaxKind.ExclamationEqualsToken, ts.SyntaxKind.ExclamationEqualsEqualsToken,
+    ].includes(operator)) return true;
+    return parent.right === value &&
+      [ts.SyntaxKind.InstanceOfKeyword, ts.SyntaxKind.InKeyword].includes(operator);
+  }
+
+  function intrinsicReference(node) {
+    if (!ts.isIdentifier(node)) return true;
+    const parent = node.parent;
+    return runtimeIdentifier(node) &&
+      !((ts.isJsxAttribute(parent) || ts.isEnumMember(parent)) && parent.name === node);
+  }
+
+  // Every analyzed file trusts its registered keys to the one shared Symbol intrinsic, so a
+  // file that could write it is refused even when it reads no registered key itself.
+  function refuseSymbolIntrinsicTamper() {
+    let targets = null;
+    const mutated = (expression) => {
+      if (!targets) {
+        targets = new Set();
+        const collect = (node) => {
+          for (const target of mutationTargets(node)) targets.add(target);
+          ts.forEachChild(node, collect);
+        };
+        collect(sourceFile);
+      }
+      return targets.has(expression);
+    };
+    function inspect(node) {
+      if (runtimeNode(node)) {
+        if (containerSymbolPropertyOperation(node)) unresolved(node, 'Symbol intrinsic write');
+        if (
+          intrinsicReference(node) && symbolIntrinsicRoot(node) &&
+          !intrinsicReadOnlyUse(node, mutated)
+        ) unresolved(node, 'Symbol intrinsic write');
+      }
+      ts.forEachChild(node, inspect);
+    }
+    inspect(sourceFile);
+  }
+
   function nodeModuleObjectUseAllowed(identifier) {
     const parent = identifier.parent;
     if (
@@ -2738,6 +2815,7 @@ export function analyzeRuntimeModuleEdges(
   }
 
   visit(sourceFile);
+  if (enforceComputedCapabilities) refuseSymbolIntrinsicTamper();
   const analysis = { edges, sourceFile };
   cache.set(cacheKey, { analysis, source, typeContext });
   return analysis;

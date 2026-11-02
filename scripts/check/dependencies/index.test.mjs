@@ -2389,6 +2389,112 @@ test('an exported static-key container write withdraws every registered-key witn
   }
 });
 
+test('a file that can write the shared Symbol intrinsic is refused without a registered-key read: every other file\'s registered key trusts it', () => {
+  const typescript = createRequire(resolve(coreRoot, 'package.json'))('typescript');
+  const emit = (source, module) => typescript.transpileModule(source, {
+    fileName: 'm.ts',
+    compilerOptions: { module: typescript.ModuleKind[module], target: typescript.ScriptTarget.ES2020 },
+  }).outputText;
+  const reader = "import * as a from './a'; export function run(payload) { a.poison(payload); return globalThis[Symbol.for('node:fs')]; }";
+  const coWriter = (slot) => `import * as a from './a'; export function run(payload) { a.${slot} = 'Symbol'; a.poison(payload); return globalThis[Symbol.for('node:fs')]; }`;
+  const strip = (output) => output.replace(/^import .*$/gm, '').replace(/^export (?=(const|function|class) )/gm, '');
+  const reaches = (writer, linked, payload, module) => {
+    const sandbox = { reached: null };
+    const a = emit(writer, module);
+    const b = emit(linked, module);
+    runInNewContext(module === 'CommonJS'
+      ? `const modules = {}; (function (exports) { ${a} })(modules.a = {}); (function (exports, require) { ${b} })(modules.b = {}, () => modules.a); try { reached = modules.b.run(${payload}) === Function; } catch { reached = false; }`
+      : `const a = (function () { 'use strict'; ${strip(a)}; return Object.freeze({ poison }); })(); const b = (function () { 'use strict'; ${strip(b)}; return { run }; })(); try { reached = b.run(${payload}) === Function; } catch { reached = false; }`,
+      sandbox);
+    return sandbox.reached;
+  };
+  const fake = "({ for: () => 'Function' })";
+  const forge = "() => 'Function'";
+  const tampers = [
+    ['container', 'export function poison(v) { globalThis.Symbol = v; }', fake],
+    ['static-string', "const K = 'Sym' + 'bol'; export function poison(v) { globalThis[K] = v; }", fake],
+    ['bare', 'export function poison(v) { Symbol = v; }', fake],
+    ['shorthand', 'export function poison(v) { ({ Symbol } = { Symbol: v }); }', fake],
+    ['member', 'export function poison(f) { Symbol.for = f; }', forge],
+    ['container-member', 'export function poison(f) { globalThis.Symbol.for = f; }', forge],
+    ['define-property', "export function poison(v) { Object.defineProperty(globalThis, 'Symbol', { value: v, configurable: true, writable: true }); }", fake],
+    ['alias', 'const g = globalThis; export function poison(v) { g.Symbol = v; }', fake],
+    ['parameter', 'function put(c, v) { c.Symbol = v; } export function poison(v) { put(globalThis, v); }', fake],
+    ['escape', 'const S = Symbol; export function poison(f) { S.for = f; }', forge],
+    ['define-getter', "export function poison(f) { Symbol.__defineGetter__('for', () => f); }", forge],
+    ['reflect', "export function poison(f) { Reflect.set(Symbol, 'for', f); }", forge],
+    ['tagged-call', "export function poison(f) { const join = Array.prototype.join; Array.prototype.join = () => 'for'; Symbol.__defineGetter__`${() => f}`; Array.prototype.join = join; }", forge],
+    ['parenthesized-call', "export function poison(f) { (Symbol.__defineGetter__)('for', () => f); }", forge],
+    ['instanceof-operand', 'export function poison(f) { return Symbol instanceof { [Symbol.hasInstance](S) { S.for = f; return false; } }; }', forge],
+  ];
+  const witness = {};
+  for (const [form, writer, payload] of tampers) {
+    for (const module of ['CommonJS', 'ESNext']) witness[`${form}/${module}`] = reaches(writer, reader, payload, module);
+  }
+  assert.deepEqual(witness, Object.fromEntries(tampers.flatMap(([form]) => [[`${form}/CommonJS`, true], [`${form}/ESNext`, true]])));
+  assert.deepEqual(parseModuleSpecifiers(reader, 'b.ts'), ['./a']);
+  for (const [form, writer] of tampers) {
+    for (const extension of ['ts', 'mjs', 'cts', 'js', 'tsx']) {
+      assert.throws(
+        () => parseModuleSpecifiers(writer, `a.${extension}`),
+        /unresolved runtime module edge \(Symbol intrinsic write\)/,
+        `${form}.${extension}`,
+      );
+    }
+    assert.deepEqual(
+      analyzeRuntimeModuleEdges(writer, `${form}-inventory.ts`, typescript, { enforceComputedCapabilities: false }).edges,
+      [],
+      `${form} inventory`,
+    );
+  }
+
+  const legitimate = [
+    ['expando', 'export function poison(v) { globalThis.appState = v; }'],
+    ['local-slot', "const s = Symbol.for('label'); export function poison(v) { globalThis[s] = v; }"],
+    ['literal-slot', "export function poison(v) { globalThis[Symbol.for('label')] = v; delete globalThis[Symbol.for('label')]; }"],
+    ['intrinsic-reads', "const it = Symbol.iterator; const fresh = Symbol('d'); export function poison(v) { void (typeof Symbol === 'function' && Symbol.keyFor(Symbol.for('x')) && 'for' in Symbol && v instanceof Symbol && !Symbol && Symbol !== v); void it; void fresh; }"],
+    ['container-reads', "export function poison(v) { void (typeof globalThis.Symbol === 'function' && globalThis.Symbol.for('x') && globalThis.Symbol.iterator); void v; }"],
+    ['well-known-method', 'export class Bag { [Symbol.iterator]() { return [][Symbol.iterator](); } } export function poison(v) { void v; void new Bag(); }'],
+    ['plain-object', 'export const box = {}; export function poison(v) { box.Symbol = v; box.Symbol.for = v; }'],
+    ['shadowed', 'export function poison(v, Symbol = {}) { Symbol.for = v; return { Symbol: Symbol }; }'],
+    ['parenthesized-reads', "export function poison(v) { void (Symbol).for('x'); void (Symbol.keyFor)(Symbol.for('y')); void (globalThis.Symbol).iterator; void v; }"],
+    ['member-argument', 'export function poison(v) { void String(Symbol.iterator); void [Symbol.asyncIterator, v]; }'],
+    ['label', 'export function poison(v) { Symbol: for (;;) { break Symbol; } void v; }'],
+  ];
+  for (const [form, writer] of legitimate) {
+    for (const module of ['CommonJS', 'ESNext']) {
+      assert.equal(reaches(writer, reader, fake, module), false, `${form}/${module}`);
+    }
+    for (const extension of ['ts', 'mjs', 'cts', 'js', 'tsx']) {
+      assert.deepEqual(parseModuleSpecifiers(writer, `a.${extension}`), [], `${form}.${extension}`);
+    }
+  }
+  assert.deepEqual(parseModuleSpecifiers('export function Mark(props) { return <svg Symbol="a" {...props} />; }', 'mark.tsx'), []);
+  assert.deepEqual(parseModuleSpecifiers('enum Glyph { Symbol } export const glyph = Glyph.Symbol;', 'glyph.ts'), []);
+
+  for (const [writer, slot] of [
+    ["export const s = Symbol.for('label'); export function poison(v) { globalThis[s] = v; }", 's'],
+    ["export const k = 'label'; export function poison(v) { globalThis[k] = v; }", 'k'],
+  ]) {
+    assert.deepEqual(parseModuleSpecifiers(writer, 'a.ts'), []);
+    assert.deepEqual(parseModuleSpecifiers(coWriter(slot), 'b.ts'), ['./a']);
+    assert.equal(reaches(writer, coWriter(slot), fake, 'CommonJS'), true);
+    assert.equal(reaches(writer, coWriter(slot), fake, 'ESNext'), false);
+  }
+
+  for (const source of [
+    "globalThis.Symbol = {}; void globalThis[Symbol.for('node:fs')];",
+    "Symbol.for = () => 'Function'; void globalThis[Symbol.for('node:fs')];",
+    "Object.defineProperty(globalThis, 'Symbol', { value: {} }); void globalThis[Symbol.for('node:fs')];",
+  ]) {
+    assert.throws(
+      () => parseModuleSpecifiers(source, 'in-file.ts'),
+      /unresolved runtime module edge \(global loader container transport\)/,
+      source,
+    );
+  }
+});
+
 test('a computed read keyed by a fresh module-local Symbol() is data access on a non-function receiver', () => {
   const portalPath = resolve(coreRoot, 'src/components/primitives/runtime/overlay/portal-scope/index.tsx');
   const portalSource = readFileSync(portalPath, 'utf8');
