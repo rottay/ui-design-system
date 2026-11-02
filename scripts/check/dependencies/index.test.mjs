@@ -2319,6 +2319,76 @@ test('runtime closure resolves @ui/* through the tsconfig components mapping and
   }
 });
 
+test('runtime closure keeps every path alias inside its mapped root while relative edges may leave it', () => {
+  const fixtureRoot = mkdtempSync(resolve(tmpdir(), 'rottay-ds-alias-containment-'));
+  const sourceRoot = resolve(fixtureRoot, 'src');
+  const write = (path, marker) => {
+    mkdirSync(dirname(resolve(fixtureRoot, path)), { recursive: true });
+    writeFileSync(resolve(fixtureRoot, path), `import '${marker}';\nexport const X = 1;\n`);
+  };
+  const trace = (source) => {
+    writeFileSync(resolve(sourceRoot, 'index.ts'), source);
+    const graph = traceSourceEntry(resolve(sourceRoot, 'index.ts'), sourceRoot);
+    return {
+      externals: [...graph.externalImports.keys()].sort(),
+      visited: [...graph.visited].map((file) => relative(fixtureRoot, file).replaceAll('\\', '/')).sort(),
+    };
+  };
+  const entry = 'src/index.ts';
+  try {
+    write('outside/index.ts', 'fixture-repo-outside');
+    write('src-evil/index.ts', 'fixture-root-lookalike');
+    write('src.ts', 'fixture-root-sibling-extension');
+    write('src/outside/index.ts', 'fixture-alias-outside');
+    write('src/legit/index.ts', 'fixture-root-legit');
+    write('src/..dotted/index.ts', 'fixture-root-dotted');
+    write('src/components/patterns/index.ts', 'fixture-ui-legit');
+    write('src/components/primitives/index.ts', 'fixture-ui-normalized');
+    write('src/components-evil/index.ts', 'fixture-ui-lookalike');
+    write('src/foundation/contracts/theme/index.ts', 'fixture-types-legit');
+    write('src/foundation/contracts-evil/index.ts', 'fixture-types-lookalike');
+
+    for (const [specifier, packageRoot] of [
+      ['@/../outside', '@/..'],
+      ['@/../src-evil', '@/..'],
+      ['@ui/../outside', '@ui/..'],
+      ['@ui/../components-evil', '@ui/..'],
+      ['@ui/patterns/../../outside', '@ui/patterns'],
+      ['@types/../../outside', '@types/..'],
+      ['@types/../contracts-evil', '@types/..'],
+    ]) {
+      assert.deepEqual(
+        trace(`export { X } from '${specifier}';\n`),
+        { externals: [packageRoot], visited: [entry] },
+        specifier,
+      );
+    }
+
+    assert.deepEqual(
+      trace("export { X } from '@/';\n"),
+      { externals: [], visited: [entry] },
+      'a root alias must not select the sibling extension candidate of its own root',
+    );
+
+    for (const [specifier, file, marker] of [
+      ['@/legit', 'src/legit/index.ts', 'fixture-root-legit'],
+      ['@/..dotted', 'src/..dotted/index.ts', 'fixture-root-dotted'],
+      ['@ui/patterns', 'src/components/patterns/index.ts', 'fixture-ui-legit'],
+      ['@ui/patterns/../primitives', 'src/components/primitives/index.ts', 'fixture-ui-normalized'],
+      ['@types/theme', 'src/foundation/contracts/theme/index.ts', 'fixture-types-legit'],
+      ['../outside', 'outside/index.ts', 'fixture-repo-outside'],
+    ]) {
+      assert.deepEqual(
+        trace(`export { X } from '${specifier}';\n`),
+        { externals: [marker], visited: [file, entry].sort() },
+        specifier,
+      );
+    }
+  } finally {
+    rmSync(fixtureRoot, { recursive: true, force: true });
+  }
+});
+
 test('runtime export inventory includes the public CLI import and every CJS condition', () => {
   const manifest = JSON.parse(readFileSync(resolve(coreRoot, 'package.json'), 'utf8'));
   const conditions = collectRuntimeExportConditions(manifest);

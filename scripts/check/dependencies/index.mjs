@@ -2579,15 +2579,19 @@ export function parseModuleSpecifiers(source, fileName = 'fixture.ts') {
 
 function resolveSourceModule(fromFile, specifier, root = sourceRoot) {
   let base;
+  let aliasRoot = null;
   if (specifier.startsWith('./') || specifier.startsWith('../')) {
     base = resolve(dirname(fromFile), specifier);
   } else if (specifier.startsWith('@/')) {
-    base = resolve(root, specifier.slice(2));
+    aliasRoot = resolve(root);
+    base = resolve(aliasRoot, specifier.slice(2));
   } else if (specifier.startsWith('@ui/') && specifier.length > '@ui/'.length) {
     // Mirrors tsconfig `paths` "@ui/*" -> "./src/components/*"; there is no bare `@ui` mapping.
-    base = resolve(root, 'components', specifier.slice('@ui/'.length));
+    aliasRoot = resolve(root, 'components');
+    base = resolve(aliasRoot, specifier.slice('@ui/'.length));
   } else if (specifier === '@types' || specifier.startsWith('@types/')) {
-    base = resolve(root, 'foundation', 'contracts', specifier.slice('@types'.length + 1));
+    aliasRoot = resolve(root, 'foundation', 'contracts');
+    base = resolve(aliasRoot, specifier.slice('@types'.length + 1));
   } else {
     return null;
   }
@@ -2597,7 +2601,12 @@ function resolveSourceModule(fromFile, specifier, root = sourceRoot) {
     ...SOURCE_EXTENSIONS.map((extension) => `${base}${extension}`),
     ...SOURCE_EXTENSIONS.map((extension) => resolve(base, `index${extension}`)),
   ];
-  return candidates.find((candidate) => existsSync(candidate) && statSync(candidate).isFile()) ?? null;
+  // A path alias never reaches outside its mapped root, however its segments normalize.
+  return candidates.find((candidate) => (
+    (aliasRoot === null || isPathInside(candidate, aliasRoot)) &&
+    existsSync(candidate) &&
+    statSync(candidate).isFile()
+  )) ?? null;
 }
 
 function collectFileImports(files) {
