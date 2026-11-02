@@ -1480,10 +1480,6 @@ test('a computed read keyed by a declared finite literal set is data access, not
     `import { opaque } from 'unresolved-supplier'; namespace N { let key = 'label'; export function f() { return opaque[key]; } }`,
     'finite-literal-keys.ts',
   ), ['unresolved-supplier']);
-  assert.deepEqual(parseModuleSpecifiers(
-    `import { opaque } from 'unresolved-supplier'; export let key = 'label'; export function f() { return opaque[key]; }`,
-    'finite-literal-keys.ts',
-  ), ['unresolved-supplier']);
 
   const hostile = [
     `import { opaque } from 'unresolved-supplier'; function pick(key = 'label') { return opaque[key]; } pick('constructor')("return import('d3')")();`,
@@ -1743,6 +1739,67 @@ test('an exported object-rest declaration is refused: CommonJS emit deletes thro
   for (const source of refused) {
     assert.throws(
       () => parseModuleSpecifiers(source, 'object-rest-export.ts'),
+      /unresolved runtime module edge \(constructor property capability\)/,
+      source,
+    );
+  }
+});
+
+test('an exported finite-key declaration is refused: CommonJS emit reads the key from a writable exports slot', async () => {
+  const typescript = createRequire(resolve(coreRoot, 'package.json'))('typescript');
+  const read = 'export function read(o: any) { return o[k]; }';
+  const forms = {
+    declaration: `export let k: 'label' = 'label'; ${read}`,
+    clause: `let k: 'label' = 'label'; export { k }; ${read}`,
+    local: `let k: 'label' = 'label'; ${read}`,
+  };
+  const witness = {};
+  for (const [form, source] of Object.entries(forms)) {
+    for (const module of ['CommonJS', 'ESNext']) {
+      const output = typescript.transpileModule(source, {
+        compilerOptions: { module: typescript.ModuleKind[module], target: typescript.ScriptTarget.ES2020 },
+      }).outputText;
+      const exported = module === 'CommonJS' ? {} : await import(`data:text/javascript,${encodeURIComponent(output)}`);
+      if (module === 'CommonJS') runInNewContext(output, { exports: exported });
+      assert.equal(exported.read({ label: form }), form, `${form}/${module}`);
+      const replaced = Reflect.set(exported, 'k', 'constructor');
+      witness[`${form}/${module}`] = [/o\[exports\.k\]/.test(output), replaced, exported.read(() => {}) === Function];
+    }
+  }
+  assert.deepEqual(witness, {
+    'declaration/CommonJS': [true, true, true],
+    'declaration/ESNext': [false, false, false],
+    'clause/CommonJS': [false, true, false],
+    'clause/ESNext': [false, false, false],
+    'local/CommonJS': [false, true, false],
+    'local/ESNext': [false, false, false],
+  });
+
+  const accepted = [
+    forms.clause,
+    forms.local,
+    `let k: 'label' = 'label'; export { k as default }; ${read}`,
+    `const k = 0; export { k }; ${read}`,
+    `export function read(o: any, k: 'label') { return o[k]; }`,
+    `export namespace N { let k: 'label' = 'label'; export function read(o: any) { return o[k]; } }`,
+    `let base: 'label' = 'label'; export function read(o: any) { const k = base; return o[k]; }`,
+  ];
+  for (const source of accepted) {
+    assert.deepEqual(parseModuleSpecifiers(source, 'finite-key-export.ts'), [], source);
+  }
+  const refused = [
+    forms.declaration,
+    `export var k: 'label' = 'label'; ${read}`,
+    `export const k = 0; ${read}`,
+    `export const a = 'x', k = 1; ${read}`,
+    `let base: 'label' = 'label'; export const k: 'label' = base; ${read}`,
+    `export let base: 'label' = 'label'; export function read(o: any) { const k = base; return o[k]; }`,
+    `export let base: 'label' = 'label'; export function read(o: any, k: 'label' = base) { return o[k]; }`,
+    `import { opaque } from 'unresolved-supplier'; export let key = 'label'; export function f() { return opaque[key]; }`,
+  ];
+  for (const source of refused) {
+    assert.throws(
+      () => parseModuleSpecifiers(source, 'finite-key-export.ts'),
       /unresolved runtime module edge \(constructor property capability\)/,
       source,
     );

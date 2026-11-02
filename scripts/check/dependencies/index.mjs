@@ -2182,8 +2182,8 @@ export function analyzeRuntimeModuleEdges(
         modifiers & ts.ModifierFlags.Export);
   }
 
-  // Names a key binding declares, unwritten in this strict module. A cast in its own initializer
-  // proves nothing; a parameter needs an annotation, trusted as declared, not checked against callers.
+  // Names a key binding declares, unwritten and without `export` (CommonJS reads it via `exports`).
+  // An initializer cast proves nothing; a parameter's annotation is trusted, not caller-checked.
   function declaredFiniteKeyNames(expression, resolvingSymbols = new Set()) {
     if (!expression || typeof checker.getTypeFromTypeNode !== 'function') return null;
     if (!ts.isExternalModule(sourceFile)) return null;
@@ -2203,7 +2203,8 @@ export function analyzeRuntimeModuleEdges(
       const binding = (
         (ts.isParameter(declaration) && !declaration.dotDotDotToken) ||
         ts.isVariableDeclaration(declaration)
-      ) && ts.isIdentifier(declaration.name) && runtimeKeyDeclaration(declaration);
+      ) && ts.isIdentifier(declaration.name) && runtimeKeyDeclaration(declaration) &&
+        !(ts.getCombinedModifierFlags(declaration) & ts.ModifierFlags.Export);
       if (!binding || (!declaration.type && (ts.isParameter(declaration) || !declaration.initializer))) {
         proven = false;
         break;
