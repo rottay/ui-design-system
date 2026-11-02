@@ -4687,6 +4687,46 @@ function installPackedConsumer({ consumerRoot, tarball, packedManifest, producer
   return { installedPackage, runtimeFixtures };
 }
 
+export const PACKED_FIXTURE_RENDERED_SUPPLIERS = Object.freeze([
+  '@phosphor-icons/react', '@thesvg/react', 'antd', 'd3', 'motion',
+]);
+
+export const PACKED_RUNTIME_CONDITION_SUBPATHS = Object.freeze({
+  import: Object.freeze([
+    '.', './charts', './charts/access', './charts/renderers', './charts/spec', './eslint',
+    './icons', './icons/presets/bithire', './marks', './marks/brand', './marks/cloud',
+    './motion', './pictograms', './server', './server/static-markup', './spatial',
+    './supplier-honesty-cli',
+  ]),
+  require: Object.freeze([
+    '.', './charts', './charts/access', './charts/renderers', './charts/spec', './eslint',
+    './icons', './icons/presets/bithire', './marks', './marks/brand', './marks/cloud',
+    './motion', './pictograms', './server', './server/static-markup', './spatial',
+  ]),
+});
+
+function rosterDrift(label, expected, actual) {
+  const missing = expected.filter((entry) => !actual.includes(entry));
+  const unexpected = actual.filter((entry) => !expected.includes(entry));
+  const duplicated = actual.filter((entry, index) => actual.indexOf(entry) !== index);
+  if (missing.length + unexpected.length + duplicated.length === 0) return [];
+  return [
+    `${label}: missing [${missing.join(', ')}], unexpected [${unexpected.join(', ')}], duplicated [${[...new Set(duplicated)].join(', ')}]`,
+  ];
+}
+
+export function packedFixtureSupplierDrift(renderedSuppliers) {
+  return rosterDrift('fixture suppliers', PACKED_FIXTURE_RENDERED_SUPPLIERS, [...(renderedSuppliers ?? [])]);
+}
+
+export function packedRuntimeConditionDrift(runtimeFixtures) {
+  return ['import', 'require'].flatMap((mode) => rosterDrift(
+    `${mode} conditions`,
+    PACKED_RUNTIME_CONDITION_SUBPATHS[mode],
+    (runtimeFixtures?.[mode] ?? []).map((entry) => entry.subpath),
+  ));
+}
+
 export async function auditPackedArtifact(root = coreRoot) {
   assertPackedBuildPrerequisite(root);
 
@@ -4732,7 +4772,7 @@ export async function auditPackedArtifact(root = coreRoot) {
     writeFileSync(
       fixtureSource,
       `import { AreaChart, CountUp, FadeIn, ScaleIn } from ${JSON.stringify(packedManifest.name)};\n` +
-      `import { CopyIcon, Icon } from ${JSON.stringify(`${packedManifest.name}/icons`)};\n` +
+      `import { Icon } from ${JSON.stringify(`${packedManifest.name}/icons`)};\n` +
       `import { BrandMark, CloudServiceMark } from ${JSON.stringify(`${packedManifest.name}/marks`)};\n` +
       `import {\n` +
       `  ChartFrame,\n` +
@@ -4982,7 +5022,7 @@ export async function auditPackedArtifact(root = coreRoot) {
       `type PackedSpatialTypes = [SpatialInteraction, SpatialLiveMode, SpatialPurpose, SpatialQuality];\n` +
       `const packedSpatialTypes = null as unknown as PackedSpatialTypes;\n` +
       `const spatialValues = [SPATIAL_SCENE_MODULE_VERSION, SpatialExperience, spatialBudget, spatialPerformance, spatialEvent];\n` +
-      'console.log(AreaChart, CountUp, FadeIn, ScaleIn, CopyIcon, Icon, BrandMark, CloudServiceMark, ChartFrame, ChartInsightSummary, resolveChartProjection, chartView, chartPhoneView, chartFrameProps, chartInsightSummaryProps, packedChartTypes, chartGrammar, chartInsight, chartSummary, packedChartSpecTypes, chartSpecValues, accessProps, accessPageStatus, accessCell, accessFile, accessValues, rendererComponents, barProps, heatProps, lineProps, pieProps, scatterProps, lineDatumKey, chartInteractionMeta, chartActiveDatum, chartInteraction, packedChartInteractionTypes, motionPolicy, motionRecipe, packedMotionTypes, motionValues, spatialProps, packedSpatialTypes, spatialValues);\n',
+      'console.log(AreaChart, CountUp, FadeIn, ScaleIn, Icon, BrandMark, CloudServiceMark, ChartFrame, ChartInsightSummary, resolveChartProjection, chartView, chartPhoneView, chartFrameProps, chartInsightSummaryProps, packedChartTypes, chartGrammar, chartInsight, chartSummary, packedChartSpecTypes, chartSpecValues, accessProps, accessPageStatus, accessCell, accessFile, accessValues, rendererComponents, barProps, heatProps, lineProps, pieProps, scatterProps, lineDatumKey, chartInteractionMeta, chartActiveDatum, chartInteraction, packedChartInteractionTypes, motionPolicy, motionRecipe, packedMotionTypes, motionValues, spatialProps, packedSpatialTypes, spatialValues);\n',
     );
     writeFileSync(resolve(consumerRoot, 'tsconfig.json'), JSON.stringify({
       compilerOptions: {
@@ -5007,10 +5047,9 @@ export async function auditPackedArtifact(root = coreRoot) {
       { cwd: consumerRoot },
     );
     const cliReport = JSON.parse(cliResult.stdout);
-    const missingFixtureSuppliers = ['@phosphor-icons/react', '@thesvg/react', 'antd', 'd3', 'motion', 'lucide-react']
-      .filter((supplier) => !cliReport.renderedSuppliers?.includes(supplier));
-    if (missingFixtureSuppliers.length > 0) {
-      throw new Error(`packed supplier CLI missed fixture suppliers: ${missingFixtureSuppliers.join(', ')}`);
+    const fixtureSupplierDrift = packedFixtureSupplierDrift(cliReport.renderedSuppliers);
+    if (fixtureSupplierDrift.length > 0) {
+      throw new Error(`packed supplier CLI fixture drifted: ${fixtureSupplierDrift.join('; ')}`);
     }
 
     // Create this only after the supplier CLI has scanned the positive app
@@ -5057,11 +5096,9 @@ export async function auditPackedArtifact(root = coreRoot) {
     }
 
     const runtimeFixtures = runtimeExportFixtures(packedManifest);
-    if (runtimeFixtures.import.length !== 26 || runtimeFixtures.require.length !== 25) {
-      throw new Error(
-        `packed runtime condition inventory drifted; expected 26 import + 25 require, found ` +
-        `${runtimeFixtures.import.length} import + ${runtimeFixtures.require.length} require`,
-      );
+    const runtimeConditionDrift = packedRuntimeConditionDrift(runtimeFixtures);
+    if (runtimeConditionDrift.length > 0) {
+      throw new Error(`packed runtime condition inventory drifted: ${runtimeConditionDrift.join('; ')}`);
     }
     const installedContract = readJson(resolve(installedPackage, 'contracts/runtime/suppliers/index.json'));
     const contractShapeErrors = validateSupplierContractShape(installedContract);

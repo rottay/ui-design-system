@@ -20,6 +20,10 @@ import {
   deriveSupplierContract,
   loadSupplierContract,
   localizeRuntimeFixtureManifest,
+  PACKED_FIXTURE_RENDERED_SUPPLIERS,
+  PACKED_RUNTIME_CONDITION_SUBPATHS,
+  packedFixtureSupplierDrift,
+  packedRuntimeConditionDrift,
   parseLockIdentities,
   parseModuleSpecifiers,
   repositoryRoot,
@@ -35,6 +39,7 @@ import {
   validateSupplierDeclarations,
 } from './index.mjs';
 import {
+  inferRenderedSuppliers,
   inspectInstalledDesignSystem,
   resolveInstalledContractMode,
   scanAppSuppliers as scanPackagedAppSuppliers,
@@ -2010,12 +2015,11 @@ test('runtime export inventory includes the public CLI import and every CJS cond
   assert.ok(fixtures.require.some((entry) => entry.specifier.endsWith('/charts/access')));
   assert.ok(fixtures.import.some((entry) => entry.specifier.endsWith('/charts/renderers')));
   assert.ok(fixtures.require.some((entry) => entry.specifier.endsWith('/charts/renderers')));
-  for (const iconPack of ['foundation', 'identity', 'intelligence', 'operations']) {
-    assert.ok(fixtures.import.some((entry) => entry.specifier.endsWith(`/icons/${iconPack}`)));
-    assert.ok(fixtures.require.some((entry) => entry.specifier.endsWith(`/icons/${iconPack}`)));
-  }
+  assert.deepEqual(packedRuntimeConditionDrift(fixtures), []);
   for (const assetSubpath of [
+    '/icons',
     '/icons/presets/bithire',
+    '/marks',
     '/marks/brand',
     '/marks/cloud',
   ]) {
@@ -2026,7 +2030,10 @@ test('runtime export inventory includes the public CLI import and every CJS cond
   assert.ok(fixtures.require.some((entry) => entry.specifier.endsWith('/motion')));
   assert.ok(fixtures.import.some((entry) => entry.specifier.endsWith('/spatial')));
   assert.ok(fixtures.require.some((entry) => entry.specifier.endsWith('/spatial')));
-  for (const retiredSubpath of ['/effects', '/spatial/spec', '/icons/full', '/icons/corpus', '/icons/bithire']) {
+  for (const retiredSubpath of [
+    '/effects', '/spatial/spec', '/icons/full', '/icons/corpus', '/icons/bithire',
+    '/icons/foundation', '/icons/identity', '/icons/intelligence', '/icons/operations',
+  ]) {
     for (const mode of ['import', 'require']) {
       assert.equal(fixtures[mode].some((entry) => entry.specifier.endsWith(retiredSubpath)), false, retiredSubpath);
     }
@@ -2039,6 +2046,78 @@ test('packed consumer audit keeps motion and spatial but never reaches for the r
     assert.ok(packedAudit.includes(`\${packedManifest.name}${subpath}\``), subpath);
   }
   assert.doesNotMatch(packedAudit, /\/effects\b|effects-|\bEFFECT_|\beffect[A-Z]|Effect/);
+});
+
+test('packed runtime condition roster names only live exports and refuses retired packs', () => {
+  const manifest = JSON.parse(readFileSync(resolve(coreRoot, 'package.json'), 'utf8'));
+  const live = runtimeExportFixtures(manifest);
+  assert.deepEqual(packedRuntimeConditionDrift(live), []);
+  assert.equal(PACKED_RUNTIME_CONDITION_SUBPATHS.import.length, live.import.length);
+  assert.equal(PACKED_RUNTIME_CONDITION_SUBPATHS.require.length, live.require.length);
+  const retired = [
+    './effects', './spatial/spec', './icons/full', './icons/corpus', './icons/bithire',
+    './icons/foundation', './icons/identity', './icons/intelligence', './icons/operations',
+  ];
+  for (const mode of ['import', 'require']) {
+    for (const subpath of retired) {
+      assert.equal(PACKED_RUNTIME_CONDITION_SUBPATHS[mode].includes(subpath), false, `${mode} ${subpath}`);
+    }
+  }
+  const withRetired = runtimeExportFixtures({
+    ...manifest,
+    exports: { ...manifest.exports, './icons/foundation': manifest.exports['./icons'] },
+  });
+  assert.match(packedRuntimeConditionDrift(withRetired).join('\n'), /import conditions: .*unexpected \[\.\/icons\/foundation\]/);
+  assert.match(packedRuntimeConditionDrift(withRetired).join('\n'), /require conditions: .*unexpected \[\.\/icons\/foundation\]/);
+  const { './pictograms': _pictograms, ...withoutPictograms } = manifest.exports;
+  assert.match(
+    packedRuntimeConditionDrift(runtimeExportFixtures({ ...manifest, exports: withoutPictograms })).join('\n'),
+    /missing \[\.\/pictograms\]/,
+  );
+});
+
+test('packed consumer fixture imports only contract symbols and renders exactly the reconciled suppliers', () => {
+  const packedAudit = auditPackedArtifact.toString();
+  assert.doesNotMatch(packedAudit, /CopyIcon|lucide|\/icons\/(?:foundation|identity|intelligence|operations|full|corpus|bithire)\b/);
+  assert.ok(packedAudit.includes('packedFixtureSupplierDrift(cliReport.renderedSuppliers)'));
+  assert.ok(packedAudit.includes('packedRuntimeConditionDrift(runtimeFixtures)'));
+  const positiveFixture = packedAudit
+    .slice(0, packedAudit.indexOf('retiredSpatialSpecSource'))
+    .replace(/\\n`\s*\+\s*`/g, '\n');
+  const declarations = [...positiveFixture.matchAll(
+    /import \{([^}]*)\} from \$\{JSON\.stringify\((?:packedManifest\.name|`\$\{packedManifest\.name\}(\/[^`]+)`)\)\};/g,
+  )].map(([, names, subpath = '']) => ({ names, subpath }));
+  assert.deepEqual(declarations.map(({ subpath }) => subpath), [
+    '', '/icons', '/marks', '/charts', '/charts/spec', '/charts/access', '/charts/renderers', '/motion', '/spatial',
+  ]);
+  const appRoot = mkdtempSync(resolve(tmpdir(), 'rottay-ds-packed-fixture-'));
+  try {
+    mkdirSync(resolve(appRoot, 'src'), { recursive: true });
+    writeFileSync(
+      resolve(appRoot, 'src/fixture.tsx'),
+      declarations.map(({ names, subpath }) => `import {${names}} from '@rottay/design-system${subpath}';`).join('\n') + '\n',
+    );
+    const contract = loadSupplierContract();
+    const typescript = createRequire(resolve(coreRoot, 'package.json'))('typescript');
+    const { dsSymbols } = scanPackagedAppSuppliers({ appRoot, contract, typescript });
+    assert.deepEqual([...dsSymbols.get('./icons').keys()], ['Icon']);
+    const inferred = inferRenderedSuppliers(dsSymbols, contract);
+    assert.deepEqual(inferred.errors, []);
+    const rendered = [...inferred.required.keys()].sort();
+    assert.deepEqual(rendered, [...PACKED_FIXTURE_RENDERED_SUPPLIERS].sort());
+    assert.deepEqual(packedFixtureSupplierDrift(rendered), []);
+    assert.equal(contract.supplierPackages.includes('lucide-react'), true);
+    assert.match(packedFixtureSupplierDrift([...rendered, 'lucide-react']).join('\n'), /unexpected \[lucide-react\]/);
+    for (const supplier of PACKED_FIXTURE_RENDERED_SUPPLIERS) {
+      assert.match(
+        packedFixtureSupplierDrift(rendered.filter((entry) => entry !== supplier)).join('\n'),
+        new RegExp(`missing \\[${supplier.replace(/[/.@-]/g, '\\$&')}\\]`),
+        supplier,
+      );
+    }
+  } finally {
+    rmSync(appRoot, { recursive: true, force: true });
+  }
 });
 
 test('offline runtime fixtures localize required packages and omit unavailable optional packages', () => {
