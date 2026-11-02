@@ -244,3 +244,116 @@ describe('Splitter modern contract: pointer drag', () => {
     fireEvent.pointerUp(document);
   });
 });
+
+type PanelLocks = ReadonlyArray<boolean | undefined>;
+
+/** `undefined` omits `resizable` entirely, so the documented default is what runs. */
+function lockedSplitter(
+  locks: PanelLocks,
+  sizes: ReadonlyArray<number> = locks.map(() => 100 / locks.length),
+  props: Record<string, unknown> = {}
+) {
+  return (
+    <Splitter {...props}>
+      {locks.map((resizable, i) => (
+        <Panel
+          key={i}
+          defaultSize={sizes[i]}
+          {...(resizable === undefined ? {} : { resizable })}
+        >
+          <span>panel-{i}</span>
+        </Panel>
+      ))}
+    </Splitter>
+  );
+}
+
+/** Each gutter's posture as the user meets it: a tab-stop separator, an inert
+ *  rail, or `mixed` when the DOM contradicts itself. */
+function gutterPostures(): string[] {
+  return gutters().map((gutter) => {
+    const operable =
+      gutter.getAttribute('role') === 'separator' &&
+      gutter.tabIndex === 0 &&
+      !gutter.hasAttribute('aria-hidden') &&
+      gutter.getAttribute('data-resizable') === 'true';
+    const locked =
+      gutter.getAttribute('role') === null &&
+      gutter.tabIndex === -1 &&
+      gutter.getAttribute('aria-hidden') === 'true' &&
+      gutter.getAttribute('data-resizable') === 'false';
+    return operable ? 'operable' : locked ? 'locked' : 'mixed';
+  });
+}
+
+function panelGrows(): string[] {
+  return panels().map((panel) => panel.style.getPropertyValue('--ds-splitter-panel-grow'));
+}
+
+describe('Splitter modern contract: resizable={false} locks only its adjacent gutters', () => {
+  it.each<{ name: string; locks: PanelLocks; expected: string[] }>([
+    { name: 'three panels, resizable omitted everywhere', locks: [undefined, undefined, undefined], expected: ['operable', 'operable'] },
+    { name: 'three panels, first locked', locks: [false, undefined, undefined], expected: ['locked', 'operable'] },
+    { name: 'three panels, middle locked', locks: [undefined, false, undefined], expected: ['locked', 'locked'] },
+    { name: 'three panels, last locked', locks: [undefined, undefined, false], expected: ['operable', 'locked'] },
+    { name: 'three panels, explicit true around a locked middle', locks: [true, false, true], expected: ['locked', 'locked'] },
+    { name: 'three panels, first and last locked', locks: [false, undefined, false], expected: ['locked', 'locked'] },
+    { name: 'three panels, explicit true everywhere', locks: [true, true, true], expected: ['operable', 'operable'] },
+    { name: 'four panels, first locked', locks: [false, undefined, undefined, undefined], expected: ['locked', 'operable', 'operable'] },
+    { name: 'four panels, second locked beside explicit true', locks: [undefined, false, undefined, true], expected: ['locked', 'locked', 'operable'] },
+    { name: 'four panels, last locked', locks: [true, undefined, undefined, false], expected: ['operable', 'operable', 'locked'] },
+  ])('$name', ({ locks, expected }) => {
+    render(lockedSplitter(locks));
+    expect(gutterPostures()).toEqual(expected);
+  });
+
+  it('a locked gutter refuses keyboard and pointer resize while its operable neighbour still resizes', () => {
+    const onResize = vi.fn();
+    const onResizeStart = vi.fn();
+    render(lockedSplitter([false, undefined, undefined], [30, 40, 30], { onResize, onResizeStart }));
+    const [locked, free] = gutters();
+    expect(panelGrows()).toEqual(['30', '40', '30']);
+
+    fireEvent.keyDown(locked, { key: 'ArrowRight' });
+    fireEvent.keyDown(locked, { key: 'End' });
+    fireEvent.keyDown(locked, { key: 'Home' });
+    expect(panelGrows()).toEqual(['30', '40', '30']);
+
+    fireEvent.pointerDown(locked, { clientX: 300, clientY: 200 });
+    expect(locked.getAttribute('data-dragging')).toBe('false');
+    fireEvent.pointerMove(document, { clientX: 900, clientY: 200 });
+    fireEvent.pointerUp(document);
+    expect(panelGrows()).toEqual(['30', '40', '30']);
+    expect(onResizeStart).not.toHaveBeenCalled();
+    expect(onResize).not.toHaveBeenCalled();
+
+    expect(free.getAttribute('aria-valuenow')).toBe('70');
+    fireEvent.keyDown(free, { key: 'ArrowRight' });
+    expect(free.getAttribute('aria-valuenow')).toBe('72');
+    expect(panelGrows()).toEqual(['30', '42', '28']);
+    expect(onResize).toHaveBeenLastCalledWith([30, 42, 28]);
+  });
+
+  it('follows resizable across rerenders, relocking and releasing the right gutters', () => {
+    const sizes = [30, 40, 30];
+    const { rerender } = render(lockedSplitter([undefined, undefined, undefined], sizes));
+    expect(gutterPostures()).toEqual(['operable', 'operable']);
+
+    rerender(lockedSplitter([undefined, false, undefined], sizes));
+    expect(gutterPostures()).toEqual(['locked', 'locked']);
+
+    rerender(lockedSplitter([undefined, undefined, false], sizes));
+    expect(gutterPostures()).toEqual(['operable', 'locked']);
+
+    rerender(lockedSplitter([false, undefined, undefined], sizes));
+    expect(gutterPostures()).toEqual(['locked', 'operable']);
+    fireEvent.keyDown(gutters()[0], { key: 'ArrowRight' });
+    expect(panelGrows()).toEqual(['30', '40', '30']);
+
+    rerender(lockedSplitter([undefined, undefined, undefined], sizes));
+    expect(gutterPostures()).toEqual(['operable', 'operable']);
+    fireEvent.keyDown(gutters()[0], { key: 'ArrowRight' });
+    expect(gutters()[0].getAttribute('aria-valuenow')).toBe('32');
+    expect(panelGrows()).toEqual(['32', '38', '30']);
+  });
+});

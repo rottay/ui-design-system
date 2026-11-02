@@ -429,8 +429,8 @@ export const Splitter = React.forwardRef<HTMLDivElement, SplitterProps>(
     // separator (no tab stop, no drag handlers, static skin state).
     const gutterOperable = childArray.map(
       (_, index) =>
-        panelsMetaRef.current[index]?.resizable !== false &&
-        panelsMetaRef.current[index + 1]?.resizable !== false
+        arrayValueAt(panelsMetaRef.current, index)?.resizable !== false &&
+        arrayValueAt(panelsMetaRef.current, index + 1)?.resizable !== false
     );
 
     return (
@@ -458,7 +458,7 @@ export const Splitter = React.forwardRef<HTMLDivElement, SplitterProps>(
               <ResizeHandle
                 orientation={isVertical ? 'horizontal' : 'vertical'}
                 arrows="position"
-                operable={gutterOperable[index]}
+                operable={arrayValueAt(gutterOperable, index)}
                 label={i18n?.t('splitter.resize_gutter') ?? 'Resize panels'}
                 min={boundaryRangeAt(sizes, index, panelsMetaRef.current).min}
                 max={boundaryRangeAt(sizes, index, panelsMetaRef.current).max}
@@ -469,13 +469,13 @@ export const Splitter = React.forwardRef<HTMLDivElement, SplitterProps>(
                     ? 'ArrowUp ArrowDown Home End'
                     : 'ArrowLeft ArrowRight Home End'
                 }
-                onPointerDown={gutterOperable[index] ? handlePointerDown(index) : undefined}
-                onAdjust={gutterOperable[index] ? handleAdjust(index) : undefined}
+                onPointerDown={arrayValueAt(gutterOperable, index) ? handlePointerDown(index) : undefined}
+                onAdjust={arrayValueAt(gutterOperable, index) ? handleAdjust(index) : undefined}
                 anatomy={{
                   'data-part': 'gutter',
                   'data-orientation': isVertical ? 'vertical' : 'horizontal',
                   'data-dragging': draggingIndex === index ? 'true' : 'false',
-                  'data-resizable': gutterOperable[index] ? 'true' : 'false',
+                  'data-resizable': arrayValueAt(gutterOperable, index) ? 'true' : 'false',
                 }}
               />
             )}

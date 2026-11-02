@@ -72,6 +72,20 @@
   default, markup, token, accessibility or dependency change. Source and
   focal simulated-DOM checks cover the change; browser and public-package
   acceptance remain pending.
+- Read Modern Splitter panel settings and gutter operability through the
+  existing `arrayValueAt` collection helper instead of computed element
+  reads. Each read targets a rendered panel position, and a read past the
+  last panel still finds no panel, so a `resizable={false}` panel locks
+  exactly the gutters it locked before: each adjacent gutter renders
+  without the separator role or a tab stop, is hidden from assistive
+  technology and refuses keyboard and pointer resizing. New
+  contract tests pin that locking for the first, a middle and the last
+  panel in three- and four-panel layouts, `resizable` omitted versus
+  explicit, keyboard and pointer refusal beside a gutter that still
+  resizes, and changes to `resizable` across rerenders. No public API,
+  type, default, markup, order, behavior or dependency change. Source and
+  focal simulated-DOM checks cover the change; browser and public-package
+  acceptance remain pending.
 - Forward `config.access` from `HeaderSurface` to `SurfaceActionBar`, so
   `{ mode: 'all' }` keeps its declared contract on Header actions, as
   `SidebarSurface` already does: an action hidden only by its `visible`
