@@ -39,6 +39,13 @@
 
 ### Patch Changes
 
+- Move focus into a closed Modern Dropdown menu portaled through
+  `getPopupContainer` when ArrowDown or ArrowUp on the trigger opens it: focus
+  now lands on the first or last enabled item, as it already did for in-place
+  menus, instead of staying on the trigger. Pointer opens and arrow keys in an
+  already open menu are unchanged. No public API, type, default or dependency
+  change. Source and focal checks cover the correction; browser and
+  public-package acceptance remain pending.
 - Forward `config.access` from `HeaderSurface` to `SurfaceActionBar`, so
   `{ mode: 'all' }` keeps its declared contract on Header actions, as
   `SidebarSurface` already does: an action hidden only by its `visible`

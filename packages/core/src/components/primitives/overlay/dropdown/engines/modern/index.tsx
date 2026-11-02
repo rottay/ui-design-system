@@ -582,21 +582,20 @@ export const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>((props, 
       '[data-part="menu"] > [data-part="item-shell"] > [data-part="item"]:not(:disabled)',
     );
     if (!items?.length) return false;
-    const target = edge === 'first' ? items[0] : items[items.length - 1];
+    const target = edge === 'first' ? items[0] : items.item(items.length - 1);
     target?.focus();
     return true;
   }, []);
 
-  // Consume the keyboard-open focus edge once the surface exists (inside
-  // `<Portal>` it mounts one commit after the host resolves, so the flag
-  // survives until then; a close before that clears it).
+  // Consume the keyboard-open edge only on the mounted surface: a portaled open
+  // detaches its in-tree surface one commit before the portaled one attaches.
   useEffect(() => {
     if (!isOpen) {
       focusEdgeOnOpenRef.current = null;
       return;
     }
     const edge = focusEdgeOnOpenRef.current;
-    if (!edge || !surfaceEl) return;
+    if (!edge || !surfaceEl || surfaceEl !== surfaceRef.current) return;
     focusEdgeOnOpenRef.current = null;
     focusMenuEdge(edge);
   }, [focusMenuEdge, isOpen, surfaceEl]);
