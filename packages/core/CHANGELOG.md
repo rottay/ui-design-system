@@ -249,6 +249,22 @@
   missing active axis, an empty base, controlled rerenders and the tolerance
   on both axes. No public API, type, default, markup, paint, behavior or
   dependency change. Browser and public-package acceptance remain pending.
+- Read the row that a Modern ColumnSettings move takes through the existing
+  `arrayValueAt` collection helper instead of a computed index read, before
+  the column order is changed. Every move the rendered controls request is
+  unchanged: the move buttons and the arrow, Home and End keys move the row
+  shown at that position in the current order, emit the same keys to
+  `onReorder`, and announce the string header, or the key when the header is
+  not a string, with the new position and the total row count. Focus still
+  follows the moved row, edge moves still do nothing, and reordering stays
+  disabled while a search filters the list. A move from a position with no
+  rendered row, negative ones included, cannot be requested through the
+  public props; it now returns before reordering, announcing or calling
+  `onReorder` instead of throwing. New tests pin an order that differs from
+  `allColumns`, a non-string header, End on the first row, edge keys, the
+  disabled filtered reorder and focus after a controlled move. No public
+  API, type, default, markup, paint, i18n or dependency change. Browser and
+  public-package acceptance remain pending.
 - Forward `config.access` from `HeaderSurface` to `SurfaceActionBar`, so
   `{ mode: 'all' }` keeps its declared contract on Header actions, as
   `SidebarSurface` already does: an action hidden only by its `visible`

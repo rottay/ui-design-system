@@ -43,6 +43,7 @@ import { NavigationUpIcon } from '@/graphics/icons/semantic/generated/roles/navi
 import { NavigationDownIcon } from '@/graphics/icons/semantic/generated/roles/navigation-down';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { partAttributes, useInteractionState } from '@/foundation/behavior';
+import { arrayValueAt } from '@/foundation/kernel/collections';
 
 import type { ColumnSettingsProps, ColumnSettingItem } from '../../contracts';
 
@@ -327,10 +328,12 @@ export default function ModernColumnSettingsDropdown({
   const handleMove = useCallback(
     (fromIndex: number, toIndex: number) => {
       if (toIndex < 0 || toIndex >= sortedColumns.length || toIndex === fromIndex) return;
+      const movedColumn = arrayValueAt(sortedColumns, fromIndex);
+      // arrayValueAt counts a negative position from the end; a row index never is one.
+      if (fromIndex < 0 || movedColumn === undefined) return;
       const keys = sortedColumns.map((col) => col.key);
       const [moved] = keys.splice(fromIndex, 1);
       keys.splice(toIndex, 0, moved);
-      const movedColumn = sortedColumns[fromIndex];
       const movedName =
         typeof movedColumn.header === 'string' ? movedColumn.header : movedColumn.key;
       pendingMoveFocus.current = {
