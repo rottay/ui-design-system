@@ -194,6 +194,19 @@
   integer rows after scrolling back near the top. No public API, type,
   default or dependency change. Browser and public-package acceptance
   remain pending.
+- Read the row top that `useMeasuredScroll` `scrollToIndex` assigns to the
+  scroll element through the existing `arrayValueAt` collection helper
+  instead of a computed index read. The index is still clamped to the rows
+  of the current `count`, so an index before the first row or past the last,
+  infinite ones included, scrolls to that row's top. A fractional or `NaN`
+  index, which names no dataset row, and an empty dataset still scroll to
+  `0`; fractional indices are not rounded. Without a mounted scroll element
+  the call still does nothing. New tests mount a scroll element over eight
+  rows of uneven height and pin the first, a middle and the last row's top,
+  clamping before and after `count` shrinks, the `0` fallback after a real
+  move, an empty dataset and an unmounted element. No public API, type,
+  default, markup, paint, behavior or dependency change. Browser and
+  public-package acceptance remain pending.
 - Forward `config.access` from `HeaderSurface` to `SurfaceActionBar`, so
   `{ mode: 'all' }` keeps its declared contract on Header actions, as
   `SidebarSurface` already does: an action hidden only by its `visible`

@@ -244,7 +244,7 @@ export function useMeasuredScroll(options: UseMeasuredScrollOptions): UseMeasure
       const element = scrollRef.current;
       if (!element) return;
       const clamped = Math.max(0, Math.min(index, count - 1));
-      element.scrollTop = offsets[clamped] ?? 0;
+      element.scrollTop = arrayValueAt(offsets, clamped) ?? 0;
     },
     [count, offsets],
   );

@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+
 import { fireEvent, render, renderHook, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
@@ -186,5 +188,128 @@ describe('useMeasuredScroll visible range in a scrolled viewport', () => {
       { index: 2, start: 30, size: 30 },
       { index: 3, start: 60, size: 40 },
     ]);
+  });
+});
+
+describe('useMeasuredScroll scrollToIndex on a mounted scroll element', () => {
+  // Rows are 10, 20, ..., 80px tall: tops at 0, 10, 30, 60, 100, 150, 210, 280; total 360.
+  const estimateRowSize = (index: number) => (index + 1) * 10;
+
+  type ScrollToIndex = (index: number) => void;
+  type ScrollTargetProps = { count: number; onApi: (scrollToIndex: ScrollToIndex) => void };
+
+  function ScrollTarget({ count, onApi }: ScrollTargetProps) {
+    const { scrollRef, onScroll, totalSize, scrollToIndex } = useMeasuredScroll({
+      count,
+      estimateSize: estimateRowSize,
+    });
+    useEffect(() => {
+      onApi(scrollToIndex);
+    }, [onApi, scrollToIndex]);
+    return (
+      <div ref={scrollRef} onScroll={onScroll} data-testid="scroll-target">
+        <div style={{ height: totalSize }} />
+      </div>
+    );
+  }
+
+  // happy-dom has no layout; an own writable scrollTop records the hook's assignment
+  // exactly, without clamping or a scroll event.
+  function mountScrollTarget(count: number) {
+    const api: { scrollToIndex: ScrollToIndex } = { scrollToIndex: () => undefined };
+    const onApi = (scrollToIndex: ScrollToIndex) => {
+      api.scrollToIndex = scrollToIndex;
+    };
+    const view = render(<ScrollTarget count={count} onApi={onApi} />);
+    const viewport = screen.getByTestId('scroll-target');
+    Object.defineProperty(viewport, 'scrollTop', { configurable: true, writable: true, value: 0 });
+    return {
+      api,
+      viewport,
+      rerender: (next: number) => view.rerender(<ScrollTarget count={next} onApi={onApi} />),
+      unmount: view.unmount,
+    };
+  }
+
+  it('scrolls to the top offset of the requested non-uniform row', () => {
+    const { api, viewport } = mountScrollTarget(8);
+
+    // Row 3's top is 60: not row 2's top (30), its own bottom at row 4's top (100), 0 or 360.
+    api.scrollToIndex(3);
+    expect(viewport.scrollTop).toBe(60);
+
+    // The last row's top is 280, not the total size 360.
+    api.scrollToIndex(7);
+    expect(viewport.scrollTop).toBe(280);
+
+    api.scrollToIndex(0);
+    expect(viewport.scrollTop).toBe(0);
+
+    api.scrollToIndex(1);
+    expect(viewport.scrollTop).toBe(10);
+  });
+
+  it('clamps out-of-range indices to the first and last rows of the current count', () => {
+    const { api, viewport, rerender } = mountScrollTarget(8);
+
+    api.scrollToIndex(3);
+    expect(viewport.scrollTop).toBe(60);
+    api.scrollToIndex(-5);
+    expect(viewport.scrollTop).toBe(0);
+
+    api.scrollToIndex(99);
+    expect(viewport.scrollTop).toBe(280);
+    api.scrollToIndex(Number.NEGATIVE_INFINITY);
+    expect(viewport.scrollTop).toBe(0);
+    api.scrollToIndex(Number.POSITIVE_INFINITY);
+    expect(viewport.scrollTop).toBe(280);
+
+    // After the dataset shrinks to three rows, the last row is row 2 at 30.
+    rerender(3);
+    api.scrollToIndex(99);
+    expect(viewport.scrollTop).toBe(30);
+  });
+
+  it('falls back to offset 0 for a fractional or NaN index', () => {
+    const { api, viewport } = mountScrollTarget(8);
+
+    // A fractional index names no dataset row, so it has no offset.
+    api.scrollToIndex(3);
+    expect(viewport.scrollTop).toBe(60);
+    api.scrollToIndex(2.5);
+    expect(viewport.scrollTop).toBe(0);
+
+    api.scrollToIndex(3);
+    expect(viewport.scrollTop).toBe(60);
+    api.scrollToIndex(Number.NaN);
+    expect(viewport.scrollTop).toBe(0);
+  });
+
+  it('scrolls to 0 for an empty dataset', () => {
+    const { api, viewport } = mountScrollTarget(0);
+
+    viewport.scrollTop = 40;
+    api.scrollToIndex(0);
+    expect(viewport.scrollTop).toBe(0);
+
+    viewport.scrollTop = 40;
+    api.scrollToIndex(5);
+    expect(viewport.scrollTop).toBe(0);
+  });
+
+  it('does nothing without a mounted scroll element', () => {
+    const { result } = renderHook(() =>
+      useMeasuredScroll({ count: 8, estimateSize: estimateRowSize }),
+    );
+    expect(() => result.current.scrollToIndex(3)).not.toThrow();
+
+    const { api, viewport, unmount } = mountScrollTarget(8);
+    api.scrollToIndex(3);
+    expect(viewport.scrollTop).toBe(60);
+
+    // Unmounting detaches the scroll ref, so a retained callback leaves the old element alone.
+    unmount();
+    api.scrollToIndex(5);
+    expect(viewport.scrollTop).toBe(60);
   });
 });
