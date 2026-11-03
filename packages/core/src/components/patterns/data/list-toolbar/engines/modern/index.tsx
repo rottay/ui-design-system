@@ -262,7 +262,7 @@ function FilterButton({
 }: {
   pill: FilterPillConfig;
   /** Lifecycle state of this filter's current value; absent means applied. */
-  state?: ActiveFilterState;
+  state?: ActiveFilterState | undefined;
   onFilterChange?: (key: string, value: unknown) => void;
 }) {
   const [open, setOpen] = useState(false);
@@ -779,14 +779,22 @@ export default function ModernListToolbar({
       state: ActiveFilterState;
     }[] = [];
     for (const pill of filterPills) {
-      const active = activeFilters[pill.key];
+      /* Own entries only: a pill keyed like an Object.prototype member must
+         never read an inherited value as its active filter or its state. */
+      const active = Object.prototype.hasOwnProperty.call(activeFilters, pill.key)
+        ? activeFilters[pill.key]
+        : undefined;
       if (active && active !== '' && active !== 'all') {
         const option = pill.options.find((o) => o.value === String(active));
+        const ownState =
+          filterStates && Object.prototype.hasOwnProperty.call(filterStates, pill.key)
+            ? filterStates[pill.key]
+            : undefined;
         /* An active value that no longer resolves against the pill's options
            is invalid on its face (stale saved view, retired option) — the
            consumer's explicit map wins when it says otherwise. */
         const state: ActiveFilterState =
-          filterStates?.[pill.key] ?? (option ? 'applied' : 'invalid');
+          ownState ?? (option ? 'applied' : 'invalid');
         chips.push({
           key: pill.key,
           label: pill.label,
@@ -802,10 +810,10 @@ export default function ModernListToolbar({
   /** Chip states keyed by filter key, shared with the pill triggers so the
      rail and the strip can never disagree about a filter's lifecycle. */
   const chipStateByKey = useMemo(
-    () =>
-      Object.fromEntries(
-        activeFilterChips.map((chip) => [chip.key, chip.state])
-      ) as Record<string, ActiveFilterState>,
+    (): ReadonlyMap<string, ActiveFilterState> =>
+      new Map(
+        activeFilterChips.map((chip): [string, ActiveFilterState] => [chip.key, chip.state])
+      ),
     [activeFilterChips]
   );
   // `showTitleSection` alone gates the cluster. The historical
@@ -952,7 +960,7 @@ export default function ModernListToolbar({
                   <FilterButton
                     key={pill.key}
                     pill={pill}
-                    state={chipStateByKey[pill.key]}
+                    state={chipStateByKey.get(pill.key)}
                     onFilterChange={onFilterChange}
                   />
                 ))}
@@ -1038,7 +1046,7 @@ export default function ModernListToolbar({
                   <FilterButton
                     key={pill.key}
                     pill={pill}
-                    state={chipStateByKey[pill.key]}
+                    state={chipStateByKey.get(pill.key)}
                     onFilterChange={onFilterChange}
                   />
                 ))}

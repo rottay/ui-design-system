@@ -265,6 +265,29 @@
   disabled filtered reorder and focus after a controlled move. No public
   API, type, default, markup, paint, i18n or dependency change. Browser and
   public-package acceptance remain pending.
+- Read only own entries of `activeFilters` and `filterStates` when the
+  Modern ListToolbar builds its active filter chips, and hand each chip's
+  state to the compact and desktop filter triggers through a `Map` instead
+  of a plain object. A pill keyed like an `Object.prototype` member, such as
+  `constructor`, `toString` or `__proto__`, no longer raises a phantom
+  invalid chip when `activeFilters` has no own entry for it; without an own
+  `filterStates` entry its chip state falls back to the option match,
+  applied when the active value names an option and invalid otherwise,
+  instead of an inherited value; and a trigger whose filter has no chip
+  reads as applied and carries no `data-filter-state`, so the triggers and
+  the chip strip agree. Entries inherited from any other prototype, such as
+  an object built with `Object.create(defaults)`, are no longer read either;
+  pass those filters as own entries. Own entries keep their behavior: draft,
+  invalid and applied states, an active value no option resolves still
+  marked invalid, an explicit own `filterStates` value still winning, a
+  state without an active value raising no chip, the empty-string key, and
+  own entries named like `Object.prototype` members. New tests pin, in the
+  desktop and compact layouts, ordinary keys, explicit own prototype-named
+  entries, the empty-string key, an absent chip on prototype-named
+  triggers, no phantom chip for keys missing from a present `activeFilters`
+  object, and the option fallback without an own `filterStates` entry. No
+  public API, type, default, markup, paint, i18n or dependency change.
+  Browser and public-package acceptance remain pending.
 - Forward `config.access` from `HeaderSurface` to `SurfaceActionBar`, so
   `{ mode: 'all' }` keeps its declared contract on Header actions, as
   `SidebarSurface` already does: an action hidden only by its `visible`
