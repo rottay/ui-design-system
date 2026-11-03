@@ -223,6 +223,19 @@
   settings button, and the absent settings column. No public API, type,
   default, markup, paint, behavior or dependency change. Browser and
   public-package acceptance remain pending.
+- Read the active chart domain interval that `useChartViewport`
+  `getBrushScale` inverts by selecting its `y` or `x` field directly instead
+  of through a computed axis key. A `y` brush still inverts against the `y`
+  interval, and an `x`, `xy` or unset brush axis, or no brush config,
+  against the `x` interval. A missing selected interval still falls back to
+  `[0, 1]`, never to the other axis; the domain is still read when
+  `getBrushScale` is called, so it follows the latest set, pan, zoom or
+  controlled domain; and a zero or negative plot size still returns the
+  interval's lower edge. New tests pin distinct `x` and `y` domains for
+  every brush axis, the missing-axis fallback, uncontrolled and controlled
+  freshness, and the non-positive plot size. No public API, type, default,
+  markup, paint, behavior or dependency change. Browser and public-package
+  acceptance remain pending.
 - Forward `config.access` from `HeaderSurface` to `SurfaceActionBar`, so
   `{ mode: 'all' }` keeps its declared contract on Header actions, as
   `SidebarSurface` already does: an action hidden only by its `visible`

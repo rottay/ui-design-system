@@ -287,8 +287,8 @@ export function useChartViewport(config: ChartViewportConfig): ChartViewportStat
   }, [commit]);
 
   const getBrushScale = useCallback((plotPixelSize: number): ChartViewportBrushScale => {
-    const axis: ChartViewportAxis = brushAxis === 'y' ? 'y' : 'x';
-    const interval = stateRef.current.activeDomain[axis];
+    const current = stateRef.current.activeDomain;
+    const interval = brushAxis === 'y' ? current.y : current.x;
     const [lower, upper] = interval ?? [0, 1];
     const span = upper - lower;
     return {

@@ -1,5 +1,5 @@
 import React, { act, useRef } from 'react';
-import { cleanup, fireEvent, render } from '@testing-library/react';
+import { cleanup, fireEvent, render, within } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { useChartBrush, type BrushSelection } from '../../brush';
@@ -35,7 +35,7 @@ function Harness({ config, handle }: { config: ChartViewportConfig; handle: Harn
 function mount(config: ChartViewportConfig): { handle: HarnessHandle; root: HTMLElement } {
   const handle: HarnessHandle = { current: null };
   const view = render(<Harness config={config} handle={handle} />);
-  return { handle, root: view.getByTestId('root') };
+  return { handle, root: within(view.container).getByTestId('root') };
 }
 
 const BASE: ChartViewportConfig = {
@@ -240,5 +240,83 @@ describe('useChartViewport reuses the brush hook end-to-end', () => {
     // Feed a settled selection through the viewport bridge (data coordinates).
     act(() => handle.current?.handleBrushEnd({ start: 10, end: 40 }));
     expect(handle.current?.domain.x).toEqual([10, 40]);
+  });
+});
+
+describe('useChartViewport brush scale axis selection', () => {
+  const XY_BASE: ChartViewportConfig['baseDomain'] = { x: [10, 110], y: [200, 600] };
+
+  it('inverts against the y interval for a y brush and the x interval for x, xy and the default', () => {
+    const yBrush = mount({ baseDomain: XY_BASE, brush: { enabled: true, axis: 'y' } }).handle;
+    expect(yBrush.current?.getBrushScale(100).invert(0)).toBe(200);
+    expect(yBrush.current?.getBrushScale(100).invert(25)).toBe(300);
+    expect(yBrush.current?.getBrushScale(100).invert(100)).toBe(600);
+
+    const xBrush = mount({ baseDomain: XY_BASE, brush: { enabled: true, axis: 'x' } }).handle;
+    const xyBrush = mount({ baseDomain: XY_BASE, brush: { enabled: true, axis: 'xy' } }).handle;
+    const unsetAxis = mount({ baseDomain: XY_BASE, brush: { enabled: true } }).handle;
+    const noBrush = mount({ baseDomain: XY_BASE }).handle;
+    for (const handle of [xBrush, xyBrush, unsetAxis, noBrush]) {
+      expect(handle.current?.getBrushScale(100).invert(0)).toBe(10);
+      expect(handle.current?.getBrushScale(100).invert(50)).toBe(60);
+      expect(handle.current?.getBrushScale(100).invert(100)).toBe(110);
+    }
+  });
+
+  it('falls back to [0, 1] when the selected axis is absent instead of reading the other axis', () => {
+    const missingY = mount({ baseDomain: { x: [10, 110] }, brush: { enabled: true, axis: 'y' } }).handle;
+    const missingX = mount({ baseDomain: { y: [200, 600] }, brush: { enabled: true, axis: 'x' } }).handle;
+    const missingXForXy = mount({ baseDomain: { y: [200, 600] }, brush: { enabled: true, axis: 'xy' } }).handle;
+    for (const handle of [missingY, missingX, missingXForXy]) {
+      expect(handle.current?.getBrushScale(100).invert(0)).toBe(0);
+      expect(handle.current?.getBrushScale(100).invert(50)).toBe(0.5);
+      expect(handle.current?.getBrushScale(100).invert(100)).toBe(1);
+    }
+  });
+
+  it('reads the current uncontrolled y domain after set, pan and zoom transforms', () => {
+    const { handle } = mount({ baseDomain: XY_BASE, zoom: { enabled: true }, brush: { enabled: true, axis: 'y' } });
+    act(() => handle.current?.setAxisDomain('y', [300, 500]));
+    act(() => handle.current?.setAxisDomain('x', [20, 40]));
+    expect(handle.current?.getBrushScale(100).invert(0)).toBe(300);
+    expect(handle.current?.getBrushScale(100).invert(100)).toBe(500);
+
+    act(() => handle.current?.pan('y', 0.5));
+    expect(handle.current?.domain.y).toEqual([400, 600]);
+    expect(handle.current?.getBrushScale(100).invert(0)).toBe(400);
+    expect(handle.current?.getBrushScale(100).invert(50)).toBe(500);
+
+    act(() => handle.current?.zoomIn('y'));
+    expect(handle.current?.domain.y).toEqual([420, 580]);
+    expect(handle.current?.getBrushScale(100).invert(0)).toBe(420);
+    expect(handle.current?.getBrushScale(100).invert(100)).toBe(580);
+  });
+
+  it('reads the current controlled y domain after the controlled prop changes', () => {
+    const handle: HarnessHandle = { current: null };
+    const config: ChartViewportConfig = {
+      baseDomain: XY_BASE,
+      domain: { x: [10, 110], y: [250, 450] },
+      brush: { enabled: true, axis: 'y' },
+    };
+    const view = render(<Harness config={config} handle={handle} />);
+    expect(handle.current?.getBrushScale(100).invert(0)).toBe(250);
+    expect(handle.current?.getBrushScale(100).invert(100)).toBe(450);
+
+    view.rerender(<Harness config={{ ...config, domain: { x: [10, 110], y: [300, 400] } }} handle={handle} />);
+    expect(handle.current?.getBrushScale(100).invert(0)).toBe(300);
+    expect(handle.current?.getBrushScale(100).invert(100)).toBe(400);
+  });
+
+  it('returns the selected axis lower edge for a zero or negative plot size', () => {
+    const yBrush = mount({ baseDomain: XY_BASE, brush: { enabled: true, axis: 'y' } }).handle;
+    expect(yBrush.current?.getBrushScale(0).invert(37)).toBe(200);
+    expect(yBrush.current?.getBrushScale(-5).invert(37)).toBe(200);
+
+    const xBrush = mount({ baseDomain: XY_BASE, brush: { enabled: true, axis: 'x' } }).handle;
+    expect(xBrush.current?.getBrushScale(0).invert(37)).toBe(10);
+
+    const missingY = mount({ baseDomain: { x: [10, 110] }, brush: { enabled: true, axis: 'y' } }).handle;
+    expect(missingY.current?.getBrushScale(0).invert(37)).toBe(0);
   });
 });
