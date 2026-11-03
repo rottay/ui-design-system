@@ -2,7 +2,7 @@
 // bottom mode re-expresses the container edge, and both boxes are observed directly.
 import React from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { render, screen, waitFor } from '@testing-library/react';
+import { act, render, screen, waitFor } from '@testing-library/react';
 
 import ModernAffix from '../engines/modern';
 
@@ -173,5 +173,159 @@ describe('Affix modern reservation and container edge', () => {
 
     await waitFor(() => expect(bar.style.position).toBe('fixed'));
     expect(onChange).toHaveBeenLastCalledWith(true);
+  });
+
+  it('commits nothing when an observation re-measures an unchanged, un-affixed bar', async () => {
+    const forwardedRef = vi.fn();
+    const onChange = vi.fn();
+
+    // Default rects: the bar's top (4px) is below the pin line, so nothing is measured.
+    render(
+      <ModernAffix ref={forwardedRef} offsetTop={0} onChange={onChange}>
+        <span>Idle header</span>
+      </ModernAffix>
+    );
+
+    const bar = (await screen.findByText('Idle header')).parentElement as HTMLDivElement;
+    const placeholder = bar.parentElement as HTMLDivElement;
+    expect(bar.style.position).toBe('');
+    expect(forwardedRef).toHaveBeenLastCalledWith(bar);
+    forwardedRef.mockClear();
+
+    act(() => {
+      for (const entry of observers) entry.callback([], {} as ResizeObserver);
+    });
+
+    // Every re-render re-attaches the forwarded ref: silence means no state was committed.
+    expect(forwardedRef).not.toHaveBeenCalled();
+    expect(onChange).not.toHaveBeenCalled();
+    expect(bar.style.position).toBe('');
+    expect(placeholder.style.blockSize).toBe('');
+  });
+
+  it('commits nothing when an observation re-measures an unchanged, affixed geometry', async () => {
+    rects.placeholder = rect({ top: 0, bottom: 48 });
+    rects.root = rect({ top: 0, bottom: 48 });
+    const forwardedRef = vi.fn();
+    const onChange = vi.fn();
+
+    render(
+      <ModernAffix ref={forwardedRef} offsetTop={0} onChange={onChange}>
+        <span>Pinned header</span>
+      </ModernAffix>
+    );
+
+    const bar = (await screen.findByText('Pinned header'))
+      .parentElement as HTMLDivElement;
+    const placeholder = bar.parentElement as HTMLDivElement;
+    await waitFor(() => expect(bar.style.position).toBe('fixed'));
+    expect(onChange).toHaveBeenCalledTimes(1);
+    forwardedRef.mockClear();
+
+    act(() => {
+      for (const entry of observers) entry.callback([], {} as ResizeObserver);
+    });
+
+    expect(forwardedRef).not.toHaveBeenCalled();
+    expect(onChange).toHaveBeenCalledTimes(1);
+    expect(bar.style.position).toBe('fixed');
+    expect(bar.style.top).toBe('0px');
+    expect(bar.style.left).toBe('16px');
+    expect(bar.style.width).toBe('200px');
+    expect(placeholder.style.blockSize).toBe('48px');
+  });
+
+  it('re-commits each measured channel that moves while the bar stays affixed', async () => {
+    const container = document.createElement('div');
+    container.dataset.part = 'container';
+    document.body.appendChild(container);
+    rects.placeholder = rect({ top: 0, bottom: 48 });
+    rects.root = rect({ top: 0, bottom: 48 });
+    const onChange = vi.fn();
+
+    render(
+      <ModernAffix offsetTop={0} target={() => container} onChange={onChange}>
+        <span>Moving header</span>
+      </ModernAffix>
+    );
+
+    const bar = (await screen.findByText('Moving header'))
+      .parentElement as HTMLDivElement;
+    const placeholder = bar.parentElement as HTMLDivElement;
+    await waitFor(() => expect(bar.style.position).toBe('fixed'));
+    expect(bar.style.top).toBe('0px');
+    expect(bar.style.left).toBe('16px');
+    expect(bar.style.width).toBe('200px');
+    expect(placeholder.style.blockSize).toBe('48px');
+
+    const observe = () => {
+      act(() => {
+        for (const entry of observers) entry.callback([], {} as ResizeObserver);
+      });
+    };
+
+    // Each step moves exactly one channel; an ignored channel would leave a stale value.
+    rects.placeholder = rect({ top: 0, bottom: 48, left: 40 });
+    observe();
+    expect(bar.style.left).toBe('40px');
+    expect(bar.style.width).toBe('200px');
+
+    rects.placeholder = rect({ top: 0, bottom: 48, left: 40, width: 260 });
+    observe();
+    expect(bar.style.width).toBe('260px');
+    expect(bar.style.left).toBe('40px');
+
+    rects.root = rect({ top: 0, bottom: 64, height: 64 });
+    observe();
+    expect(placeholder.style.blockSize).toBe('64px');
+    expect(bar.style.width).toBe('260px');
+
+    // The container's top edge moves down 20px; the bar is still past the pin line.
+    rects.container = rect({ top: 20, bottom: 500, height: 480 });
+    observe();
+    expect(bar.style.top).toBe('20px');
+    expect(placeholder.style.blockSize).toBe('64px');
+
+    expect(bar.style.position).toBe('fixed');
+    expect(onChange).toHaveBeenCalledTimes(1);
+    expect(onChange).toHaveBeenLastCalledWith(true);
+
+    container.remove();
+  });
+
+  it('re-commits a moved bottom edge while the bar stays affixed in bottom mode', async () => {
+    const container = document.createElement('div');
+    container.dataset.part = 'container';
+    document.body.appendChild(container);
+    rects.placeholder = rect({ top: 460, bottom: 500, height: 40 });
+    rects.root = rect({ top: 460, bottom: 500, height: 40 });
+    const onChange = vi.fn();
+
+    render(
+      <ModernAffix offsetBottom={10} target={() => container} onChange={onChange}>
+        <span>Moving actions</span>
+      </ModernAffix>
+    );
+
+    const bar = (await screen.findByText('Moving actions'))
+      .parentElement as HTMLDivElement;
+    const placeholder = bar.parentElement as HTMLDivElement;
+    await waitFor(() => expect(bar.style.position).toBe('fixed'));
+    expect(bar.style.bottom).toBe('410px');
+
+    // The container bottom rises 50px (900 - 450 = 450 inset); only `bottom` moves.
+    rects.container = rect({ top: 0, bottom: 450, height: 450 });
+    act(() => {
+      for (const entry of observers) entry.callback([], {} as ResizeObserver);
+    });
+
+    expect(bar.style.bottom).toBe('460px');
+    expect(bar.style.left).toBe('16px');
+    expect(bar.style.width).toBe('200px');
+    expect(placeholder.style.blockSize).toBe('40px');
+    expect(bar.style.position).toBe('fixed');
+    expect(onChange).toHaveBeenCalledTimes(1);
+
+    container.remove();
   });
 });

@@ -86,6 +86,19 @@
   type, default, markup, order, behavior or dependency change. Source and
   focal simulated-DOM checks cover the change; browser and public-package
   acceptance remain pending.
+- Compare Modern Affix measured geometry through six named property reads
+  instead of a computed per-key lookup. The comparison still covers exactly
+  `position`, `top`, `bottom`, `left`, `width` and the placeholder
+  `blockSize` reservation with strict equality, so re-measuring an unchanged
+  geometry commits no new state and a change on any one of them re-commits
+  the fixed style and reservation, as before. New tests pin that re-measuring
+  an unchanged geometry, affixed or not, commits nothing and fires no further
+  `onChange`, and that a moved left edge, width, reserved block size or
+  container top edge, and in bottom mode a moved container bottom edge, each
+  reach the DOM while the bar stays affixed and `onChange` fires once. No
+  public API, type, default, markup, paint, behavior or dependency change.
+  Source and focal simulated-DOM checks cover the change; browser and
+  public-package acceptance remain pending.
 - Forward `config.access` from `HeaderSurface` to `SurfaceActionBar`, so
   `{ mode: 'all' }` keeps its declared contract on Header actions, as
   `SidebarSurface` already does: an action hidden only by its `visible`

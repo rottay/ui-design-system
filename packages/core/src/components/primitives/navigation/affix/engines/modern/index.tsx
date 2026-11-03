@@ -154,7 +154,14 @@ function projectGeometry(
 function sameGeometry(a?: React.CSSProperties, b?: React.CSSProperties): boolean {
   if (a === b) return true;
   if (!a || !b) return false;
-  return GEOMETRY_KEYS.every((key) => a[key] === b[key]);
+  return (
+    a.position === b.position &&
+    a.top === b.top &&
+    a.bottom === b.bottom &&
+    a.left === b.left &&
+    a.width === b.width &&
+    a.blockSize === b.blockSize
+  );
 }
 
 // ============================================================================
