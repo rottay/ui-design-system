@@ -130,6 +130,20 @@
   of each previous column to the first column, where the key is not
   consumed. No public API, type, default, markup, paint, behavior or
   dependency change. Browser and public-package acceptance remain pending.
+- Read the Modern TimePicker panel's mount-scroll targets, the selected
+  hour, minute and second options and the AM/PM cell, through the
+  `HTMLCollection` `item()` method instead of computed index reads. The
+  panel, shared by `TimePicker.RangePicker`, still scrolls each rendered
+  column's selected option into view once on mount, centred and instant: in
+  12-hour mode the hour column uses the display hour, so midnight lands on
+  12, and the AM or PM cell follows the value. A column whose value matches
+  none of its rendered options, such as a hidden disabled hour or a minute
+  off `minuteStep`, scrolls nothing. New tests pin the 24-hour cells with no
+  further scroll after a later selection, the PM and midnight AM cells, a
+  column without a matching option, an absent hour column in a format
+  without seconds, and an unset 24-hour value. No public API, type, default,
+  markup, paint, behavior or dependency change. Browser and public-package
+  acceptance remain pending.
 - Forward `config.access` from `HeaderSurface` to `SurfaceActionBar`, so
   `{ mode: 'all' }` keeps its declared contract on Header actions, as
   `SidebarSurface` already does: an action hidden only by its `visible`

@@ -127,3 +127,162 @@ describe('TimePicker modern advanced coverage', () => {
     expect(container.querySelector('[data-part="trigger-input"]')).toHaveValue('09:15:00');
   });
 });
+
+const CENTRED_INSTANT = { block: 'center', behavior: 'instant' };
+
+/** Spies the DOM scroll API before the panel mounts; `optionScrolls()` lists, in
+    call order, the time-option cells it scrolled and the options each call passed. */
+const spyOptionScrolls = () => {
+  const spy = vi.spyOn(HTMLElement.prototype, 'scrollIntoView').mockImplementation(() => {});
+  const optionScrolls = () =>
+    spy.mock.calls.flatMap(([options], call) => {
+      const target = spy.mock.contexts[call];
+      return target instanceof HTMLElement && target.matches('[data-part="time-option"]')
+        ? [{ target, options }]
+        : [];
+    });
+  return { optionScrolls, restore: () => spy.mockRestore() };
+};
+
+describe('TimePicker modern mount scroll', () => {
+  it('scrolls each selected 24h option into view once on mount, centred and instant', () => {
+    const { optionScrolls, restore } = spyOptionScrolls();
+    try {
+      render(<ModernTimePicker defaultValue="14:25:40" format="HH:mm:ss" />);
+      const trigger = screen.getByRole('combobox');
+      fireEvent.click(trigger);
+
+      const [hourColumn, minuteColumn, secondColumn] = columns();
+      const scrolls = optionScrolls();
+      expect(scrolls).toHaveLength(3);
+      expect(scrolls[0].target).toBe(optionsOf(hourColumn)[14]);
+      expect(scrolls[1].target).toBe(optionsOf(minuteColumn)[25]);
+      expect(scrolls[2].target).toBe(optionsOf(secondColumn)[40]);
+      expect(scrolls.map(({ target }) => target.textContent)).toEqual(['14', '25', '40']);
+      for (const { target, options } of scrolls) {
+        expect(target).toHaveAttribute('aria-selected', 'true');
+        expect(options).toEqual(CENTRED_INSTANT);
+      }
+
+      // Mount-only: a later selection re-renders the open panel without scrolling again.
+      fireEvent.click(optionsOf(minuteColumn)[50]);
+      expect(trigger).toHaveValue('14:50:40');
+      expect(optionScrolls()).toHaveLength(3);
+    } finally {
+      restore();
+    }
+  });
+
+  it('scrolls the 12h display hour and the PM meridiem cell', () => {
+    const { optionScrolls, restore } = spyOptionScrolls();
+    try {
+      render(<ModernTimePicker defaultValue="21:05" format="hh:mm" use12Hours />);
+      fireEvent.click(screen.getByRole('combobox'));
+
+      expect(columns()).toHaveLength(3);
+      const [hourColumn, minuteColumn, meridiemColumn] = columns();
+      expect(meridiemColumn).toHaveAttribute('data-column', 'meridiem');
+      const scrolls = optionScrolls();
+      expect(scrolls).toHaveLength(3);
+      expect(scrolls[0].target).toBe(optionsOf(hourColumn)[8]);
+      expect(scrolls[1].target).toBe(optionsOf(minuteColumn)[5]);
+      expect(scrolls[2].target).toBe(optionsOf(meridiemColumn)[1]);
+      expect(scrolls.slice(0, 2).map(({ target }) => target.textContent)).toEqual(['09', '05']);
+      for (const { target, options } of scrolls) {
+        expect(target).toHaveAttribute('aria-selected', 'true');
+        expect(options).toEqual(CENTRED_INSTANT);
+      }
+    } finally {
+      restore();
+    }
+  });
+
+  it('scrolls midnight to the last 12h hour cell and the AM meridiem cell', () => {
+    const { optionScrolls, restore } = spyOptionScrolls();
+    try {
+      render(<ModernTimePicker defaultValue="00:40" format="hh:mm" use12Hours />);
+      fireEvent.click(screen.getByRole('combobox'));
+
+      const [hourColumn, minuteColumn, meridiemColumn] = columns();
+      expect(optionsOf(hourColumn)).toHaveLength(12);
+      const scrolls = optionScrolls();
+      expect(scrolls).toHaveLength(3);
+      expect(scrolls[0].target).toBe(optionsOf(hourColumn)[11]);
+      expect(scrolls[0].target.textContent).toBe('12');
+      expect(scrolls[1].target).toBe(optionsOf(minuteColumn)[40]);
+      expect(scrolls[2].target).toBe(optionsOf(meridiemColumn)[0]);
+      for (const { target, options } of scrolls) {
+        expect(target).toHaveAttribute('aria-selected', 'true');
+        expect(options).toEqual(CENTRED_INSTANT);
+      }
+    } finally {
+      restore();
+    }
+  });
+
+  it('scrolls nothing in a column whose selected value is not one of its options', () => {
+    const { optionScrolls, restore } = spyOptionScrolls();
+    try {
+      render(
+        <ModernTimePicker
+          defaultValue="10:20:30"
+          format="HH:mm:ss"
+          minuteStep={15}
+          hideDisabledOptions
+          disabledTime={() => ({ disabledHours: () => [10] })}
+        />
+      );
+      fireEvent.click(screen.getByRole('combobox'));
+
+      // Hour 10 is hidden and minute 20 is off the 15-minute step: no selected cell in either.
+      const [hourColumn, minuteColumn, secondColumn] = columns();
+      expect(optionsOf(hourColumn)).toHaveLength(23);
+      expect(hourColumn.querySelector('[aria-selected="true"]')).toBeNull();
+      expect(optionsOf(minuteColumn).map((option) => option.textContent)).toEqual(['00', '15', '30', '45']);
+      expect(minuteColumn.querySelector('[aria-selected="true"]')).toBeNull();
+
+      const scrolls = optionScrolls();
+      expect(scrolls).toHaveLength(1);
+      expect(scrolls[0].target).toBe(optionsOf(secondColumn)[30]);
+      expect(scrolls[0].options).toEqual(CENTRED_INSTANT);
+    } finally {
+      restore();
+    }
+  });
+
+  it('skips an absent hour column and the seconds column outside a seconds format', () => {
+    const { optionScrolls, restore } = spyOptionScrolls();
+    try {
+      render(<ModernTimePicker defaultValue="07:45" format="HH:mm" showHour={false} />);
+      fireEvent.click(screen.getByRole('combobox'));
+
+      expect(columns()).toHaveLength(1);
+      const [minuteColumn] = columns();
+      const scrolls = optionScrolls();
+      expect(scrolls).toHaveLength(1);
+      expect(scrolls[0].target).toBe(optionsOf(minuteColumn)[45]);
+      expect(scrolls[0].target.textContent).toBe('45');
+    } finally {
+      restore();
+    }
+  });
+
+  it('scrolls the first cell of every column when no time is set', () => {
+    const { optionScrolls, restore } = spyOptionScrolls();
+    try {
+      render(<ModernTimePicker format="HH:mm:ss" />);
+      fireEvent.click(screen.getByRole('combobox'));
+
+      const timeColumns = columns();
+      expect(timeColumns).toHaveLength(3);
+      const scrolls = optionScrolls();
+      expect(scrolls).toHaveLength(3);
+      timeColumns.forEach((column, index) => {
+        expect(scrolls[index].target).toBe(optionsOf(column)[0]);
+        expect(scrolls[index].options).toEqual(CENTRED_INSTANT);
+      });
+    } finally {
+      restore();
+    }
+  });
+});

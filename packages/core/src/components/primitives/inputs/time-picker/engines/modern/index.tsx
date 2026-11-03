@@ -285,7 +285,7 @@ const TimePanel: React.FC<TimePanelProps> = ({
     const scrollTo = (container: HTMLDivElement | null, options: TimeOption[], selected: number) => {
       if (!container) return;
       const index = options.findIndex((o) => o.value === selected);
-      const item = container.children[index] as HTMLElement | undefined;
+      const item = container.children.item(index);
       if (item) {
         item.scrollIntoView({ block: 'center', behavior: 'instant' });
       }
@@ -294,7 +294,7 @@ const TimePanel: React.FC<TimePanelProps> = ({
     scrollTo(minutesRef.current, minuteOptions, minutes);
     if (showSeconds) scrollTo(secondsRef.current, secondOptions, seconds);
     if (use12Hours && meridiemRef.current) {
-      const item = meridiemRef.current.children[meridiem === 'pm' ? 1 : 0] as HTMLElement | undefined;
+      const item = meridiemRef.current.children.item(meridiem === 'pm' ? 1 : 0);
       item?.scrollIntoView({ block: 'center', behavior: 'instant' });
     }
   }, []);
