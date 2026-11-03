@@ -11,6 +11,8 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
+import { arrayValueAt } from '@/foundation/kernel/collections';
+
 // ---------------------------------------------------------------------------
 // Types
 // ---------------------------------------------------------------------------
@@ -137,7 +139,7 @@ export function useMeasuredScroll(options: UseMeasuredScrollOptions): UseMeasure
     () => buildOffsets(count, measuredRef.current, estimate),
     [count, estimate, sizeVersion],
   );
-  const totalSize = offsets[count] ?? 0;
+  const totalSize = arrayValueAt(offsets, count) ?? 0;
 
   // --- measurement plumbing -------------------------------------------------
 

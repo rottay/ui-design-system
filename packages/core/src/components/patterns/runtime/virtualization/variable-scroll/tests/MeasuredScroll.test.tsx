@@ -49,4 +49,28 @@ describe('useMeasuredScroll', () => {
     );
     expect(result.current.virtualItems.map((r) => r.index)).toEqual([0, 1, 2]);
   });
+
+  it('tracks the cumulative extent as count shrinks to zero and grows again', () => {
+    // Row i is estimated at (i + 1) * 10px: 10, 20, 30, 40, 50.
+    const estimateSize = (i: number) => (i + 1) * 10;
+    const { result, rerender } = renderHook(
+      ({ count }: { count: number }) => useMeasuredScroll({ count, estimateSize }),
+      { initialProps: { count: 5 } },
+    );
+    expect(result.current.totalSize).toBe(150);
+
+    rerender({ count: 2 });
+    expect(result.current.totalSize).toBe(30);
+    expect(result.current.virtualItems.map((r) => r.index)).toEqual([0, 1]);
+
+    rerender({ count: 0 });
+    expect(result.current.totalSize).toBe(0);
+    expect(result.current.virtualItems).toEqual([]);
+
+    rerender({ count: 4 });
+    expect(result.current.totalSize).toBe(100);
+    const rows = result.current.virtualItems;
+    expect(rows.map((r) => r.index)).toEqual([0, 1, 2, 3]);
+    expect(rows[3]).toMatchObject({ start: 60, size: 40 });
+  });
 });

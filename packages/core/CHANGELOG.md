@@ -157,6 +157,14 @@
   last value, and a closed list. No public API, type, default, markup,
   paint, behavior or dependency change. Browser and public-package
   acceptance remain pending.
+- Read the `useMeasuredScroll` `totalSize`, the last cumulative row offset,
+  through the existing `arrayValueAt` collection helper instead of a
+  computed index read. It is still the sum of every row's measured size, or
+  its `estimateSize` while unmeasured, and `0` for an empty list. A new test
+  pins the total and the rendered rows as `count` shrinks to zero and grows
+  again under a per-row estimate. No public API, type, default, markup,
+  paint, behavior or dependency change. Browser and public-package
+  acceptance remain pending.
 - Forward `config.access` from `HeaderSurface` to `SurfaceActionBar`, so
   `{ mode: 'all' }` keeps its declared contract on Header actions, as
   `SidebarSurface` already does: an action hidden only by its `visible`
