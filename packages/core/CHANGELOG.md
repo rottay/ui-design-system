@@ -236,6 +236,19 @@
   freshness, and the non-positive plot size. No public API, type, default,
   markup, paint, behavior or dependency change. Browser and public-package
   acceptance remain pending.
+- Compare the active and base chart domains behind `useChartViewport`
+  `isDefault` by reading their `x` and `y` fields directly instead of
+  through a computed axis key. The viewport is still default only when every
+  axis the base domain declares matches the active one by value within the
+  existing tolerance: a base axis that is absent is ignored, an active axis
+  the base lacks is not compared, an empty base is default, and an active
+  domain missing a declared base axis is not. `isDefault` still drives the
+  root's `data-chart-viewport` and the reset button's disabled state. New
+  tests pin a change on only `x` or only `y`, a by-value restore and reset
+  with both axes declared, an absent base axis beside a compared one, a
+  missing active axis, an empty base, controlled rerenders and the tolerance
+  on both axes. No public API, type, default, markup, paint, behavior or
+  dependency change. Browser and public-package acceptance remain pending.
 - Forward `config.access` from `HeaderSurface` to `SurfaceActionBar`, so
   `{ mode: 'all' }` keeps its declared contract on Header actions, as
   `SidebarSurface` already does: an action hidden only by its `visible`

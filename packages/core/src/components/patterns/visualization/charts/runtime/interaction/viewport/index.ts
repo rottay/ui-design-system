@@ -299,11 +299,10 @@ export function useChartViewport(config: ChartViewportConfig): ChartViewportStat
     };
   }, [brushAxis]);
 
-  const isDefault = useMemo(() => {
-    const axes: ChartViewportAxis[] = ['x', 'y'];
-    return axes.every((axis) => baseDomain[axis] === undefined
-      || intervalsEqual(activeDomain[axis], baseDomain[axis]));
-  }, [activeDomain, baseDomain]);
+  const isDefault = useMemo(() => (
+    (baseDomain.x === undefined || intervalsEqual(activeDomain.x, baseDomain.x))
+    && (baseDomain.y === undefined || intervalsEqual(activeDomain.y, baseDomain.y))
+  ), [activeDomain, baseDomain]);
 
   const interactive = (zoom?.enabled ?? false) || (brush?.enabled ?? false);
   const wheelEnabled = (zoom?.enabled ?? false) && (zoom?.wheel ?? false);

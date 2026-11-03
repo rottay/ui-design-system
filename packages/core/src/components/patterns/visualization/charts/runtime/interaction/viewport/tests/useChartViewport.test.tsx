@@ -320,3 +320,132 @@ describe('useChartViewport brush scale axis selection', () => {
     expect(missingY.current?.getBrushScale(0).invert(37)).toBe(0);
   });
 });
+
+describe('useChartViewport default state across both axes', () => {
+  const TWO_AXIS_BASE: ChartViewportConfig['baseDomain'] = { x: [0, 100], y: [200, 600] };
+  const TWO_AXIS: ChartViewportConfig = {
+    baseDomain: TWO_AXIS_BASE,
+    zoom: { enabled: true },
+    brush: { enabled: true, axis: 'x' },
+  };
+
+  it('leaves default when only y changes and returns to it when y is restored by value', () => {
+    const { handle, root } = mount(TWO_AXIS);
+    expect(handle.current?.isDefault).toBe(true);
+    expect(root.getAttribute('data-default')).toBe('true');
+    expect(handle.current?.getResetButtonProps()).toMatchObject({ disabled: true, 'data-chart-viewport': 'default' });
+
+    act(() => handle.current?.setAxisDomain('y', [300, 500]));
+    expect(handle.current?.domain.x).toEqual([0, 100]);
+    expect(handle.current?.isDefault).toBe(false);
+    expect(root.getAttribute('data-default')).toBe('false');
+    expect(handle.current?.getRootProps({ plot: { x: 0, y: 0, width: 100, height: 100 } })['data-chart-viewport']).toBe('zoomed');
+    expect(handle.current?.getResetButtonProps()).toMatchObject({ disabled: false, 'data-chart-viewport': 'zoomed' });
+
+    act(() => handle.current?.setAxisDomain('y', [200, 600]));
+    expect(handle.current?.domain.y).not.toBe(TWO_AXIS_BASE.y);
+    expect(handle.current?.isDefault).toBe(true);
+    expect(root.getAttribute('data-default')).toBe('true');
+  });
+
+  it('leaves default when only x changes while y still matches the base', () => {
+    const { handle, root } = mount(TWO_AXIS);
+    act(() => handle.current?.setAxisDomain('x', [20, 40]));
+    expect(handle.current?.domain.y).toEqual([200, 600]);
+    expect(handle.current?.isDefault).toBe(false);
+    expect(root.getAttribute('data-default')).toBe('false');
+    expect(handle.current?.getResetButtonProps().disabled).toBe(false);
+  });
+
+  it('stays zoomed until every changed axis matches again, and reset restores default', () => {
+    const { handle, root } = mount(TWO_AXIS);
+    act(() => handle.current?.setAxisDomain('x', [20, 40]));
+    act(() => handle.current?.setAxisDomain('y', [300, 500]));
+    expect(handle.current?.isDefault).toBe(false);
+
+    act(() => handle.current?.setAxisDomain('x', [0, 100]));
+    expect(handle.current?.domain.x).toEqual([0, 100]);
+    expect(handle.current?.domain.y).toEqual([300, 500]);
+    expect(handle.current?.isDefault).toBe(false);
+    expect(root.getAttribute('data-default')).toBe('false');
+
+    act(() => handle.current?.setAxisDomain('x', [20, 40]));
+    act(() => handle.current?.reset());
+    expect(handle.current?.domain).toEqual({ x: [0, 100], y: [200, 600] });
+    expect(handle.current?.isDefault).toBe(true);
+    expect(root.getAttribute('data-default')).toBe('true');
+  });
+
+  it('ignores an active axis that the base domain does not declare', () => {
+    const uncontrolled = mount({
+      baseDomain: { x: [0, 100] },
+      defaultDomain: { x: [0, 100], y: [5, 7] },
+      zoom: { enabled: true },
+    });
+    expect(uncontrolled.handle.current?.domain.y).toEqual([5, 7]);
+    expect(uncontrolled.handle.current?.isDefault).toBe(true);
+    expect(uncontrolled.root.getAttribute('data-default')).toBe('true');
+
+    act(() => uncontrolled.handle.current?.setAxisDomain('x', [10, 20]));
+    expect(uncontrolled.handle.current?.isDefault).toBe(false);
+
+    const controlled = mount({ baseDomain: { y: [200, 600] }, domain: { x: [1, 2], y: [200, 600] } });
+    expect(controlled.handle.current?.isDefault).toBe(true);
+    expect(controlled.root.getAttribute('data-default')).toBe('true');
+  });
+
+  it('is not default when the active domain lacks an axis the base declares', () => {
+    const missingY = mount({ baseDomain: TWO_AXIS_BASE, domain: { x: [0, 100] } });
+    expect(missingY.handle.current?.isDefault).toBe(false);
+    expect(missingY.root.getAttribute('data-default')).toBe('false');
+
+    const missingX = mount({ baseDomain: TWO_AXIS_BASE, domain: { y: [200, 600] } });
+    expect(missingX.handle.current?.isDefault).toBe(false);
+    expect(missingX.root.getAttribute('data-default')).toBe('false');
+  });
+
+  it('is vacuously default for an empty base domain whatever the active domain holds', () => {
+    const empty = mount({ baseDomain: {} });
+    expect(empty.handle.current?.isDefault).toBe(true);
+    expect(empty.root.getAttribute('data-default')).toBe('true');
+
+    const seeded = mount({ baseDomain: {}, defaultDomain: { x: [1, 2], y: [3, 4] } });
+    expect(seeded.handle.current?.isDefault).toBe(true);
+    expect(seeded.handle.current?.getResetButtonProps().disabled).toBe(true);
+  });
+
+  it('recomputes default for a controlled domain across rerenders on either axis', () => {
+    const handle: HarnessHandle = { current: null };
+    const config: ChartViewportConfig = { baseDomain: TWO_AXIS_BASE, domain: { x: [0, 100], y: [200, 600] } };
+    const view = render(<Harness config={config} handle={handle} />);
+    const root = within(view.container).getByTestId('root');
+    expect(handle.current?.isDefault).toBe(true);
+    expect(root.getAttribute('data-default')).toBe('true');
+
+    view.rerender(<Harness config={{ ...config, domain: { x: [0, 100], y: [250, 600] } }} handle={handle} />);
+    expect(handle.current?.isDefault).toBe(false);
+    expect(root.getAttribute('data-default')).toBe('false');
+
+    view.rerender(<Harness config={{ ...config, domain: { x: [0, 100], y: [200, 600] } }} handle={handle} />);
+    expect(handle.current?.isDefault).toBe(true);
+    expect(root.getAttribute('data-default')).toBe('true');
+
+    view.rerender(<Harness config={{ ...config, domain: { x: [0, 90], y: [200, 600] } }} handle={handle} />);
+    expect(handle.current?.isDefault).toBe(false);
+    expect(root.getAttribute('data-default')).toBe('false');
+  });
+
+  it('compares each axis within the existing epsilon tolerance', () => {
+    const withinTolerance = mount({
+      baseDomain: TWO_AXIS_BASE,
+      domain: { x: [1e-10, 100 - 1e-10], y: [200 + 1e-10, 600 - 1e-10] },
+    });
+    expect(withinTolerance.handle.current?.isDefault).toBe(true);
+
+    const yBeyond = mount({ baseDomain: TWO_AXIS_BASE, domain: { x: [0, 100], y: [200 + 1e-6, 600] } });
+    expect(yBeyond.handle.current?.isDefault).toBe(false);
+
+    const xBeyond = mount({ baseDomain: TWO_AXIS_BASE, domain: { x: [0, 100 + 1e-6], y: [200, 600] } });
+    expect(xBeyond.handle.current?.isDefault).toBe(false);
+  });
+});
