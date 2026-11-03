@@ -207,6 +207,22 @@
   move, an empty dataset and an unmounted element. No public API, type,
   default, markup, paint, behavior or dependency change. Browser and
   public-package acceptance remain pending.
+- Read the Modern WorkspaceSwitcher menu control that keyboard navigation
+  focuses through the existing `arrayValueAt` collection helper instead of a
+  computed index read. ArrowDown and ArrowUp in the search still focus the
+  first or last row. In the row column and the settings column, ArrowDown
+  and ArrowUp move one control and wrap past both ends, Home and End reach
+  the first and last control, and the inline-end and inline-start arrows
+  cross between a row and its own settings button; the roving tab stop
+  follows the focused control. A column with a single control keeps focus
+  in place, and without `onSettings` the inline-end arrow moves no focus and
+  leaves the roving row unchanged. New tests pin real focus on the first,
+  middle and last row with wrapping at both ends, the settings column with
+  wrapping, Home and End and a cross back to its row, the last row's own
+  settings button and back, a list filtered to one row with its single
+  settings button, and the absent settings column. No public API, type,
+  default, markup, paint, behavior or dependency change. Browser and
+  public-package acceptance remain pending.
 - Forward `config.access` from `HeaderSurface` to `SurfaceActionBar`, so
   `{ mode: 'all' }` keeps its declared contract on Header actions, as
   `SidebarSurface` already does: an action hidden only by its `visible`

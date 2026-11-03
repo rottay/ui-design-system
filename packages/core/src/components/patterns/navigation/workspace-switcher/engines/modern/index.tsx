@@ -41,6 +41,7 @@ import { Badge } from '../../../../../primitives/display/badge';
 import ModernAvatar from '../../../../../primitives/display/avatar/engines/modern';
 import ModernInput from '../../../../../primitives/inputs/input/engines/modern';
 import ModernEmpty from '../../../../../primitives/display/empty/engines/modern';
+import { arrayValueAt } from '@/foundation/kernel/collections';
 import { ActionAddIcon } from '@/graphics/icons/semantic/generated/roles/action-add';
 import { NavigationDownIcon } from '@/graphics/icons/semantic/generated/roles/navigation-down';
 import { NavigationSettingsIcon } from '@/graphics/icons/semantic/generated/roles/navigation-settings';
@@ -136,7 +137,7 @@ export default function ModernWorkspaceSwitcher(props: WorkspaceSwitcherProps) {
       if (nodes.length === 0) return;
       const wrapped = ((index % nodes.length) + nodes.length) % nodes.length;
       setFocusIndex(wrapped);
-      nodes[wrapped]?.focus();
+      arrayValueAt(nodes, wrapped)?.focus();
     },
     [columnNodes],
   );

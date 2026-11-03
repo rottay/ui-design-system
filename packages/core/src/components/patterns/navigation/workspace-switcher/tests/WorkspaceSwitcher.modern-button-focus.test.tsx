@@ -229,3 +229,129 @@ describe('ModernWorkspaceSwitcher — the row control rides the Button primitive
     expect(wrappers && declarations(wrappers.body)).toContain('display: contents');
   });
 });
+
+describe('ModernWorkspaceSwitcher — arrow keys move real focus to the addressed Button', () => {
+  const THREE = [
+    { id: 'ws-1', name: 'Acme Corp', role: 'Admin', plan: 'pro' },
+    { id: 'ws-2', name: 'Beta Inc', role: 'Member', plan: 'free' },
+    { id: 'ws-3', name: 'Gamma LLC', role: 'Owner', plan: 'enterprise' },
+  ];
+  const row = (id: string) => screen.getByTestId(`workspace-item-${id}`);
+  const gear = (id: string) => screen.getByTestId(`workspace-settings-${id}`);
+  const search = () => screen.getByTestId('workspace-search');
+  const rowFrame = (id: string) => row(id).closest('[data-part="item-row"]');
+
+  const openThree = async ({ withSettings = true } = {}) => {
+    const view = render(
+      <ModernWorkspaceSwitcher
+        workspaces={THREE}
+        activeWorkspaceId="ws-1"
+        onSwitch={vi.fn()}
+        {...(withSettings ? { onSettings: vi.fn() } : {})}
+      />,
+    );
+    // The trigger and the gears are the lazy public Button: await both boundaries.
+    fireEvent.click(await screen.findByTestId('workspace-trigger'));
+    await screen.findByTestId('workspace-item-ws-3');
+    if (withSettings) await screen.findByTestId('workspace-settings-ws-3');
+    return view;
+  };
+
+  it('lands on the first, middle and last row and wraps past both ends', async () => {
+    await openThree();
+
+    fireEvent.keyDown(search(), { key: 'ArrowUp' });
+    expect(document.activeElement).toBe(row('ws-3'));
+
+    fireEvent.keyDown(row('ws-3'), { key: 'ArrowDown' });
+    expect(document.activeElement).toBe(row('ws-1'));
+
+    fireEvent.keyDown(row('ws-1'), { key: 'ArrowDown' });
+    expect(document.activeElement).toBe(row('ws-2'));
+    expect(['ws-1', 'ws-2', 'ws-3'].map((id) => row(id).getAttribute('tabindex'))).toEqual(['-1', '0', '-1']);
+
+    fireEvent.keyDown(row('ws-2'), { key: 'ArrowUp' });
+    expect(document.activeElement).toBe(row('ws-1'));
+
+    fireEvent.keyDown(row('ws-1'), { key: 'ArrowUp' });
+    expect(document.activeElement).toBe(row('ws-3'));
+  });
+
+  it('roves the gear column with wrap and Home/End, then crosses back to the same row', async () => {
+    await openThree();
+
+    fireEvent.keyDown(search(), { key: 'ArrowDown' });
+    fireEvent.keyDown(row('ws-1'), { key: 'ArrowRight' });
+    expect(document.activeElement).toBe(gear('ws-1'));
+
+    fireEvent.keyDown(gear('ws-1'), { key: 'ArrowUp' });
+    expect(document.activeElement).toBe(gear('ws-3'));
+
+    fireEvent.keyDown(gear('ws-3'), { key: 'ArrowDown' });
+    expect(document.activeElement).toBe(gear('ws-1'));
+
+    fireEvent.keyDown(gear('ws-1'), { key: 'End' });
+    expect(document.activeElement).toBe(gear('ws-3'));
+
+    fireEvent.keyDown(gear('ws-3'), { key: 'Home' });
+    expect(document.activeElement).toBe(gear('ws-1'));
+
+    fireEvent.keyDown(gear('ws-1'), { key: 'ArrowDown' });
+    expect(document.activeElement).toBe(gear('ws-2'));
+    expect(['ws-1', 'ws-2', 'ws-3'].map((id) => gear(id).getAttribute('tabindex'))).toEqual(['-1', '0', '-1']);
+
+    fireEvent.keyDown(gear('ws-2'), { key: 'ArrowLeft' });
+    expect(document.activeElement).toBe(row('ws-2'));
+  });
+
+  it('crosses from the last row to its own gear and back', async () => {
+    await openThree();
+
+    fireEvent.keyDown(search(), { key: 'ArrowDown' });
+    fireEvent.keyDown(row('ws-1'), { key: 'End' });
+    expect(document.activeElement).toBe(row('ws-3'));
+
+    fireEvent.keyDown(row('ws-3'), { key: 'ArrowRight' });
+    expect(document.activeElement).toBe(gear('ws-3'));
+
+    fireEvent.keyDown(gear('ws-3'), { key: 'ArrowLeft' });
+    expect(document.activeElement).toBe(row('ws-3'));
+  });
+
+  it('keeps focus on the only row of a one-row filtered column', async () => {
+    await openThree();
+
+    // Type-ahead from a row: only "Gamma LLC" contains a "g".
+    fireEvent.keyDown(search(), { key: 'ArrowDown' });
+    fireEvent.keyDown(row('ws-1'), { key: 'G' });
+    expect(screen.queryByTestId('workspace-item-ws-1')).toBeNull();
+    expect(screen.queryByTestId('workspace-item-ws-2')).toBeNull();
+
+    fireEvent.keyDown(search(), { key: 'ArrowDown' });
+    expect(document.activeElement).toBe(row('ws-3'));
+
+    for (const key of ['ArrowDown', 'ArrowUp', 'Home', 'End']) {
+      fireEvent.keyDown(row('ws-3'), { key });
+      expect(document.activeElement, key).toBe(row('ws-3'));
+    }
+
+    fireEvent.keyDown(row('ws-3'), { key: 'ArrowRight' });
+    expect(document.activeElement).toBe(gear('ws-3'));
+    fireEvent.keyDown(gear('ws-3'), { key: 'ArrowDown' });
+    expect(document.activeElement).toBe(gear('ws-3'));
+  });
+
+  it('leaves focus and the roving row untouched when the gear column is empty', async () => {
+    const { container } = await openThree({ withSettings: false });
+    expect(container.querySelectorAll('.ds-workspace-switcher__settings').length).toBe(0);
+
+    fireEvent.keyDown(search(), { key: 'ArrowDown' });
+    fireEvent.keyDown(row('ws-1'), { key: 'ArrowDown' });
+    expect(document.activeElement).toBe(row('ws-2'));
+
+    fireEvent.keyDown(row('ws-2'), { key: 'ArrowRight' });
+    expect(document.activeElement).toBe(row('ws-2'));
+    expect(['ws-1', 'ws-2', 'ws-3'].map((id) => row(id).getAttribute('tabindex'))).toEqual(['-1', '0', '-1']);
+    expect(rowFrame('ws-2')).toHaveAttribute('data-focused', 'true');
+  });
+});
