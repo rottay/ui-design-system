@@ -91,3 +91,155 @@ describe('Cascader modern controlled value and popup wiring', () => {
     }
   });
 });
+
+describe('Cascader modern keyboard drill focus', () => {
+  const regions = [
+    {
+      value: 'europe',
+      label: 'Europe',
+      children: [
+        {
+          value: 'portugal',
+          label: 'Portugal',
+          children: [
+            { value: 'lisbon', label: 'Lisbon' },
+            { value: 'porto', label: 'Porto' },
+          ],
+        },
+        {
+          value: 'spain',
+          label: 'Spain',
+          children: [
+            { value: 'madrid', label: 'Madrid' },
+            { value: 'barcelona', label: 'Barcelona' },
+          ],
+        },
+      ],
+    },
+    { value: 'asia', label: 'Asia', children: [{ value: 'japan', label: 'Japan' }] },
+  ];
+
+  it('lands on the first option of the last column after each keyboard drill', async () => {
+    renderWithEngine(<ModernCascader options={regions} />, 'modern');
+    fireEvent.click(screen.getByRole('combobox'));
+
+    const europe = await screen.findByRole('option', { name: 'Europe' });
+    europe.focus();
+    fireEvent.keyDown(europe, { key: 'ArrowRight' });
+    const portugal = await screen.findByRole('option', { name: 'Portugal' });
+    expect(portugal).toHaveFocus();
+
+    fireEvent.keyDown(portugal, { key: 'ArrowRight' });
+    const lisbon = await screen.findByRole('option', { name: 'Lisbon' });
+    expect(lisbon).toHaveFocus();
+    const column = lisbon.closest('[data-part="menu-column"]');
+    expect(column).toHaveAttribute('data-last', 'true');
+    expect(column?.parentElement?.querySelectorAll(':scope > [data-part="menu-column"]')).toHaveLength(3);
+  });
+
+  it('focuses the replaced last column when drilling from a middle column, then releases the pending focus', async () => {
+    renderWithEngine(
+      <ModernCascader options={regions} defaultValue={['europe', 'portugal', 'lisbon']} />,
+      'modern'
+    );
+    fireEvent.click(screen.getByRole('combobox'));
+
+    const spain = await screen.findByRole('option', { name: 'Spain' });
+    expect(document.querySelectorAll('[data-part="menu-column"]')).toHaveLength(3);
+    spain.focus();
+    fireEvent.keyDown(spain, { key: 'ArrowRight' });
+
+    const madrid = await screen.findByRole('option', { name: 'Madrid' });
+    expect(madrid).toHaveFocus();
+    expect(madrid.closest('[data-part="menu-column"]')).toHaveAttribute('data-last', 'true');
+    expect(screen.queryByRole('option', { name: 'Lisbon' })).toBeNull();
+    expect(document.querySelectorAll('[data-part="menu-column"]')).toHaveLength(3);
+
+    // A pointer expansion after the keyboard drill must not inherit its focus move.
+    fireEvent.click(screen.getByRole('option', { name: 'Portugal' }));
+    const lisbon = await screen.findByRole('option', { name: 'Lisbon' });
+    expect(lisbon).not.toHaveFocus();
+  });
+
+  // Europe, Iberia and Spain each sit second in their column, so a read from
+  // another column or a first-option fallback lands on a different row.
+  const realms = [
+    {
+      value: 'asia',
+      label: 'Asia',
+      children: [
+        {
+          value: 'east-asia',
+          label: 'East Asia',
+          children: [{ value: 'japan', label: 'Japan', children: [{ value: 'tokyo', label: 'Tokyo' }] }],
+        },
+      ],
+    },
+    {
+      value: 'europe',
+      label: 'Europe',
+      children: [
+        {
+          value: 'nordics',
+          label: 'Nordics',
+          children: [{ value: 'norway', label: 'Norway', children: [{ value: 'oslo', label: 'Oslo' }] }],
+        },
+        {
+          value: 'iberia',
+          label: 'Iberia',
+          children: [
+            { value: 'portugal', label: 'Portugal', children: [{ value: 'lisbon', label: 'Lisbon' }] },
+            { value: 'spain', label: 'Spain', children: [{ value: 'madrid', label: 'Madrid' }] },
+          ],
+        },
+      ],
+    },
+  ];
+
+  it('expands the option of its own column when drilling from a deeper middle column', async () => {
+    renderWithEngine(
+      <ModernCascader options={realms} defaultValue={['europe', 'iberia', 'portugal', 'lisbon']} />,
+      'modern'
+    );
+    fireEvent.click(screen.getByRole('combobox'));
+
+    const spain = await screen.findByRole('option', { name: 'Spain' });
+    expect(document.querySelectorAll('[data-part="menu-column"]')).toHaveLength(4);
+    spain.focus();
+    fireEvent.keyDown(spain, { key: 'ArrowRight' });
+
+    const madrid = await screen.findByRole('option', { name: 'Madrid' });
+    expect(madrid).toHaveFocus();
+    expect(madrid.closest('[data-part="menu-column"]')).toHaveAttribute('data-last', 'true');
+    expect(screen.getByRole('option', { name: 'Spain' })).toHaveAttribute('aria-selected', 'true');
+    expect(screen.queryByRole('option', { name: 'Lisbon' })).toBeNull();
+    expect(document.querySelectorAll('[data-part="menu-column"]')).toHaveLength(4);
+  });
+
+  it('returns focus to the selected option of each previous column and stops at the first column', async () => {
+    renderWithEngine(
+      <ModernCascader options={realms} defaultValue={['europe', 'iberia', 'portugal', 'lisbon']} />,
+      'modern'
+    );
+    fireEvent.click(screen.getByRole('combobox'));
+
+    const spain = await screen.findByRole('option', { name: 'Spain' });
+    spain.focus();
+    fireEvent.keyDown(spain, { key: 'ArrowRight' });
+    const madrid = await screen.findByRole('option', { name: 'Madrid' });
+    expect(madrid).toHaveFocus();
+
+    fireEvent.keyDown(madrid, { key: 'ArrowLeft' });
+    expect(screen.getByRole('option', { name: 'Spain' })).toHaveFocus();
+    fireEvent.keyDown(document.activeElement as HTMLElement, { key: 'ArrowLeft' });
+    expect(screen.getByRole('option', { name: 'Iberia' })).toHaveFocus();
+    fireEvent.keyDown(document.activeElement as HTMLElement, { key: 'ArrowLeft' });
+    const europe = screen.getByRole('option', { name: 'Europe' });
+    expect(europe).toHaveFocus();
+    expect(document.querySelectorAll('[data-part="menu-column"]')).toHaveLength(4);
+
+    // The first column has no previous column: the key is neither consumed nor moves focus.
+    expect(fireEvent.keyDown(europe, { key: 'ArrowLeft' })).toBe(true);
+    expect(europe).toHaveFocus();
+  });
+});

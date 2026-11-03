@@ -113,6 +113,23 @@
   type, default, markup, paint, behavior or dependency change. Source and
   focal simulated-DOM checks cover the change; browser and public-package
   acceptance remain pending.
+- Read the Modern Cascader menu columns used by keyboard navigation through
+  the `NodeList` `item()` method and the existing `arrayValueAt` collection
+  helper instead of computed index reads: the last rendered column after a
+  keyboard expansion, the focused option's own column when a drill expands
+  it, and the previous column when focus moves back. A keyboard drill still
+  expands the focused option of its own column and focuses the first option
+  of the last column, including the column that replaces the previous last
+  one when the drill starts in a middle column. Moving back still focuses
+  the selected option of the previous column, or else its first option, and
+  leaves the key unhandled in the first column. A pointer expansion, an
+  absent dropdown and an empty column list still move no focus. New tests
+  pin a three-level keyboard drill, the replaced last column, a following
+  pointer expansion that does not inherit the keyboard focus move, a drill
+  from a deeper middle column, and moving back through the selected option
+  of each previous column to the first column, where the key is not
+  consumed. No public API, type, default, markup, paint, behavior or
+  dependency change. Browser and public-package acceptance remain pending.
 - Forward `config.access` from `HeaderSurface` to `SurfaceActionBar`, so
   `{ mode: 'all' }` keeps its declared contract on Header actions, as
   `SidebarSurface` already does: an action hidden only by its `visible`

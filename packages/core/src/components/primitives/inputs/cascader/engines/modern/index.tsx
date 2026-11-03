@@ -470,7 +470,7 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
       if (!pendingColumnFocusRef.current) return;
       pendingColumnFocusRef.current = false;
       const columns = dropdownRef.current?.querySelectorAll('[data-part="menu-column"]');
-      const last = columns?.[columns.length - 1];
+      const last = columns?.item(columns.length - 1);
       last?.querySelector<HTMLElement>('[data-part="option"]')?.focus();
     }, [activeColumns]);
 
@@ -533,7 +533,7 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
       });
 
       if (intent === 'next') {
-        const option = arrayValueAt(activeColumns[columnIndex] ?? [], currentIndex);
+        const option = arrayValueAt(arrayValueAt(activeColumns, columnIndex) ?? [], currentIndex);
         if (!option) return;
         const expandable =
           (getChildren(option, fieldNames)?.length ?? 0) > 0 ||
@@ -547,7 +547,7 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
       if (intent === 'previous') {
         if (columnIndex === 0) return;
         e.preventDefault();
-        const prevColumn = columnsWrap.querySelectorAll(':scope > [data-part="menu-column"]')[columnIndex - 1];
+        const prevColumn = columnsWrap.querySelectorAll(':scope > [data-part="menu-column"]').item(columnIndex - 1);
         const focusTarget =
           prevColumn?.querySelector<HTMLElement>('[data-part="option"][data-selected="true"]') ??
           prevColumn?.querySelector<HTMLElement>('[data-part="option"]');
