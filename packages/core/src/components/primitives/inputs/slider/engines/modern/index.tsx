@@ -59,6 +59,7 @@
 
 import React, { useState, useCallback } from 'react';
 import { serializeState } from '@/foundation/behavior';
+import { arrayValueAt } from '@/foundation/kernel/collections';
 import type { SliderProps } from '../../contracts';
 import { SLIDER_DEFAULTS } from '../../contracts';
 import { useOptionalDirection, useOptionalTranslation } from '@/infrastructure/runtime/i18n';
@@ -192,13 +193,13 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
     const stopForKey = (val: number, key: string): number | undefined => {
       if (!markStops) return undefined;
       if (key === 'Home') return markStops[0]!;
-      if (key === 'End') return markStops[markStops.length - 1]!;
+      if (key === 'End') return arrayValueAt(markStops, -1);
       const forward = key === 'ArrowRight' || key === 'ArrowUp' || key === 'PageUp';
       const backward = key === 'ArrowLeft' || key === 'ArrowDown' || key === 'PageDown';
       if (!forward && !backward) return undefined;
       const index = markStops.indexOf(snapToStop(val));
       const next = Math.min(markStops.length - 1, Math.max(0, index + (forward ? 1 : -1)));
-      return markStops[next]!;
+      return arrayValueAt(markStops, next);
     };
 
     /** Handler for the single-value slider (non-range mode). */

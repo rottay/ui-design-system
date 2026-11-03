@@ -99,6 +99,20 @@
   public API, type, default, markup, paint, behavior or dependency change.
   Source and focal simulated-DOM checks cover the change; browser and
   public-package acceptance remain pending.
+- Read the Modern Slider mark-ladder End stop and the stop an arrow or page
+  key moves to through the existing `arrayValueAt` collection helper instead
+  of computed element reads. With `step={null}` the ladder is still the
+  in-scale marks sorted ascending: End lands on the highest and Home on the
+  lowest, arrow and page keys move one stop from the nearest stop (the lower
+  one on a tie) and hold at either end with the key swallowed, and range
+  handles still clamp at each other. New tests pin End and stepping on marks
+  that enumerate out of order, with uneven gaps and an out-of-scale mark, one
+  stop per page key, holding at both ends without `onChange`, the tie, a
+  single in-scale mark as both ends, native value keys when no mark is in
+  scale, and a range start handle clamping at the end handle. No public API,
+  type, default, markup, paint, behavior or dependency change. Source and
+  focal simulated-DOM checks cover the change; browser and public-package
+  acceptance remain pending.
 - Forward `config.access` from `HeaderSurface` to `SurfaceActionBar`, so
   `{ mode: 'all' }` keeps its declared contract on Header actions, as
   `SidebarSurface` already does: an action hidden only by its `visible`
