@@ -223,7 +223,9 @@ export function useMeasuredScroll(options: UseMeasuredScrollOptions): UseMeasure
     const startIndex = Math.max(0, findStartIndex(offsets, scrollTop) - overscan);
     const bottom = scrollTop + height;
     let endIndex = startIndex;
-    while (endIndex < count - 1 && offsets[endIndex + 1] < bottom) endIndex += 1;
+    // A missing offset falls back to `bottom`, so the strict comparison ends the scan.
+    while (endIndex < count - 1 && (arrayValueAt(offsets, endIndex + 1) ?? bottom) < bottom)
+      endIndex += 1;
     endIndex = Math.min(count - 1, endIndex + overscan);
 
     const items: MeasuredVirtualItem[] = [];

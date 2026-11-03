@@ -165,6 +165,16 @@
   again under a per-row estimate. No public API, type, default, markup,
   paint, behavior or dependency change. Browser and public-package
   acceptance remain pending.
+- Read the next row's top offset that ends the `useMeasuredScroll` visible
+  range through the existing `arrayValueAt` collection helper instead of a
+  computed index read. A row still joins `virtualItems` only when its top
+  edge lies strictly above the viewport bottom, so a row starting exactly at
+  the bottom stays out unless `overscan` adds it, and a missing offset ends
+  the scan rather than extending the range. New tests scroll a real viewport
+  over eight rows of uneven height and pin that boundary one pixel apart,
+  both after a single row and after a scan across several rows. No public
+  API, type, default, markup, paint, behavior or dependency change. Browser
+  and public-package acceptance remain pending.
 - Forward `config.access` from `HeaderSurface` to `SurfaceActionBar`, so
   `{ mode: 'all' }` keeps its declared contract on Header actions, as
   `SidebarSurface` already does: an action hidden only by its `visible`

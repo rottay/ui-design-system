@@ -1,4 +1,4 @@
-import { renderHook } from '@testing-library/react';
+import { fireEvent, render, renderHook, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
 import { useMeasuredScroll } from '..';
@@ -72,5 +72,76 @@ describe('useMeasuredScroll', () => {
     const rows = result.current.virtualItems;
     expect(rows.map((r) => r.index)).toEqual([0, 1, 2, 3]);
     expect(rows[3]).toMatchObject({ start: 60, size: 40 });
+  });
+});
+
+describe('useMeasuredScroll visible range in a scrolled viewport', () => {
+  // Rows are 10, 20, ..., 80px tall: tops at 0, 10, 30, 60, 100, 150, 210, 280.
+  const estimateRowSize = (index: number) => (index + 1) * 10;
+
+  function ScrolledRows() {
+    const { scrollRef, onScroll, totalSize, virtualItems } = useMeasuredScroll({
+      count: 8,
+      estimateSize: estimateRowSize,
+      overscan: 0,
+    });
+    return (
+      <div ref={scrollRef} onScroll={onScroll} data-testid="viewport">
+        <div style={{ height: totalSize }}>
+          {virtualItems.map((item) => (
+            <div
+              key={item.index}
+              data-testid="row"
+              data-index={item.index}
+              data-start={item.start}
+            />
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  // happy-dom has no layout, so the scroll offset and viewport height are set on
+  // the element before the real scroll event reaches the hook's onScroll handler.
+  function scrollViewport(scrollTop: number, clientHeight: number): void {
+    const viewport = screen.getByTestId('viewport');
+    Object.defineProperty(viewport, 'scrollTop', { configurable: true, value: scrollTop });
+    Object.defineProperty(viewport, 'clientHeight', { configurable: true, value: clientHeight });
+    fireEvent.scroll(viewport);
+  }
+
+  function renderedRows(): Array<{ index: number; start: number }> {
+    return screen.queryAllByTestId('row').map((row) => ({
+      index: Number(row.getAttribute('data-index')),
+      start: Number(row.getAttribute('data-start')),
+    }));
+  }
+
+  it('stops before a row whose top edge equals the viewport bottom', () => {
+    render(<ScrolledRows />);
+    // scrollTop 35 sits inside row 2; bottom 35 + 65 = 100 is exactly row 4's top.
+    scrollViewport(35, 65);
+    expect(renderedRows()).toEqual([
+      { index: 2, start: 30 },
+      { index: 3, start: 60 },
+    ]);
+
+    // One more pixel crosses row 4's top edge, so row 4 becomes visible.
+    scrollViewport(35, 66);
+    expect(renderedRows().map((row) => row.index)).toEqual([2, 3, 4]);
+  });
+
+  it('scans several non-uniform rows to the strict bottom boundary', () => {
+    render(<ScrolledRows />);
+    // scrollTop 100 is row 4's top; bottom 100 + 180 = 280 is exactly row 7's top.
+    scrollViewport(100, 180);
+    expect(renderedRows()).toEqual([
+      { index: 4, start: 100 },
+      { index: 5, start: 150 },
+      { index: 6, start: 210 },
+    ]);
+
+    scrollViewport(100, 181);
+    expect(renderedRows().map((row) => row.index)).toEqual([4, 5, 6, 7]);
   });
 });
