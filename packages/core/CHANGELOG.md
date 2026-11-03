@@ -144,6 +144,19 @@
   without seconds, and an unset 24-hour value. No public API, type, default,
   markup, paint, behavior or dependency change. Browser and public-package
   acceptance remain pending.
+- Read the last selected value that Backspace removes from a Modern
+  `multiple` Select through the existing `arrayValueAt` collection helper
+  instead of a computed index read. With the list open and the filter
+  empty, Backspace is still consumed and removes the most recently selected
+  value, not the first or last option, and the list stays open; when that
+  value is disabled or matches no option it stays, and no earlier value is
+  removed in its place. A typed filter and a closed list still neither
+  consume Backspace nor change the value. New tests pin selection order
+  against option order across two Backspaces, a controlled searchable
+  Select whose last value is `0`, a typed filter, a disabled and an unknown
+  last value, and a closed list. No public API, type, default, markup,
+  paint, behavior or dependency change. Browser and public-package
+  acceptance remain pending.
 - Forward `config.access` from `HeaderSurface` to `SurfaceActionBar`, so
   `{ mode: 'all' }` keeps its declared contract on Header actions, as
   `SidebarSurface` already does: an action hidden only by its `visible`

@@ -557,7 +557,7 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
           // An empty filter plus Backspace peels the last selected tag.
           if (multiple && searchValue === '' && internalValue.length > 0) {
             e.preventDefault();
-            const lastValue = internalValue[internalValue.length - 1];
+            const lastValue = arrayValueAt(internalValue, internalValue.length - 1);
             const lastOption = allOptions.find((opt) => opt.value === lastValue);
             if (lastOption && !lastOption.disabled) {
               handleSelect(lastOption.value, lastOption);
