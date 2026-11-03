@@ -230,12 +230,11 @@ export function useMeasuredScroll(options: UseMeasuredScrollOptions): UseMeasure
 
     const items: MeasuredVirtualItem[] = [];
     for (let index = startIndex; index <= endIndex; index += 1) {
-      items.push({
-        index,
-        start: offsets[index],
-        size: (offsets[index + 1] ?? offsets[index]) - offsets[index],
-        measureRef: measureRefFor(index),
-      });
+      const start = arrayValueAt(offsets, index);
+      const end = arrayValueAt(offsets, index + 1);
+      // A fractional index (non-integer overscan) is not a dataset row and has no edges.
+      if (start === undefined || end === undefined) continue;
+      items.push({ index, start, size: end - start, measureRef: measureRefFor(index) });
     }
     return items;
   }, [count, offsets, scrollTop, viewportHeight, overscan, measureRefFor]);

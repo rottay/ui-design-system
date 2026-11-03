@@ -37,6 +37,17 @@ describe('useMeasuredScroll', () => {
     expect(result.current.virtualItems.map((r) => r.index)).toEqual([0, 1]);
   });
 
+  it('keeps whole dataset rows for a fractional overscan at the top', () => {
+    // Unscrolled, the start index clamps to 0, so only the end carries the fraction.
+    const { result } = renderHook(() =>
+      useMeasuredScroll({ count: 100, estimateSize: 50, overscan: 1.5 }),
+    );
+    const rows = result.current.virtualItems;
+    expect(rows.map((r) => r.index)).toEqual([0, 1]);
+    expect(rows[0]).toMatchObject({ index: 0, start: 0, size: 50 });
+    expect(rows[1]).toMatchObject({ index: 1, start: 50, size: 50 });
+  });
+
   it('returns no rows and zero size for an empty dataset', () => {
     const { result } = renderHook(() => useMeasuredScroll({ count: 0, estimateSize: 50 }));
     expect(result.current.virtualItems).toEqual([]);
@@ -79,11 +90,11 @@ describe('useMeasuredScroll visible range in a scrolled viewport', () => {
   // Rows are 10, 20, ..., 80px tall: tops at 0, 10, 30, 60, 100, 150, 210, 280.
   const estimateRowSize = (index: number) => (index + 1) * 10;
 
-  function ScrolledRows() {
+  function ScrolledRows({ overscan = 0 }: { overscan?: number }) {
     const { scrollRef, onScroll, totalSize, virtualItems } = useMeasuredScroll({
       count: 8,
       estimateSize: estimateRowSize,
-      overscan: 0,
+      overscan,
     });
     return (
       <div ref={scrollRef} onScroll={onScroll} data-testid="viewport">
@@ -94,6 +105,7 @@ describe('useMeasuredScroll visible range in a scrolled viewport', () => {
               data-testid="row"
               data-index={item.index}
               data-start={item.start}
+              data-size={item.size}
             />
           ))}
         </div>
@@ -114,6 +126,14 @@ describe('useMeasuredScroll visible range in a scrolled viewport', () => {
     return screen.queryAllByTestId('row').map((row) => ({
       index: Number(row.getAttribute('data-index')),
       start: Number(row.getAttribute('data-start')),
+    }));
+  }
+
+  function renderedGeometry(): Array<{ index: number; start: number; size: number }> {
+    return screen.queryAllByTestId('row').map((row) => ({
+      index: Number(row.getAttribute('data-index')),
+      start: Number(row.getAttribute('data-start')),
+      size: Number(row.getAttribute('data-size')),
     }));
   }
 
@@ -143,5 +163,28 @@ describe('useMeasuredScroll visible range in a scrolled viewport', () => {
 
     scrollViewport(100, 181);
     expect(renderedRows().map((row) => row.index)).toEqual([4, 5, 6, 7]);
+  });
+
+  it('emits no row at a fractional index when a fractional overscan is subtracted', () => {
+    render(<ScrolledRows overscan={1.5} />);
+    // Unscrolled, the start clamps to 0: whole rows 0 and 1 render.
+    expect(renderedGeometry()).toEqual([
+      { index: 0, start: 0, size: 10 },
+      { index: 1, start: 10, size: 20 },
+    ]);
+
+    // scrollTop 35 starts in row 2, so the start index is 2 - 1.5 = 0.5 and every
+    // candidate index (0.5, 1.5) is fractional: no dataset row, so nothing renders.
+    scrollViewport(35, 65);
+    expect(renderedGeometry()).toEqual([]);
+
+    // scrollTop 15 starts in row 1, which clamps the start back to 0: whole rows return.
+    scrollViewport(15, 20);
+    expect(renderedGeometry()).toEqual([
+      { index: 0, start: 0, size: 10 },
+      { index: 1, start: 10, size: 20 },
+      { index: 2, start: 30, size: 30 },
+      { index: 3, start: 60, size: 40 },
+    ]);
   });
 });

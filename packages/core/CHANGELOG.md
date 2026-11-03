@@ -175,6 +175,25 @@
   both after a single row and after a scan across several rows. No public
   API, type, default, markup, paint, behavior or dependency change. Browser
   and public-package acceptance remain pending.
+- Fix `useMeasuredScroll` returning rows at a fractional index with an
+  undefined `start` and a `NaN` `size`. Subtracting a non-integer `overscan`
+  from the first visible row's index after scrolling can produce such
+  indices. Each row now reads its top and bottom offsets through the
+  existing `arrayValueAt` collection helper and is left out of
+  `virtualItems` when either edge is missing, so every returned item keeps
+  the `index`, `start` and `size` of a dataset row. Omission is per row: a
+  scrolled state can return fewer rows or none, and an index that
+  floating-point addition brings to a whole number is still returned. An
+  integer `overscan`, including the default, returns the same rows, starts
+  and sizes as before, and a fractional `overscan` still returns whole rows
+  from index 0 while the first visible row lies within `overscan` rows of
+  the top. A row whose offsets are `NaN`, for example from a `NaN`
+  `estimateSize`, is still returned with those values. `overscan` itself is
+  not rounded or clamped. New tests pin whole rows for a fractional
+  `overscan` at the top, no fractional rows after scrolling, and exact
+  integer rows after scrolling back near the top. No public API, type,
+  default or dependency change. Browser and public-package acceptance
+  remain pending.
 - Forward `config.access` from `HeaderSurface` to `SurfaceActionBar`, so
   `{ mode: 'all' }` keeps its declared contract on Header actions, as
   `SidebarSurface` already does: an action hidden only by its `visible`
