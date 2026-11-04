@@ -10,7 +10,7 @@
  * this file stamps. Own copy resolves through the optional `components`
  * i18n channel with an English floor; weekday and month names follow the
  * active locale via Intl, and the grid's week start follows the locale's
- * own `Intl.Locale.getWeekInfo()` (Sunday floor).
+ * native week-info when available, with the shared locale policy otherwise.
  *
  * PINS: the previous/next controls are the TEXT buttons
  * '<' / '>' (`getByText('<')` / `getByText('>')`) — governed chevron icons
@@ -45,6 +45,7 @@ import { DayCell, EventChip } from './runtime';
 import ModernCalendarTimeGrid from './presentation';
 import { useOptionalDirection, useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { arrayValueAt } from '@/foundation/kernel/collections';
+import { resolveWeekStartsOn } from '@/components/primitives/foundation/calendar';
 import ModernButton from '../../../../../primitives/inputs/button/engines/modern';
 import ModernSelect from '../../../../../primitives/inputs/select/engines/modern';
 import ModernSpinner from '../../../../../primitives/feedback/spinner/engines/modern';
@@ -53,16 +54,15 @@ const ROOT_CLASS_NAME = 'ds-pattern-calendar-view ds-engine-modern';
 
 /**
  * Week start for the active locale, from the sanctioned Intl runtime:
- * `Intl.Locale.getWeekInfo().firstDay` (1 = Monday … 7 = Sunday), floored to
- * Sunday (7) when the runtime predates weekInfo or the locale is the
- * 'default' placeholder. Never a hardcoded locale table.
+ * `Intl.Locale.getWeekInfo().firstDay` (1 = Monday … 7 = Sunday), with the
+ * shared locale policy when week-info is unavailable. An invalid or
+ * unavailable locale retains the Sunday floor.
  */
 function weekStartDay(locale: string): number {
   try {
-    const loc = new Intl.Locale(
-      locale === 'default' ? navigator.language : locale,
-    ) as Intl.Locale & { getWeekInfo?: () => { firstDay?: number }; weekInfo?: { firstDay?: number } };
-    return loc.getWeekInfo?.().firstDay ?? loc.weekInfo?.firstDay ?? 7;
+    const resolvedLocale = locale === 'default' ? navigator.language : locale;
+    const loc = new Intl.Locale(resolvedLocale) as Intl.Locale & { getWeekInfo?: () => { firstDay?: number }; weekInfo?: { firstDay?: number } };
+    return loc.getWeekInfo?.().firstDay ?? loc.weekInfo?.firstDay ?? resolveWeekStartsOn(resolvedLocale);
   } catch {
     return 7;
   }

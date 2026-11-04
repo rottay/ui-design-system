@@ -39,6 +39,11 @@
 
 ### Patch Changes
 
+- Use the shared locale week-start policy in Modern CalendarView when native
+  week-info is unavailable, so Spanish month headers and day placement start
+  on Monday while English keeps Sunday. Native week-info takes precedence;
+  the month keeps whole week rows with empty padding cells, and the controlled
+  date/view API is unchanged.
 - Restore Modern CalendarView's retained Week and Day layouts as hourly grids
   instead of rendering the month grid for every view. Week navigation advances
   seven local calendar days and Day navigation advances one; month navigation

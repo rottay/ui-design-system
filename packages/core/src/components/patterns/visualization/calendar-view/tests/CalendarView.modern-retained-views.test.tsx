@@ -1,6 +1,7 @@
 process.env.TZ = 'America/Los_Angeles';
 
 import React from 'react';
+import { renderToStaticMarkup } from 'react-dom/server';
 import { act, fireEvent, render, screen, within } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import userEvent from '@testing-library/user-event';
@@ -436,5 +437,78 @@ describe('CalendarView Modern retained month behavior and additional events', ()
     fireEvent.click(screen.getByRole('button', { name: 'Next month' }));
     expect(onDateChange).toHaveBeenCalledExactlyOnceWith(new Date(2026, 1, 28, 9));
     expect(container.querySelectorAll('[data-part="date-label"]')).toHaveLength(31);
+  });
+});
+
+describe.sequential('CalendarView Modern missing week-info month locale parity', () => {
+  function assertMonthHeaders(locale: 'es' | 'en') {
+    const prototype = Intl.Locale.prototype;
+    const keys = ['getWeekInfo', 'weekInfo'] as const;
+    const saved = keys.map((key) => ({ key, descriptor: Object.getOwnPropertyDescriptor(prototype, key) }));
+    for (const { key, descriptor } of saved) {
+      if ((!descriptor && Reflect.has(prototype, key)) || descriptor?.configurable === false) {
+        throw new Error(`PT004_WEEKINFO_GUARD_UNSAFE:${key}`);
+      }
+    }
+    try {
+      for (const { key } of saved) {
+        if (!Reflect.deleteProperty(prototype, key) || Reflect.has(prototype, key)) {
+          throw new Error(`PT004_WEEKINFO_GUARD_NOT_ABSENT:${key}`);
+        }
+      }
+      const assertUnavailable = () => {
+        const instance = new Intl.Locale(locale);
+        for (const key of keys) {
+          if (Reflect.has(instance, key) || Reflect.get(instance, key) !== undefined) {
+            throw new Error(`PT004_WEEKINFO_GUARD_INSTANCE:${key}`);
+          }
+        }
+      };
+      const firstDay = locale === 'es' ? 5 : 4;
+      expect(new Date(2026, 0, firstDay).getDay(), `PT004_CIVIL_ORACLE:${locale}`).toBe(locale === 'es' ? 1 : 0);
+      const expected = Array.from({ length: 7 }, (_, index) =>
+        new Date(2026, 0, firstDay + index).toLocaleDateString(locale, { weekday: 'short' }),
+      );
+      const tree = <I18nProvider locale={locale}><ModernCalendarView events={[]} view="month" currentDate={new Date(2026, 2, 18)} /></I18nProvider>;
+      const server = document.createElement('template');
+      assertUnavailable();
+      server.innerHTML = renderToStaticMarkup(tree);
+      assertUnavailable();
+      const mounted = render(tree);
+      try {
+        const headers = (root: ParentNode) => Array.from(root.querySelectorAll('[role="columnheader"]'), (node) => node.textContent);
+        const actual = { ssr: headers(server.content), dom: headers(mounted.container) };
+        assertUnavailable();
+        expect.soft(actual.ssr, `PT004_WEEKINFO_ALIGNMENT:${locale}:SSR`).toEqual(expected);
+        expect.soft(actual.dom, `PT004_WEEKINFO_ALIGNMENT:${locale}:DOM`).toEqual(expected);
+      } finally {
+        mounted.unmount();
+      }
+    } finally {
+      const restorationErrors: string[] = [];
+      for (const { key, descriptor } of saved) {
+        try {
+          if (descriptor) Object.defineProperty(prototype, key, descriptor);
+          else if (!Reflect.deleteProperty(prototype, key)) restorationErrors.push(`delete:${key}`);
+        } catch {
+          restorationErrors.push(`define:${key}`);
+        }
+      }
+      for (const { key, descriptor } of saved) {
+        const restored = Object.getOwnPropertyDescriptor(prototype, key);
+        if (descriptor === undefined ? restored !== undefined || Reflect.has(prototype, key) : restored === undefined || Object.keys(descriptor).length !== Object.keys(restored).length || Object.keys(descriptor).some((field) => !Object.prototype.hasOwnProperty.call(restored, field) || !Object.is(Reflect.get(descriptor, field), Reflect.get(restored, field)))) {
+          restorationErrors.push(`descriptor:${key}`);
+        }
+      }
+      if (restorationErrors.length) throw new Error(`PT004_WEEKINFO_RESTORE_FAILED:${restorationErrors.join(',')}`);
+    }
+  }
+
+  it('matches shared es month headers in SSR and DOM without platform week-info', () => {
+    assertMonthHeaders('es');
+  });
+
+  it('matches shared en month headers in SSR and DOM without platform week-info', () => {
+    assertMonthHeaders('en');
   });
 });
