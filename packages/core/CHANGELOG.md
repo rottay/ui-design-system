@@ -39,6 +39,23 @@
 
 ### Patch Changes
 
+- Restore Modern CalendarView's retained Week and Day layouts as hourly grids
+  instead of rendering the month grid for every view. Week navigation advances
+  seven local calendar days and Day navigation advances one; month navigation
+  keeps its clamped day behavior. Timed entries follow their start/end boundaries,
+  clip to the visible day and use separate overlap lanes; minimum late-day
+  footprints stay within the final slot without changing actual timestamps.
+  All-day and date-only
+  entries remain in an all-day row. Local DST transitions omit missing hours and
+  distinguish repeated hours, with shared week labels reflecting the zones present
+  across their dates. Nested custom-renderer controls keep their own keyboard
+  and pointer activation. The controlled date/view API, event objects,
+  custom renderers and header/toolbar slots are unchanged. Make the month
+  `+N more` control expand additional events, including read-only events, with
+  the existing in-cell keyboard protocol and a collapse action. Add focused
+  DOM and computed-browser geometry tests. No public API, dependency or engine
+  support change; Classic and Rustic remain frozen. Browser and public-package
+  acceptance remain pending.
 - Materialize authored tenant-theme v2/v3 envelope dials with `Object.assign`
   into their existing private groups. For supported documents, motion intensity
   and duration scale, typography scale, radius scale and surface effect

@@ -2,7 +2,7 @@
 
 /**
  * @fileoverview Modern engine for the CalendarView pattern.
- * Renders a month grid with event chips, composing public DS primitives
+ * Renders month, week and day grids with event chips, composing public DS primitives
  * (Button for navigation/today, Select for the view switch, Spinner for
  * loading) — the pattern never recreates a control with its own HTML/CSS.
  * Geometry and the pattern's own paint live in the modern
@@ -30,10 +30,6 @@
  * Enter/Space fires `onDateClick`. Focus never leaves the displayed month —
  * month navigation stays parent-owned through the toolbar.
  *
- * DEBT: the contract offers month/week/day views; this engine renders the
- * month grid for every mode — the Select surface stays per contract and
- * the week/day time-slot engines are documented follow-up, not half-built.
- *
  * @example
  * <ModernCalendarView
  *   events={[{ id: '1', title: 'Standup', start: new Date(), color: '#3b82f6' }]}
@@ -44,78 +40,16 @@
 
 import React, { useId, useMemo, useRef, useState } from 'react';
 import type { CalendarViewProps, CalendarEvent } from '../../contracts';
+import { toDateKey, startTime } from './foundation';
+import { DayCell, EventChip } from './runtime';
+import ModernCalendarTimeGrid from './presentation';
 import { useOptionalDirection, useOptionalTranslation } from '@/infrastructure/runtime/i18n';
-import { partAttributes, serializeState, useInteractionState } from '@/foundation/behavior';
+import { arrayValueAt } from '@/foundation/kernel/collections';
 import ModernButton from '../../../../../primitives/inputs/button/engines/modern';
 import ModernSelect from '../../../../../primitives/inputs/select/engines/modern';
 import ModernSpinner from '../../../../../primitives/feedback/spinner/engines/modern';
 
 const ROOT_CLASS_NAME = 'ds-pattern-calendar-view ds-engine-modern';
-
-/**
- * The day cell (a part) and the read-only event chip (named by its class hook,
- * no part) are STATEFUL: the shared interaction kernel alone decides when they
- * are hovered, pressed or focus-visible, and the skin pairs every platform
- * pseudo-class with the kernel token it stands for. At rest the kernel
- * serializes nothing, so `[data-state]` never matches a resting element and the
- * pseudo-class stays the fallback of one decision, not a second one (F-37).
- *
- * The caller's own `onFocus` / `onBlur` still run: the kernel owns the
- * element's state, the pattern owns the roving tab stop.
- */
-type StatefulDivProps = React.HTMLAttributes<HTMLDivElement> & {
-  [key: `data-${string}`]: string | number | boolean | undefined;
-};
-
-const DayCell = React.forwardRef<HTMLDivElement, StatefulDivProps>(function DayCell(
-  { children, onFocus, onBlur, ...rest },
-  ref,
-) {
-  const interaction = useInteractionState();
-  return (
-    <div
-      {...rest}
-      {...interaction.handlers}
-      onFocus={(event) => {
-        interaction.handlers.onFocus(event);
-        onFocus?.(event);
-      }}
-      onBlur={(event) => {
-        interaction.handlers.onBlur(event);
-        onBlur?.(event);
-      }}
-      {...partAttributes('day-cell', interaction.state)}
-      ref={ref}
-    >
-      {children}
-    </div>
-  );
-});
-
-const EventChip = React.forwardRef<HTMLDivElement, StatefulDivProps>(function EventChip(
-  { children, onFocus, onBlur, ...rest },
-  ref,
-) {
-  const interaction = useInteractionState();
-  return (
-    <div
-      {...rest}
-      {...interaction.handlers}
-      onFocus={(event) => {
-        interaction.handlers.onFocus(event);
-        onFocus?.(event);
-      }}
-      onBlur={(event) => {
-        interaction.handlers.onBlur(event);
-        onBlur?.(event);
-      }}
-      data-state={serializeState(interaction.state)}
-      ref={ref}
-    >
-      {children}
-    </div>
-  );
-});
 
 /**
  * Week start for the active locale, from the sanctioned Intl runtime:
@@ -127,8 +61,8 @@ function weekStartDay(locale: string): number {
   try {
     const loc = new Intl.Locale(
       locale === 'default' ? navigator.language : locale,
-    ) as Intl.Locale & { getWeekInfo?: () => { firstDay?: number } };
-    return loc.getWeekInfo?.().firstDay ?? 7;
+    ) as Intl.Locale & { getWeekInfo?: () => { firstDay?: number }; weekInfo?: { firstDay?: number } };
+    return loc.getWeekInfo?.().firstDay ?? loc.weekInfo?.firstDay ?? 7;
   } catch {
     return 7;
   }
@@ -163,45 +97,13 @@ function getMonthGrid(date: Date, weekStart: number) {
   return cells;
 }
 
-/** A bare `YYYY-MM-DD` payload: a calendar date, not an instant. */
-const DATE_ONLY_ISO = /^(\d{4})-(\d{2})-(\d{2})$/;
-
-/** Normalize a Date or ISO string into a YYYY-MM-DD key for event lookup. */
-function toDateKey(d: Date | string): string {
-  if (typeof d === 'string') {
-    // `new Date('2026-03-05')` is UTC midnight, so `getDate()` reports the
-    // previous day everywhere west of UTC. A date-only payload names a
-    // calendar day: keep its own digits instead of re-projecting it.
-    const dateOnly = DATE_ONLY_ISO.exec(d);
-    if (dateOnly) return `${dateOnly[1]}-${dateOnly[2]}-${dateOnly[3]}`;
-  }
-  const date = typeof d === 'string' ? new Date(d) : d;
-  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
-}
-
-/** Milliseconds a calendar day spans, used to walk a multi-day range. */
 const DAY_MS = 24 * 60 * 60 * 1000;
 
-/** Sort key for an event: the numeric instant of its start. */
-function startTime(d: Date | string): number {
-  const dateOnly = typeof d === 'string' ? DATE_ONLY_ISO.exec(d) : null;
-  if (dateOnly) {
-    return new Date(
-      Number(dateOnly[1]),
-      Number(dateOnly[2]) - 1,
-      Number(dateOnly[3]),
-    ).getTime();
-  }
-  const value = typeof d === 'string' ? new Date(d) : d;
-  const time = value.getTime();
-  return Number.isNaN(time) ? 0 : time;
-}
-
 /**
- * Modern calendar view rendering a month grid with event chips.
+ * Modern calendar view with controlled month, week and day layouts.
  * @param props - CalendarViewProps including events array, navigation callbacks,
  *   optional custom toolbar/header, and a generic `T` for event payload data.
- * @returns A month grid card; loading state composes the Spinner primitive.
+ * @returns A calendar grid; loading state composes the Spinner primitive.
  */
 export default function ModernCalendarView<T>(props: CalendarViewProps<T>) {
   // Optional channel with an English floor: the calendar renders standalone
@@ -245,8 +147,10 @@ export default function ModernCalendarView<T>(props: CalendarViewProps<T>) {
 
   const copy = {
     today: tOr('calendarView.today', 'Today'),
-    previousMonth: tOr('calendarView.previousMonth', 'Previous month'),
-    nextMonth: tOr('calendarView.nextMonth', 'Next month'),
+    previous: view === 'month' ? tOr('calendarView.previousMonth', 'Previous month') : view === 'week' ? tOr('calendarView.previousWeek', 'Previous week') : tOr('calendarView.previousDay', 'Previous day'),
+    next: view === 'month' ? tOr('calendarView.nextMonth', 'Next month') : view === 'week' ? tOr('calendarView.nextWeek', 'Next week') : tOr('calendarView.nextDay', 'Next day'),
+    allDay: tOr('calendarView.allDay', 'All day'),
+    showLess: tOr('calendarView.showLess', 'Show fewer events'),
     viewMonth: tOr('calendarView.viewMonth', 'Month'),
     viewWeek: tOr('calendarView.viewWeek', 'Week'),
     viewDay: tOr('calendarView.viewDay', 'Day'),
@@ -258,6 +162,21 @@ export default function ModernCalendarView<T>(props: CalendarViewProps<T>) {
   const weekStart = useMemo(() => weekStartDay(locale), [locale]);
   const cells = useMemo(() => getMonthGrid(currentDate, weekStart), [currentDate, weekStart]);
   const dayNames = useMemo(() => weekdayNames(locale, weekStart), [locale, weekStart]);
+
+  const visibleDays = useMemo(() => {
+    const first = new Date(currentDate);
+    first.setHours(0, 0, 0, 0);
+    if (view === 'week') first.setDate(first.getDate() - (first.getDay() - weekStart % 7 + 7) % 7);
+    return Array.from({ length: view === 'week' ? 7 : 1 }, (_, index) => {
+      const date = new Date(first);
+      date.setDate(date.getDate() + index);
+      return date;
+    });
+  }, [currentDate, view, weekStart]);
+  const rangeLabel = view === 'month' ? monthLabel : view === 'day'
+    ? currentDate.toLocaleDateString(locale, { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })
+    : visibleDays.map((date, index) => index === 0 || index === 6 ? date.toLocaleDateString(locale, { month: 'short', day: 'numeric', year: 'numeric' }) : '').filter(Boolean).join(' – ');
+  const [expandedDate, setExpandedDate] = useState<string | null>(null);
 
   // Index events by date string for O(1) lookup per cell during render. An
   // event carrying an `end` occupies EVERY day it spans, not just its start
@@ -304,11 +223,17 @@ export default function ModernCalendarView<T>(props: CalendarViewProps<T>) {
     return map;
   }, [events, cells]);
 
-  // Navigate forward or backward by one month. Creates a new Date to
-  // avoid mutating the controlled currentDate prop. The day is clamped to
+  // Navigation follows the active view without mutating currentDate.
+  // Month changes clamp the day before setting the target month. The day is clamped to
   // the target month's length first: a bare `setMonth` on Jan 31 overflows
   // into March and skips February entirely.
-  const navigateMonth = (delta: number) => {
+  const navigateDate = (delta: number) => {
+    if (view !== 'month') {
+      const next = new Date(currentDate);
+      next.setDate(next.getDate() + delta * (view === 'week' ? 7 : 1));
+      onDateChange?.(next);
+      return;
+    }
     const targetMonth = currentDate.getMonth() + delta;
     const daysInTarget = new Date(currentDate.getFullYear(), targetMonth + 1, 0).getDate();
     const next = new Date(currentDate);
@@ -365,18 +290,18 @@ export default function ModernCalendarView<T>(props: CalendarViewProps<T>) {
      returns to the cell; Up/Down walk the stack. Enter/Space stay bound to
      `onDateClick` on EVERY cell, so the documented callback is untouched. */
   const enterCell = (cellNode: HTMLElement): boolean => {
-    const firstChip = cellNode.querySelector<HTMLElement>('.ds-pattern-calendar-view__event');
+    const firstChip = cellNode.querySelector<HTMLElement>('.ds-pattern-calendar-view__event[tabindex], .ds-pattern-calendar-view__overflow-action');
     if (!firstChip) return false;
     firstChip.focus();
     return true;
   };
 
-  const handleChipKeyDown = (e: React.KeyboardEvent<HTMLElement>, ev: CalendarEvent<T>) => {
+  const handleChipKeyDown = (e: React.KeyboardEvent<HTMLElement>, ev?: CalendarEvent<T>) => {
     const chip = e.currentTarget;
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
       e.stopPropagation();
-      onEventClick?.(ev);
+      if (ev) onEventClick?.(ev);
       return;
     }
     if (e.key === 'Escape') {
@@ -390,9 +315,11 @@ export default function ModernCalendarView<T>(props: CalendarViewProps<T>) {
       // stack edges absorb the key instead of jumping a week.
       e.preventDefault();
       e.stopPropagation();
-      const sibling =
-        e.key === 'ArrowDown' ? chip.nextElementSibling : chip.previousElementSibling;
-      if (sibling instanceof HTMLElement && sibling.classList.contains('ds-pattern-calendar-view__event')) sibling.focus();
+      const entries = Array.from(chip.closest('[data-part="day-cell"]')?.querySelectorAll<HTMLElement>('.ds-pattern-calendar-view__event[tabindex], .ds-pattern-calendar-view__overflow-action') ?? []);
+      const index = entries.indexOf(chip);
+      const sibling = arrayValueAt(entries, index + (e.key === 'ArrowDown' ? 1 : -1));
+      if (e.key === 'ArrowUp' && index === 0) return;
+      sibling?.focus();
     }
   };
 
@@ -401,7 +328,7 @@ export default function ModernCalendarView<T>(props: CalendarViewProps<T>) {
     // which is the NEXT day in an RTL grid (Tree primitive idiom).
     const rtl = direction === 'rtl';
     if (e.key === 'F2') {
-      if (!eventsInteractive) return;
+      if (!eventsInteractive && !e.currentTarget.querySelector('.ds-pattern-calendar-view__overflow-action')) return;
       if (enterCell(e.currentTarget)) e.preventDefault();
       return;
     }
@@ -441,23 +368,23 @@ export default function ModernCalendarView<T>(props: CalendarViewProps<T>) {
               size="sm"
               className="ds-pattern-calendar-view__toolbar-action"
               data-action="previous"
-              aria-label={copy.previousMonth}
-              onClick={() => navigateMonth(-1)}
+              aria-label={copy.previous}
+              onClick={() => navigateDate(-1)}
             >
               {'<'}
             </ModernButton>
             {/* The title doubles as the grid's accessible name and a polite
                 live region: navigating months announces the new range. */}
             <h3 data-part="month-title" id={titleId} aria-live="polite">
-              {monthLabel}
+              {rangeLabel}
             </h3>
             <ModernButton
               variant="ghost"
               size="sm"
               className="ds-pattern-calendar-view__toolbar-action"
               data-action="next"
-              aria-label={copy.nextMonth}
-              onClick={() => navigateMonth(1)}
+              aria-label={copy.next}
+              onClick={() => navigateDate(1)}
             >
               {'>'}
             </ModernButton>
@@ -497,6 +424,14 @@ export default function ModernCalendarView<T>(props: CalendarViewProps<T>) {
         <div data-part="loading">
           <ModernSpinner size="md" className="ds-pattern-calendar-view__spinner" />
         </div>
+      ) : view !== 'month' ? (
+        <ModernCalendarTimeGrid
+          dates={visibleDays} events={events} currentDate={currentDate}
+          locale={locale} direction={direction} allDayLabel={copy.allDay}
+          today={today} rangeLabel={rangeLabel} labelledBy={toolbar == null ? titleId : undefined}
+          onDateClick={onDateClick} onEventClick={onEventClick} renderEvent={renderEvent}
+          onEnterCell={enterCell} onEntryKeyDown={handleChipKeyDown}
+        />
       ) : (
         /* Grid geometry and frame are skin-owned through the public anatomy.
            APG: role=grid labelled by the month title; week rows are
@@ -507,8 +442,8 @@ export default function ModernCalendarView<T>(props: CalendarViewProps<T>) {
           /* A caller-supplied toolbar replaces the default month title, so
              the id reference would dangle and leave the grid unnamed: fall
              back to the same localized month string as a direct label. */
-          aria-labelledby={toolbar ? undefined : titleId}
-          aria-label={toolbar ? monthLabel : undefined}
+          aria-labelledby={toolbar == null ? titleId : undefined}
+          aria-label={toolbar == null ? undefined : rangeLabel}
         >
           <div data-part="weekday-row" role="row">
             {dayNames.map((d) => (
@@ -584,7 +519,7 @@ export default function ModernCalendarView<T>(props: CalendarViewProps<T>) {
                         </div>
                         {/* Show at most 3 event chips per cell to keep the grid compact;
                             overflow is shown as "+N more" below. */}
-                        {dayEvents.slice(0, 3).map((ev) => {
+                        {(expandedDate === cellKey ? dayEvents : dayEvents.slice(0, 3)).map((ev) => {
                           /* Per-event color is consumer config data: it rides the
                              family's own accent channel (quoted key) and the skin
                              owns the fill. An event that states NO colour stamps
@@ -626,9 +561,24 @@ export default function ModernCalendarView<T>(props: CalendarViewProps<T>) {
                           );
                         })}
                         {dayEvents.length > 3 && (
-                          <div data-part="overflow-count">
-                            {tOr('calendarView.overflowMore', '+{count} more', { count: dayEvents.length - 3 })}
-                          </div>
+                          <span data-part="overflow-count">
+                            <ModernButton
+                              chrome="none"
+                              className="ds-pattern-calendar-view__overflow-action"
+                              tabIndex={-1}
+                              aria-expanded={expandedDate === cellKey}
+                              onClick={(event) => { event.stopPropagation(); setExpandedDate(expandedDate === cellKey ? null : cellKey); }}
+                              onKeyDown={(event) => {
+                                if (event.key === 'Enter' || event.key === ' ') {
+                                  event.preventDefault();
+                                  event.stopPropagation();
+                                  setExpandedDate(expandedDate === cellKey ? null : cellKey);
+                                } else handleChipKeyDown(event, undefined);
+                              }}
+                            >
+                              {expandedDate === cellKey ? copy.showLess : tOr('calendarView.overflowMore', '+{count} more', { count: dayEvents.length - 3 })}
+                            </ModernButton>
+                          </span>
                         )}
                       </>
                     )}

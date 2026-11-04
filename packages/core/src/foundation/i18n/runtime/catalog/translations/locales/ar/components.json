@@ -447,7 +447,13 @@
     "viewMonth": "شهر",
     "viewWeek": "أسبوع",
     "viewDay": "يوم",
-    "overflowMore": "+{count} أخرى"
+    "overflowMore": "+{count} أخرى",
+    "previousWeek": "الأسبوع السابق",
+    "nextWeek": "الأسبوع التالي",
+    "previousDay": "اليوم السابق",
+    "nextDay": "اليوم التالي",
+    "allDay": "طوال اليوم",
+    "showLess": "عرض أحداث أقل"
   },
   "cascader": {
     "placeholder": "يرجى الاختيار",

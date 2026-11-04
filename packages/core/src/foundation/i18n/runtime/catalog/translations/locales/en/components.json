@@ -447,7 +447,13 @@
     "viewMonth": "Month",
     "viewWeek": "Week",
     "viewDay": "Day",
-    "overflowMore": "+{count} more"
+    "overflowMore": "+{count} more",
+    "previousWeek": "Previous week",
+    "nextWeek": "Next week",
+    "previousDay": "Previous day",
+    "nextDay": "Next day",
+    "allDay": "All day",
+    "showLess": "Show fewer events"
   },
   "cascader": {
     "placeholder": "Please select",

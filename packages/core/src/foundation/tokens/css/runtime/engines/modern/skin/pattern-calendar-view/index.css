@@ -367,7 +367,7 @@
     [data-part='day-cell'] {
     min-block-size: var(--ds-calendar-view-cell-min-height-compact, 3.5rem);
   }
-  .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
+  .ds-pattern-calendar-view.ds-engine-modern[data-part='root'][data-view-mode='month']
     > [data-part='grid']
     [data-part='day-cell']
     .ds-pattern-calendar-view__event {
@@ -498,6 +498,72 @@
    authored size untouched. */
 @media (hover: none), (pointer: coarse) {
   .ds-pattern-calendar-view.ds-engine-modern [data-part='day-cell'] {
+    min-block-size: var(--ds-touch-target-min, 44px);
+  }
+}
+
+.ds-pattern-calendar-view.ds-engine-modern[data-part='root'] > [data-part='grid'][data-time-grid='true'] {
+  --_ds-calendar-view-hour-size: max(var(--ds-spacing-16, 4rem), calc(2 * var(--ds-spacing-6, 1.5rem)));
+  grid-template-columns: minmax(4rem, auto) repeat(7, minmax(8rem, 1fr));
+  grid-template-rows: auto auto repeat(var(--_ds-calendar-view-hour-rows), var(--_ds-calendar-view-hour-size));
+  inline-size: 100%;
+  min-inline-size: 0;
+  max-block-size: 70vh;
+  box-sizing: border-box;
+  overflow: auto;
+}
+.ds-pattern-calendar-view.ds-engine-modern[data-part='root'][data-view-mode='day'] > [data-part='grid'][data-time-grid='true'] {
+  grid-template-columns: minmax(4rem, auto) minmax(8rem, 1fr);
+}
+.ds-pattern-calendar-view.ds-engine-modern[data-part='root'] > [data-part='grid'][data-time-grid='true'] [data-part='date-label'] {
+  padding: var(--ds-spacing-1);
+  color: var(--ds-color-text-secondary);
+  font-size: var(--ds-font-size-xs);
+  font-variant-numeric: tabular-nums;
+  border-block-end: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border);
+  background: var(--ds-surface-inset);
+}
+.ds-pattern-calendar-view.ds-engine-modern[data-part='root'] > [data-part='grid'][data-time-grid='true'] [data-part='day-cell'] {
+  min-block-size: 0;
+}
+.ds-pattern-calendar-view.ds-engine-modern[data-part='root'] > [data-part='grid'][data-time-grid='true'] [data-part='day-cell'][data-time-slot='true'] {
+  position: relative;
+  block-size: var(--_ds-calendar-view-hour-size);
+  padding: 0;
+  box-sizing: border-box;
+}
+.ds-pattern-calendar-view.ds-engine-modern[data-part='root'] > [data-part='grid'][data-time-grid='true'] [data-part='day-cell']::after {
+  z-index: 2;
+}
+.ds-pattern-calendar-view.ds-engine-modern[data-part='root'] > [data-part='grid'][data-time-grid='true'] [data-part='day-cell'] .ds-pattern-calendar-view__event[data-time-entry='true'] {
+  position: absolute;
+  z-index: 1;
+  inset-block-start: calc(var(--_ds-calendar-view-entry-offset) * var(--_ds-calendar-view-hour-size));
+  block-size: calc(var(--_ds-calendar-view-entry-span) * var(--_ds-calendar-view-hour-size));
+  min-block-size: var(--ds-spacing-6, 1.5rem);
+  inset-inline-start: calc(100% * var(--_ds-calendar-view-entry-lane) / var(--_ds-calendar-view-entry-lanes));
+  inline-size: calc(100% / var(--_ds-calendar-view-entry-lanes));
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  box-sizing: border-box;
+  margin: 0;
+  border-inline-end: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border);
+  white-space: normal;
+}
+.ds-pattern-calendar-view.ds-engine-modern[data-part='root'] > [data-part='grid'][data-time-grid='true'] .ds-pattern-calendar-view__event time {
+  display: block;
+  font-variant-numeric: tabular-nums;
+}
+
+.ds-pattern-calendar-view.ds-engine-modern[data-part='root'] > [data-part='grid'][data-time-grid='true'] [data-part='day-cell'][data-time-slot='false'] {
+  min-block-size: var(--ds-touch-target-min, 44px);
+}
+@media (hover: none), (pointer: coarse) {
+  .ds-pattern-calendar-view.ds-engine-modern[data-part='root'] > [data-part='grid'][data-time-grid='true'] {
+    --_ds-calendar-view-hour-size: max(var(--ds-spacing-16, 4rem), calc(2 * var(--ds-spacing-6, 1.5rem)), calc(2 * var(--ds-touch-target-min, 44px)));
+  }
+  .ds-pattern-calendar-view.ds-engine-modern[data-part='root'] > [data-part='grid'][data-time-grid='true'] [data-part='day-cell'] .ds-pattern-calendar-view__event[data-time-entry='true'] {
     min-block-size: var(--ds-touch-target-min, 44px);
   }
 }

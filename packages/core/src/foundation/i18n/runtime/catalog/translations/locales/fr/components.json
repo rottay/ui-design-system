@@ -1048,7 +1048,13 @@
     "viewMonth": "Mois",
     "viewWeek": "Semaine",
     "viewDay": "Jour",
-    "overflowMore": "+{count} de plus"
+    "overflowMore": "+{count} de plus",
+    "previousWeek": "Semaine précédente",
+    "nextWeek": "Semaine suivante",
+    "previousDay": "Jour précédent",
+    "nextDay": "Jour suivant",
+    "allDay": "Toute la journée",
+    "showLess": "Afficher moins d’événements"
   },
   "savedViews": {
     "rename": "Renommer",

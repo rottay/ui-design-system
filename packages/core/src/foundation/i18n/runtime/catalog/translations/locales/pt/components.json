@@ -1098,7 +1098,13 @@
     "viewMonth": "Mês",
     "viewWeek": "Semana",
     "viewDay": "Dia",
-    "overflowMore": "+{count} a mais"
+    "overflowMore": "+{count} a mais",
+    "previousWeek": "Semana anterior",
+    "nextWeek": "Próxima semana",
+    "previousDay": "Dia anterior",
+    "nextDay": "Próximo dia",
+    "allDay": "Dia inteiro",
+    "showLess": "Mostrar menos eventos"
   },
   "colorpicker": {
     "clear": "Limpar",
