@@ -268,6 +268,107 @@ describe('ModernFileManager grid roving tab stop', () => {
     expect(document.activeElement).toBe(gridCards(container)[2]);
     expect(gridCards(container).map((card) => card.tabIndex)).toEqual([-1, -1, 0]);
   });
+
+  it('updates ref slots when keyed files change order without activating an item', () => {
+    const onNavigate = vi.fn();
+    const onSelectionChange = vi.fn();
+    const props = createProps({ viewMode: 'grid', onNavigate, onSelectionChange });
+    const { container, rerender } = render(<ModernFileManager {...props} />);
+    const before = gridCards(container);
+
+    rerender(
+      <ModernFileManager
+        {...props}
+        files={[
+          { id: 'f2', name: 'photo.jpg', type: 'file' },
+          { id: 'f1', name: 'report.pdf', type: 'file' },
+        ]}
+      />
+    );
+
+    expect(gridCards(container).map(cardName)).toEqual(['Documents', 'photo.jpg', 'report.pdf']);
+    expect(gridCards(container)[1]).toBe(before[2]);
+    expect(gridCards(container)[2]).toBe(before[1]);
+    act(() => gridCards(container)[0].focus());
+    fireEvent.keyDown(gridCards(container)[0], { key: 'ArrowRight' });
+    expect(document.activeElement).toBe(gridCards(container)[1]);
+    expect(cardName(document.activeElement)).toBe('photo.jpg');
+    fireEvent.keyDown(gridCards(container)[1], { key: 'End' });
+    expect(document.activeElement).toBe(gridCards(container)[2]);
+    expect(cardName(document.activeElement)).toBe('report.pdf');
+    expect(gridCards(container).map((card) => card.tabIndex)).toEqual([-1, -1, 0]);
+    expect(onNavigate).not.toHaveBeenCalled();
+    expect(onSelectionChange).not.toHaveBeenCalled();
+  });
+
+  it('reuses a removed card position for the new live button without shifting surviving refs', () => {
+    const props = createProps({ viewMode: 'grid' });
+    const { container, rerender } = render(<ModernFileManager {...props} />);
+    const before = gridCards(container);
+    const removedFocus = vi.spyOn(before[2], 'focus');
+
+    rerender(
+      <ModernFileManager
+        {...props}
+        files={[{ id: 'f1', name: 'report.pdf', type: 'file' }]}
+      />
+    );
+    expect(before[2].isConnected).toBe(false);
+    expect(gridCards(container)[1]).toBe(before[1]);
+    act(() => gridCards(container)[0].focus());
+    fireEvent.keyDown(gridCards(container)[0], { key: 'ArrowDown' });
+    expect(document.activeElement).toBe(gridCards(container)[1]);
+    expect(cardName(document.activeElement)).toBe('report.pdf');
+
+    rerender(
+      <ModernFileManager
+        {...props}
+        files={[
+          { id: 'f1', name: 'report.pdf', type: 'file' },
+          { id: 'f3', name: 'replacement.txt', type: 'file' },
+        ]}
+      />
+    );
+    expect(gridCards(container)[1]).toBe(before[1]);
+    expect(gridCards(container)[2]).not.toBe(before[2]);
+    fireEvent.keyDown(gridCards(container)[1], { key: 'End' });
+    expect(document.activeElement).toBe(gridCards(container)[2]);
+    expect(cardName(document.activeElement)).toBe('replacement.txt');
+    fireEvent.keyDown(gridCards(container)[2], { key: 'ArrowUp' });
+    expect(document.activeElement).toBe(gridCards(container)[1]);
+    expect(gridCards(container).map((card) => card.tabIndex)).toEqual([-1, 0, -1]);
+    expect(removedFocus).not.toHaveBeenCalled();
+  });
+
+  it.each(['list', 'loading'] as const)('uses remounted grid buttons after a %s view detaches the old refs', (intermediate) => {
+    const props = createProps({ viewMode: 'grid' });
+    const { container, rerender } = render(<ModernFileManager {...props} />);
+    const before = gridCards(container);
+    const detachedFocus = before.map((card) => vi.spyOn(card, 'focus'));
+
+    rerender(
+      <ModernFileManager
+        {...props}
+        viewMode={intermediate === 'list' ? 'list' : 'grid'}
+        loading={intermediate === 'loading'}
+      />
+    );
+    expect(gridCards(container)).toHaveLength(0);
+    expect(before.every((card) => !card.isConnected)).toBe(true);
+
+    rerender(<ModernFileManager {...props} />);
+    expect(gridCards(container)).toHaveLength(3);
+    expect(gridCards(container).every((card) => !before.includes(card))).toBe(true);
+    act(() => gridCards(container)[0].focus());
+    fireEvent.keyDown(gridCards(container)[0], { key: 'ArrowRight' });
+    expect(document.activeElement).toBe(gridCards(container)[1]);
+    expect(cardName(document.activeElement)).toBe('report.pdf');
+    fireEvent.keyDown(gridCards(container)[1], { key: 'End' });
+    expect(document.activeElement).toBe(gridCards(container)[2]);
+    expect(cardName(document.activeElement)).toBe('photo.jpg');
+    expect(gridCards(container).map((card) => card.tabIndex)).toEqual([-1, -1, 0]);
+    for (const focus of detachedFocus) expect(focus).not.toHaveBeenCalled();
+  });
 });
 
 describe('ModernFileManager standalone copy floors', () => {

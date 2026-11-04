@@ -42,7 +42,7 @@ import type { PatternFileManagerProps, FileItem, FileSystemItem } from '../../co
 import { pathSegmentLabel, pathSegmentTarget, refuseInvalidPath } from '../../runtime';
 import { useOptionalTranslation, useReadingDirectionIsRtl } from '@/infrastructure/runtime/i18n';
 import { partAttributes, useInteractionState } from '@/foundation/behavior';
-import { arrayValueAt } from '@/foundation/kernel/collections';
+import { arrayValueAt, setArrayValueAt } from '@/foundation/kernel/collections';
 import { formatDate as formatDateIntl, formatFileSize } from '@/foundation/i18n/runtime/formatting';
 import { LayoutGridIcon } from '@/graphics/icons/semantic/generated/roles/layout-grid';
 import { LayoutListIcon } from '@/graphics/icons/semantic/generated/roles/layout-list';
@@ -551,7 +551,7 @@ export default function ModernFileManager(props: PatternFileManagerProps) {
               {items.map((item, index) => (
                 <GridCard
                   key={item.id}
-                  ref={(node) => { gridCardRefs.current[index] = node; }}
+                  ref={(node) => { setArrayValueAt(gridCardRefs.current, index, node); }}
                   data-selected={selectedItems.includes(item.id)}
                   data-file-kind={fileKindOf(item)}
                   className="ds-file-manager__grid-card"

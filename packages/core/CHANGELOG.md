@@ -50,6 +50,17 @@
   not replaying after another card receives focus. No public API, type, default,
   markup, paint, keyboard or dependency change. Source and focal simulated-DOM
   checks cover the change; browser and public-package acceptance remain pending.
+- Store Modern FileManager grid-card button refs through the existing
+  `setArrayValueAt` collection helper. Each rendered position keeps its current
+  button, or `null` when detached, without shifting sibling positions. Supported
+  keyboard focus behavior is unchanged. Add tests for keyed file reordering,
+  removal and regrowth at the same position, and returning to the grid from list
+  and loading views: arrow and End moves target the live card in rendered order,
+  preserve the single tab stop, and never focus a detached button. Arrow moves
+  also leave navigation and selection callbacks untouched. No public API, type,
+  default, markup, paint, keyboard or dependency change. Source and focal
+  simulated-DOM checks cover this setter change; browser and public-package
+  acceptance remain pending.
 - Move focus into a closed Modern Dropdown menu portaled through
   `getPopupContainer` when ArrowDown or ArrowUp on the trigger opens it: focus
   now lands on the first or last enabled item, as it already did for in-place
