@@ -39,6 +39,12 @@
 
 ### Patch Changes
 
+- Read DataTable `useInlineEditing`'s current pending edits for a row through
+  the existing property-read helper when a batch cell saves successfully. Saved
+  cells still leave the pending map once, failed siblings remain for retry, and
+  drafts queued in other columns or rows during an in-flight save remain
+  pending. `discardAll` behavior is unchanged. No public API, type, callback or
+  dependency change.
 - Read Modern FileManager's pending grid-card focus target through the existing
   `arrayValueAt` collection helper instead of a computed index read. For indices
   produced by grid keyboard navigation, focus still walks folders before files,

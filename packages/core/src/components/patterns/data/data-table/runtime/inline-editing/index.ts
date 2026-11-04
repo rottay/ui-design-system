@@ -86,6 +86,8 @@ export interface UseInlineEditingReturn<T> {
 // Hook
 // ---------------------------------------------------------------------------
 
+function readRecordValue<T extends object, K extends keyof T>(value: T, key: K): T[K] | undefined;
+function readRecordValue(value: unknown, key: PropertyKey): unknown;
 function readRecordValue(value: unknown, key: PropertyKey): unknown {
   if (typeof value !== 'object' || value === null) return undefined;
   return Reflect.get(value, key);
@@ -179,7 +181,7 @@ export function useInlineEditing<T extends object>(
           // Drop each cell as it saves: if a later cell throws, an already-saved cell left
           // pending would be re-submitted to onSave on retry.
           setPendingEdits((prev) => {
-            const rowEdits = prev[rk];
+            const rowEdits = readRecordValue(prev, rk);
             if (!rowEdits) return prev;
             const { [ck]: _omitted, ...restCols } = rowEdits;
             if (Object.keys(restCols).length === 0) {
