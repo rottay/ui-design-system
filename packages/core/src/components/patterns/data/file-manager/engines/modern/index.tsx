@@ -42,6 +42,7 @@ import type { PatternFileManagerProps, FileItem, FileSystemItem } from '../../co
 import { pathSegmentLabel, pathSegmentTarget, refuseInvalidPath } from '../../runtime';
 import { useOptionalTranslation, useReadingDirectionIsRtl } from '@/infrastructure/runtime/i18n';
 import { partAttributes, useInteractionState } from '@/foundation/behavior';
+import { arrayValueAt } from '@/foundation/kernel/collections';
 import { formatDate as formatDateIntl, formatFileSize } from '@/foundation/i18n/runtime/formatting';
 import { LayoutGridIcon } from '@/graphics/icons/semantic/generated/roles/layout-grid';
 import { LayoutListIcon } from '@/graphics/icons/semantic/generated/roles/layout-list';
@@ -263,7 +264,7 @@ export default function ModernFileManager(props: PatternFileManagerProps) {
     const pending = pendingCardFocus.current;
     if (pending == null) return;
     pendingCardFocus.current = null;
-    gridCardRefs.current[pending]?.focus();
+    arrayValueAt(gridCardRefs.current, pending)?.focus();
   }, [activeCardIndex]);
 
   // Enter/Space mirrors the click contract; inline arrows follow the writing

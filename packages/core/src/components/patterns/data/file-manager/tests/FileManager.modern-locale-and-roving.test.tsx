@@ -212,6 +212,62 @@ describe('ModernFileManager grid roving tab stop', () => {
     fireEvent.keyDown(cards[1], { key: ' ' });
     expect(onSelectionChange).toHaveBeenCalledWith(['f1']);
   });
+
+  const cardName = (card: Element | null) =>
+    card?.closest('[data-part="grid-card"]')?.querySelector('[data-part="item-name"]')?.textContent;
+
+  it('moves focus onto the card in rendered order for ArrowDown, ArrowUp and End', () => {
+    const { container } = render(
+      <ModernFileManager
+        {...createProps({
+          viewMode: 'grid',
+          files: [
+            { id: 'f1', name: 'report.pdf', type: 'file' },
+            { id: 'f2', name: 'photo.jpg', type: 'file' },
+          ],
+          folders: [
+            { id: 'd1', name: 'Documents', type: 'folder' },
+            { id: 'd2', name: 'Music', type: 'folder' },
+          ],
+        })}
+      />
+    );
+
+    expect(gridCards(container).map(cardName)).toEqual(['Documents', 'Music', 'report.pdf', 'photo.jpg']);
+    act(() => gridCards(container)[0].focus());
+
+    fireEvent.keyDown(gridCards(container)[0], { key: 'PageDown' });
+    expect(document.activeElement).toBe(gridCards(container)[0]);
+
+    fireEvent.keyDown(gridCards(container)[0], { key: 'ArrowDown' });
+    expect(document.activeElement).toBe(gridCards(container)[1]);
+    expect(cardName(document.activeElement)).toBe('Music');
+
+    fireEvent.keyDown(gridCards(container)[1], { key: 'ArrowDown' });
+    expect(cardName(document.activeElement)).toBe('report.pdf');
+
+    fireEvent.keyDown(gridCards(container)[2], { key: 'ArrowUp' });
+    expect(cardName(document.activeElement)).toBe('Music');
+
+    fireEvent.keyDown(gridCards(container)[1], { key: 'End' });
+    expect(document.activeElement).toBe(gridCards(container)[3]);
+    expect(cardName(document.activeElement)).toBe('photo.jpg');
+    expect(gridCards(container).map((card) => card.tabIndex)).toEqual([-1, -1, -1, 0]);
+  });
+
+  it('does not replay a consumed arrow move when focus later lands on another card', () => {
+    const { container } = render(
+      <ModernFileManager {...createProps({ viewMode: 'grid' })} />
+    );
+
+    act(() => gridCards(container)[0].focus());
+    fireEvent.keyDown(gridCards(container)[0], { key: 'ArrowRight' });
+    expect(document.activeElement).toBe(gridCards(container)[1]);
+
+    act(() => gridCards(container)[2].focus());
+    expect(document.activeElement).toBe(gridCards(container)[2]);
+    expect(gridCards(container).map((card) => card.tabIndex)).toEqual([-1, -1, 0]);
+  });
 });
 
 describe('ModernFileManager standalone copy floors', () => {

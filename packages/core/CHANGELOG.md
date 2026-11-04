@@ -39,6 +39,17 @@
 
 ### Patch Changes
 
+- Read Modern FileManager's pending grid-card focus target through the existing
+  `arrayValueAt` collection helper instead of a computed index read. For indices
+  produced by grid keyboard navigation, focus still walks folders before files,
+  follows the writing direction for inline arrows, and clamps at the edges
+  without wrapping. A pending arrow move is consumed once, so later focus on
+  another card is not pulled back to the previous target. New tests pin
+  ArrowDown, ArrowUp and End landing on the named card in rendered order, the
+  single tab stop, an unhandled key leaving focus in place, and a consumed move
+  not replaying after another card receives focus. No public API, type, default,
+  markup, paint, keyboard or dependency change. Source and focal simulated-DOM
+  checks cover the change; browser and public-package acceptance remain pending.
 - Move focus into a closed Modern Dropdown menu portaled through
   `getPopupContainer` when ArrowDown or ArrowUp on the trigger opens it: focus
   now lands on the first or last enabled item, as it already did for in-place
