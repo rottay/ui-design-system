@@ -1,6 +1,74 @@
 # Design System Roadmap — Modern Engine Premium Uplift
 
-> **Current owner order (2026-11-02):** Codex is sole technical DT, coordinator and serial
+## Owner scope correction — 2026-11-04: published V1 and meaningful personalization
+
+**Approved delivery boundary; implementation and release evidence remain pending.**
+This latest explicit owner decision supersedes the V1/V2/V3 boundary prose below
+where it assigns application adoption to this roadmap. This epic ends with a
+working, independently accepted and **published** Modern V1 library. Its release
+must identify the approved source/commit, exact package version and integrity,
+registry publication, useful Docs/changelog and an installed-package verification
+in a DS-owned consumer fixture. A build, branch, prepared archive or source-only
+verdict is not publication. Existing W0/V1 quality gates remain required.
+
+BitHire creation, actual application adoption, app branding choices, host wiring,
+application DB installation/history/migrations and rollout belong to a **separate
+future application epic owned by Dani**, not to this epic or its release critical
+path. DS-owned reference fixtures still prove the public library contract without
+editing applications. Existing historical reference evidence stays valid by input
+and impact; an application release is not needed to certify the library.
+
+### Personalization deliverable
+
+Ship complete editable starting presets using the current Modern typed catalog,
+shared components and admitted customization mechanisms. Target five distinct
+profiles; four are sufficient if the fifth is demonstrably redundant, as the owner
+explicitly allowed four or five. The following names and industry examples are a
+proposed selection, not already implemented features or proven market demand:
+
+| Proposed preset | Distinct visual treatment | Illustrative fit, not an industry restriction |
+| --- | --- | --- |
+| Geométrico | Restrained radius, clear hierarchy, sober surfaces and subtle motion | Finance, legal, professional services |
+| Redondeado | Softer corners, comfortable spacing, approachable typography and states | Recruiting, education, wellbeing |
+| Artesanal | Warm palette, characterful headings, deliberate rhythm and restrained material depth | Hospitality, culture, craft; the owner's rustic aesthetic |
+| Compacto | Dense but readable layout, clear table/form hierarchy and efficient interactions | Logistics, administration, data-heavy work |
+| Minimalista | Generous spacing, refined typography, quiet elevation and measured emphasis | Premium services, events, hospitality |
+
+The existing catalog has 29 controls: 19 Standard and 10 Pro. Its five registered
+style IDs do not establish five distinct proposed looks. Compose the vertical
+baseline, inherited style reference and tenant brand decisions; retain plan
+inheritance and let explicitly authorized overrides take precedence. Standard
+authors Standard controls; Pro also authors Pro controls. Inherited preset quality
+is preserved across plans. Display names do not rename persisted IDs, versions or
+digests.
+
+These are presets over **Modern**, not new engines, copied component families,
+industry forks or a reactivation of the frozen Rustic engine. Reuse the existing
+four-theme proof and admitted controls wherever they satisfy the selected styles;
+add only a demonstrated missing delta. Preserve shape, typography, rhythm/density,
+depth, motion and states as meaningful non-palette dimensions under existing
+catalog rules. Light/dark, keyboard/focus, contrast, reduced motion, responsive
+behavior, supported SSR/hydration and static/serialized-document parity keep their
+existing acceptance obligations. Verify comparable content/composition and the
+current required component/vertical fixtures; do not add a new Cartesian-product
+campaign, certifier, registry or optional test programme.
+
+Design references inspected on 2026-11-04: [Radix theme composition](https://www.radix-ui.com/themes/docs/theme/overview),
+[Radix density scaling](https://www.radix-ui.com/themes/docs/theme/spacing) and
+[Carbon productive/expressive motion](https://www.carbondesignsystem.com/building-blocks/foundations/motion/overview).
+They support the customization axes; the five-profile selection is our proposal,
+not a claim that those systems validate these industry segments.
+
+Advanced spatial/WebGPU or AI capabilities and any later DS extensions require
+an explicit future selection; they do not postpone V1 publication. Preserve the
+170-WO registry/history and every original FAIL/acceptance record. Mixed WOs may
+remain open for out-of-epic obligations without making an accepted, published V1
+incomplete or falsely claiming full-programme completion. Continue W0 and
+independent V1 work in parallel, with one serial integrator and existing resource
+admission. Current All-Sol staffing and DISK-SCOPE-01 are unchanged.
+
+
+> **Staffing succession recorded on 2026-11-02 (historical; later owner orders prevail):** Codex is sole technical DT, coordinator and serial
 > integrator; Claude Admin Opus writers and distinct Claude Admin reviewers operate in parallel.
 > Read [Owner succession — 2026-11-02](#owner-succession--2026-11-02-codex-technical-dt), then
 > start at [Owner-approved V1 scope and parallel delivery](#owner-approved-v1-scope-and-parallel-delivery--2026-10-27).
@@ -34,15 +102,19 @@ Record: `/Users/daniel/Developer/Rottay/.local/normalization/platform-parallel/s
 
 ### Binding V1 / V2 / V3 boundaries
 
-**V1:** a stable Modern DS public package from which productive applications can start. Retain complete meaningful bounded customization, styles that admit/compile/verify/emit/mount, immutable descriptor/identity, static/serialized-DB parity, coherent family cascade beyond palette, useful public components, adaptive Card/Grid/collections, supported SSR/hydration/first interactions, request/portal isolation, accessibility, RTL/i18n and tested public entrypoints. Standard/Pro are editing permissions, never different quality. Four provisional same-vertical themes with the same content/composition prove differentiation; no final identity choice is needed.
+**V1:** a stable Modern DS public package from which productive applications can start. Retain complete meaningful bounded customization, styles that admit/compile/verify/emit/mount, immutable descriptor/identity, static/serialized-DB parity, coherent family cascade beyond palette, useful public components, adaptive Card/Grid/collections, supported SSR/hydration/first interactions, request/portal isolation, accessibility, RTL/i18n and tested public entrypoints. Standard/Pro are editing permissions, never different quality. Four or five complete editable presets with the same content/composition prove differentiation, targeting five under the 2026-11-04 owner correction above; no final app identity choice is needed.
 
-**V2:** real app adoption/DB installation, history/actor/CAS/restore operations, downstream stored-data migrations, final identity and behavior-neutral tree normalization. Apps have their own owners and are not implemented in DS. Retained DS unsafe behavior, broken public promises and ineffective release predicates cannot be deferred here.
+**Outside this epic (formerly labelled V2):** real app adoption/DB installation, history/actor/CAS/restore operations, downstream stored-data migrations and final app identity belong to a separate application epic owned by Dani. Any later DS normalization needs its own selected scope. Retained DS unsafe behavior, broken public V1 promises and ineffective release predicates cannot be deferred here.
 
 **V3:** currently unconsumed live spatial/WebGPU and AI state-motion capabilities, plus subsequently selected new features, and full-programme certification when all original obligations are satisfied. No premature final GAT-09 or claim of all-170 completion.
 
 Full required V1 product/proof detail: [approved release-contract scope](../../docs-engineering/archive/audits/2026-10-27/design-system-cloud/reconciliation/v1-release-contract.md). The linked archive retains its historical “proposed” status; this dated canonical section records the adoption. Its implementation constraints and evidence limits remain applicable; its earlier no-implementation authorization is superseded only by this section.
 
 ### Assignment of all 29 open WOs
+
+The original V2/V3 labels below preserve the historical full-programme mapping.
+They do not activate application work or make its completion a V1 release gate;
+the 2026-11-04 owner boundary above governs this epic.
 
 | WO | Entrega propuesta | Alcance |
 |---|---|---|
@@ -64,7 +136,7 @@ Full required V1 product/proof detail: [approved release-contract scope](../../d
 | WO-CRA-20 | V1 | Poda de pesos de iconos, consumidores resueltos y medida del resultado. |
 | WO-CRA-21 | V1 | Contraste BrandMark según fondo real; no diseño de identidad final. |
 | WO-CRA-22 | V1 | Entry público sin proveedor concreto indebidamente alcanzable. |
-| WO-ARC-19 | V1 prueba / V2 cierre condicionado | Cuatro temas técnicos distintos con misma composición y seis ejes; DONE conserva EVI-02. |
+| WO-ARC-19 | V1 prueba / V2 cierre condicionado | Cuatro o cinco presets editables distintos, objetivo cinco, misma composición y seis ejes; DONE completo conserva EVI-02. |
 | WO-GAT-11 | V1 prueba / V2 cierre condicionado | RTL, zoom, forced-colors, contenido largo, teclado/foco; no diferir robustez por dependencia administrativa. |
 | WO-GAT-12 | V1 | Censo de capacidades con SHAs reales, sin fingir apps instaladas. |
 | WO-SKIN-08 | V1 prueba / V2 cierre condicionado | Resolver residuos productivos de skin/cascada; DONE completo conserva EVI-02. |
