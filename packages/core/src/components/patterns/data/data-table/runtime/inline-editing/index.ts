@@ -186,7 +186,8 @@ export function useInlineEditing<T extends object>(
             const restCols = { ...rowEdits };
             Reflect.deleteProperty(restCols, ck);
             if (Object.keys(restCols).length === 0) {
-              const { [rk]: _omittedRow, ...restRows } = prev;
+              const restRows = { ...prev };
+              Reflect.deleteProperty(restRows, rk);
               return restRows;
             }
             return { ...prev, [rk]: restCols };

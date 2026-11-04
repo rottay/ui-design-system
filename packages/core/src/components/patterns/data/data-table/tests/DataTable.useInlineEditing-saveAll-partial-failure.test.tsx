@@ -318,4 +318,122 @@ describe('useInlineEditing — saveAll partial failure', () => {
     expect(result.current.pendingEdits).toEqual({});
   });
 
+  it('removes a completed row without mutating the queued outer snapshot or remaining row', async () => {
+    const failure = new Error('Beta rejected');
+    const onSave = vi.fn(async (row: Row, _columnKey: string, _newValue: unknown, _oldValue: unknown) => {
+      if (row.id === 'b') throw failure;
+    });
+    const { result } = renderHook(() =>
+      useInlineEditing({ data: rows, columns: [], rowKey: 'id', onSave, batchMode: true }),
+    );
+
+    await act(async () => {
+      await result.current.editingProps.onCellEdit?.(rows[0], 'name', 'Alpha!', 'Alpha');
+      await result.current.editingProps.onCellEdit?.(rows[1], 'name', 'Beta!', 'Beta');
+    });
+    const queued = result.current.pendingEdits;
+    const remainingRow = queued.b;
+    expect(queued).toEqual({ a: { name: 'Alpha!' }, b: { name: 'Beta!' } });
+    await act(async () => { await result.current.saveAll(); });
+
+    expect(result.current.pendingEdits).toEqual({ b: { name: 'Beta!' } });
+    expect(result.current.pendingEdits).not.toBe(queued);
+    expect(result.current.pendingEdits.b).toBe(remainingRow);
+    expect(queued).toEqual({ a: { name: 'Alpha!' }, b: { name: 'Beta!' } });
+    expect(queued.b).toBe(remainingRow);
+    expect(result.current.saveError).toBe(failure);
+    expect(onSave.mock.calls).toEqual([
+      [rows[0], 'name', 'Alpha!', 'Alpha'],
+      [rows[1], 'name', 'Beta!', 'Beta'],
+    ]);
+    onSave.mockClear();
+    onSave.mockImplementation(async () => {});
+    await act(async () => { await result.current.saveAll(); });
+    expect(onSave).toHaveBeenCalledExactlyOnceWith(rows[1], 'name', 'Beta!', 'Beta');
+    expect(result.current.pendingEdits).toEqual({});
+    expect(queued).toEqual({ a: { name: 'Alpha!' }, b: { name: 'Beta!' } });
+  });
+
+  it('preserves integer and special row-key order and values after a completed row leaves', async () => {
+    const two = { id: '2', name: 'Two' };
+    const ten = { id: '10', name: 'Ten' };
+    const leading = { id: '01', name: 'Leading' };
+    const protoRow = { id: '__proto__', name: 'Proto' };
+    const constructorRow = { id: 'constructor', name: 'Constructor' };
+    const failure = new Error('Ten rejected');
+    const onSave = vi.fn(async (row: Row, _columnKey: string, _newValue: unknown, _oldValue: unknown) => {
+      if (row.id === '10') throw failure;
+    });
+    const { result } = renderHook(() =>
+      useInlineEditing({ data: [two, ten, leading, protoRow, constructorRow], columns: [], rowKey: (row) => row.id, onSave, batchMode: true }),
+    );
+
+    await act(async () => {
+      await result.current.editingProps.onCellEdit?.(leading, 'name', '', 'Leading');
+      await result.current.editingProps.onCellEdit?.(protoRow, 'name', null, 'Proto');
+      await result.current.editingProps.onCellEdit?.(ten, 'name', false, 'Ten');
+      await result.current.editingProps.onCellEdit?.(constructorRow, 'name', 'Constructor!', 'Constructor');
+      await result.current.editingProps.onCellEdit?.(two, 'name', 0, 'Two');
+    });
+    const queued = result.current.pendingEdits;
+    expect(Object.keys(queued)).toEqual(['2', '10', '01', '__proto__', 'constructor']);
+    await act(async () => { await result.current.saveAll(); });
+
+    expect(onSave.mock.calls).toEqual([
+      [two, 'name', 0, 'Two'],
+      [ten, 'name', false, 'Ten'],
+    ]);
+    expect(Object.keys(result.current.pendingEdits)).toEqual(['10', '01', '__proto__', 'constructor']);
+    expect(Object.values(result.current.pendingEdits)).toEqual([
+      { name: false }, { name: '' }, { name: null }, { name: 'Constructor!' },
+    ]);
+    expect(Object.keys(queued)).toEqual(['2', '10', '01', '__proto__', 'constructor']);
+    expect(result.current.saveError).toBe(failure);
+    onSave.mockClear();
+    onSave.mockImplementation(async () => {});
+    await act(async () => { await result.current.saveAll(); });
+    expect(onSave.mock.calls).toEqual([
+      [ten, 'name', false, 'Ten'],
+      [leading, 'name', '', 'Leading'],
+      [protoRow, 'name', null, 'Proto'],
+      [constructorRow, 'name', 'Constructor!', 'Constructor'],
+    ]);
+    expect(result.current.pendingEdits).toEqual({});
+    expect(result.current.hasPendingEdits).toBe(false);
+    expect(result.current.saveError).toBeNull();
+  });
+
+  it('retains a late different-row draft when the last cell of the saving row completes', async () => {
+    let finish: (() => void) | undefined;
+    const waiting = new Promise<void>((resolve) => { finish = resolve; });
+    const onSave = vi.fn((_row: Row, _columnKey: string, _newValue: unknown, _oldValue: unknown) => waiting);
+    const { result } = renderHook(() =>
+      useInlineEditing({ data: rows, columns: [], rowKey: 'id', onSave, batchMode: true }),
+    );
+
+    await act(async () => { await result.current.editingProps.onCellEdit?.(rows[0], 'name', 'Alpha!', 'Alpha'); });
+    let saving: Promise<void> | undefined;
+    act(() => { saving = result.current.saveAll(); });
+    expect(result.current.isSaving).toBe(true);
+    await act(async () => { await result.current.editingProps.onCellEdit?.(rows[1], 'name', 'Beta!', 'Beta'); });
+    const latestQueued = result.current.pendingEdits;
+    const lateRow = latestQueued.b;
+    expect(latestQueued).toEqual({ a: { name: 'Alpha!' }, b: { name: 'Beta!' } });
+    expect(finish).toBeTypeOf('function');
+    await act(async () => { finish?.(); await saving; });
+
+    expect(result.current.pendingEdits).toEqual({ b: { name: 'Beta!' } });
+    expect(result.current.pendingEdits).not.toBe(latestQueued);
+    expect(result.current.pendingEdits.b).toBe(lateRow);
+    expect(latestQueued).toEqual({ a: { name: 'Alpha!' }, b: { name: 'Beta!' } });
+    expect(onSave).toHaveBeenCalledExactlyOnceWith(rows[0], 'name', 'Alpha!', 'Alpha');
+    expect(result.current.isSaving).toBe(false);
+    await act(async () => { await result.current.saveAll(); });
+    expect(onSave.mock.calls).toEqual([
+      [rows[0], 'name', 'Alpha!', 'Alpha'],
+      [rows[1], 'name', 'Beta!', 'Beta'],
+    ]);
+    expect(result.current.pendingEdits).toEqual({});
+  });
+
 });
