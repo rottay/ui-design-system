@@ -183,7 +183,8 @@ export function useInlineEditing<T extends object>(
           setPendingEdits((prev) => {
             const rowEdits = readRecordValue(prev, rk);
             if (!rowEdits) return prev;
-            const { [ck]: _omitted, ...restCols } = rowEdits;
+            const restCols = { ...rowEdits };
+            Reflect.deleteProperty(restCols, ck);
             if (Object.keys(restCols).length === 0) {
               const { [rk]: _omittedRow, ...restRows } = prev;
               return restRows;

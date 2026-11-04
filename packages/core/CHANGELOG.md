@@ -39,6 +39,13 @@
 
 ### Patch Changes
 
+- Derive DataTable `useInlineEditing`'s remaining pending cells from a fresh
+  shallow copy of the current pending row, deleting only the saved own column
+  key. Supported batch-save behavior is unchanged: prior pending-row snapshots
+  are not mutated, failed siblings remain for retry, and drafts queued in other
+  columns or rows during an in-flight save remain pending. Remaining key order
+  and falsy draft values are preserved. No public API, type, callback or
+  dependency change.
 - Read DataTable `useInlineEditing`'s current pending edits for a row through
   the existing property-read helper when a batch cell saves successfully. Saved
   cells still leave the pending map once, failed siblings remain for retry, and

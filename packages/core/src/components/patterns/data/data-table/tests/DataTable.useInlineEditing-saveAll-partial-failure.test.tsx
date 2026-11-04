@@ -208,4 +208,114 @@ describe('useInlineEditing — saveAll partial failure', () => {
     expect(onSave).toHaveBeenCalledExactlyOnceWith(rows[0], 'name', 'Alpha!', 'Alpha');
   });
 
+  it('keeps queued row snapshots unchanged while removing a persisted cell', async () => {
+    const row = { id: 'a', name: 'Alpha', note: 'first' };
+    const failure = new Error('note rejected');
+    const onSave = vi.fn(async (_row: typeof row, columnKey: string, _newValue: unknown, _oldValue: unknown) => {
+      if (columnKey === 'note') throw failure;
+    });
+    const { result } = renderHook(() =>
+      useInlineEditing({ data: [row], columns: [], rowKey: 'id', onSave, batchMode: true }),
+    );
+
+    await act(async () => {
+      await result.current.editingProps.onCellEdit?.(row, 'name', 'Alpha!', 'Alpha');
+      await result.current.editingProps.onCellEdit?.(row, 'note', 'first!', 'first');
+    });
+    const queued = result.current.pendingEdits;
+    const queuedRow = queued.a;
+    expect(queuedRow).toEqual({ name: 'Alpha!', note: 'first!' });
+    await act(async () => { await result.current.saveAll(); });
+
+    expect(result.current.pendingEdits).toEqual({ a: { note: 'first!' } });
+    expect(result.current.pendingEdits).not.toBe(queued);
+    expect(result.current.pendingEdits.a).not.toBe(queuedRow);
+    expect(queued).toEqual({ a: { name: 'Alpha!', note: 'first!' } });
+    expect(queued.a).toBe(queuedRow);
+    expect(queuedRow).toEqual({ name: 'Alpha!', note: 'first!' });
+    expect(result.current.saveError).toBe(failure);
+    expect(onSave.mock.calls).toEqual([
+      [row, 'name', 'Alpha!', 'Alpha'],
+      [row, 'note', 'first!', 'first'],
+    ]);
+  });
+
+  it('preserves remaining key order and falsy drafts after the first integer-keyed cell saves', async () => {
+    const row = { id: 'a', name: 'Alpha', ['2']: 'Two', ['10']: 'Ten', ['01']: 'Leading', ['__proto__']: 'Proto', note: 'Note' };
+    const failure = new Error('ten rejected');
+    const onSave = vi.fn(async (_row: typeof row, columnKey: string, _newValue: unknown, _oldValue: unknown) => {
+      if (columnKey === '10') throw failure;
+    });
+    const { result } = renderHook(() =>
+      useInlineEditing({ data: [row], columns: [], rowKey: 'id', onSave, batchMode: true }),
+    );
+
+    await act(async () => {
+      await result.current.editingProps.onCellEdit?.(row, 'name', 'Alpha!', 'Alpha');
+      await result.current.editingProps.onCellEdit?.(row, '10', false, 'Ten');
+      await result.current.editingProps.onCellEdit?.(row, '2', 0, 'Two');
+      await result.current.editingProps.onCellEdit?.(row, '01', '', 'Leading');
+      await result.current.editingProps.onCellEdit?.(row, '__proto__', null, 'Proto');
+      await result.current.editingProps.onCellEdit?.(row, 'note', 'Note!', 'Note');
+    });
+    await act(async () => { await result.current.saveAll(); });
+
+    expect(onSave.mock.calls).toEqual([
+      [row, '2', 0, 'Two'],
+      [row, '10', false, 'Ten'],
+    ]);
+    expect(result.current.pendingEdits).toEqual({
+      a: { ['10']: false, name: 'Alpha!', ['01']: '', ['__proto__']: null, note: 'Note!' },
+    });
+    expect(Object.keys(result.current.pendingEdits.a ?? {})).toEqual(['10', 'name', '01', '__proto__', 'note']);
+    expect(result.current.saveError).toBe(failure);
+    onSave.mockClear();
+    onSave.mockImplementation(async () => {});
+    await act(async () => { await result.current.saveAll(); });
+    expect(onSave.mock.calls).toEqual([
+      [row, '10', false, 'Ten'],
+      [row, 'name', 'Alpha!', 'Alpha'],
+      [row, '01', '', 'Leading'],
+      [row, '__proto__', null, 'Proto'],
+      [row, 'note', 'Note!', 'Note'],
+    ]);
+    expect(result.current.pendingEdits).toEqual({});
+    expect(result.current.hasPendingEdits).toBe(false);
+    expect(result.current.saveError).toBeNull();
+  });
+
+  it('keeps a new row draft when the completed snapshot cell is already absent', async () => {
+    const row = { id: 'a', name: 'Alpha', note: 'first' };
+    let finish: (() => void) | undefined;
+    const waiting = new Promise<void>((resolve) => { finish = resolve; });
+    const onSave = vi.fn((_row: typeof row, _columnKey: string, _newValue: unknown, _oldValue: unknown) => waiting);
+    const { result } = renderHook(() =>
+      useInlineEditing({ data: [row], columns: [], rowKey: 'id', onSave, batchMode: true }),
+    );
+
+    await act(async () => { await result.current.editingProps.onCellEdit?.(row, 'name', 'Alpha!', 'Alpha'); });
+    let saving: Promise<void> | undefined;
+    act(() => { saving = result.current.saveAll(); });
+    expect(result.current.isSaving).toBe(true);
+    act(() => result.current.discardAll());
+    await act(async () => { await result.current.editingProps.onCellEdit?.(row, 'note', 'late note', 'first'); });
+    const latestQueued = result.current.pendingEdits;
+    const latestRow = latestQueued.a;
+    expect(latestQueued).toEqual({ a: { note: 'late note' } });
+    expect(finish).toBeTypeOf('function');
+    await act(async () => { finish?.(); await saving; });
+
+    expect(result.current.pendingEdits).toEqual({ a: { note: 'late note' } });
+    expect(result.current.pendingEdits.a).not.toBe(latestRow);
+    expect(latestQueued).toEqual({ a: { note: 'late note' } });
+    expect(onSave).toHaveBeenCalledExactlyOnceWith(row, 'name', 'Alpha!', 'Alpha');
+    expect(result.current.isSaving).toBe(false);
+    await act(async () => { await result.current.saveAll(); });
+    expect(onSave.mock.calls).toEqual([
+      [row, 'name', 'Alpha!', 'Alpha'],
+      [row, 'note', 'late note', 'first'],
+    ]);
+    expect(result.current.pendingEdits).toEqual({});
+  });
+
 });
