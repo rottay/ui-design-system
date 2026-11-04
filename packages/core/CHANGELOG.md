@@ -39,6 +39,12 @@
 
 ### Patch Changes
 
+- Store `DashboardSurface`'s packed section spans in a private map keyed by
+  section key. Supported layout behavior is unchanged: packed values follow the
+  matching section, mobile stacking keeps precedence, and configured packing
+  and authored desktop/mobile span branches remain intact. Reordering sections
+  retains keyed child identity. No public API, type, default, callback or
+  dependency change.
 - Remove a completed DataTable `useInlineEditing` batch row from a fresh
   shallow copy of the current pending map, deleting only that row's own key.
   Supported batch-save behavior is unchanged: prior outer snapshots stay intact,

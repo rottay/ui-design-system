@@ -319,9 +319,9 @@ function DashboardSurfaceContent({
       // this surface has no CSS-pinned track count to contradict.
       spanBias: adaptiveEnvironment.posture.spanBias,
     });
-    return Object.fromEntries(
+    return new Map(
       result.placements.map((placement) => [placement.itemId, placement.colSpan])
-    ) as Record<string, number>;
+    );
   }, [
     config.visual.adaptivePacking,
     config.visual.stackSectionsOnMobile,
@@ -478,7 +478,7 @@ function DashboardSurfaceContent({
                       isMobile && config.visual.stackSectionsOnMobile !== false
                         ? undefined
                         : packedSectionSpans
-                        ? packedSectionSpans[section.key]
+                        ? packedSectionSpans.get(section.key)
                         : isMobile
                         ? section.mobileSpan
                         : section.span
