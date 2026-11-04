@@ -131,7 +131,7 @@ function authoredDials(
         : authored;
     if (value === undefined) continue;
     const host = (general[group] ??= {}) as Record<string, unknown>;
-    host[field] = value;
+    Object.assign(host, { [field]: value });
   }
   return general as TenantAppearanceGeneral;
 }

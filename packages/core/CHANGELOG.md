@@ -39,6 +39,14 @@
 
 ### Patch Changes
 
+- Materialize authored tenant-theme v2/v3 envelope dials with `Object.assign`
+  into their existing private groups. For supported documents, motion intensity
+  and duration scale, typography scale, radius scale and surface effect
+  intensity retain their values, including explicit zero, without replacing
+  sibling fields. Absent or undefined values remain un-authored, and writes
+  still throw on failure. Envelope issue paths, direct and profile-derived
+  provenance, and caller documents are unchanged. No public API, schema,
+  policy, compiler version or artifact format change.
 - Store `DashboardSurface`'s packed section spans in a private map keyed by
   section key. Supported layout behavior is unchanged: packed values follow the
   matching section, mobile stacking keeps precedence, and configured packing

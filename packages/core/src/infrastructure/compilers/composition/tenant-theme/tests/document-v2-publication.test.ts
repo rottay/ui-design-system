@@ -16,6 +16,8 @@ import {
 import type {
   TenantThemeArtifact,
   TenantThemeDocumentV2,
+  TenantThemeDocumentVersioned,
+  TenantThemeVerticalEnvelope,
 } from "@rottay/design-system/server";
 import {
   TenantThemeDocumentError,
@@ -613,5 +615,119 @@ describe("compileTenantThemeDocumentV2 · refusals, by name", () => {
         },
       })
     ).toThrow(TenantThemeDocumentV2Error);
+  });
+});
+
+
+const envelopeWriteVersions: TenantThemeDocumentVersioned["version"][] = [2, 3];
+describe.each(envelopeWriteVersions)("compileTenantThemeDocumentV2 · version %i authored envelope writes", (version) => {
+  const registered = getTenantThemeVerticalEnvelope(IDENTITY.verticalKey);
+  if (!registered) throw new Error("The registered bithire envelope is required by this fixture");
+  const narrowed: TenantThemeVerticalEnvelope = {
+    ...registered,
+    ranges: {
+      ...registered.ranges,
+      motionIntensity: { min: 0.4, max: 0.6 },
+      motionDurationScale: { min: 0.9, max: 1.1 },
+      typeScale: { min: 0.98, max: 1.02 },
+      radiusScale: { min: 0.9, max: 1.1 },
+      effectIntensity: { min: 0.2, max: 0.4 },
+    },
+  };
+  const outside: {
+    label: string;
+    decision: string;
+    decisions: TenantThemeDocumentV2["decisions"];
+  }[] = [
+    { label: "motion intensity with its duration sibling", decision: "motion.dial", decisions: { "motion.dial": { intensity: 0.7, durationScale: 1 } } },
+    { label: "motion duration with its intensity sibling", decision: "motion.dial", decisions: { "motion.dial": { intensity: 0.5, durationScale: 1.3 } } },
+    { label: "typography scale", decision: "typography.scale", decisions: { "typography.scale": 1.06 } },
+    { label: "shape radius", decision: "shape.radius-scale", decisions: { "shape.radius-scale": 1.15 } },
+    { label: "surface intensity", decision: "surfaces.effect-intensity", decisions: { "surfaces.effect-intensity": 0.6 } },
+  ];
+
+  it.each(outside)("names the authored envelope refusal for $label", ({ decision, decisions }) => {
+    const document: TenantThemeDocumentVersioned = { version, plan: "pro", decisions };
+    const before = canonicalizeTenantThemeValue(document);
+    expect(issuesOf(() => compileTenantThemeDocumentV2({ ...IDENTITY, document, verticalEnvelope: narrowed })))
+      .toEqual([{
+        code: "invalid_value",
+        path: `$.decisions[${JSON.stringify(decision)}]`,
+        message: "Value exceeds the bithire envelope",
+      }]);
+    expect(canonicalizeTenantThemeValue(document)).toBe(before);
+  });
+
+  it("publishes exact boundary dials together without changing the input or direct authorship", () => {
+    const motion = Object.freeze({ intensity: 0.4, durationScale: 1.1 });
+    const decisions: TenantThemeDocumentV2["decisions"] = Object.freeze({
+      "motion.dial": motion,
+      "typography.scale": 0.98,
+      "shape.radius-scale": 1.1,
+      "surfaces.effect-intensity": 0.2,
+    });
+    const document: TenantThemeDocumentVersioned = Object.freeze({ version, plan: "pro", decisions });
+    const before = canonicalizeTenantThemeValue(document);
+    const compilation = compileTenantThemeDocumentV2({ ...IDENTITY, document, verticalEnvelope: narrowed });
+    expect(entryFor(compilation, "motion.dial")).toMatchObject({
+      authoredValue: motion, provenance: "direct-override", tier: "standard",
+      effectiveLeaves: ["motion.intensity", "motion.durationScale"],
+    });
+    for (const { id, value } of [
+      { id: "typography.scale", value: 0.98 },
+      { id: "shape.radius-scale", value: 1.1 },
+      { id: "surfaces.effect-intensity", value: 0.2 },
+    ]) {
+      expect(entryFor(compilation, id)).toMatchObject({ authoredValue: value, provenance: "direct-override", tier: "standard" });
+    }
+    expect(verifyTenantThemeArtifactV1(compilation.artifact, { slug: IDENTITY.slug, verticalKey: IDENTITY.verticalKey }))
+      .toEqual({ ok: true, artifact: compilation.artifact });
+    expect(canonicalizeTenantThemeValue(document)).toBe(before);
+  });
+
+  it("retains explicit zero dials for refusal and accepts them when the envelope permits zero", () => {
+    const document: TenantThemeDocumentVersioned = {
+      version, plan: "pro", decisions: { "motion.dial": { intensity: 0 }, "surfaces.effect-intensity": 0 },
+    };
+    const before = canonicalizeTenantThemeValue(document);
+    expect(issuesOf(() => compileTenantThemeDocumentV2({ ...IDENTITY, document, verticalEnvelope: narrowed })))
+      .toEqual([
+        { code: "invalid_value", path: '$.decisions["motion.dial"]', message: "Value exceeds the bithire envelope" },
+        { code: "invalid_value", path: '$.decisions["surfaces.effect-intensity"]', message: "Value exceeds the bithire envelope" },
+      ]);
+    const compilation = compileTenantThemeDocumentV2({ ...IDENTITY, document, verticalEnvelope: registered });
+    expect(entryFor(compilation, "motion.dial")).toMatchObject({ authoredValue: { intensity: 0 }, provenance: "direct-override" });
+    expect(entryFor(compilation, "surfaces.effect-intensity")).toMatchObject({ authoredValue: 0, provenance: "direct-override" });
+    expect(verifyTenantThemeArtifactV1(compilation.artifact, { slug: IDENTITY.slug, verticalKey: IDENTITY.verticalKey }))
+      .toEqual({ ok: true, artifact: compilation.artifact });
+    expect(canonicalizeTenantThemeValue(document)).toBe(before);
+  });
+
+  it("leaves an undefined motion sibling to profile-derived envelope narrowing", () => {
+    const document: TenantThemeDocumentVersioned = {
+      version, plan: "pro", decisions: {
+        "experience.profile": "rottay/management-editorial@1",
+        "motion.dial": { intensity: 0.5, durationScale: undefined },
+      },
+    };
+    const before = {
+      ...document,
+      decisions: {
+        ...document.decisions,
+        "motion.dial": { ...document.decisions["motion.dial"] },
+      },
+    };
+    const compilation = compileTenantThemeDocumentV2({
+      ...IDENTITY, document,
+      verticalEnvelope: { ...narrowed, ranges: { ...narrowed.ranges, motionDurationScale: { min: 0.9, max: 1 } } },
+    });
+    expect(entryFor(compilation, "motion.dial")).toMatchObject({
+      authoredValue: { intensity: 0.5 }, provenance: "direct-override", effectiveLeaves: ["motion.intensity"],
+    });
+    expect(compilation.ledger.entries.find((entry) => entry.effectiveLeaves.includes("motion.durationScale")))
+      .toMatchObject({ provenance: "profile-derived", tier: null, authoredValue: 1 });
+    expect(verifyTenantThemeArtifactV1(compilation.artifact, { slug: IDENTITY.slug, verticalKey: IDENTITY.verticalKey }))
+      .toEqual({ ok: true, artifact: compilation.artifact });
+    expect(document).toStrictEqual(before);
   });
 });
