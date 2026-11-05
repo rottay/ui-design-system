@@ -29,6 +29,10 @@ import {
   summarizeDsSupportMilestones,
   summarizeProgramMilestones,
   validateDoneTransition,
+  validateClaimTransition,
+  validateStagedClaims,
+  stagedClaimRestriction,
+  validateV1PhaseMapping,
   validateContractDiff,
   validateCrossProgramConvergenceLedger,
   validateDsImprovementsTraceability,
@@ -2756,4 +2760,89 @@ test("an absent producer stops generation instead of publishing an empty diff", 
     () => readContractDiff({ producer: "packages/core/scripts/check/no-such-producer/index.mjs" }),
     /the producer is absent/,
   );
+});
+
+
+test("V1 approved four-WO mapping accepts the current exact authorities and source items", () => {
+  assert.deepEqual(validateV1PhaseMapping(liveRegistry()), []);
+});
+
+for (const [id, formerPhase, itemIds] of [
+  ["WO-TOK-11", "2A", ["DS-IMP-048"]],
+  ["WO-ARC-19", "3", ["DS-IMP-028", "DS-IMP-029"]],
+  ["WO-ENG-25", "2B", ["DS-IMP-086", "DS-IMP-087", "DS-IMP-088", "DS-IMP-089"]],
+  ["WO-CRA-15", "2C", ["DS-IMP-106", "DS-IMP-107", "DS-IMP-108"]],
+]) {
+  test(`V1 approved mapping refuses ${id} in its former phase`, () => {
+    const registry = liveRegistry();
+    assert.deepEqual(validateV1PhaseMapping(registry), []);
+    findWorkOrder(registry, id).phase = formerPhase;
+    assert.deepEqual(validateV1PhaseMapping(registry), [
+      `${id}: V1 full-completion mapping must be phase 6`,
+    ]);
+  });
+
+  test(`V1 approved mapping refuses ${id} source-item phase drift`, () => {
+    const registry = liveRegistry();
+    assert.deepEqual(validateV1PhaseMapping(registry), []);
+    const items = registry.traceability["ds-improvements"].items
+      .filter((item) => item.disposition === "execute" && item.authority === id);
+    assert.deepEqual(items.map((item) => item.id).sort(), [...itemIds].sort());
+    items[0].phase = formerPhase;
+    assert.deepEqual(validateV1PhaseMapping(registry), [
+      `${id}: V1 exact mapped items/phase must be preserved`,
+    ]);
+  });
+}
+
+test("V1 phase claim refuses missing ownerGo after an otherwise claimable control", () => {
+  const registry = liveRegistry();
+  findWorkOrder(registry, "WO-ARC-12").status = "done";
+  openPhase(registry, "2A");
+  const authority = findWorkOrder(registry, "WO-ARC-17");
+  assert.equal(phaseClaimBlocker(registry, authority, { today: LIVE_REGISTRY_TODAY }), null);
+  delete registry.traceability["ds-improvements"].phaseControls["2A"].ownerGo;
+  assert.equal(phaseClaimBlocker(registry, authority, { today: LIVE_REGISTRY_TODAY }),
+    "phase 2A ownerGo approval is missing");
+});
+
+test("CON08 staged DS-step1 claim accepts only its admitted subset and explicit scope", () => {
+  const registry = liveRegistry();
+  const con08 = findWorkOrder(registry, "WO-CON-08");
+  con08.status = "todo";
+  assert.equal(findWorkOrder(registry, "WO-ARC-21").status, "in-progress");
+  assert.deepEqual(validateStagedClaims(registry), []);
+  assert.match(stagedClaimRestriction(con08), /DS step 1 only/);
+  assert.match(stagedClaimRestriction(con08), /consumer steps 2–4 blocked by WO-ARC-21/);
+  assert.deepEqual(validateClaimTransition(registry, con08, {
+    scope: "ds-step1", today: LIVE_REGISTRY_TODAY,
+  }), []);
+  assert.ok(validateClaimTransition(registry, con08, { today: LIVE_REGISTRY_TODAY })
+    .some((error) => error.includes("explicit --scope ds-step1 required")));
+});
+
+test("CON08 staged claim refuses an illegal dependency subset without weakening full dependencies", () => {
+  const registry = liveRegistry();
+  assert.deepEqual(validateStagedClaims(registry), []);
+  const con08 = findWorkOrder(registry, "WO-CON-08");
+  const fullDependencies = [...con08.dependsOn];
+  con08.claimDependsOn = ["WO-CAT-04", "WO-EMI-02", "WO-ARC-21"];
+  assert.ok(validateStagedClaims(registry).includes(
+    "WO-CON-08: claimDependsOn must be exactly CAT-04, EMI-02, CON-06 in that order"));
+  assert.deepEqual(con08.dependsOn, fullDependencies);
+});
+
+test("CON08 full done remains refused after a valid staged claim while ARC21 is open", () => {
+  const registry = liveRegistry();
+  const con08 = findWorkOrder(registry, "WO-CON-08");
+  con08.status = "todo";
+  assert.deepEqual(validateClaimTransition(registry, con08, {
+    scope: "ds-step1", today: LIVE_REGISTRY_TODAY,
+  }), []);
+  con08.status = "in-progress";
+  assert.deepEqual(validateDoneTransition(registry, con08, { today: LIVE_REGISTRY_TODAY }), [
+    "WO-CON-08: dependencies not done: WO-ARC-21",
+  ]);
+  findWorkOrder(registry, "WO-ARC-21").status = "done";
+  assert.deepEqual(validateDoneTransition(registry, con08, { today: LIVE_REGISTRY_TODAY }), []);
 });

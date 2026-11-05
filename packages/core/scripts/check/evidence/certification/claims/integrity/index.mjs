@@ -1204,7 +1204,7 @@ export function discoverV1Clauses({ repoRoot, registry, exclusions = V1_EXCLUSIO
   return clauses;
 }
 
-function validateV1Measurements(measurements, populations, errors) {
+export function validateV1Measurements(measurements, populations, errors) {
   if (!measurements || !populations) { errors.push("executed V1 safety/contrast/axis measurements are missing"); return; }
   const pairs = populations.contrast;
   const observed = measurements.contrast;

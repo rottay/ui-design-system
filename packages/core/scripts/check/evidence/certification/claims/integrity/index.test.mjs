@@ -11,6 +11,7 @@ import {
   compareCertificationRuns,
   inventoryPublicClaims,
   resolveGat09Disposition,
+  validateV1Measurements,
 } from "./index.mjs";
 
 function withFixture(prefix, run) {
@@ -383,3 +384,122 @@ test("structural mode proves the contract while final mode cannot bypass live ex
     assert.match(backdated.errors.join("\n"), /must equal the current/u);
   });
 });
+
+
+function retainedMeasurementUnitData() {
+  const members = Array.from({ length: 5 }, (_, index) => `UNIT-member-${index}`);
+  const axes = ["shape", "rhythm", "typography", "depth", "motion", "states"];
+  const statesMembers = Array.from({ length: 20 }, (_, index) => `UNIT-state-member-${index}`);
+  const populations = {
+    contrast: [
+      { id: "UNIT-body", pairId: "UNIT-body-pair", palette: "UNIT-DATA", kind: "body", minimum: 60 },
+      { id: "UNIT-ui", pairId: "UNIT-ui-pair", palette: "UNIT-DATA", kind: "ui", minimum: 45 },
+    ],
+    axes: axes.map((axis) => ({ axis, minimum: 0.8, members: [...members] })),
+    statesControls: ["UNIT-control-a", "UNIT-control-b"].map((id) => ({
+      id, minimum: 20, members: [...statesMembers],
+    })),
+  };
+  const measurements = {
+    contrast: populations.contrast.map(({ id, minimum }) => ({ id, minimum, lc: minimum, skipped: false })),
+    axes: populations.axes.map(({ axis, minimum, members: applicable }) => ({
+      axis, minimum, applicable: [...applicable], moved: applicable.slice(0, 4),
+    })),
+    statesControls: populations.statesControls.map(({ id, members: moved }) => ({ id, moved: [...moved] })),
+    paletteOnlyNoncolorMoved: 0,
+    statesOnlyShapeTypographyMoved: 0,
+    legacy: { storedRowSafety: true, authoringRestriction: true, resolutionCoverage: true, renderingConsumer: true },
+    spatial: { staticFallback: true, productiveLivePaths: [] },
+  };
+  return { populations, measurements };
+}
+
+function retainedMeasurementUnitErrors({ measurements, populations }) {
+  const errors = [];
+  validateV1Measurements(measurements, populations, errors);
+  return errors;
+}
+
+test("retained measurement unit predicate accepts UNIT DATA at exact APCA, six-axis and per-control floors", () => {
+  assert.deepEqual(retainedMeasurementUnitErrors(retainedMeasurementUnitData()), []);
+});
+
+test("retained measurement unit predicate accepts signed APCA magnitudes and movement above the axis floor", () => {
+  const data = retainedMeasurementUnitData();
+  for (const result of data.measurements.contrast) result.lc = -result.minimum;
+  for (const result of data.measurements.axes) result.moved = [...result.applicable];
+  assert.deepEqual(retainedMeasurementUnitErrors(data), []);
+});
+
+for (const [pairIndex, kind, floor] of [[0, "body", 60], [1, "ui", 45]]) {
+  for (const [label, mutate] of [
+    ["below floor", (data) => { data.measurements.contrast[pairIndex].lc = floor - 0.01; }],
+    ["changed population minimum", (data) => { data.populations.contrast[pairIndex].minimum = floor - 1; }],
+    ["changed measurement minimum", (data) => { data.measurements.contrast[pairIndex].minimum = floor - 1; }],
+    ["unjustified skip", (data) => {
+      Object.assign(data.measurements.contrast[pairIndex], {
+        skipped: true, disposition: "UNIT-DATA", reason: "UNIT DATA is not an admitted skip disposition.",
+      });
+    }],
+  ]) {
+    test(`retained measurement unit predicate refuses APCA ${kind} ${label}`, () => {
+      const data = retainedMeasurementUnitData();
+      assert.deepEqual(retainedMeasurementUnitErrors(data), []);
+      mutate(data);
+      assert.deepEqual(retainedMeasurementUnitErrors(data), [`APCA floor/failure/unjustified skip: UNIT-${kind}`]);
+    });
+  }
+}
+
+for (const [label, mutate, expected] of [
+  ["missing measurements", (data) => { data.measurements = null; }, "executed V1 safety/contrast/axis measurements are missing"],
+  ["missing populations", (data) => { data.populations = null; }, "executed V1 safety/contrast/axis measurements are missing"],
+  ["empty APCA population", (data) => { data.populations.contrast = []; }, "APCA pairing population/cardinality mismatch"],
+  ["missing APCA measurement", (data) => { data.measurements.contrast.pop(); }, "APCA pairing population/cardinality mismatch"],
+  ["duplicate APCA population identity", (data) => { data.populations.contrast[1].id = data.populations.contrast[0].id; }, "APCA pairing population/cardinality mismatch"],
+  ["missing axis population", (data) => { data.populations.axes.pop(); }, "six-axis population mismatch"],
+  ["missing axis measurement", (data) => { data.measurements.axes.pop(); }, "six-axis population mismatch"],
+  ["unregistered axis population", (data) => { data.populations.axes[0].axis = "color"; }, "six-axis population mismatch"],
+  ["duplicate current axis members", (data) => { data.populations.axes[0].members[4] = data.populations.axes[0].members[0]; }, "axis floor/population failure: shape"],
+  ["axis movement below 0.8", (data) => { data.measurements.axes[0].moved = data.measurements.axes[0].moved.slice(0, 3); }, "axis floor/population failure: shape"],
+  ["changed axis population minimum", (data) => { data.populations.axes[0].minimum = 0.79; }, "axis floor/population failure: shape"],
+  ["changed axis measurement minimum", (data) => { data.measurements.axes[0].minimum = 0.79; }, "axis floor/population failure: shape"],
+  ["changed applicable axis population", (data) => { data.measurements.axes[0].applicable.pop(); }, "axis floor/population failure: shape"],
+  ["foreign moved axis member", (data) => { data.measurements.axes[0].moved[0] = "UNIT-foreign-member"; }, "axis floor/population failure: shape"],
+  ["duplicate moved axis member", (data) => { data.measurements.axes[0].moved[0] = data.measurements.axes[0].moved[1]; }, "axis floor/population failure: shape"],
+  ["empty states-control population", (data) => { data.populations.statesControls = []; }, "states-control population mismatch"],
+  ["missing states-control measurement", (data) => { data.measurements.statesControls.pop(); }, "states-control population mismatch"],
+  ["duplicate states-control population identity", (data) => { data.populations.statesControls[1].id = data.populations.statesControls[0].id; }, "states-control population mismatch"],
+  ["changed per-control minimum", (data) => { data.populations.statesControls[0].minimum = 19; }, "D1 per-control floor failure: UNIT-control-a"],
+  ["foreign moved states-control member", (data) => { data.measurements.statesControls[0].moved[0] = "UNIT-foreign-state-member"; }, "D1 per-control floor failure: UNIT-control-a"],
+  ["duplicate moved states-control member", (data) => { data.measurements.statesControls[0].moved[0] = data.measurements.statesControls[0].moved[1]; }, "D1 per-control floor failure: UNIT-control-a"],
+  ["palette-only noncolor movement", (data) => { data.measurements.paletteOnlyNoncolorMoved = 1; }, "axis negative controls failed"],
+  ["states-only shape or typography movement", (data) => { data.measurements.statesOnlyShapeTypographyMoved = 1; }, "axis negative controls failed"],
+  ["missing static spatial fallback", (data) => { data.measurements.spatial.staticFallback = false; }, "excluded live spatial path exposed or static fallback missing"],
+  ["exposed productive live spatial path", (data) => { data.measurements.spatial.productiveLivePaths = ["UNIT-only/exposed-live-path"]; }, "excluded live spatial path exposed or static fallback missing"],
+]) {
+  test(`retained measurement unit predicate refuses ${label}`, () => {
+    const data = retainedMeasurementUnitData();
+    assert.deepEqual(retainedMeasurementUnitErrors(data), []);
+    mutate(data);
+    assert.deepEqual(retainedMeasurementUnitErrors(data), [expected]);
+  });
+}
+
+for (const [controlIndex, id] of [[0, "UNIT-control-a"], [1, "UNIT-control-b"]]) {
+  test(`retained measurement unit predicate refuses 19 moved members for ${id} despite another control reaching 20`, () => {
+    const data = retainedMeasurementUnitData();
+    assert.deepEqual(retainedMeasurementUnitErrors(data), []);
+    data.measurements.statesControls[controlIndex].moved.pop();
+    assert.deepEqual(retainedMeasurementUnitErrors(data), [`D1 per-control floor failure: ${id}`]);
+  });
+}
+
+for (const key of ["storedRowSafety", "authoringRestriction", "resolutionCoverage", "renderingConsumer"]) {
+  test(`retained measurement unit predicate refuses false legacy ${key}`, () => {
+    const data = retainedMeasurementUnitData();
+    assert.deepEqual(retainedMeasurementUnitErrors(data), []);
+    data.measurements.legacy[key] = false;
+    assert.deepEqual(retainedMeasurementUnitErrors(data), ["unsafe legacy data/restrictions/consumer proof"]);
+  });
+}
